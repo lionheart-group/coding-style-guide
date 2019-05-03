@@ -1,0 +1,148 @@
+.slides {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    p {
+        text-align: justify;
+        font-size: .9em;
+    }
+
+    & > section {
+        padding-left: 100px !important;
+        padding-right: 100px !important;
+        box-sizing: border-box;
+        text-align: left;
+
+        & > h1,
+        & > h2,
+        & > h3,
+        & > h4 {
+            text-align: center;
+            text-transform: none;
+
+            .is-small {
+                font-size: .6em;
+                opacity: .6;
+            }
+        }
+    }
+
+    strong.important {
+        color: #f00;
+    }
+
+    code {
+        display: inline-block;
+        border: 1px solid;
+    }
+    pre {
+        font-size: .4em;
+
+        code {
+            display: block;
+            border: none;
+        }
+    }
+
+    & > section > pre {
+        width: auto;
+        margin-left: -100px !important;
+        margin-right: -100px !important;
+        code {
+            padding: 1em 100px;
+        }
+    }
+
+    blockquote {
+        width: auto;
+        padding: 5px 40px;
+        p {
+            display: block !important;
+        }
+        small {
+            display: block;
+            text-align: right;
+        }
+    }
+
+    .row {
+        display: flex;
+
+        .col {
+            width: 50%;
+            flex-grow: 1;
+            flex-shrink: 0;
+
+            & > h1,
+            & > h2,
+            & > h3,
+            & > h4 {
+                text-align: center;
+                text-transform: none;
+            }
+
+        }
+    }
+}
+
+/**
+ * Examples
+ */
+.u-align-center {
+    text-align: center;
+}
+.c-headline {
+    background: #eee;
+    padding: 5px 20px;
+
+    &__title {
+        color: #333 !important;
+        margin: 0 0 .1em !important;
+        padding-bottom: .05em;
+        line-height: 1 !important;
+        font-weight: bold;
+        border-bottom: 1px solid #ccc;
+    }
+    &__subtitle {
+        color: #666 !important;
+        margin: 0 !important;
+        line-height: 1 !important;
+        font-weight: bold;
+    }
+}
+.c-button {
+    outline: none;
+    cursor: pointer;
+    border: none;
+    background: #eee;
+    color: #333;
+    line-height: inherit;
+    font-size: 16px;
+    font-weight: inherit;
+    font-family: inherit;
+    padding: 1em 2em;
+    transition: background .3s;
+
+    &:hover {
+        background: #ccc;
+    }
+
+    &.is-primary {
+        background: #007bff;
+        color: #fff;
+
+        &:hover {
+            background: #0069d9;
+        }
+    }
+
+    &.is-secondary {
+        background: #28a745;
+        color: #fff;
+
+        &:hover {
+            background: #1e7e34;
+        }
+    }
+}

@@ -1,0 +1,18 @@
+image: node:8.12
+
+cache:
+  paths:
+  - node_modules/
+  - .yarn
+
+pages:
+  stage: deploy
+  script:
+    - yarn config set cache-folder .yarn
+    - yarn install
+    - yarn build
+  artifacts:
+    paths:
+      - public
+  only:
+    - master

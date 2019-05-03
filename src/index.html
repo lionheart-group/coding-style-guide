@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LH&c HTML/CSS Coding Rule</title>
+</head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+# LH&c HTML/CSS Coding Rule
+                    </textarea>
+                </section>
+            </div>
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+# Basically
+
+* We're using [FLOCSS](https://github.com/hiloki/flocss/blob/master/README_eng.md) rule basically
+                    </textarea>
+                </section>
+            </div>
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+# FLOCSS
+
+FLOCSS is a CSS architecture methodology that adopts concepts from OOCSS, SMACSS, BEM and SuitCSS. It has also been heavily influenced by the layer structures of MCSS.
+
+[Details](https://github.com/hiloki/flocss/blob/master/README_eng.md)
+                    </textarea>
+                </section>
+            </div>
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+# Basic Principles
+
+1. Foundation - reset/normalize/base...
+2. layout - header/main/sidebar/footer...
+3. Object
+    1. Component - grid/button/form/media...
+    2. Project - articles/ranking/promo...
+    3. Utility - clearfix/display/margin...
+                    </textarea>
+                </section>
+            </div>
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+# Custom on LH&c
+
+1. Foundation - reset/normalize/base...
+2. layout - header/main/sidebar/footer...
+3. Object
+    1. Component - grid/button/form/media...
+    2. Project - articles/ranking/promo...
+    3. Utility - clearfix/display/margin...
+    4. <strong class="important">Views - each page's style</strong>
+                    </textarea>
+                </section>
+            </div>
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+# Views
+
+You can include the style of each page's style. And, if you find common layout in views style, you need to convert to Project or Component.
+
+Prefix is `.v-`
+                    </textarea>
+                </section>
+            </div>
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+# Views Example
+
+File name is `scss/views/index.scss`
+
+```scss
+.v-visual {
+    &__catch {
+        font-size: 100px;
+    }
+}
+```
+                    </textarea>
+                </section>
+            </div>
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+# Other coding rules
+
+1. Must use <strong class="important">prefix</strong>
+2. Must <strong class="important">not</strong> use only tag selector
+3. Must use <strong class="important">Element</strong> or <strong class="important">Child combinator (`>`)</strong> for child element
+4. If there is common layout, <strong class="important">convert to Component or Project</strong>
+                    </textarea>
+                </section>
+            </div>
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">Other coding rules</span>
+### 1. Must use <strong class="important">prefix</strong>
+
+If you use the prefix coding, when you confirm the html, you can easily understand where is the target syntax.
+
+For example, you can see `.l-` is inside of Common Layout css, `.v-` is in each page's css.
+                    </textarea>
+                </section>
+            </div>
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">Other coding rules</span>
+### 1. Must use <strong class="important">prefix</strong>
+
+<div class="row">
+<div class="col">
+<h4>Bad</h4>
+
+```scss
+.index-page {
+    .visual {}
+    .news {}
+}
+```
+</div>
+<div class="col">
+<h4>Good</h4>
+
+```scss
+.v-visual {
+}
+.v-news {
+}
+```
+</div>
+</div>
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">Other coding rules</span>
+### 2. Must <strong class="important">not</strong> use only tag selector
+
+When you use tag selector, it sometimes affects to somewhere you don't think.
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">Other coding rules</span>
+### 2. Must <strong class="important">not</strong> use only tag selector
+
+<div class="row">
+<div class="col">
+<h4>Bad</h4>
+
+```scss
+.v-visual {
+    h1 {
+        // foo bar
+    }
+}
+```
+</div>
+<div class="col">
+<h4>Good</h4>
+
+```scss
+.v-slide {
+    &__catch {
+        // foo bar
+    }
+}
+
+// or
+
+.v-slide {
+    & > h1 {
+        // foo bar
+    }
+}
+```
+</div>
+</div>
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">Other coding rules</span>
+### 3. Must use <strong class="important">Element</strong> or <strong class="important">Child combinator (`>`)</strong> for child element
+
+Also normal class or other layer's class should not be used in other class. Because, other members are hard to get it when you use it.
+
+so, we must use BEM Element or Child combinator (`>`).
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">Other coding rules</span>
+### 3. Must use <strong class="important">Element</strong> or <strong class="important">Child combinator (`>`)</strong> for child element
+
+<div class="row">
+<div class="col">
+<h4>Bad</h4>
+
+```scss
+.v-visual {
+    .catch {
+        // foo bar
+    }
+
+    .c-button {
+        // foo bar
+    }
+}
+```
+</div>
+<div class="col">
+<h4>Good</h4>
+
+```scss
+.v-slide {
+    &__catch {
+        // foo bar
+    }
+
+    &__button {
+        // foo bar
+    }
+}
+
+// or
+
+.v-slide {
+    & > h1 {
+        // foo bar
+    }
+    & > button {
+        // foo bar
+    }
+}
+```
+</div>
+</div>
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">Other coding rules</span>
+### 4. If there is common layout, <strong class="important">convert to Component or Project</strong>
+
+Before start coding, we should check the all the page's design. And, need to prepare common style layout for Component or Project.
+
+But, if you find the common style when you creating, you should convert to Component or Project.
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+# Component or Project
+
+Component and Project are both of having the meaning that common layout style.
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">Component or Project</span>
+### Component
+
+> Defines small scale modules as patterns for re-use.<br>
+> <small>-- [FLOCSS Component](https://github.com/hiloki/flocss/blob/master/README_eng.md#1-component)</small>
+
+e.g. Button, Headline and so on
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">Component or Project</span>
+### Project
+
+> Define patterns which are unique to the project which consists of several components and other elements.<br>
+> <small>-- [FLOCSS Project](https://github.com/hiloki/flocss/blob/master/README_eng.md#2-project)</small>
+
+e.g. Entrly list, Form table and so on
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+# What is BEM
+
+BEM is naming rule that is structed by categorizing names into Blocks, Elements and Modifiers.
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">What is BEM</span>
+### Block
+
+Block is a parent of Elements. And, in case of our rule, must be named prefix for Blocks.
+
+<div class="row">
+
+<div class="col">
+<h4>HTML</h4>
+
+```html
+<div class="v-block">
+</div>
+```
+
+</div>
+
+<div class="col">
+<h4>SCSS</h4>
+
+```scss
+.v-block {
+    // foo bar
+}
+```
+
+</div>
+
+</div>
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">What is BEM</span>
+### Element
+
+Element is formed descendent of Blocks or other Elements. Must be separate by double underbar (`__`).
+
+<div class="row">
+<div class="col">
+
+<h4>HTML</h4>
+
+```html
+<div class="v-block">
+    <div class="v-block__element">
+        <p class="v-block__element__child-element">Foo</p>
+    </div>
+</div>
+```
+
+</div>
+<div class="col">
+
+<h4>SCSS</h4>
+
+```scss
+.v-block {
+    &__element {
+        // .v-block__element
+
+        &__child-element {
+            // .v-block__element__child-element
+        }
+    }
+}
+```
+
+</div>
+</div>
+
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">What is BEM</span>
+### Element Example
+
+<div class="row">
+<div class="col">
+
+<h4>SCSS</h4>
+
+```scss
+.c-headline {
+    background: #eee;
+    padding: 5px 20px;
+
+    &__title {
+        color: #333;
+        margin: 0 0 .1em;
+        padding-bottom: .05em;
+        line-height: 1;
+        font-weight: bold;
+        border-bottom: 1px solid #ccc;
+    }
+    &__subtitle {
+        color: #666;
+        margin: 0;
+        line-height: 1;
+        font-weight: bold;
+    }
+}
+```
+
+</div>
+<div class="col">
+<h4>HTML</h4>
+
+```html
+<div class="c-headline">
+    <p class="c-headline__title">Title</p>
+    <p class="c-headline__subtitle">Sub title</p>
+</div>
+```
+
+<h4>Result</h4>
+<div class="c-headline">
+    <h2 class="c-headline__title">Title</h2>
+    <p class="c-headline__subtitle">Sub title</p>
+</div>
+</div>
+</div>
+
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">What is BEM</span>
+### Modifier
+
+Modifier is represented different state or version of Blocks. Must be separate by double hyphen (`--`). or, you can use State pattern of [SMACSS](http://smacss.com/book/type-state), the prefix of `.is-` or `.has-` as modifier style pattern.
+
+<div class="row">
+<div class="col">
+
+<h4>HTML</h4>
+
+```html
+<div class="v-block"></div>
+<div class="v-block v-block--modifier"></div>
+<div class="v-block is-modifier"></div>
+```
+
+</div>
+<div class="col">
+
+<h4>SCSS</h4>
+
+```scss
+.v-block {
+    &--modifier {
+        // .v-block--modifier
+    }
+
+    &.is-modifier {
+        // .v-block.is-modifier
+    }
+}
+```
+
+</div>
+</div>
+
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+## <span class="is-small">What is BEM</span>
+### Modifier Example
+
+<div class="row">
+<div class="col">
+
+<h4>SCSS</h4>
+
+```scss
+.c-button {
+    outline: none;
+    cursor: pointer;
+    border: none;
+    background: #eee;
+    color: #333;
+    line-height: inherit;
+    font-size: 16px;
+    font-weight: inherit;
+    font-family: inherit;
+    padding: 1em 2em;
+    transition: background .3s;
+
+    &:hover {
+        background: #ccc;
+    }
+
+    &.is-primary {
+        background: #007bff;
+        color: #fff;
+
+        &:hover {
+            background: #0069d9;
+        }
+    }
+
+    &.is-secondary {
+        background: #28a745;
+        color: #fff;
+
+        &:hover {
+            background: #1e7e34;
+        }
+    }
+}
+```
+
+</div>
+<div class="col">
+<h4>HTML</h4>
+
+```html
+<button class="c-button">Normal button</button>
+<button class="c-button is-primary">Primary button</button>
+<button class="c-button is-secondary">Secondary button</button>
+```
+
+<h4>Result</h4>
+<div class="u-align-center">
+<button class="c-button">Normal button</button>
+<button class="c-button is-primary">Primary button</button>
+<button class="c-button is-secondary">Secondary button</button>
+</div>
+</div>
+</div>
+
+                    </textarea>
+                </section>
+            </div>
+
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-markdown>
+# In the end
+### Please remember at leaset the following things
+
+1. Must use <strong class="important">prefix</strong>
+2. Must <strong class="important">not</strong> use only tag selector
+3. Must use <strong class="important">Element</strong> or <strong class="important">Child combinator (`>`)</strong> for child element
+4. If there is common layout, <strong class="important">convert to Component or Project</strong>
+                    </textarea>
+                </section>
+            </div>
+        </div>
+
+        <script src="./main.ts"></script>
+    </body>
+</html>
