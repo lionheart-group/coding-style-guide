@@ -1,0 +1,39 @@
+{% extends 'template/siteframe.twig' %}
+
+{% block title %}Introduction{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block contents %}
+<div class="c-visual">
+    <div class="u-layout">
+        <div class="c-visual__text">
+            <h1 class="c-visual__title">LionHeart Coding Style Guide</h1>
+        </div>
+    </div>
+</div>
+
+<section class="p-section">
+    <div class="u-layout">
+        <h2 class="c-headline2"><a href="#introduction" id="introduction" class="c-position-anchor">Introduction</a></h2>
+
+        <div class="p-section__body">
+          <p>"Speed" and "Quality" are important for our works, and we need to keep consistent quality no matter who does it. And, we need to think the site that built by us should be easily updating.</p>
+          <p>So, we prepared our coding style guide. Basically, we should follow this guide for keeping our work's quality.</p>
+        </div>
+    </div>
+</section>
+
+<section class="p-section">
+    <div class="u-layout">
+        <h2 class="c-headline2"><a href="#toc" id="toc" class="c-position-anchor">Table of topics</a></h2>
+
+        <div class="p-section__body">
+            {% import "macros/global.twig" as global %}
+
+            {{ global.recursiveNav(site.nav) }}
+        </div>
+    </div>
+</section>
+{% endblock %}

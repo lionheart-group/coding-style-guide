@@ -1,0 +1,12 @@
+/**
+ * Align Styles
+ */
+@include alignStyle();
+
+@include mq_pc {
+    @include alignStyle('-pc');
+}
+
+@include mq_sp {
+    @include alignStyle('-sp');
+}

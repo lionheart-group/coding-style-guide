@@ -1,0 +1,12 @@
+/**
+ * Image
+ */
+@include imageStyle;
+
+@media screen and (min-width: $sp-width-breakpoint + 1px) {
+    @include imageStyle("-pc");
+}
+
+@include mq_sp {
+    @include imageStyle("-sp");
+}

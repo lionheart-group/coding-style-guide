@@ -1,0 +1,14 @@
+// stylelint-disable
+@mixin floatStyle ($prefix: "") {
+    .u#{$prefix}-float-left {
+        float: left;
+    }
+
+    .u#{$prefix}-float-right {
+        float: right;
+    }
+
+    .u#{$prefix}-clear {
+        clear: both;
+    }
+}

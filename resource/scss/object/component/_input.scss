@@ -1,0 +1,51 @@
+/**
+ * Form & Input
+ */
+.c-input {
+    &__label {
+        cursor: pointer;
+        display: inline-block;
+    }
+
+    &__text {
+        border: 1px solid #aaa;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        font-size: 1.6rem;
+        outline: none;
+        padding: 8px;
+
+        &--short {
+            width: 5em;
+        }
+
+        &--full {
+            width: 100%;
+        }
+
+        &:focus {
+            border: 1px solid #182ece;
+        }
+    }
+
+    &__select {
+        background: #eee;
+        border: 1px solid #aaa;
+        font-size: 1.6rem;
+        height: 2em;
+        padding: 0 1em;
+    }
+}
+
+@include mq_sp {
+    .c-input {
+        &__text {
+            font-size: initial;
+        }
+
+        &__select {
+            font-size: initial;
+        }
+    }
+}

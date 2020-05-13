@@ -1,0 +1,57 @@
+/**
+ * Form styling
+ */
+.p-form {
+    &__table {
+        width: 100%;
+
+        & > tbody {
+            & > tr {
+                &.is-top {
+                    * {
+                        vertical-align: top;
+                    }
+                }
+
+                & > th {
+                    padding: 10px 1em 10px 0;
+                    text-align: left;
+                    vertical-align: middle;
+                    white-space: nowrap;
+                    width: 1em;
+                }
+
+                & > td {
+                    padding: 10px 0;
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
+}
+
+@include mq_sp {
+    .p-form {
+        &__table {
+            &,
+            thead,
+            tbody,
+            tr,
+            th,
+            td {
+                width: auto;
+                display: block;
+            }
+
+            & > tbody > tr {
+                & > th {
+                    padding: 1rem 0 0;
+                }
+
+                & > td {
+                    padding: 0 0 1rem;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+/**
+ * Display Styles
+ */
+@include displayStyle();
+
+@include mq_pc {
+    @include displayStyle('-pc');
+}
+
+@include mq_sp {
+    @include displayStyle('-sp');
+}

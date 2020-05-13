@@ -1,0 +1,17 @@
+.p-section {
+    & + & {
+        margin-top: 6rem;
+    }
+
+    &__body {
+        & > p,
+        & > ul,
+        & > ol,
+        & > dl,
+        & > pre {
+            &:not(:first-child) {
+                margin-top: $space-elements-gap;
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+.c-important {
+    font-weight: 900;
+
+    &.is-primary {
+        color: $color-lh-red;
+    }
+
+    &.is-secondary {
+        color: $color-lh-blue;
+    }
+}

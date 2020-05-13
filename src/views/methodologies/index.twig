@@ -1,0 +1,85 @@
+{% extends 'template/siteframe.twig' %}
+
+{% block title %}CSS methodologies{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block contents %}
+<div class="c-visual">
+    <div class="u-layout">
+        <div class="c-visual__text">
+            <h1 class="c-visual__title">CSS methodologies</h1>
+        </div>
+    </div>
+</div>
+
+<section class="p-section">
+    <div class="u-layout">
+        <h2 class="c-headline2"><a href="#flocss" id="flocss" class="c-position-anchor">FLOCSS</a></h2>
+
+        <div class="p-section__body">
+          <p>Basically, We'll follow <a href="https://github.com/hiloki/flocss/blob/master/README_eng.md" target="_blank">"FLOCSS"</a> CSS methodologies, and we have the enhanced rules. This document is included this rules instruction also.</p>
+        </div>
+    </div>
+</section>
+
+<section class="p-section">
+    <div class="u-layout">
+        <h2 class="c-headline2"><a href="#foundation" id="foundation" class="c-position-anchor">Foundation</a></h2>
+
+        <div class="p-section__body">
+            <p><strong>Foundation</strong> should be written the basic styles. <strong class="c-important is-primary">You can write the tag selector style into Foundation only</strong>.</p>
+            <dl>
+                <dt>Target elements</dt>
+                <dd>
+                    <ul>
+                        <li>Tag elements</li>
+                    </ul>
+                </dd>
+                <dt>Target files</dt>
+                <dd>
+                    <ul>
+                        <li>scss/foundation/*.scss</li>
+                    </ul>
+                </dd>
+            </dl>
+
+            <div class="c-alert is-info">
+                <h3 class="c-alert__head">Remarks</h3>
+
+                <div class="c-alert__body">
+                    <p>Separate scss files by each tag selectors. (e.g. <strong>_a.scss</strong>, <strong>_ul.scss</strong>)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="p-section">
+    <div class="u-layout">
+        <h2 class="c-headline2"><a href="#layout" id="layout" class="c-position-anchor">Layout</a></h2>
+
+        <div class="p-section__body">
+            <p><strong>Layout</strong> should be witten the large common containers such as the header area, sidebar and footer.</p>
+            <dl>
+                <dt>Target elements</dt>
+                <dd>
+                    <ul>
+                        <li>Header</li>
+                        <li>Footer</li>
+                        <li>Sidebar</li>
+                    </ul>
+                </dd>
+                <dt>Target elements</dt>
+                <dd>
+                    <ul>
+                        <li>scss/layout/*.scss</li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

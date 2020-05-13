@@ -1,0 +1,18 @@
+/**
+ * Global Navigation
+ */
+.l-nav {
+    &__list {
+        list-style: none;
+    }
+
+    &__item {
+        margin-left: 0;
+    }
+
+    &__anchor {
+        display: block;
+        line-height: 1;
+        padding: 1rem;
+    }
+}

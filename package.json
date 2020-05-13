@@ -1,17 +1,66 @@
 {
-  "name": "lh-conding-rule",
+  "name": "coding-style-guide",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {},
+  "description": "",
+  "main": "resource/ts/index.ts",
   "scripts": {
-    "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html -d public"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode=production",
+    "dev": "webpack --mode=development",
+    "watch": "webpack -w --mode=development",
+    "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
+    "lintfix": "eslint --fix --ext .js,.ts --ignore-path .gitignore ."
   },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/lionheart-group/coding-style-guide.git"
+  },
+  "author": "SUSH <s.ukai@lionheart.co.jp>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/lionheart-group/coding-style-guide/issues"
+  },
+  "homepage": "https://gitlab.com/lionheart-group/coding-style-guide#readme",
   "devDependencies": {
-    "parcel-bundler": "^1.12.3",
-    "parcel-plugin-static-files-copy": "^2.0.0",
-    "sass": "^1.17.3",
-    "typescript": "^3.4.1"
+    "@namics/stylelint-bem": "^6.3.1",
+    "@types/highlight.js": "^9.12.3",
+    "@types/mini-css-extract-plugin": "^0.9.1",
+    "@types/node": "^13.13.5",
+    "@types/optimize-css-assets-webpack-plugin": "^5.0.1",
+    "@types/terser-webpack-plugin": "^2.2.0",
+    "@types/webpack": "^4.41.12",
+    "@typescript-eslint/eslint-plugin": "^2.32.0",
+    "@typescript-eslint/parser": "^2.32.0",
+    "@typescript-eslint/typescript-estree": "^2.32.0",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^3.5.3",
+    "cssnano-preset-advanced": "^4.0.7",
+    "eslint": "^7.0.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "fibers": "^5.0.0",
+    "jest": "^26.0.1",
+    "mini-css-extract-plugin": "^0.9.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "prettier": "^2.0.5",
+    "ress": "github:sushat4692/ress",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.2.1",
+    "stylelint": "^13.3.3",
+    "stylelint-config-recommended": "^3.0.0",
+    "stylelint-config-recommended-scss": "^4.2.0",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-scss": "^3.17.2",
+    "stylelint-selector-tag-no-without-class": "^2.0.3",
+    "terser-webpack-plugin": "^3.0.1",
+    "ts-loader": "^7.0.4",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.8.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "highlight.js": "^10.0.3"
   }
 }
