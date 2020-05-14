@@ -1,8 +1,9 @@
 // Font
 // stylelint-disable-next-line value-keyword-case
-$sans-font: "Noto Sans JP", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Verdana, sans-serif;
+$sans-font: 'Lato', sans-serif;
 // stylelint-disable-next-line value-keyword-case
 $serif-font: "Noto Serif JP", Georgia, 游明朝, "Yu Mincho", YuMincho, "Hiragino Mincho ProN", HGS明朝E, メイリオ, Meiryo, serif;
+$source-font: 'Source Code Pro', monospace;
 $default-font: $sans-font;
 
 // For SmartPhone
@@ -17,7 +18,7 @@ $pc-layout-width: 1000;
 $pc-window-gap: 4rem;
 $pc-grid-gap: 2rem;
 $pc-grid-steps: 12;
-$pc-side-width: 200px;
+$pc-side-width: 220px;
 
 // Label
 $label-info-color: #1183c0;

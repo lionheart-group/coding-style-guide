@@ -9,13 +9,13 @@ return [
         // og:type
         'type'        => 'article',
         // page title
-        'title'       => 'タイトル',
+        'title'       => 'LionHeart Coding Style Guide',
         // meta description
         'description' => '',
         // meta keywords
         'keywords'    => '',
         // site name
-        'name'        => 'タイトル',
+        'name'        => 'LionHeart Coding Style Guide',
         // ogp:image
         'image'       => null,
         // Twitter account
@@ -33,7 +33,51 @@ return [
                 'label' => 'Home',
                 'link' => '/',
                 'children' => [],
-            ], [
+            ],
+            [
+                'label' => 'Basic rules',
+                'link' => '/basic/',
+                'children' => [
+                    [
+                        'label' => 'Document rule',
+                        'link' => '/basic/#document',
+                        'children' => [],
+                    ],
+                    [
+                        'label' => 'Directory Structure',
+                        'link' => '/basic/#directory',
+                        'children' => [],
+                    ],
+                ]
+            ],
+            [
+                'label' => 'Images',
+                'link' => '/image/',
+                'children' => [
+                    [
+                        'label' => 'File naming rules',
+                        'link' => '/image/#naming',
+                        'children' => [
+                            [
+                                'label' => 'Basically rules',
+                                'link' => '/image/#naming-basic',
+                                'children' => []
+                            ],
+                            [
+                                'label' => 'Detail rules',
+                                'link' => '/image/#naming-detail',
+                                'children' => []
+                            ]
+                        ],
+                    ],
+                    [
+                        'label' => 'Export format',
+                        'link' => '/image/#format',
+                        'children' => []
+                    ],
+                ],
+            ],
+            [
                 'label' => 'CSS methodologies',
                 'link' => '/methodologies/',
                 'children' => [
@@ -41,15 +85,18 @@ return [
                         'label' => 'FLOCSS',
                         'link' => '/methodologies/#flocss',
                         'children' => [],
-                    ], [
+                    ],
+                    [
                         'label' => 'Foundation',
                         'link' => '/methodologies/#foundation',
                         'children' => [],
-                    ], [
+                    ],
+                    [
                         'label' => 'Layout',
                         'link' => '/methodologies/#layout',
                         'children' => [],
-                    ], [
+                    ],
+                    [
                         'label' => 'Object',
                         'link' => '/methodologies/#object',
                         'children' => [
@@ -57,23 +104,31 @@ return [
                                 'label' => 'Component',
                                 'link' => '/methodologies/#object-component',
                                 'children' => [],
-                            ], [
+                            ],
+                            [
                                 'label' => 'Project',
                                 'link' => '/methodologies/#object-project',
                                 'children' => [],
-                            ], [
+                            ],
+                            [
                                 'label' => 'Utility',
                                 'link' => '/methodologies/#object-utility',
                                 'children' => [],
                             ],
                         ],
-                    ], [
+                    ],
+                    [
                         'label' => 'View',
                         'link' => '/methodologies/#view',
                         'children' => [],
                     ],
                 ],
-            ]
+            ],
+            [
+                'label' => 'Tips',
+                'link' => '/tips/',
+                'children' => [],
+            ],
         ]
     ]
 ];

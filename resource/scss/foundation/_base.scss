@@ -46,6 +46,14 @@ a {
 p {
 }
 
+code,
+kbd,
+pre,
+samp {
+    font-size: 1.4rem;
+    font-family: $source-font;
+}
+
 /**
  * List
  */
@@ -57,11 +65,18 @@ li {
 }
 
 dl {
-    dt {
-        font-weight: bold;
+}
 
-        & ~ dt {
-            margin-top: 0.4em;
-        }
+dt {
+    font-weight: bold;
+
+    & ~ dt {
+        margin-top: 0.4em;
     }
 }
+
+dd {
+    margin-left: 1em;
+    margin-top: 0.2em;
+}
+

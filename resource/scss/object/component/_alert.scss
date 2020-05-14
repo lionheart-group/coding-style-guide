@@ -12,6 +12,15 @@
     }
 
     &__body {
+        & > p,
+        & > ul,
+        & > ol,
+        & > dl,
+        & > pre {
+            &:not(:first-child) {
+                margin-top: $space-elements-gap / 4;
+            }
+        }
     }
 
     &.is-primary {

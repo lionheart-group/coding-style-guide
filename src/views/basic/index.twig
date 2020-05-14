@@ -1,0 +1,146 @@
+{% extends 'template/siteframe.twig' %}
+
+{% block title %}Basic rules | {{ site.name }}{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block contents %}
+<div class="c-visual">
+    <div class="u-layout">
+        <div class="c-visual__text">
+            <h1 class="c-visual__title">Basic rules</h1>
+        </div>
+    </div>
+</div>
+
+<section class="p-section">
+    <div class="u-layout">
+        <h2 class="c-headline2"><a href="#document" id="document" class="c-position-anchor">Document rule</a></h2>
+
+        <div class="p-section__body">
+            <ul>
+                <li>Indent style is <strong class="c-important is-primary">space</strong></li>
+                <li>Indent size is <strong class="c-important is-primary">4 spaces</strong></li>
+            </ul>
+
+            <div class="c-alert is-success">
+                <h3 class="c-alert__head">Recommendation</h3>
+
+                <div class="c-alert__body">
+                    <p>Our project has <a href="https://editorconfig.org/" target="_blank">EditorConfig</a> setting file (.editorconfig). This setting file will adjust document rule automatically for your editor when you enabled the following settings/plugins.</p>
+
+                    <ul>
+                        <li><a href="https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig" target="_blank">For VS Code</a></li>
+                        <li><a href="https://atom.io/packages/editorconfig" target="_blank">For Atom</a></li>
+                        <li><a href="https://github.com/kidwm/brackets-editorconfig/" target="_blank">For Brackets</a></li>
+                        <li>Adobe Dreamweaver is not available</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="p-section">
+    <div class="u-layout">
+        <h2 class="c-headline2"><a href="#directory" id="directory" class="c-position-anchor">Directory Structure</a></h2>
+
+        <div class="p-section__body">
+            <p>Follow the following directory structure under the document root.</p>
+            <pre class="language-yaml"><code>{{ '- htdocs/
+  └ data/
+      ├ scss/ # SCSS files
+      ├ foundation/  # Reset CSS
+      ├ layout/      # Layout
+      ├ object/      # Object
+      │  ├ component/   # Component
+      │  ├ project/     # Project
+      │  └ utility/     # Utility
+      ├ views/       # SCSS files for each page
+      │  └ index.scss   # SCSS file for Index page
+      ├ css/  # Compiled files from SCSS
+      └ img/  # Image files
+          ├ common/  # Common image files
+          └ views/    # Included image files for each page
+              └ index/  # Image files for Index page'|escape }}</code></pre>
+            <p>Image/CSS/JS file's place should be adjust by URL</p>
+
+            <dl>
+                <dt>Sample</dt>
+                <dd>
+                    <ul>
+                        <li>
+                            <span class="c-important is-primary">http://example.com/</span>
+                            <ul>
+                                <li><strong>Image</strong> : htdocs/data/img/views/index/</li>
+                                <li><strong>SCSS</strong> : htdocs/data/scss/views/index.scss</li>
+                                <li><strong>JS</strong>   : htdocs/data/js/views/index.js</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="c-important is-primary">http://example.com/sample/</span>
+                            <ul>
+                                <li>
+                                    <strong>Common for category</strong>
+                                    <ul>
+                                        <li><strong>Image</strong> : htdocs/data/img/views/sample/common/</li>
+                                        <li><strong>SCSS</strong> : htdocs/data/scss/views/sample/common.scss</li>
+                                        <li><strong>JS</strong> : htdocs/data/js/views/sample/common.js</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Image</strong> : htdocs/data/img/views/sample/index/</li>
+                                <li><strong>SCSS</strong> : htdocs/data/scss/views/sample/index.scss</li>
+                                <li><strong>JS</strong>   : htdocs/data/js/views/sample/index.js</li>
+                                <li><span class="c-important is-secondary">*Caution : Not sample.scss, sample.js</span></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="c-important is-primary">http://example.com/sample/test.html</span>
+                            <ul>
+                                <li>
+                                    <strong>Common for category</strong>
+                                    <ul>
+                                        <li><strong>Image</strong> : htdocs/data/img/views/sample/common/</li>
+                                        <li><strong>SCSS</strong> : htdocs/data/scss/views/sample/common.scss</li>
+                                        <li><strong>JS</strong> : htdocs/data/js/views/sample/common.js</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Image</strong> : htdocs/data/img/views/sample/test/</li>
+                                <li><strong>SCSS</strong> : htdocs/data/scss/views/sample/test.scss</li>
+                                <li><strong>JS</strong>   : htdocs/data/js/views/sample/test.js</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="c-important is-primary">http://example.com/sample/test/</span>
+                            <ul>
+                                <li>
+                                    <strong>Common for category</strong>
+                                    <ul>
+                                        <li><strong>Image</strong> : htdocs/data/img/views/sample/common/</li>
+                                        <li><strong>SCSS</strong> : htdocs/data/scss/views/sample/common.scss</li>
+                                        <li><strong>JS</strong> : htdocs/data/js/views/sample/common.js</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>Common for sub category</strong>
+                                    <ul>
+                                        <li><strong>Image</strong> : htdocs/data/img/views/sample/test/common/</li>
+                                        <li><strong>SCSS</strong> : htdocs/data/scss/views/sample/test/common.scss</li>
+                                        <li><strong>JS</strong> : htdocs/data/js/views/sample/test/common.js</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Image</strong> : htdocs/data/img/views/sample/test/index/</li>
+                                <li><strong>SCSS</strong> : htdocs/data/scss/views/sample/test/index.scss</li>
+                                <li><strong>JS</strong>   : htdocs/data/js/views/sample/test/index.js</li>
+                                <li><span class="c-important is-secondary">*Caution : Not sample/test/, test.scss, test.js</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
