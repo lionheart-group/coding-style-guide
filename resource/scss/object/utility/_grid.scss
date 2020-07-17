@@ -1,9 +1,0 @@
-@include gridStyle($pc-grid-gap, $pc-grid-steps);
-
-@include mq_pc {
-    @include gridStyle($pc-grid-gap, $pc-grid-steps, '-pc');
-}
-
-@include mq_sp {
-    @include gridStyle($sp-grid-gap, $sp-grid-steps, '-sp');
-}
