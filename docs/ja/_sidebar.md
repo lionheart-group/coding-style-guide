@@ -7,8 +7,12 @@
   * [書出設定](/ja/image/export.md)
 * CSS構成案
   * [概要](/ja/methodologies/)
-  * [重要事項](/ja/methodologies/important.md)
-  * [Foundation](/ja/methodologies/foundation.md)
+  * 注意事項
+    * [ファイル名とクラス名の関係について](/ja/methodologies/important/name.md)
+    * [別コンポーネントを含めないこと](/ja/methodologies/important/child.md)
+    * [タグセレクタは使用しないこと](/ja/methodologies/important/selector.md)
+  * [Foundation](/ja/methodologies/foundation/)
+    * [代表的なmixin](/ja/methodologies/foundation/mixin.md)
   * [Layout](/ja/methodologies/layout.md)
   * Object
     * [Component](/ja/methodologies/object/component.md)

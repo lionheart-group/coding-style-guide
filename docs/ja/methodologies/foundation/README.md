@@ -6,3 +6,6 @@
 （`h*`の余白や、`ul`の点などを消しています）
 
 また、変数やmixinもfoundation内に格納するようにします。
+
+> [!TIP]
+> [代表的なmixinはこちら](/ja/methodologies/foundation/mixin.md)
