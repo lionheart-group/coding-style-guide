@@ -1,9 +1,13 @@
 * [コーディングスタイルガイド](/ja/)
 * 基本設定
-  * [基本設定](/ja/basic.md)
-  * [画像について](/ja/image.md)
+  * [アプリケーション設定](/ja/basic/)
+  * [ディレクトリ構造](/ja/basic/directory.md)
+* 画像について
+  * [命名規則](/ja/image/)
+  * [書出設定](/ja/image/export.md)
 * CSS構成案
   * [概要](/ja/methodologies/)
+  * [重要事項](/ja/methodologies/important.md)
   * [Foundation](/ja/methodologies/foundation.md)
   * [Layout](/ja/methodologies/layout.md)
   * Object

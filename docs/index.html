@@ -17,11 +17,23 @@
       coverpage: true,
       loadSidebar: true,
       'flexible-alerts': {
-        style: 'callout'
+        style: 'callout',
+        good: {
+          label: "Good",
+          icon: "fas fa-thumbs-up",
+          className: "tip"
+        },
+        bad: {
+          label: "Bad",
+          icon: "fas fa-thumbs-down",
+          className: "danger"
+        }
       }
     }
   </script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
   <script src="//unpkg.com/docsify-plugin-flexible-alerts"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-php.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-scss.min.js"></script>
 </body>
 </html>
