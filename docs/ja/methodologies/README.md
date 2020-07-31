@@ -25,3 +25,22 @@ FLOCSSの基本原則にのっとったディレクトリ構成を用意しま�
       ├ project/
       └ utility/
 ```
+
+
+## 注意事項
+
+FLOCSSに加えて幾つか独自に制限しているルールがありますので、下記のリンクを確認してください。
+
+* [ファイル名とクラス名の関係について](/ja/methodologies/important/name.md)
+* [別Componentを含めないこと](/ja/methodologies/important/child.md)
+* [タグセレクタは使用しないこと](/ja/methodologies/important/selector.md)
+
+
+## 各レイヤーの説明
+
+* [Foundation](/ja/methodologies/foundation/)
+* [Layout](/ja/methodologies/layout.md)
+* Object
+  * [Component](/ja/methodologies/object/component.md)
+  * [Project](/ja/methodologies/object/project.md)
+  * [Utility](/ja/methodologies/object/utility.md)

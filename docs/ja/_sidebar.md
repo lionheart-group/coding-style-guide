@@ -9,7 +9,7 @@
   * [概要](/ja/methodologies/)
   * 注意事項
     * [ファイル名とクラス名の関係について](/ja/methodologies/important/name.md)
-    * [別コンポーネントを含めないこと](/ja/methodologies/important/child.md)
+    * [別Componentを含めないこと](/ja/methodologies/important/child.md)
     * [タグセレクタは使用しないこと](/ja/methodologies/important/selector.md)
   * [Foundation](/ja/methodologies/foundation/)
     * [代表的なmixin](/ja/methodologies/foundation/mixin.md)

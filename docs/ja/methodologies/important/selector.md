@@ -27,7 +27,7 @@ Foundationを除き、タグセレクタは使用しないこと。
 > ```
 
 > [!GOOD]
-> 子コンポーネントを作成してください。
+> 子Componentを作成してください。
 > 
 > ```html
 > <div class="c-foo">
@@ -45,7 +45,7 @@ Foundationを除き、タグセレクタは使用しないこと。
 > ```
 
 > [!GOOD]
-> `<table>`などタグ構造が複雑なものも子コンポーネントを作成してください。
+> `<table>`などタグ構造が複雑なものも子Componentを作成してください。
 > 
 > ```html
 > <table class="c-table">
