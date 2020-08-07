@@ -34,13 +34,14 @@ FLOCSSに加えて幾つか独自に制限しているルールがあります�
 * [ファイル名とクラス名の関係について](/ja/methodologies/important/name.md)
 * [別Componentを含めないこと](/ja/methodologies/important/child.md)
 * [タグセレクタは使用しないこと](/ja/methodologies/important/selector.md)
+* [メディアクエリの記述位置](/ja/methodologies/important/media_query.md)
 
 
 ## 各レイヤーの説明
 
 * [Foundation](/ja/methodologies/foundation/)
-* [Layout](/ja/methodologies/layout.md)
+* [Layout](/ja/methodologies/layout/)
 * Object
-  * [Component](/ja/methodologies/object/component.md)
-  * [Project](/ja/methodologies/object/project.md)
-  * [Utility](/ja/methodologies/object/utility.md)
+  * [Component](/ja/methodologies/object/component/)
+  * [Project](/ja/methodologies/object/project/)
+  * [Utility](/ja/methodologies/object/utility/)

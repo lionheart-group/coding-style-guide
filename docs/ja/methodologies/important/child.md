@@ -7,10 +7,6 @@
 
 ## 事例
 
-<!--panels:start-->
-
-<!--div:left-panel-->
-
 > [!BAD]
 > `.c-foo`内の`.c-bar`のレイアウトを変更したい場合でも、`.c-foo`内に`.c-bar`を含めないようにしてください。
 > 
@@ -30,8 +26,6 @@
 > }
 > ```
 
-<!--div:right-panel-->
-
 > [!GOOD]
 > 上記例の解決作の一つとして、例えばc-barに並列でc-fooの子Componentを追加します。 
 >
@@ -50,5 +44,3 @@
 >     }
 > }
 > ```
-
-<!--panels:end-->
