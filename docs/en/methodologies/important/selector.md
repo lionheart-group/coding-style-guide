@@ -1,0 +1,97 @@
+# Don't use tag selector
+
+You must NOT use tag selector except for the inside of `Foundation`.
+
+> [!TIP]
+> We allowed the child selector, but we changed the rule. Because, child selector has a week point. When you change the tag structures (e.g. when you change `<span>` to `<a>`), child selector won't be available.
+
+> [!REASON]
+> This rule will avoid the unintentional layout.
+
+## Example
+
+> [!BAD]
+> You must not use tag selector even if it's child selector.
+> 
+> ```html
+> <div class="c-foo">
+>     <p></p>
+> </div>
+> ```
+> 
+> ```scss
+> // scss/object/component/_foo.scss
+> .c-foo {
+>     > p {
+>         // something style
+>     }
+> }
+> ```
+
+> [!GOOD]
+> Prepare as the child component.
+> 
+> ```html
+> <div class="c-foo">
+>     <p class="c-foo__child"></p>
+> </div>
+> ```
+> 
+> ```scss
+> // scss/object/component/_foo.scss
+> .c-foo {
+>     &__child {
+>         // something style
+>     }
+> }
+> ```
+
+> [!GOOD]
+> Please prepare as the child components even if for `<table>` that is needed complex structure.
+> 
+> ```html
+> <table class="c-table">
+>     <thead class="c-table__thead">
+>         <tr class="c-table__thead__row">
+>             <th class="c-table__thead__head"></th>
+>             <td class="c-table__thead__data"></td>
+>         </tr>
+>     </thead>
+>     <tbody class="c-table__tbody">
+>         <tr class="c-table__tbody__row">
+>             <th class="c-table__tbody__head"></th>
+>             <td class="c-table__tbody__data"></td>
+>         </tr>
+>     </tbody>
+> </table>
+> ```
+> 
+> ```scss
+> // scss/object/component/_table.scss
+> .c-table {
+>     &__thead {
+>         // something style
+>         &__row {
+>             // something style
+>         }
+>         &__head {
+>             // something style
+>         }
+>         &__data {
+>             // something style
+>         }
+>     }
+>     &__tbody {
+>         // something style
+>         &__row {
+>             // something style
+>         }
+>         &__head {
+>             // something style
+>         }
+>         &__data {
+>             // something style
+>         }
+>     }
+> }
+> ```

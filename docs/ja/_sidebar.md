@@ -1,4 +1,3 @@
-* [コーディングスタイルガイド](/ja/)
 * 基本設定
   * [アプリケーション設定](/ja/basic/)
   * [ディレクトリ構造](/ja/basic/directory.md)
@@ -7,6 +6,7 @@
   * [書出設定](/ja/image/export.md)
 * CSS構成案
   * [概要](/ja/methodologies/)
+  * [旧バージョンとの違い](/ja/methodologies/migrations.md)
   * 注意事項
     * [ファイル名とクラス名の関係について](/ja/methodologies/important/name.md)
     * [別Componentを含めないこと](/ja/methodologies/important/child.md)

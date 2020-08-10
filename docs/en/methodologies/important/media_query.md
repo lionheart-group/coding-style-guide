@@ -1,19 +1,19 @@
-# メディアクエリの記述位置
+# Place of media query
 
-各要素ごとに各レイアウトのスタイルをまとめて記述します。
+Please write a style of one element for PC/SP collectively.
 
 > [!TIP]
-> 以前のルールでは、PCまたはSPの記述をファイル上部、もう一方のレイアウトをファイル下部にまとめて記述していました。
+> We separated PC/SP layout the above and the bottom.
 
 > [!REASON]
-> 各レイアウトの記述を近くに記述することで、スタイルの重複記述や、上書き漏れを防止します。
+> You can find the same style with PC and SP easily when you write it collectively.
 
 
-## 事例
+## Example
 
 > [!BAD]
-> ファイル下部にまとめて別レイアウトのスタイルを記述しないようにしてください。
-> 
+> Please don't write a different layout style to the bottom of a file.
+>
 > ```scss
 > // scss/object/component/_foo.scss
 > .c-foo {
@@ -34,8 +34,8 @@
 > ```
 
 > [!GOOD]
-> `.c-foo`、`.c-foo__bar`それぞれの直下にメディアクエリのスタイルを記述します。
-> 
+> Please write media query under the each `.c-foo` and `.c-foo__bar` styles.
+>
 > ```scss
 > // scss/object/component/_foo.scss
 > .c-foo {

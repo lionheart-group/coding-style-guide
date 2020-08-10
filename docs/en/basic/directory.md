@@ -1,0 +1,55 @@
+# Directory structure
+
+```
+- htdocs/  # Document root
+  └ data/
+      ├ scss/  # SCSS directories
+      │  ├ foundation/
+      │  ├ layout/
+      │  ├ object/
+      │     ├ component/
+      │     ├ project/
+      │     └ utility/
+      ├ css/  # Compiled css (Won't include into Repository)
+      └ img/  # Image directories
+          ├ common/  # Common images
+          └ views/   # Each page's images
+              └ index/  # Top page's images
+```
+
+> Image/JS file's place should be adjust by URL
+
+## Sample
+
+* http://example.com/
+  * **Image** : htdocs/data/img/views/index/
+  * **SCSS** : htdocs/data/scss/object/project/_index.scss
+  * **JS** : htdocs/data/js/views/index.js
+  
+* http://example.com/sample/
+  * Common for `sample`
+    * **Image** : htdocs/data/img/views/sample/common/
+    * **JS** : htdocs/data/js/views/sample/common.js
+  * **Image** : htdocs/data/img/views/sample/index/
+  * **SCSS** : htdocs/data/scss/object/project/_sample.scss
+  * **JS** : htdocs/data/js/views/sample/index.js
+  
+* http://example.com/sample/test.html
+  * Common for `sample`
+    * **Image** : htdocs/data/img/views/sample/common/
+    * **JS** : htdocs/data/js/views/sample/common.js
+  * **Image** : htdocs/data/img/views/sample/test/
+  * **SCSS** : htdocs/data/scss/object/project/_sample-test.scss
+  * **JS** : htdocs/data/js/views/sample/test.js
+  
+* http://example.com/sample/test/
+  * Common for `sample`
+    * **Image** : htdocs/data/img/views/sample/common/
+    * **JS** : htdocs/data/js/views/sample/common.js
+  * Common for `sample/test`
+    * **Image** : htdocs/data/img/views/sample/test/common/
+    * **JS** : htdocs/data/js/views/sample/test/common.js
+  * **Image** : htdocs/data/img/views/sample/test/index/
+  * **SCSS** : htdocs/data/scss/object/project/_sample-test.scss
+  * **JS** : htdocs/data/js/views/sample/test/index.js
+  
