@@ -7,6 +7,7 @@
   <meta name="description" content="LH Coding Style Guide">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/lib/themes/vue.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
   <div id="app"></div>
@@ -40,7 +41,40 @@
           icon: "fas fa-lightbulb",
           className: "info"
         }
-      }
+      },
+      plugins: [
+        function(hook, vm) {
+          hook.beforeEach(function(html) {
+            var lang = (function () {
+              if (vm.route.path.match(/^\/en\//)) {
+                return 'en';
+              } else if (vm.route.path.match(/^\/ja\//)) {
+                return 'ja';
+              }
+              return false;
+            })();
+
+            if (!lang) {
+              return html;
+            }
+
+            var label = lang === 'en' ? '日本語' : 'English';
+            var url = (function () {
+              if (lang === 'en') {
+                return vm.route.path.replace(/^\/en\//, '/ja/');
+              } else {
+                return vm.route.path.replace(/^\/ja\//, '/en/');
+              }
+            })();
+            var editHtml = '[📝 ' + label + '](' + url + ')\n';
+
+            return (
+              editHtml +
+              html
+            );
+          });
+        }
+      ]
     }
   </script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>

@@ -1,5 +1,9 @@
 * Basic settings
-  * [Application settings](/en/basic/)
+  * [Recommended Application](/en/basic/)
+    * [Visual Studio Code](/en/basic/application/vscode.md)
+    * [Atom](/en/basic/application/atom.md)
+  * Other required applications
+    * [Watchman](/en/basic/application/watchman.md)
   * [Directory structure](/en/basic/directory.md)
 * About image
   * [Naming rules](/en/image/)

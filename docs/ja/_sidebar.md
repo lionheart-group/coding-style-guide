@@ -1,5 +1,11 @@
 * 基本設定
-  * [アプリケーション設定](/ja/basic/)
+  * [推奨アプリケーション](/ja/basic/)
+    * [Visual Studio Code](/ja/basic/application/vscode.md)
+    * [Atom](/ja/basic/application/atom.md)
+    * ~~[Brackets](/ja/basic/application/brackets.md)~~
+    * [DreamWeaver](/ja/basic/application/dreamweaver.md)
+  * その他必要アプリケーション
+    * [Watchman](/ja/basic/application/watchman.md)
   * [ディレクトリ構造](/ja/basic/directory.md)
 * 画像について
   * [命名規則](/ja/image/)
