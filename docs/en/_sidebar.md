@@ -23,3 +23,9 @@
     * [Component](/en/methodologies/object/component/)
     * [Project](/en/methodologies/object/project/)
     * [Utility](/en/methodologies/object/utility/)
+* WordPress
+  * [Description](/en/wordpress/)
+  * Other settings
+    * [How to change sub page title](/en/wordpress/howto/title.md)
+    * [How to change topic path "Home" label](/en/wordpress/howto/topic-path.md)
+  * [Additional functions](/en/wordpress/functions.md)

@@ -1,7 +1,5 @@
 # CSS構成案
 
-## 概要
-
 [FLOCSS](https://github.com/hiloki/flocss)をベースに、LHの案件に併せて変更を行ったルールを利用していきます。
 
 

@@ -4,8 +4,6 @@
 > There are different rules from the old version. Please see the reference migration guide.  
 > [Migrations from Old rules](/en/methodologies/migrations.md)
 
-## Description
-
 Basically, We'll follow [FLOCSS](https://github.com/hiloki/flocss/blob/master/README_eng.md) CSS methodologies, and we have the enhanced rules.
 
 

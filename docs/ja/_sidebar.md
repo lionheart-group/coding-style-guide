@@ -25,3 +25,9 @@
     * [Component](/ja/methodologies/object/component/)
     * [Project](/ja/methodologies/object/project/)
     * [Utility](/ja/methodologies/object/utility/)
+* WordPress
+  * [概要](/ja/wordpress/)
+  * その他設定
+    * [サブページタイトル・英名の設定方法](/ja/wordpress/howto/title.md)
+    * [パンくずのラベル「ホーム」の変更方法](/ja/wordpress/howto/topic-path.md)
+  * [独自定義関数](/ja/wordpress/functions.md)
