@@ -25,6 +25,13 @@
     * [Component](/ja/methodologies/object/component/)
     * [Project](/ja/methodologies/object/project/)
     * [Utility](/ja/methodologies/object/utility/)
+* タスクランナーについて
+  * [概要](/ja/task-runner/)
+  * 用意されているタスクランナー
+    * [watch](/ja/task-runner/watch.md)
+    * [build:scss](/ja/task-runner/build-scss.md)
+    * [optimize:image](/ja/task-runner/optimize-image.md)
+    * [convert:webp](/ja/task-runner/convert-webp.md)
 * WordPress
   * [概要](/ja/wordpress/)
   * その他設定
