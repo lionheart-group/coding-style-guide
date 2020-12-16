@@ -1,11 +1,12 @@
 # Don't include other component
 
-**You must NOT include other Components in a Component.**
+**You must NOT include other Components in a Component.**  
+And, **You must NOT use ONLY child components, without parent component.**
 
 > [!REASON]
 > When you make styles in one Component, you can avoid unintentional layout with Components combination.
 
-## Example
+## Example(1)
 
 > [!BAD]
 > You must NOT include `.c-bar` into `.c-foo`, even if you want to change the layout of `.c-bar` inside of `.c-foo`.
@@ -43,4 +44,34 @@
 >         // something style
 >     }
 > }
+> ```
+
+## Example(2)
+
+> [!BAD]
+> You must NOT use `.c-bar__child` except for parent component `.c-bar`.
+>
+> ```html
+> <div class="c-foo">
+>     <div class="c-bar__child"></div>
+> </div>
+> ```
+
+> [!GOOD]
+> You should wrap child component `.c-bar__child` by parent component `.c-bar`.
+>
+> ```html
+> <div class="c-foo">
+>     <div class="c-bar">
+>         <div class="c-bar__child"></div>
+>     </div>
+> </div>
+> ```
+>
+> Or
+>
+> ```html
+> <div class="c-foo c-bar">
+>     <div class="c-bar__child"></div>
+> </div>
 > ```
