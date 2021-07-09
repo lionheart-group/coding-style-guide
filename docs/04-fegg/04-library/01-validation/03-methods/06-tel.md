@@ -1,0 +1,45 @@
+---
+title: Validation::tel
+---
+
+> Check valid tel character (+ - 0-9)
+
+
+## Description
+
+```php
+public boolean Validation::tel( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                     |
+| ------ | --------- | ------- | --------------------------- |
+| $name  | string    |         | Item label                  |
+| $value | mixed     |         | Check field value           |
+| $code  | mixed     | ""      | Error code or Error message |
+
+
+## Example
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// If $value is Tel string
+$successName = 'Success Field';
+$successVar  = '000-000-0000';
+$validation->tel('success', $successVar, array('@tel', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// If $value is not Tel string
+$failedName = 'Failed Field';
+$failedVar  = '2000/01/01';
+$validation->tel('failed', $failedVar, array('@tel', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>Failed Field</strong> は登録できない形式です"
+```

@@ -1,0 +1,27 @@
+---
+title: Application::setHtmlHeader
+---
+
+> Set HTML Header
+
+## Description
+
+```php
+public void Application::setHtmlHeader( string $header )
+```
+
+Set HTML Header
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                  |
+| ------- | --------- | ------- | ------------------------ |
+| $header | string    |         | Appending header content |
+
+## Example
+
+```php title="Controller"
+$this->setHtmlHeader( 'Content-type: text/javascript' );
+```
+
+Append `Content-type: text/javascript` to HTML header.

@@ -1,0 +1,68 @@
+---
+title: Validation::numeric
+---
+
+> Check numeric or not
+
+
+## Description
+
+```php
+public boolean Validation::numeric( string $name, mixed $value, [ mixed $code = '', boolean $decimalPointFlag = false, boolean $minusFlag = false ] )
+```
+
+
+## Arguments
+
+| Name              | Data type | Default | Remarks                     |
+| ----------------- | --------- | ------- | --------------------------- |
+| $name             | string    |         | Item label                  |
+| $value            | mixed     |         | Check field value           |
+| $code             | mixed     | ""      | Error code or Error message |
+| $decimalPointFlag | boolean   | false   | Allow including "."         |
+| $minusFlag        | boolean   | false   | Allow including "-"         |
+
+
+## Example
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// If $value is numeric
+$successName = 'Success Field';
+$successVar  = '123';
+$validation->numeric('success', $successVar, array('@numeric', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// If $value is not numeric
+$failedName = 'Failed Field';
+$failedVar  = 'abc123';
+$validation->numeric('failed', $failedVar, array('@numeric', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>Failed Field</strong> は 半角数字で入力してください"
+```
+
+### Optional Flag
+
+```php title="Controller"
+// If $value is negative numeric
+$failedName = 'Failed Field';
+$failedVar  = '-10';
+$validation->numeric('failed', $failedVar, array('@numeric', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>Failed Field</strong> は 半角数字で入力してください"
+
+// If $value is negative numeric with activate $minusFlag
+$successName = 'success Field';
+$successVar  = '-10';
+$validation->numeric('success', $successVar, array('@numeric_minus', $successName), false, true);
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); -> null
+```

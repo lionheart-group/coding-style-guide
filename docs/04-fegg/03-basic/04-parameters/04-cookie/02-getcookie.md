@@ -1,0 +1,48 @@
+---
+title: Application::getCookie
+---
+
+> Get COOKIE data
+
+## Description
+
+```php
+public void Application::getCookie( [ string $name = "" ] )
+```
+
+Get COOKIE data. If you omit argument, `getCookie` return all COOKIE data.
+
+
+## Arguments
+
+| Name    | Data type | Default | Remarks          |
+| :------ | :-------- | :------ | :--------------- |
+| $name   | string    |         | Cookie param key |
+
+
+## Example
+
+```php title="Controller - First.php"
+$this->setCookie('foo', 'bar');
+```
+
+```php title="Controller - Second.php"
+$this->getCookie('foo'); // -> bar
+```
+
+### Get all cookie datas
+
+If you omit argument, `getCookie` return all COOKIE data.
+
+```php title="Controller - First.php"
+$this->setCookie('foo', 'bar');
+$this->setCookie('baz', 'qux');
+```
+
+```php title="Controller - Second.php"
+var_dump( $this->getCookie() );
+```
+
+```html title="Output"
+array(2) { ["foo"]=> string(3) "bar" ["baz"]=> string(3) "qux" }
+```

@@ -1,0 +1,22 @@
+{
+  "title": {
+    "message": "Coding Style Guide",
+    "description": "The title in the navbar"
+  },
+  "item.label.HTML": {
+    "message": "HTML",
+    "description": "Navbar item with label HTML"
+  },
+  "item.label.WordPress": {
+    "message": "WordPress",
+    "description": "Navbar item with label WordPress"
+  },
+  "item.label.Fegg": {
+    "message": "Fegg",
+    "description": "Navbar item with label Fegg"
+  },
+  "item.label.GitLab": {
+    "message": "GitLab",
+    "description": "Navbar item with label GitLab"
+  }
+}

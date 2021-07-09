@@ -1,0 +1,45 @@
+---
+title: Validation::required
+---
+
+> Check required
+
+
+## Description
+
+```php
+public boolean Validation::required( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                     |
+| ------ | --------- | ------- | --------------------------- |
+| $name  | string    |         | Item label                  |
+| $value | mixed     |         | Check field value           |
+| $code  | mixed     | ""      | Error code or Error message |
+
+
+## Example
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// If $value is not empty
+$successName = 'Success Field';
+$successVar  = 'foo';
+$validation->required('success', $successVar, array('@required', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// If $value is empty
+$failedName = 'Failed Field';
+$failedVar  = null;
+$validation->required('failed', $failedVar, array('@required', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>Failed Field</strong> は半角英数で入力してください"
+```

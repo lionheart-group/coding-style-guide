@@ -1,0 +1,122 @@
+{
+  "version.label": {
+    "message": "次へ",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.HTML": {
+    "message": "HTML",
+    "description": "The label for category HTML in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Basic": {
+    "message": "基本設定",
+    "description": "The label for category Basic in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Applications": {
+    "message": "アプリケーション",
+    "description": "The label for category Applications in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Image": {
+    "message": "画像について",
+    "description": "The label for category Image in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.CSS Methodologies": {
+    "message": "CSS構成案",
+    "description": "The label for category CSS Methodologies in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Important": {
+    "message": "注意事項",
+    "description": "The label for category Important in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Foundation": {
+    "message": "Foundation",
+    "description": "The label for category Foundation in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Object": {
+    "message": "Object",
+    "description": "The label for category Object in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.WordPress": {
+    "message": "WordPress",
+    "description": "The label for category WordPress in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.How To": {
+    "message": "その他設定",
+    "description": "The label for category How To in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Fegg": {
+    "message": "Fegg",
+    "description": "The label for category Fegg in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Install": {
+    "message": "インストール",
+    "description": "The label for category Install in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Basic function": {
+    "message": "基本関数",
+    "description": "The label for category Basic function in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Template": {
+    "message": "テンプレート",
+    "description": "The label for category Template in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Display methods": {
+    "message": "表示関数",
+    "description": "The label for category Display methods in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Helper methods": {
+    "message": "ヘルパー関数",
+    "description": "The label for category Helper methods in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Rules": {
+    "message": "テンプレート式",
+    "description": "The label for category Rules in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Parameters": {
+    "message": "サーバ変数",
+    "description": "The label for category Parameters in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.POST/GET": {
+    "message": "POST/GET",
+    "description": "The label for category POST/GET in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.SESSION": {
+    "message": "SESSION",
+    "description": "The label for category SESSION in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.COOKIE": {
+    "message": "COOKIE",
+    "description": "The label for category COOKIE in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Other methods": {
+    "message": "その他関数",
+    "description": "The label for category Other methods in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Ticket": {
+    "message": "Ticket",
+    "description": "The label for category Ticket in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Extension libraries": {
+    "message": "追加ライブラリー",
+    "description": "The label for category Extension libraries in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Validation": {
+    "message": "データ検証",
+    "description": "The label for category Validation in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Methods": {
+    "message": "関数",
+    "description": "The label for category Methods in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Database": {
+    "message": "データベース",
+    "description": "The label for category Database in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Task Runner": {
+    "message": "タスクランナー",
+    "description": "The label for category Task Runner in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Scripts": {
+    "message": "実行スクリプト",
+    "description": "The label for category Scripts in sidebar tutorialSidebar"
+  }
+}

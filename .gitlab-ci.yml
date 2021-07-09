@@ -1,9 +1,9 @@
 pages:
   stage: deploy
   script:
-    - cp -r docs/. public
+    - npm run build
   artifacts:
     paths:
-      - public
+      - build
   only:
     - master

@@ -1,0 +1,55 @@
+---
+title: Application::displayTemplate
+---
+
+> Display compiled template
+
+## Description
+
+```php
+public void Application::displayTemplate( string $template, [ array $assignedValue = array() ] )
+```
+
+Read template file -> compile -> display output.
+
+## Arguments
+
+| Name           | Data type | Default | Remarks                |
+| -------------- | --------- | ------- | ---------------------- |
+| $template      | string    |         | Template file name     |
+| $assignedValue | array     | array() | Arguments for template |
+
+## Example
+
+This reads the **bar.tpl** template file in **code/template/foo/bar.tpl**, compile it and display the compiled output.
+
+```php title="code/application/Foo.php"
+<?php
+
+class Foo extends Application
+{
+    function bar(){
+        $this->displayTemplate( 'foo/bar' );
+    }
+}
+```
+
+:::note
+You should not include the “.tpl” extension in the parameter.
+:::
+
+```html title="code/template/foo/bar.tpl"
+<p>Variable : {{ $page.baz }}</p>
+<p>If else : {{ if true }}True{{ end }}</p>
+<p>Loop  : {{ foreach $array as $k => $v }}{{ end foreach }}</p>
+<p>Template rule  : {{ follow Fegg template rules }}</p>
+```
+
+```html title="Output"
+Variable :
+If else : True
+Loop  :
+Template rule  : {{ follow Fegg template rules }}
+```
+
+Notice here the codes inside the `{{}}` in first 3 lines of paragraph in template file. In Fegg, these are the examples and valid syntax of application code following the [Template rules](/docs/fegg/basic/templates#template-rules), otherwise it will return as display or parse an error.

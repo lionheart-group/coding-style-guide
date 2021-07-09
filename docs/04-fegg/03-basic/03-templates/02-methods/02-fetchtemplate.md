@@ -1,0 +1,32 @@
+---
+title: Application::fetchTemplate
+---
+
+> Return compiled template into a string
+
+## Description
+
+```php
+public string Application::fetchTemplate( string $template, [ array $assignedValue = array() ] )
+```
+
+Returns the [Application::displayTemplate](./displaytemplate) into string without displaying the output.
+
+## Arguments
+
+| Name           | Data type | Default | Remarks                |
+| -------------- | --------- | ------- | ---------------------- |
+| $template      | string    |         | Template file name     |
+| $assignedValue | array     | array() | Arguments for template |
+
+## Example
+
+```php
+$content = $this->fetchTemplate( 'foo/bar' );
+```
+
+This assigned the [Application::displayTemplate](./displaytemplate) to $content variable from compiled template.
+
+:::note
+You should not include the “.tpl” extension in the parameter.
+:::
