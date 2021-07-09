@@ -3,7 +3,7 @@ module.exports = {
   title: 'Coding Style Guide',
   tagline: 'LionHeart Group Coding Style Guide',
   url: 'https://lionheart-group.gitlab.io/coding-style-guide/',
-  baseUrl: '/',
+  baseUrl: '/coding-style-guide/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
