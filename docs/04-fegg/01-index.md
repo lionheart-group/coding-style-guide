@@ -1,0 +1,8 @@
+---
+title: Fegg Coding Guide
+slug: /fegg
+---
+
+## About Fegg
+
+[Fegg](https://github.com/genies-inc/Fegg) is a custom PHP Framework that created by only 3 files.

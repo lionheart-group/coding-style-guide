@@ -1,0 +1,28 @@
+---
+title: Application::setSession
+---
+
+> Set SESSION data (and call session_start)
+
+## Description
+
+```php
+public void Application::setSession( string $name, mixed $value )
+```
+
+Set SESSION data and automatically call `session_start` method.
+
+
+## Arguments
+
+| Name    | Data type | Default | Remarks             |
+| :------ | :-------- | :------ | :------------------ |
+| $name   | string    |         | Session param key   |
+| $method | mixed     |         | Value               |
+
+
+## Example
+
+```php title="Controller"
+$this->setSession('foo', 'bar');
+```

@@ -1,0 +1,81 @@
+---
+title: Component
+---
+
+> Defines small scale modules as patterns for re-use.
+> 
+> This includes patterns commonly used such as button in the Bootstrap Component category.
+> 
+> Modules defined in this layer should have minimal styling. For example, try to avoid defining a set width or color.
+
+FLOCSS recommends to separate by small units but we're allowing to make a big Component. Instead, **you must put into `Component` about the reuse layout of the website.**
+
+About modifire, you should use SMACSS State pattern (`.is-` prefix).
+
+You must use `.c-` prefix for Component.
+
+## In case of small Component
+
+```html
+<button class="c-button">Button</button>
+<button class="c-button is-primary">Primary button</button>
+<button class="c-button is-secondary">Secondary button</button>
+```
+
+```scss
+// scss/object/component/_button.scss
+.c-button {
+    // something style
+    
+    &.is-primary {
+        // something style
+    }
+    &.is-secondary {
+        // something style
+    }
+}
+```
+
+## In case of big Component
+
+```html
+<div class="c-contact-banner">
+    <h2 class="c-contact-banner__head">Contact</h2>
+    <div class="c-contact-banner__inner">
+        <div class="c-contact-banner__tel">
+            <p class="c-contact-banner__label">Phone</p>
+            <a class="tel:0000000000" class="c-contact-banner__tel__anchor u-anchor-tel">000-000-0000</a>
+        </div>
+        <div class="c-contact-banner__form">
+            <p class="c-contact-banner__label">Email</p>
+            <a href="/contact/" class="c-contact-banner__form__button c-button">Contact form</a>
+        </div>
+    </div>
+</div>
+```
+
+```scss
+// scss/object/component/_contact-banner.scss
+.c-contact-banner {
+    &__head {
+    }
+    &__inner {
+    }
+    &__label {
+    }
+    &__tel {
+        &__anchor {
+        }
+    }
+    &__form {
+        &__button {
+        }
+    }
+}
+```
+
+:::tip TIPS
+This example Component has Utility (`.u-anchor-tel`) and another Component (`.c-button`), but you must NOT overwrite styles of those inside of `.c-contact-banner` Component. Please make Child Component (e.g. `.c-contact-banner__tel__anchor` and `.c-contact-banner__form__button`), then you can define the style of those elements.
+
+Reference : [Don't include other component](/docs/html/methodologies/important/child)
+:::

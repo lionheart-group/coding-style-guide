@@ -1,0 +1,48 @@
+---
+title: Validation::maxlength
+---
+
+> Check character less than maximum length
+
+
+## Description
+
+```php
+public boolean Validation::maxlength( string $name, mixed $value, numeric $length, [ mixed $code = '' ] )
+```
+
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                     |
+| ------- | --------- | ------- | --------------------------- |
+| $name   | string    |         | Item label                  |
+| $value  | mixed     |         | Check field value           |
+| $length | numeric   |         | Specific length value       |
+| $code   | mixed     | ""      | Error code or Error message |
+
+
+## Example
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// If $value is less than equal specific length
+$successName = 'Success Field';
+$successVar  = 'foo';
+$length      = 5;
+$validation->maxlength('success', $successVar, $length, array('@maxlength', $successName, $length));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// If $value is more than specific length
+$failedName = 'Failed Field';
+$failedVar  = 'failed';
+$length     = 5;
+$validation->maxlength('failed', $failedVar, $length, array('@maxlength', $failedName, $length));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>Failed Field</strong> は <strong>5</strong> 文字以内で入力してください"
+```

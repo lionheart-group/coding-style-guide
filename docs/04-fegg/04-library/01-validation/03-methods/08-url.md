@@ -1,0 +1,45 @@
+---
+title: Validation::url
+---
+
+> Check valid url character
+
+
+## Description
+
+```php
+public boolean Validation::url( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                     |
+| ------ | --------- | ------- | --------------------------- |
+| $name  | string    |         | Item label                  |
+| $value | mixed     |         | Check field value           |
+| $code  | mixed     | ""      | Error code or Error message |
+
+
+## Example
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// If $value is URL string
+$successName = 'Success Field';
+$successVar  = 'http://example.com';
+$validation->url('success', $successVar, array('@url', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// If $value is not URL string
+$failedName = 'Failed Field';
+$failedVar  = 'normal text';
+$validation->url('failed', $failedVar, array('@url', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>Failed Field</strong> は登録できない形式です"
+```

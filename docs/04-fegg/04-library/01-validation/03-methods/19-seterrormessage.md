@@ -1,0 +1,37 @@
+---
+title: Validation::setErrorMessage
+---
+
+> Set Error message
+
+
+## Description
+
+```php
+public boolean Validation::setErrorMessage( string $name, string $message )
+```
+
+
+## Arguments
+
+| Name     | Data type | Default | Remarks       |
+| -------- | --------- | ------- | ------------- |
+| $name    | string    |         | Item label    |
+| $message | string    |         | Error message |
+
+
+## Example
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// Set error message
+$validation->setErrorMessage('failed', 'Something Error');
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "Something Error"
+```

@@ -1,0 +1,114 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.HTML": {
+    "message": "HTML",
+    "description": "The label for category HTML in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Basic": {
+    "message": "Basic",
+    "description": "The label for category Basic in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Applications": {
+    "message": "Applications",
+    "description": "The label for category Applications in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Image": {
+    "message": "Image",
+    "description": "The label for category Image in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.CSS Methodologies": {
+    "message": "CSS Methodologies",
+    "description": "The label for category CSS Methodologies in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Important": {
+    "message": "Important",
+    "description": "The label for category Important in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Foundation": {
+    "message": "Foundation",
+    "description": "The label for category Foundation in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Object": {
+    "message": "Object",
+    "description": "The label for category Object in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.WordPress": {
+    "message": "WordPress",
+    "description": "The label for category WordPress in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.How To": {
+    "message": "How To",
+    "description": "The label for category How To in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Fegg": {
+    "message": "Fegg",
+    "description": "The label for category Fegg in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Install": {
+    "message": "Install",
+    "description": "The label for category Install in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Basic function": {
+    "message": "Basic function",
+    "description": "The label for category Basic function in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Template": {
+    "message": "Template",
+    "description": "The label for category Template in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Display methods": {
+    "message": "Display methods",
+    "description": "The label for category Display methods in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Helper methods": {
+    "message": "Helper methods",
+    "description": "The label for category Helper methods in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Rules": {
+    "message": "Rules",
+    "description": "The label for category Rules in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Parameters": {
+    "message": "Parameters",
+    "description": "The label for category Parameters in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.POST/GET": {
+    "message": "POST/GET",
+    "description": "The label for category POST/GET in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.SESSION": {
+    "message": "SESSION",
+    "description": "The label for category SESSION in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.COOKIE": {
+    "message": "COOKIE",
+    "description": "The label for category COOKIE in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Other methods": {
+    "message": "Other methods",
+    "description": "The label for category Other methods in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Ticket": {
+    "message": "Ticket",
+    "description": "The label for category Ticket in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Extension libraries": {
+    "message": "Extension libraries",
+    "description": "The label for category Extension libraries in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Validation": {
+    "message": "Validation",
+    "description": "The label for category Validation in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Methods": {
+    "message": "Methods",
+    "description": "The label for category Methods in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Database": {
+    "message": "Database",
+    "description": "The label for category Database in sidebar tutorialSidebar"
+  }
+}

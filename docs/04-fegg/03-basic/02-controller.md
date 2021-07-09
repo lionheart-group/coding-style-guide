@@ -1,0 +1,234 @@
+---
+title: Controller
+---
+
+## About Controller
+
+### What is a Controller?
+
+Controllers are the basis of the application, as it determines how requests are being handled in HTTP. A Controller is a class file that is named associated with a URI.
+
+URL and Controller are closely related. (see [URL](./url))
+
+```
+http://exaple.com/foo/bar
+```
+
+In the example above, the framework will try to find a `bar` function in the controller named **Foo.php** and load it.
+
+If the URL accessed from the given example, it would load in **code/application/Foo.php** given that this file exists.
+
+```php title="code/application/Foo.php"
+<?php
+
+class Foo extends Application
+{
+    function bar(){
+        //process here...
+    }
+}
+```
+
+### Class
+
+You should have the same name class and file name, and extends `Application` class.
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+
+}
+```
+
+### Constructor
+
+You sould call parent(`Application`) class constructor.
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+    /**
+     * Constructor
+     */
+    function __construct()
+    {
+        parent::__construct();
+    }
+}
+```
+
+### Initialize
+
+Fegg have a Initialize method apart from constructor.
+
+It is `__init()` method that called after the constructor.
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+    /**
+     * Initialize
+     */
+    function __init()
+    {
+        // inityalize process
+    }
+}
+```
+
+The difference between \__init and constructor is that \__init is run after make self instance, so **it can use Application method by** `$this`.
+
+:::note
+You can omit a initialize.
+:::
+
+### Method
+
+Run a second segment name method in URL.
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+    // Run this function by http://example.com/controller/foo
+    function foo()
+    {
+        // any process
+    }
+}
+```
+
+If second segment is empty and you don’t edit basic settings, run the `index()` method.
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+    // Run this function by http://example.com/controller/index
+    //   or http://example.com/controller/
+    function index()
+    {
+        // any process
+    }
+}
+```
+
+:::note
+See [Initial settings](../first/config) about initial method name.
+:::
+
+If you want to make a secret method, you should add **underbar(_)** head of method name.
+
+```php title="code/application/Controller.php"
+// http://example.com/controller/_secret
+//   -> This URL don't call _secret() method
+
+<?php
+
+class Controller extends Application
+{
+    // This method is secret from URL dispatcher
+    function _secret()
+    {
+        // any process
+    }
+}
+```
+
+### Arguments
+
+Third segment later are passed to a method.
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+    // $param will be assigned "bar"
+    //   by http://example.com/controller/foo/bar
+    function foo( $param )
+    {
+        echo $param; // bar
+    }
+}
+```
+
+Third segment later are all passed.
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+    // $param1 will be "bar" and $param2 will be "baz"
+    //   by http://example.com/controller/foo/bar/baz
+    function foo( $param1, $param2 )
+    {
+        echo $param1; // bar
+        echo $param2; // baz
+    }
+}
+```
+
+
+## Template of Controller class
+
+```php title="code/application/Index.php"
+<?php
+/**
+ * Index Class
+ * // This file name should be Index.php
+ */
+class Index extends Application
+{
+    /**
+     * Constructor
+     */
+    function __construct() {
+        parent::__construct();
+    }
+
+    /**
+     * Initialize progress
+     * This method run after making self instance.
+     * So, it can use Application class method, for example "$this->in()".
+     * It is the difference between __init and construct.
+     * If this method is nothing, initializing progress is omitted.
+     */
+    function __init()
+    {
+    }
+
+    /**
+     * Common progress
+     * If you add the underbar(_) head of method name, it be internal method.
+     * So, it can't called by URL dispatcher.
+     */
+    function _common()
+    {
+    }
+
+    /**
+     * Default page display method
+     * If you input only class name URL, run this method.
+     * It is not necessary, but recommend be that default page display method name is index.
+     */
+    function index()
+    {
+        // Common progress
+        $this->_common();
+
+        // Display compiled template
+        $this->displayPage('index');
+    }
+}
+/* End Of File: Index.php */
+```
