@@ -2,8 +2,22 @@
 title: Trim::create
 ---
 
-<!-- Get uploaded file error -->
+Save the image to specified location
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
 
-<Underconstruction></Underconstruction>
+## Description
+
+```php
+public void Trim::create()
+```
+
+
+## Example
+
+```php title="Controller"
+$trim = $this->getClass('Tool/RSS', 'https://example.com/feed');
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+
+$trim->resizeTrim(300, 300, 'm');
+$trim->create();
+```

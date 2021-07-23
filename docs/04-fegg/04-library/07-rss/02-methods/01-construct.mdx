@@ -2,8 +2,23 @@
 title: RSS::__construct
 ---
 
-<!-- Get uploaded file error -->
+Start loading RSS feed
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self RSS::__construct( string $url )
+```
+
+## Arguments
+
+| Name | Data type | Default | Remarks      |
+| ---- | --------- | ------- | ------------ |
+| $url | string    |         | RSS Feed URL |
+
+
+## Example
+
+```php title="Controller"
+$rss = $this->getClass('Tool/RSS', 'https://example.com/feed');
+```

@@ -2,8 +2,33 @@
 title: Mail::pushHeader
 ---
 
-<!-- Get uploaded file error -->
+Add custom header
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
 
-<Underconstruction></Underconstruction>
+## Description
+
+```php
+public self Mail::pushHeader( mixed $key, [ string $val = null ] )
+```
+
+## Arguments
+
+| Name | Data type | Default | Remarks                                  |
+| ---- | --------- | ------- | ---------------------------------------- |
+| $key | mixed     |         | Header key string or key and value array |
+| $val | string    | null    | If $key is string, header value          |
+
+
+## Example
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->pushHeader('foo', 'bar');
+$mail->pushHeader('baz', 'qux');
+
+// Same with
+$mail->pushHeader(array(
+    'foo' => 'bar',
+    'baz' => 'qux',
+));
+```

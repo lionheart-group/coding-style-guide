@@ -2,8 +2,29 @@
 title: Mail::setInputCharset
 ---
 
-<!-- Get uploaded file error -->
+Set input character set
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+:::note
+If the email body text is garbling, try to use this method or [Mail::setSendCharset](/docs/fegg/library/mail/methods/setsendcharset)
+:::
 
-<Underconstruction></Underconstruction>
+
+## Description
+
+```php
+public self Mail::setInputCharset( string $charset )
+```
+
+## Arguments
+
+| Name     | Data type | Default | Remarks             |
+| -------- | --------- | ------- | ------------------- |
+| $charset | string    |         | Input character set |
+
+
+## Example
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->setInputCharset('utf-8');
+```

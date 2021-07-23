@@ -2,8 +2,34 @@
 title: Mail::__construct
 ---
 
-<!-- Get uploaded file error -->
+Setup sending image
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Mail::__construct( [ string $subject = null, string $body = null, array $header = null ] )
+```
+
+## Arguments
+
+| Name     | Data type | Default | Remarks             |
+| -------- | --------- | ------- | ------------------- |
+| $subject | string    | null    | Email subject       |
+| $body    | string    | null    | Email body          |
+| $header  | array     | null    | Email custom header |
+
+
+## Example
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail', 'Mail subject', 'Mail body');
+
+// Same with
+$mail = $this->getClass('Tool/Mail');
+$mail->subject('Mail subject');
+$mail->body('Mail body');
+
+// or
+$this->getClass('Tool/Mail')
+$mail = new Mail('Mail subject', 'Mail body');
+```

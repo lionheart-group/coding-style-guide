@@ -2,8 +2,29 @@
 title: Trim::resize
 ---
 
-<!-- Get uploaded file error -->
+Set target image and output file path
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
 
-<Underconstruction></Underconstruction>
+## Description
+
+```php
+public void Trim::resize( number $w, number $h )
+```
+
+
+## Arguments
+
+| Name | Data type | Default | Remarks                |
+| ---- | --------- | ------- | ---------------------- |
+| $w   | number    |         | Converted image width  |
+| $h   | number    |         | Converted image height |
+
+
+## Example
+
+```php title="Controller"
+$trim = $this->getClass('Tool/RSS', 'https://example.com/feed');
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+
+$trim->resize(300, 300);
+```

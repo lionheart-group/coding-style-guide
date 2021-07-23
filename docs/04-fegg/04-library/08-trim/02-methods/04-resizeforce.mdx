@@ -2,8 +2,28 @@
 title: Trim::resizeForce
 ---
 
-<!-- Get uploaded file error -->
+Resize the image forcely
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public void Trim::resizeForce( number $w, number $h )
+```
+
+
+## Arguments
+
+| Name | Data type | Default | Remarks                |
+| ---- | --------- | ------- | ---------------------- |
+| $w   | number    |         | Converted image width  |
+| $h   | number    |         | Converted image height |
+
+
+## Example
+
+```php title="Controller"
+$trim = $this->getClass('Tool/RSS', 'https://example.com/feed');
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+
+$trim->resizeForce(300, 300);
+```

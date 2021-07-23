@@ -2,8 +2,24 @@
 title: Mail::subject
 ---
 
-<!-- Get uploaded file error -->
+Set mail subject
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Mail::subject( string $subject )
+```
+
+## Arguments
+
+| Name     | Data type | Default | Remarks       |
+| -------- | --------- | ------- | ------------- |
+| $subject | string    | null    | Email subject |
+
+
+## Example
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->subject('Mail subject');
+```

@@ -2,8 +2,30 @@
 title: Mail::log
 ---
 
-<!-- Get uploaded file error -->
+Save log file instead sending email
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
 
-<Underconstruction></Underconstruction>
+## Description
+
+```php
+public self Mail::log( string $to, [ string $from_name = null, string $from_ad = null ] )
+```
+
+## Arguments
+
+| Name       | Data type | Default | Remarks            |
+| ---------- | --------- | ------- | ------------------ |
+| $to        | string    |         | Send email address |
+| $from_name | string    | null    | Sender name        |
+| $from_ad   | string    | null    | Sender address     |
+
+
+## Example
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->subject('Mail subject');
+$mail->body('Mail body');
+
+$mail->log('mail@example.com', 'John Doe', 'from@example.com');
+```
