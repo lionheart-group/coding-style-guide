@@ -1,0 +1,32 @@
+---
+title: Model::erase
+---
+
+> Execute Physical Delete the record by specified primary ID
+
+
+## Description
+
+```php
+public void Model::erase( mixed $id )
+```
+
+
+## Arguments
+
+| Name | Data type | Default | Remarks                   |
+| ---- | --------- | ------- | ------------------------- |
+| $id  | mixed     |         | Erasing target Primary ID |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->erase(1);
+```

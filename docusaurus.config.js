@@ -23,6 +23,12 @@ module.exports = {
       items: [
         {
           type: 'doc',
+          docId: 'env/index',
+          position: 'left',
+          label: 'Environment',
+        },
+        {
+          type: 'doc',
           docId: 'html/index',
           position: 'left',
           label: 'HTML',
@@ -56,6 +62,10 @@ module.exports = {
         {
           title: 'Docs',
           items: [
+            {
+              label: 'Environment',
+              to: '/docs/env',
+            },
             {
               label: 'HTML',
               to: '/docs/html',
@@ -94,13 +104,13 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://gitlab.com/lionheart-group/coding-style-guide/-/edit/master/docs/',
+            'https://gitlab.com/lionheart-group/coding-style-guide/-/edit/master/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            'https://gitlab.com/lionheart-group/coding-style-guide/-/edit/master/docs/blog/',
+            'https://gitlab.com/lionheart-group/coding-style-guide/-/edit/master/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

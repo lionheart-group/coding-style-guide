@@ -1,0 +1,32 @@
+---
+title: Model::setVisible
+---
+
+> Set Visible flag name
+
+
+## Description
+
+```php
+public self Model::setVisible( string $visible )
+```
+
+
+## Arguments
+
+| Name     | Data type | Default | Remarks           |
+| -------- | --------- | ------- | ----------------- |
+| $visible | string    |         | Visible flag name |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model();
+$model->setVisible('visible');
+
+// Same with the following
+$model = new Model(false, array(
+    'visible' => 'visible',
+));
+```

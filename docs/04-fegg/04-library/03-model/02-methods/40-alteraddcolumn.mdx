@@ -1,0 +1,30 @@
+---
+title: Model::alterAddColumn
+---
+
+> Execute Alter Add Column
+
+
+## Description
+
+```php
+public void Model::alterAddColumn( string $field )
+```
+
+## Arguments
+
+| Name   | Data type | Default | Remarks            |
+| ------ | --------- | ------- | ------------------ |
+| $field | string    |         | Adding column name |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table'   => 'cms_news',
+));
+
+// ALTER TABLE cms_news ADD news_id INTEGER NOT NULL
+$model->alterAddColumn('news_id INTEGER NOT NULL');
+```

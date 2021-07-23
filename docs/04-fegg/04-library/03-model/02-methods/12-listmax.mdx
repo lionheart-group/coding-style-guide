@@ -1,0 +1,31 @@
+---
+title: Model::listMax
+---
+
+> Set ListMax Parameter
+
+## Description
+
+```php
+public self Model::listMax( number $listMax )
+```
+
+## Arguments
+
+| Name     | Data type | Default | Remarks      |
+| -------- | --------- | ------- | ------------ |
+| $listMax | number    |         | Limit number |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Get max 5 records
+$records = $model->listMax(5)->find();
+```

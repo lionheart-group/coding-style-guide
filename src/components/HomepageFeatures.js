@@ -4,13 +4,22 @@ import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
   {
+    title: 'Environment',
+    description: (
+      <>
+        Basic environment
+      </>
+    ),
+    link: './docs/env',
+  },
+  {
     title: 'HTML',
     description: (
       <>
         HTML Coding Rule
       </>
     ),
-    link: '/docs/html',
+    link: './docs/html',
   },
   {
     title: 'WordPress',
@@ -19,7 +28,7 @@ const FeatureList = [
         WordPress Rule
       </>
     ),
-    link: '/docs/wordpress',
+    link: './docs/wordpress',
   },
   {
     title: 'Fegg',
@@ -28,13 +37,13 @@ const FeatureList = [
         Fegg Document and Rule
       </>
     ),
-    link: '/docs/fegg',
+    link: './docs/fegg',
   },
 ];
 
 function Feature({Svg, title, description, link}) {
   return (
-    <div className={clsx('col col--4')}>
+    <div className={clsx('col col--3')}>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
         <p>{description}</p>

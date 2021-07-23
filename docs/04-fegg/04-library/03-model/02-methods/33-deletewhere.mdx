@@ -1,0 +1,33 @@
+---
+title: Model::deleteWhere
+---
+
+> Execute Logical Delete the records by specified condition
+
+
+## Description
+
+```php
+public void Model::deleteWhere( string $where, array $wh_data )
+```
+
+
+## Arguments
+
+| Name     | Data type | Default | Remarks                  |
+| -------- | --------- | ------- | ------------------------ |
+| $where   | string    |         | Deleting condition query |
+| $wh_data | array     |         | Deleting condition data  |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->deleteWhere($item, $data, 'id = ?', [1]);
+```

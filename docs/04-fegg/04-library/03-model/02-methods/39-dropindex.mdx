@@ -1,0 +1,30 @@
+---
+title: Model::dropIndex
+---
+
+> Execute Drop index
+
+
+## Description
+
+```php
+public void Model::dropIndex( string $index )
+```
+
+## Arguments
+
+| Name   | Data type | Default | Remarks    |
+| ------ | --------- | ------- | ---------- |
+| $index | string    |         | Index name |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table'   => 'cms_news',
+));
+
+// DROP INDEX news_id
+$model->dropIndex('news_id');
+```

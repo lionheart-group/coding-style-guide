@@ -1,0 +1,34 @@
+---
+title: Introduction
+slug: /fegg/library/mail
+---
+
+Providing some functions for sending email
+
+## How to use
+
+You can load `Mail` class through `Application::getClass` method.
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->subject('Mail subject');
+$mail->body('Mail body');
+
+$mail->send('mail@example.com', 'John Doe', 'from@example.com');
+```
+
+## Methods
+
+* [Mail::__construct](/docs/fegg/library/mail/methods/construct)
+* [Mail::subject](/docs/fegg/library/mail/methods/subject)
+* [Mail::body](/docs/fegg/library/mail/methods/body)
+* [Mail::pushHeader](/docs/fegg/library/mail/methods/pushheader)
+* [Mail::removeHeader](/docs/fegg/library/mail/methods/removeheader)
+* [Mail::pushAttached](/docs/fegg/library/mail/methods/pushattached)
+* [Mail::send](/docs/fegg/library/mail/methods/send)
+* [Mail::sendWithFile](/docs/fegg/library/mail/methods/sendwithfile)
+* [Mail::log](/docs/fegg/library/mail/methods/log)
+* [Mail::setInputCharset](/docs/fegg/library/mail/methods/setinputcharset)
+* [Mail::setSendCharset](/docs/fegg/library/mail/methods/setsendcharset)
+* [Mail::setDebugFlag](/docs/fegg/library/mail/methods/setdebugflag)
+

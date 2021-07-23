@@ -1,0 +1,33 @@
+---
+title: Model::order
+---
+
+> Set Order Parameter
+
+
+## Description
+
+```php
+public self Model::order( string $order, [ string $duration = 'ASC' ] )
+```
+
+## Arguments
+
+| Name      | Data type | Default | Remarks                   |
+| --------- | --------- | ------- | ------------------------- |
+| $order    | string    |         | Ordering target column    |
+| $duration | string    | 'ASC'   | Set the ordering duration |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// SELECT * FROM cms_news ORDER BY created DESC
+$records = $model->order('created', 'DESC')->find();
+```

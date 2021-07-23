@@ -1,0 +1,36 @@
+---
+title: Model::group
+---
+
+> Set Group Parameter
+
+
+## Description
+
+```php
+public self Model::group( string $group )
+```
+
+## Arguments
+
+| Name   | Data type | Default | Remarks      |
+| ------ | --------- | ------- | ------------ |
+| $group | string    |         | Group column |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->group('user_id');
+
+// SELECT *
+// FROM cms_news
+// GROUP BY user_id
+$records = $model->find();
+```

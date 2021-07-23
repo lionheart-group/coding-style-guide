@@ -1,0 +1,99 @@
+---
+title: VirtualBox
+---
+
+## Install Applications
+
+You need installing following applications.
+
+* [VirtualBox](https://www.virtualbox.org/)
+* [Vagrant](https://www.vagrantup.com/)
+* [Homebrew](https://brew.sh/)
+* [Git](https://git-scm.com/)
+* [Ansible](https://www.ansible.com/)
+
+### How to install
+
+**VirtualBox**
+
+1. Access to [website](https://www.virtualbox.org/), and click download button.
+2. Click "OS X hosts" link
+
+**Vagrant**
+
+1. Access to [website](https://www.vagrantup.com/), and click download button.
+2. Click macOS > "64-bit" link
+
+**Homebrew**
+
+```bash
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+**Git**
+
+After installing Homebrew.
+
+```bash
+brew install git
+```
+
+**Ansible**
+
+After installing Homebrew.
+
+```bash
+brew install ansible
+```
+
+### Check the installation
+
+```bash
+# Vagrant
+vagrant -v
+  > Vagrant *.*.*
+
+# Git
+git --version
+  > git version *.*.*
+
+# Ansible
+ansible --version
+  > ansible *.*.*
+```
+
+
+
+## Getting ansible template of Local environment
+
+There are ansible template of local environment on [GitHub](https://github.com/sus-happy/VagrantAnsible).
+
+### Set up local environment
+
+Open Terminal, and run following commands.
+
+```bash
+# Creating Developing Directory
+mkdir ~/Virtual
+
+# Anywhere is OK, move to your favorite place
+# For example, into your user directory
+cd ~/
+
+# Getting datas from GitHub
+git clone https://github.com/sus-happy/VagrantAnsible.git
+
+# Running Vagrant command
+cd VagrantAnsible
+vagrant up --provision
+```
+
+
+## After that
+
+After you install these, you can create local environment and it's related localhost to `~/Virtual`.
+
+```
+http://foo.localhost/ -> ~/Virtual/foo/htdocs
+http://bar.localhost/ -> ~/Virtual/bar/htdocs
+```
