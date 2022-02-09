@@ -7,6 +7,10 @@
     "message": "その他",
     "description": "The title of the footer links column with title=More in the footer"
   },
+  "link.item.label.Environment": {
+    "message": "環境構築",
+    "description": "The label of footer link with label=Environment linking to /docs/env"
+  },
   "link.item.label.HTML": {
     "message": "HTML",
     "description": "The label of footer link with label=HTML linking to /docs/html"

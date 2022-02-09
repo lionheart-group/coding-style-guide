@@ -3,6 +3,10 @@
     "message": "コーディングスタイルガイド",
     "description": "The title in the navbar"
   },
+  "item.label.Environment": {
+    "message": "環境構築",
+    "description": "Navbar item with label Environment"
+  },
   "item.label.HTML": {
     "message": "HTML",
     "description": "Navbar item with label HTML"
