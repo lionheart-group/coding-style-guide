@@ -229,5 +229,32 @@
   },
   "Added coding tips for Flex box layout": {
     "message": "コーディングTIPSのFlex boxの使い方についての説明を追加しました"
+  },
+  "Environment": {
+    "message": "環境構築"
+  },
+  "Basic environment": {
+    "message": "基本的な環境の構築"
+  },
+  "HTML": {
+    "message": "HTML"
+  },
+  "HTML Coding Rule": {
+    "message": "HTMLコーディングルール"
+  },
+  "WordPress": {
+    "message": "WordPress"
+  },
+  "WordPress Rule": {
+    "message": "WordPressルール"
+  },
+  "Fegg": {
+    "message": "Fegg"
+  },
+  "Fegg Document and Rule": {
+    "message": "Feggのドキュメントと規約"
+  },
+  "Detail": {
+    "message": "詳細確認"
   }
 }

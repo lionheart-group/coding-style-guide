@@ -1,41 +1,34 @@
 import React from 'react';
 import clsx from 'clsx';
 import styles from './HomepageFeatures.module.css';
+import Translate from '@docusaurus/Translate';
 
 const FeatureList = [
   {
-    title: 'Environment',
+    title: <Translate>Environment</Translate>,
     description: (
-      <>
-        Basic environment
-      </>
+      <Translate>Basic environment</Translate>
     ),
     link: './docs/env',
   },
   {
-    title: 'HTML',
+    title: <Translate>HTML</Translate>,
     description: (
-      <>
-        HTML Coding Rule
-      </>
+      <Translate>HTML Coding Rule</Translate>
     ),
     link: './docs/html',
   },
   {
-    title: 'WordPress',
+    title: <Translate>WordPress</Translate>,
     description: (
-      <>
-        WordPress Rule
-      </>
+      <Translate>WordPress Rule</Translate>
     ),
     link: './docs/wordpress',
   },
   {
-    title: 'Fegg',
+    title: <Translate>Fegg</Translate>,
     description: (
-      <>
-        Fegg Document and Rule
-      </>
+      <Translate>Fegg Document and Rule</Translate>
     ),
     link: './docs/fegg',
   },
@@ -47,7 +40,7 @@ function Feature({Svg, title, description, link}) {
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
         <p>{description}</p>
-        {link ? <a href={link}>Detail</a> : ''}
+        {link ? <a href={link}><Translate>Detail</Translate></a> : ''}
       </div>
     </div>
   );
