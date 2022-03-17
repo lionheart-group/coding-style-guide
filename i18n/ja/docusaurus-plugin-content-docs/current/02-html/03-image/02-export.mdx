@@ -12,7 +12,7 @@ title: 書き出し設定
 * 600px以内の画像は2倍サイズで書き出すようにしてください
 * PCとSPで画像比率が同じ場合は同じ画像を表示させるようにしてください
 * PCとSPで異なる画像を表示する場合は`<picture>`タグを利用する様にしてください
-  * [環境による画像の表示分けの方法について](../tips/picture##condition-by-image-format)を確認してください
+  * [環境による画像の表示分けの方法について](/docs/html/tips/picture##condition-by-image-format)を確認してください
 
 ## 画像形式の特徴と判断基準について
 
@@ -45,11 +45,11 @@ SVG画像を書き出す際にはテキスト要素が含まれていないか�
 ### Webp <small>(.webp)</small>
 
 * WebPはWeb用に可逆/非可逆圧縮をサポートしている新しい圧縮形式です
-* XDからは直接書き出すことが出来ないため、JPEG/PNG/GIF形式からWebP形式に[`convert:webp`タスクランナー](../task-runner/scripts/convert-webp)を利用して変換をしてください
+* XDからは直接書き出すことが出来ないため、JPEG/PNG/GIF形式からWebP形式に[`convert:webp`タスクランナー](/docs/html/task-runner/scripts/convert-webp)を利用して変換をしてください
 
 :::info
 SVG画像を除いて、各画像は`<picture>`タグを用いてWebP画像も追加するようにしてください。
-`<picture>`タグの使い方については、[環境による画像の表示分けの方法について](../tips/picture##condition-by-image-format)を確認してください。
+`<picture>`タグの使い方については、[環境による画像の表示分けの方法について](/docs/html/tips/picture##condition-by-image-format)を確認してください。
 :::
 
 ### その他形式
