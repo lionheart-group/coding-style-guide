@@ -214,5 +214,20 @@
   "theme.TOCCollapsible.toggleButtonLabel": {
     "message": "On this page",
     "description": "The label used by the button on the collapsible TOC component"
+  },
+  "Added image exporting resolution instructions": {
+    "message": "画像書出時の解像度設定についての説明を追加しました"
+  },
+  "Updated image exporting WebP type instructions": {
+    "message": "画像書出時のWebP形式の説明を更新しました"
+  },
+  "Updated History": {
+    "message": "更新履歴"
+  },
+  "Added coding tips for <picture> tag": {
+    "message": "コーディングTIPSの<picture>タグについての説明を追加しました"
+  },
+  "Added coding tips for Flex box layout": {
+    "message": "コーディングTIPSのFlex boxの使い方についての説明を追加しました"
   }
 }

@@ -1,0 +1,28 @@
+---
+title: Watchman
+---
+
+:::caution
+Watchmanは直近のプロジェクトはインストール不要です。
+:::
+
+[Watchman](https://facebook.github.io/watchman/)を使うことでファイル変更を監視し、SCSSのコンパイルなどを自動的に実行することが可能です。
+
+
+## macOS
+
+Homebrewからインストールすることが可能です。
+
+```bash
+brew install watchman
+```
+
+## Windows
+
+Windows向けにはインストーラが用意されていないため、若干手順が複雑になります。
+
+[公式サイトにも説明](https://facebook.github.io/watchman/docs/install.html#binary-downloads-for-linux-macos-and-windows-beta)が存在しています。
+
+1. [GitHub Relase](https://github.com/facebook/watchman/releases)よりインストールします。
+2. 解凍後、好きなディレクトリにコピーします（例 : `Program Files`）
+3. コピーしたディレクトリ内の`bin`に`PATH`を通します（[PATHの通し方の参考](https://helpdeskgeek.com/windows-10/add-windows-path-environment-variable/)）。

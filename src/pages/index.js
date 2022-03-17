@@ -5,6 +5,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.css';
 import HomepageFeatures from '../components/HomepageFeatures';
+import UpdateHistory from '../components/UpdateHistory';
 
 import Translate, {translate} from '@docusaurus/Translate';
 
@@ -29,6 +30,7 @@ export default function Home() {
       <HomepageHeader />
       <main>
         <HomepageFeatures />
+        <UpdateHistory />
       </main>
     </Layout>
   );

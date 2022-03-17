@@ -134,5 +134,9 @@
   "sidebar.fegg.category.Trim": {
     "message": "画像処理",
     "description": "The label for category Trim in sidebar fegg"
+  },
+  "sidebar.html.category.Coding Tips": {
+    "message": "コーディングTIPS",
+    "description": "The label for category Coding Tips in sidebar html"
   }
 }

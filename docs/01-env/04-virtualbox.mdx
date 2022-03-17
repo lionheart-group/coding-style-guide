@@ -2,6 +2,10 @@
 title: VirtualBox
 ---
 
+:::warning
+on M1 mac, VirtualBox won't work, so please implement local environment by [Docker](./docker).
+:::
+
 ## Install Applications
 
 You need installing following applications.
@@ -24,19 +28,9 @@ You need installing following applications.
 1. Access to [website](https://www.vagrantup.com/), and click download button.
 2. Click macOS > "64-bit" link
 
-**Homebrew**
+**Homebrew and Git**
 
-```bash
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-```
-
-**Git**
-
-After installing Homebrew.
-
-```bash
-brew install git
-```
+Please check [Git page](./git).
 
 **Ansible**
 
@@ -64,11 +58,11 @@ ansible --version
 
 
 
-## Getting ansible template of Local environment
+## Set up Local environment
 
-There are ansible template of local environment on [GitHub](https://github.com/sus-happy/VagrantAnsible).
+There are ansible template of local environment on [GitHub](https://github.com/sushat4692/VagrantAnsible).
 
-### Set up local environment
+### Initial setting up
 
 Open Terminal, and run following commands.
 
@@ -81,17 +75,19 @@ mkdir ~/Virtual
 cd ~/
 
 # Getting datas from GitHub
-git clone https://github.com/sus-happy/VagrantAnsible.git
+git clone https://github.com/sushat4692/VagrantAnsible.git
+
+# Move to downloaded directory
+cd VagrantAnsible
 
 # Running Vagrant command
-cd VagrantAnsible
 vagrant up --provision
 ```
 
 
 ## After that
 
-After you install these, you can create local environment and it's related localhost to `~/Virtual`.
+After you setting up, you can use local environment and it's related localhost to `~/Virtual`.
 
 ```
 http://foo.localhost/ -> ~/Virtual/foo/htdocs

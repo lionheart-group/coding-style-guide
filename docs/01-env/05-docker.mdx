@@ -11,15 +11,12 @@ If VirtualBox is working, you don't need to setup this.
 You need to install [Docker Desktop](https://www.docker.com/products/docker-desktop).
 
 
-## Install docker image
+## Set up Local environment
 
-1. Download [general template](https://github.com/sushat4692/docker-lamp) to somewhere you want
-2. Duplicate ".env.sample" to ".env" in same directory
-3. Run "docker-compose up" inside of the above source directory
-4. You can access through the browser
+There are Dockerfile template of local environment on [GitHub](https://github.com/sushat4692/docker-lamp).
 
 
-### Set up local environment
+### Initial setting up
 
 Open Terminal, and run following commands.
 
@@ -27,15 +24,27 @@ Open Terminal, and run following commands.
 # Creating Developing Directory
 mkdir ~/Virtual
 
+# Anywhere is OK, move to your favorite place
+# For example, into your user directory
+cd ~/
+
+# Getting datas from GitHub
+git clone https://github.com/sushat4692/docker-lamp.git
+
+# Move to downloaded directory
+cd docker-lamp
+
+# Duplicate `.env.sample` to `.env`
+cp .env.sample .env
+
 # Running Docker command
-cd path/to/docker # where you download docker template
 docker-compose up
 ```
 
 
 ## After that
 
-After you install these, you can create local environment and it's related localhost to `~/Virtual`.
+After you setting up, you can use local environment and it's related localhost to `~/Virtual`.
 
 ```
 http://foo.localhost/ -> ~/Virtual/foo/htdocs
