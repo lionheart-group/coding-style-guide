@@ -1,0 +1,51 @@
+---
+title: Dnsmasq
+---
+
+macOS環境だと、localhostのサブドメインの解決を行うことができず、Google Chrome以外のブラウザで閲覧することができませんが、[Dnsmasq](https://thekelleys.org.uk/dnsmasq/doc.html)のインストールと設定を行うことで解決することが可能です。
+
+:::info
+Windows環境ではインストール不要です。
+:::
+
+
+## 必要アプリケーション
+
+下記アプリケーションをインストールする必要があります。
+
+* [Homebrew](https://brew.sh/)
+* [Dnsmasq](https://thekelleys.org.uk/dnsmasq/doc.html)
+
+
+### インストール方法
+
+**Homebrew**
+
+Please check [Git page](/docs/env/git).
+
+
+**Dnsmasq**
+
+Homebrewのインストール後、下記のコマンドを実行します。
+
+```bash
+brew install dnsmasq
+```
+
+## Dnsmasqの設定
+
+```bash
+# *.localhostの設定をDnsmasq設定ファイルに追記します
+echo 'address=/.localhost/::1' >> $(brew --prefix)/etc/dnsmasq.conf
+echo 'address=/.localhost/127.0.0.1' >> $(brew --prefix)/etc/dnsmasq.conf
+
+# *.localhostの名前解決用ファイルを用意します
+sudo mkdir -v /etc/resolver
+sudo bash -c 'echo "nameserver ::1" >> /etc/resolver/localhost'
+sudo bash -c 'echo "nameserver 127.0.0.1" >> /etc/resolver/localhost'
+
+# Dnsmasqの起動と自動起動設定を行います
+sudo brew services start dnsmasq
+
+# これでlocalhostのサブドメインが各ブラウザで閲覧可能になります :)
+```

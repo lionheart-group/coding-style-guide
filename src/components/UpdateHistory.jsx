@@ -5,6 +5,16 @@ import styles from './UpdateHistory.module.css';
 
 const histories = [
     {
+        version: 'v0.0.2',
+        date: '2022-03-31',
+        items: [
+            {
+                label: <Translate>Added Dnsmasq instructions</Translate>,
+                link: 'docs/env/dnsmasq'
+            },
+        ]
+    },
+    {
         version: 'v0.0.1',
         date: '2022-03-17',
         items: [
