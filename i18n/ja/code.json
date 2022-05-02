@@ -286,5 +286,8 @@
   "theme.navbar.mobileLanguageDropdown.label": {
     "message": "言語",
     "description": "The label for the mobile language switcher dropdown"
+  },
+  "Fixed VSCode plugin instruction (stylelint and eslint's config syntax was inverted)": {
+    "message": "VSCodeのプラグインの説明を修正しました (stylelintとeslintの記述が逆でした)"
   }
 }

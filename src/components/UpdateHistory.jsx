@@ -5,6 +5,16 @@ import styles from './UpdateHistory.module.css';
 
 const histories = [
     {
+        version: 'v0.0.3',
+        date: '2022-05-02',
+        items: [
+            {
+                label: <Translate>Fixed VSCode plugin instruction (stylelint and eslint's config syntax was inverted)</Translate>,
+                link: 'docs/env/editor/vscode'
+            },
+        ]
+    },
+    {
         version: 'v0.0.2',
         date: '2022-03-31',
         items: [
