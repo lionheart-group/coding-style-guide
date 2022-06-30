@@ -5,6 +5,16 @@ import styles from './UpdateHistory.module.css';
 
 const histories = [
     {
+        version: 'v0.0.4',
+        date: '2022-06-30',
+        items: [
+            {
+                label: <Translate>Added Node.js(Volta) installing instruction</Translate>,
+                link: 'docs/env/node'
+            },
+        ]
+    },
+    {
         version: 'v0.0.3',
         date: '2022-05-02',
         items: [
@@ -62,7 +72,7 @@ const UpdateHistorySection = ({version}) => {
                 <span className={styles.updateHistory__list__title__date}>{version.date}</span>
             </dt>
 
-            {version.items.map(item => (<UpdateHistoryItem item={item} />))}
+            {version.items.map((item, i) => (<UpdateHistoryItem key={i} item={item} />))}
         </>
     )
 }
@@ -73,7 +83,7 @@ const UpdateHistory = () => {
             <div className="container">
                 <h2><Translate>Updated History</Translate></h2>
                 <dl className={styles.updateHistory__list}>
-                    {histories.map(version => (<UpdateHistorySection version={version} />))}
+                    {histories.map(version => (<UpdateHistorySection key={version.version} version={version} />))}
                 </dl>
             </div>
         </section>
