@@ -25,8 +25,8 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={translate({message: `Hello from {title}`, id: 'homepage.layout.title'}, {title: translate({message: siteConfig.title})})}
-      description={translate({message: 'Description will go into a meta tag in <head />', id: 'homepage.layout.description'})}>
+      description={translate({message: siteConfig.tagline, id: 'homepage.layout.description'})}
+    >
       <HomepageHeader />
       <main>
         <HomepageFeatures />

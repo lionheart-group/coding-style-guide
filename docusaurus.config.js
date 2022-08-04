@@ -35,6 +35,12 @@ module.exports = {
         },
         {
           type: 'doc',
+          docId: 'javascript/index',
+          position: 'left',
+          label: 'JavaScript',
+        },
+        {
+          type: 'doc',
           docId: 'wordpress/index',
           position: 'left',
           label: 'WordPress',
@@ -69,6 +75,10 @@ module.exports = {
             {
               label: 'HTML',
               to: '/docs/html',
+            },
+            {
+              label: 'JavaScript',
+              to: '/docs/javascript',
             },
             {
               label: 'WordPress',
