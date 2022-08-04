@@ -304,5 +304,31 @@
   "theme.CodeBlock.wordWrapToggle": {
     "message": "Toggle word wrap",
     "description": "The title attribute for toggle word wrapping button of code block lines"
+  },
+  "JavaScript": {
+    "message": "JavaScript"
+  },
+  "Prepared JavaScript library list": {
+    "message": "JavaScriptのライブラリリストを作成"
+  },
+  "theme.admonition.note": {
+    "message": "メモ",
+    "description": "The default label used for the Note admonition (:::note)"
+  },
+  "theme.admonition.tip": {
+    "message": "ヒント",
+    "description": "The default label used for the Tip admonition (:::tip)"
+  },
+  "theme.admonition.danger": {
+    "message": "警告",
+    "description": "The default label used for the Danger admonition (:::danger)"
+  },
+  "theme.admonition.info": {
+    "message": "補足",
+    "description": "The default label used for the Info admonition (:::info)"
+  },
+  "theme.admonition.caution": {
+    "message": "注意",
+    "description": "The default label used for the Caution admonition (:::caution)"
   }
 }

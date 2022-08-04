@@ -22,5 +22,9 @@
   "item.label.GitLab": {
     "message": "GitLab",
     "description": "Navbar item with label GitLab"
+  },
+  "item.label.JavaScript": {
+    "message": "JavaScript",
+    "description": "Navbar item with label JavaScript"
   }
 }

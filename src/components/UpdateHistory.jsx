@@ -5,6 +5,16 @@ import styles from './UpdateHistory.module.css';
 
 const histories = [
     {
+        version: 'v0.0.5',
+        date: '2022-08-04',
+        items: [
+            {
+                label: <Translate>Prepared JavaScript library list</Translate>,
+                link: 'docs/javascript'
+            },
+        ]
+    },
+    {
         version: 'v0.0.4',
         date: '2022-06-30',
         items: [
