@@ -1,0 +1,34 @@
+.wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.wrap__item {
+}
+
+.wrap__label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.before {
+    position: relative;
+    padding-top: 56.25%;
+}
+
+.before__image {
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.after {
+    object-fit: cover;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}

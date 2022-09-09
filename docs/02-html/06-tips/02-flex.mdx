@@ -1,40 +1,45 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import styles from '@site/src/css/docs/html/tips/flex.module.css';
 
 # Flex box layout
+
+:::info
+You can choose [Grid layout](./grid) also instead using Flexbox.
+:::
 
 ## For 2 columns layout
 
 You can use `justify-content: between;`.
 
-<div style={{display: `flex`, flexWrap: `wrap`, justifyContent: `space-between`}}>
-    <div style={{height: 140, width: `calc(50% - 15px)`, background: `#999`}}></div>
-    <div style={{height: 140, width: `calc(50% - 15px)`, background: `#999`}}></div>
+<div className={styles.flexbetween}>
+    <div className={styles.flexbetween__item}></div>
+    <div className={styles.flexbetween__item}></div>
 </div>
 
 ## For 3 or more columns layout
 
 But, if you use `justify-content: between;` for 3 or more columns layout. Sometimes layout will be weired like the following:
 
-<div style={{display: `flex`, flexWrap: `wrap`, justifyContent: `space-between`}}>
-    <div style={{height: 140, width: `calc(33.33% - 15px)`, background: `#999`}}></div>
-    <div style={{height: 140, width: `calc(33.33% - 15px)`, background: `#999`}}></div>
-    <div style={{height: 140, width: `calc(33.33% - 15px)`, background: `#999`}}></div>
-    <div style={{height: 140, width: `calc(33.33% - 15px)`, background: `#999`, marginTop: 30}}></div>
-    <div style={{height: 140, width: `calc(33.33% - 15px)`, borderStyle: `dashed`, borderWidth: 3, borderColor: `#999`, marginTop: 30, display: `flex`, alignItems: `center`, justifyContent: `center`}}>BLANK</div>
-    <div style={{height: 140, width: `calc(33.33% - 15px)`, background: `#999`, marginTop: 30}}></div>
+<div className={styles.flexbetween}>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']} ${styles['is-blank']}`}>BLANK</div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
 </div>
 
 ## Solution
 
 You can resolve flex box layout with negative margin for parent box.
 
-<div style={{display: `flex`, flexWrap: `wrap`, justifyContent: `flex-start`, margin: `0 -15px 30px`}}>
-    <div style={{height: 140, width: `calc(100% / 3 - 30px)`, background: `#999`, margin: `0 15px`}}></div>
-    <div style={{height: 140, width: `calc(100% / 3 - 30px)`, background: `#999`, margin: `0 15px`}}></div>
-    <div style={{height: 140, width: `calc(100% / 3 - 30px)`, background: `#999`, margin: `0 15px`}}></div>
-    <div style={{height: 140, width: `calc(100% / 3 - 30px)`, background: `#999`, margin: `30px 15px 0`}}></div>
-    <div style={{height: 140, width: `calc(100% / 3 - 30px)`, background: `#999`, margin: `30px 15px 0`}}></div>
+<div className={styles.flex}>
+    <div className={styles.flex__item}></div>
+    <div className={styles.flex__item}></div>
+    <div className={styles.flex__item}></div>
+    <div className={styles.flex__item}></div>
+    <div className={styles.flex__item}></div>
 </div>
 
 
@@ -48,6 +53,7 @@ You can resolve flex box layout with negative margin for parent box.
 
     &__col {
         height: 140px;
+        background: #999;
 
         // Add margin half of gap size to horizontaly
         margin: 0 15px;
