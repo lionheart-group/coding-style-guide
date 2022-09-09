@@ -1,0 +1,21 @@
+.grid {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-bottom: 30px;
+}
+
+.grid__item {
+    background: #999;
+    height: 140px;
+}
+
+.grid.has-first .grid__item:first-child {
+    height: auto;
+
+    grid-row-start: 1;
+    grid-row-end: span 2;
+
+    grid-column-start: 1;
+    grid-column-end: span 2;
+}

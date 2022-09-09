@@ -1,0 +1,120 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import styles from '@site/src/css/docs/html/tips/grid.module.css';
+
+# Grid layout
+
+Grid layout property is a little complicated... but, if you learned it, it must be useful for your work.
+
+## Flexbox example layout
+
+If you use Grid layout instead Flexbox for Flexbox example layout, there is a good point that no need to put spacing/width styles to child element.
+
+You can assign width/spacing property to only parent that has Grid style element.
+
+<div className={styles.grid}>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-grid {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    &__item {
+        background: #999;
+        height: 140px;
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-grid">
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+
+## A little complex example
+
+Grid layout is able to set how length width/height fill by a element.
+
+so, for example, if you want to be bigger the first element than other lements, and should be aligned edge, you can use Grid layout.
+
+<div className={`${styles.grid} ${styles['has-first']}`}>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-grid {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    &__item {
+        background: #999;
+        height: 140px;
+
+        &:first-child {
+            height: auto;
+
+            grid-row-start: 1;
+            grid-row-end: span 2;
+            // Same with
+            // grid-row: 1 / span 2;
+
+            grid-column-start: 1;
+            grid-column-end: span 2;
+            // Same with
+            // grid-column: 1 / span 2;
+        }
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-grid">
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+## For More Information
+
+Actually, Grid layout has more poweful functions, so if you want to know more informations, [MDN has detail instructions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout).

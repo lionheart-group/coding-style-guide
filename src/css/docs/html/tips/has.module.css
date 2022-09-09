@@ -1,0 +1,58 @@
+.form {
+    max-width: 320px;
+    margin-bottom: 30px;
+}
+.form__row {
+    padding: 1rem;
+}
+.form__label {
+    display: block;
+}
+.form__field {
+    padding: 5px;
+    border-radius: 0;
+    border: 1px solid #aaa;
+    color: #333;
+    background: #fff;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+.form__field:focus {
+    outline-color: #25c2a0;
+}
+.form__field.has-error {
+    border-color: #f00;
+}
+.form__field.has-error:focus {
+    outline-color: #f00;
+}
+
+.form__row:has(.form__field.has-error) {
+    background: #fdd;
+}
+.form__row:has(.form__field.has-error) .form__label {
+    color: #f00;
+}
+
+.grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    flex-grow: 1;
+    max-width: 320px;
+    margin-bottom: 30px;
+}
+
+.grid__item {
+    background: #999;
+    aspect-ratio: 1 / 1;
+    transition: opacity .3s;
+}
+
+.grid:has(.grid__item:hover) .grid__item:not(:hover) {
+    opacity: .6;
+}
