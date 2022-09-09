@@ -5,6 +5,24 @@ import styles from './UpdateHistory.module.css';
 
 const histories = [
     {
+        version: 'v0.0.6',
+        date: '2022-09-09',
+        items: [
+            {
+                label: <Translate>Added coding tips for Grid layout</Translate>,
+                link: 'docs/html/tips/grid'
+            },
+            {
+                label: <Translate>Added coding tips for :has selector</Translate>,
+                link: 'docs/html/tips/has'
+            },
+            {
+                label: <Translate>Added coding tips for Accordion</Translate>,
+                link: 'docs/html/tips/accordion'
+            },
+        ]
+    },
+    {
         version: 'v0.0.5',
         date: '2022-08-04',
         items: [

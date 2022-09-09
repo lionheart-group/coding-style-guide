@@ -309,7 +309,7 @@
     "message": "JavaScript"
   },
   "Prepared JavaScript library list": {
-    "message": "JavaScriptのライブラリリストを作成"
+    "message": "JavaScriptのライブラリリストを作成しました"
   },
   "theme.admonition.note": {
     "message": "メモ",
@@ -330,5 +330,14 @@
   "theme.admonition.caution": {
     "message": "注意",
     "description": "The default label used for the Caution admonition (:::caution)"
+  },
+  "Added coding tips for Grid layout": {
+    "message": "コーディングTIPSのGridの使い方についての説明を追加しました"
+  },
+  "Added coding tips for :has selector": {
+    "message": "コーディングTIPSの:hasセレクタの使い方についての説明を追加しました"
+  },
+  "Added coding tips for Accordion": {
+    "message": "コーディングTIPSのアコーディオンについての説明を追加しました"
   }
 }
