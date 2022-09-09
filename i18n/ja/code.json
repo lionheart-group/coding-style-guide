@@ -339,5 +339,8 @@
   },
   "Added coding tips for Accordion": {
     "message": "コーディングTIPSのアコーディオンについての説明を追加しました"
+  },
+  "Added coding tips for Aspect Ratio property": {
+    "message": "コーディングTIPSのアスペクト比のプロパティについての説明を追加しました"
   }
 }

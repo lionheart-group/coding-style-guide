@@ -13,6 +13,10 @@ const histories = [
                 link: 'docs/html/tips/grid'
             },
             {
+                label: <Translate>Added coding tips for Aspect Ratio property</Translate>,
+                link: 'docs/html/tips/aspect-ratio'
+            },
+            {
                 label: <Translate>Added coding tips for :has selector</Translate>,
                 link: 'docs/html/tips/has'
             },
