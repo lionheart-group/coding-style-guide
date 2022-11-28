@@ -1,5 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
 import styles from './HomepageFeatures.module.css';
 import Translate from '@docusaurus/Translate';
 
@@ -26,7 +25,7 @@ const FeatureList = [
   },
 ];
 
-function Feature({Svg, title, link}) {
+const Feature: React.FC<{title: React.ReactNode, link: string}> = ({title, link}) => {
   return (
     <>
       {link ? <a href={link} className={styles.features__item}>{title}</a> : <span className={styles.features__item}>{title}</span>}
@@ -34,7 +33,7 @@ function Feature({Svg, title, link}) {
   );
 }
 
-export default function HomepageFeatures() {
+const HomepageFeatures: React.FC = () => {
   return (
     <section className={styles.features}>
       <div className="container">
@@ -47,3 +46,5 @@ export default function HomepageFeatures() {
     </section>
   );
 }
+
+export default HomepageFeatures;

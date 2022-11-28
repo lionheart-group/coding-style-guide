@@ -9,7 +9,7 @@
 ```html
 <picture>
     <!-- 750pxより小さいウィンドウサイズの場合の画像 -->
-    <source media="(max-width: 750px)" src="path/to/sp-image.jpg">
+    <source media="(max-width: 750px)" srcset="path/to/sp-image.jpg">
     <!-- 条件に合致しない場合の画像 -->
     <img src="path/to/pc-image.jpg">
 </picture>
@@ -42,9 +42,9 @@
 ```html
 <picture>
     <!-- ブラウザがWebP形式をサポートしており、ウィンドウサイズが750pxより小さい場合 -->
-    <source type="image/webp" media="(max-width: 750px)" src="path/to/sp-image.webp">
+    <source type="image/webp" media="(max-width: 750px)" srcset="path/to/sp-image.webp">
     <!-- 750pxより小さいウィンドウサイズの場合の画像 -->
-    <source media="(max-width: 750px)" src="path/to/sp-image.jpg">
+    <source media="(max-width: 750px)" srcset="path/to/sp-image.jpg">
     <!-- ブラウザがWebP形式をサポートしている場合の画像 -->
     <source type="image/webp" srcset="path/to/pc-image.webp">
     <!-- 条件に合致しない場合の画像 -->

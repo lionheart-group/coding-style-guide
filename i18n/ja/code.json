@@ -342,5 +342,17 @@
   },
   "Added coding tips for Aspect Ratio property": {
     "message": "コーディングTIPSのアスペクト比のプロパティについての説明を追加しました"
+  },
+  "Added PHPStorm information partialy": {
+    "message": "PHPStormの説明を一部追加しました"
+  },
+  "Revised some HTML instruction's mistake": {
+    "message": "HTMLルールの不備を修正しました"
+  },
+  "Updated task runner instruction": {
+    "message": "タスクランナーの説明を更新しました"
+  },
+  "Added validation library introduction for Validation": {
+    "message": "Validation JavaScriptライブラリの紹介を追加しました"
   }
 }
