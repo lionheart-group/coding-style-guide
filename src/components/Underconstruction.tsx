@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Underconstruction = () => {
+const Underconstruction: React.FC = () => {
     return <div style={{
         borderRadius: '.2em',
         margin: '2em 0',

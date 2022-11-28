@@ -3,7 +3,38 @@ import Translate from '@docusaurus/Translate';
 
 import styles from './UpdateHistory.module.css';
 
-const histories = [
+type HistoryItem = {
+    label: React.ReactNode,
+    link?: string
+}
+type HistoryVersion = {
+    version: string,
+    date: string,
+    items: HistoryItem[]
+}
+
+const histories: HistoryVersion[] = [
+    {
+        version: 'v0.0.7',
+        date: '2022-11-28',
+        items: [
+            {
+                label: <Translate>Added PHPStorm information partialy</Translate>,
+                link: 'docs/env/editor/phpstorm'
+            },
+            {
+                label: <Translate>Revised some HTML instruction's mistake</Translate>,
+            },
+            {
+                label: <Translate>Updated task runner instruction</Translate>,
+                link: 'docs/html/task-runner/scripts/optimize-image'
+            },
+            {
+                label: <Translate>Added validation library introduction for Validation</Translate>,
+                link: 'docs/javascript/validation'
+            },
+        ]
+    },
     {
         version: 'v0.0.6',
         date: '2022-09-09',
@@ -90,13 +121,15 @@ const histories = [
     },
 ];
 
-const UpdateHistoryItem = ({item}) => {
+const UpdateHistoryItem: React.FC<{item: HistoryItem}> = ({item}) => {
     return (
-        <dd className={styles.updateHistory__list__data}><a href={item.link}>{item.label}</a></dd>
+        <dd className={styles.updateHistory__list__data}>
+            {item.link ? <a href={item.link}>{item.label}</a> : item.label}
+        </dd>
     )
 }
 
-const UpdateHistorySection = ({version}) => {
+const UpdateHistorySection: React.FC<{version: HistoryVersion}> = ({version}) => {
     return (
         <>
             <dt className={styles.updateHistory__list__title}>
@@ -109,7 +142,7 @@ const UpdateHistorySection = ({version}) => {
     )
 }
 
-const UpdateHistory = () => {
+const UpdateHistory: React.FC = () => {
     return (
         <section className={styles.updateHistory}>
             <div className="container">
