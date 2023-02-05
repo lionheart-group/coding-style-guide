@@ -11,6 +11,7 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'lionheart-group', // Usually your GitHub org/user name.
   projectName: 'coding-style-guide', // Usually your repo name.
+  trailingSlash: false,
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'ja'],
