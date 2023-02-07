@@ -1,0 +1,92 @@
+import styles from '@site/src/css/docs/html/methodologies/important/modifier.module.scss';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Modifierだけのクラスは作らないこと
+
+"Modifier"は一つのクラスとして使用することはできません。必ずComponentと併用するようにしてください。なぜなら、"Modifier"はComponentの異なる状態を示すモノに使うためのモノとなるためです。
+
+## 事例
+
+:::danger BAD
+"Modifier"が一つのクラスとして宣言されているため良くありません。
+
+```scss
+.c-component {
+    .is-child {
+        // something style
+    }
+}
+```
+:::
+
+:::tip GOOD
+"Component"として指定してください。
+
+```scss
+.c-component {
+    &__child {
+        // something style
+    }
+}
+```
+:::
+
+## Modifierが必要になる事例
+
+例えば下記のようなボタンを実装する場合、
+
+<div className={styles.sample_buttons}>
+    <button className={styles.sample_buttons__button}>Button</button>
+    <button className={`${styles.sample_buttons__button} ${styles['is-red']}`}>Button</button>
+    <button className={`${styles.sample_buttons__button} ${styles['is-blue']}`}>Button</button>
+</div>
+
+違いは背景と線の色しかありません。その為、この場合はModifierを利用する様にしてください。
+
+<Tabs>
+<TabItem value="scss" label="SCSS" default>
+
+```scss
+// `.c-button` は元となるComponentです
+.c-button {
+    color: #fff;
+    appearance: none;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 1rem 2rem;
+    border-radius: .25rem;
+
+    // 灰色のボタン用のModifier
+    &.is-gray {
+        border: 1px solid #999;
+        background: #333;
+    }
+
+    // 赤色のボタン用のModifier
+    &.is-red {
+        border: 1px solid #f00;
+        background: #c00;
+    }
+
+    // 青色のボタン用のModifier
+    &.is-blue {
+        border: 1px solid #00f;
+        background: #333;
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<button class="c-button is-gray">Button</button>
+<button class="c-button is-red">Button</button>
+<button class="c-button is-blue">Button</button>
+```
+
+</TabItem>
+</Tabs>

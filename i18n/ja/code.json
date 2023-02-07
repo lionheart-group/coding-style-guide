@@ -354,5 +354,24 @@
   },
   "Added validation library introduction for Validation": {
     "message": "Validation JavaScriptライブラリの紹介を追加しました"
+  },
+  "Added CSS Methodologies important tips about Modifier": {
+    "message": "CSS構造の重要事項にModifierに関するページを追加しました"
+  },
+  "theme.NavBar.navAriaLabel": {
+    "message": "Main",
+    "description": "The ARIA label for the main navigation"
+  },
+  "theme.docs.sidebar.navAriaLabel": {
+    "message": "Docs sidebar",
+    "description": "The ARIA label for the sidebar navigation"
+  },
+  "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
+    "message": "Close navigation bar",
+    "description": "The ARIA label for close button of mobile sidebar"
+  },
+  "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
+    "message": "Toggle navigation bar",
+    "description": "The ARIA label for hamburger menu button of mobile navigation"
   }
 }

@@ -12,6 +12,7 @@ module.exports = {
   organizationName: 'lionheart-group', // Usually your GitHub org/user name.
   projectName: 'coding-style-guide', // Usually your repo name.
   trailingSlash: false,
+  plugins: ['docusaurus-plugin-sass'],
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'ja'],
@@ -61,8 +62,8 @@ module.exports = {
             position: 'right',
           },
           {
-            href: 'https://gitlab.com/lionheart-group/coding-style-guide',
-            label: 'GitLab',
+            href: 'https://github.com/lionheart-group/coding-style-guide',
+            label: 'GitHub',
             position: 'right',
           },
         ],
@@ -100,7 +101,7 @@ module.exports = {
             items: [
               {
                 label: 'GitLab',
-                href: 'https://gitlab.com/lionheart-group/coding-style-guide',
+                href: 'https://github.com/lionheart-group/coding-style-guide',
               },
             ],
           },
@@ -120,13 +121,13 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://gitlab.com/lionheart-group/coding-style-guide/-/edit/master/',
+            'https://github.com/lionheart-group/coding-style-guide/edit/master/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            'https://gitlab.com/lionheart-group/coding-style-guide/-/edit/master/',
+            'https://github.com/lionheart-group/coding-style-guide/edit/master/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

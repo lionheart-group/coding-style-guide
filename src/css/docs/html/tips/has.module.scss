@@ -1,0 +1,66 @@
+.form {
+    max-width: 320px;
+    margin-bottom: 30px;
+
+    &__row {
+        padding: 1rem;
+    }
+
+    &__label {
+        display: block;
+    }
+
+    &__field {
+        padding: 5px;
+        border-radius: 0;
+        border: 1px solid #aaa;
+        color: #333;
+        background: #fff;
+        font-size: inherit;
+        font-family: inherit;
+        line-height: inherit;
+        width: 100%;
+        box-sizing: border-box;
+
+        &:focus {
+            outline-color: #25c2a0;
+        }
+
+        &.has-error {
+            border-color: #f00;
+        }
+
+        &.has-error:focus {
+            outline-color: #f00;
+        }
+    }
+
+
+    &__row:has(&__field.has-error) {
+        background: #fdd;
+    }
+
+    &__row:has(&__field.has-error) &__label {
+        color: #f00;
+    }
+}
+
+.grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    flex-grow: 1;
+    max-width: 320px;
+    margin-bottom: 30px;
+
+    &__item {
+        background: #999;
+        aspect-ratio: 1 / 1;
+        transition: opacity .3s;
+    }
+
+    &:has(&__item:hover) &__item:not(:hover) {
+        opacity: .6;
+    }
+}

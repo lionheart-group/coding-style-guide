@@ -26,5 +26,9 @@
   "item.label.JavaScript": {
     "message": "JavaScript",
     "description": "Navbar item with label JavaScript"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
   }
 }

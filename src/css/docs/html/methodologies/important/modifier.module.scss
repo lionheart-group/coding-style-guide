@@ -1,0 +1,29 @@
+.sample_buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: var(--ifm-paragraph-margin-bottom);
+
+    &__button {
+        color: #fff;
+        appearance: none;
+        border: none;
+        background: transparent;
+        font-family: inherit;
+        cursor: pointer;
+        padding: 1rem 2rem;
+        border: 1px solid #999;
+        background: #333;
+        border-radius: .25rem;
+
+        &.is-red {
+            border-color: #f00;
+            background-color: #c00;
+        }
+
+        &.is-blue {
+            border-color: #00f;
+            background-color: #00c;
+        }
+    }
+}
