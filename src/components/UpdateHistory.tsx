@@ -15,6 +15,16 @@ type HistoryVersion = {
 
 const histories: HistoryVersion[] = [
     {
+        version: 'v0.0.8',
+        date: '2023-02-07',
+        items: [
+            {
+                label: <Translate>Added CSS Methodologies important tips about Modifier</Translate>,
+                link: 'docs/html/methodologies/important/modifier'
+            },
+        ]
+    },
+    {
         version: 'v0.0.7',
         date: '2022-11-28',
         items: [
