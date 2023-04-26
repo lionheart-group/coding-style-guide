@@ -1,0 +1,76 @@
+# Uploaded media
+
+WordPress has the function that is able to trim/resize images that you upload, but it's needed to update setting on theme files to use this function. so, when you need to display thumbnail images for archive pages or something sliders, please check the following instruction to avoid downloading big resouces for viewer.
+
+## Settings
+
+For enable to trim/resize specific size, you need to add [add_image_size](https://developer.wordpress.org/reference/functions/add_image_size/) function into the theme.
+
+On our theme template, you can find the place that you should put `add_image_size` function in `include/init.php`.
+
+```php
+<?php
+
+add_action('init', function() {
+    // タイトルの有効化
+    // Enable Title
+    add_theme_support('title-tag');
+
+    // アイキャッチ画像の有効化
+    // Enable Post Thumbnail
+    add_theme_support('post-thumbnails');
+
+    // アイキャッチ画像のサイズ追加
+    // Adding image size for post thumbnail
+    add_image_size('name', 100, 100, true);
+
+    // Pタグを自動挿入させない
+    // Disable automatically adding <p> tags
+    remove_filter('the_excerpt', 'wpautop');
+    remove_filter('the_content', 'wpautop');
+});
+```
+
+`add_image_size` parameter is like this:
+
+```php
+add_image_size(
+    'foo_image_size', // Image size identifier.
+    100, // Image width
+    100, // Image height
+    true // Image cropping behavior.
+         // If false, the image will be scaled (default),
+         // If true, image will be cropped to the specified dimensions
+         // using center positions.
+);
+```
+
+## In Template
+
+You can display thumbnail image by the specified size by the following function.
+
+```php
+<?php
+    if (has_post_thumbnail()):
+        the_post_thumbnail('foo_image_size');
+    else:
+?>
+        <img src="<?php the_asset_url('data/path/to/noimage.jpg') ?>">
+<?php
+    endif;
+?>
+```
+
+and, if you need to add specified class to thumbnaiil image `<img>` tag, you can put attribute parameter to second argument.
+
+```php
+<?php
+    if (has_post_thumbnail()):
+        the_post_thumbnail('foo_image_size', ['class' => 'c-image']);
+    else:
+?>
+        <img src="<?php the_asset_url('data/path/to/noimage.jpg') ?>" class="c-image">
+<?php
+    endif;
+?>
+```
