@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>Coding Style Guide Blog</title>
+        <link>https://lionheart-group.github.io/coding-style-guide/updated</link>
+        <description>Coding Style Guide Blog</description>
+        <lastBuildDate>Mon, 01 May 2023 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>en</language>
+        <item>
+            <title><![CDATA[v0.1.0]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2023/05/01/v0.1.0</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2023/05/01/v0.1.0</guid>
+            <pubDate>Mon, 01 May 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Prepared WordPress Coding Style Guide partially]]></description>
+            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/docs/wordpress">Prepared WordPress Coding Style Guide partially</a></li><li><a href="/coding-style-guide/docs/javascript/scroll">Added JavaScript Scroll Action library list</a></li><li><a href="/coding-style-guide/docs/javascript/modal">Updated JavaScript Modal library list</a></li><li><a href="/coding-style-guide/docs/javascript/validation">Updated JavaScript Validation library list</a></li><li><a href="/coding-style-guide/docs/env/docker">Updated Docker Environment instruction</a></li><li>Updated Docusaurs and dependency libraries</li><li>Arranged documents file structures</li><li>Created Updated History list/detail page</li><li>Updated top page layout partially</li></ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[v0.0.8]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2023/02/07/v0.0.8</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2023/02/07/v0.0.8</guid>
+            <pubDate>Tue, 07 Feb 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Added CSS Methodologies important tips about Modifier]]></description>
+            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/docs/html/methodologies/important/modifier">Added CSS Methodologies important tips about Modifier</a></li></ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[v0.0.7]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2022/11/28/v0.0.7</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2022/11/28/v0.0.7</guid>
+            <pubDate>Mon, 28 Nov 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Added PHPStorm information partialy]]></description>
+            <content:encoded><![CDATA[<ul><li><del>Added PHPStorm information partialy</del></li><li>Revised some HTML instruction's mistake</li><li><a href="/coding-style-guide/docs/html/task-runner/scripts/optimize-image">Updated task runner instruction</a></li><li><a href="/coding-style-guide/docs/javascript/validation">Added validation library introduction for Validation</a></li></ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[v0.0.6]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2022/09/09/v0.0.6</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2022/09/09/v0.0.6</guid>
+            <pubDate>Fri, 09 Sep 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Added coding tips for Grid layout]]></description>
+            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/docs/html/tips/grid">Added coding tips for Grid layout</a></li><li><a href="/coding-style-guide/docs/html/tips/aspect-ratio">Added coding tips for Aspect Ratio property</a></li><li><a href="/coding-style-guide/docs/html/tips/has">Added coding tips for :has selector</a></li><li><a href="/coding-style-guide/docs/html/tips/accordion">Added coding tips for Accordion</a></li></ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[v0.0.5]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2022/08/04/v0.0.5</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2022/08/04/v0.0.5</guid>
+            <pubDate>Thu, 04 Aug 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Prepared JavaScript library list]]></description>
+            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/docs/javascript">Prepared JavaScript library list</a></li></ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[v0.0.4]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2022/06/30/v0.0.4</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2022/06/30/v0.0.4</guid>
+            <pubDate>Thu, 30 Jun 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Added Node.js(Volta) installing instruction]]></description>
+            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/docs/env/node">Added Node.js(Volta) installing instruction</a></li></ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[v0.0.3]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2022/05/02/v0.0.3</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2022/05/02/v0.0.3</guid>
+            <pubDate>Mon, 02 May 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Fixed VSCode plugin instruction (stylelint and eslint's config syntax was inverted)]]></description>
+            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/docs/env/editor/vscode">Fixed VSCode plugin instruction (stylelint and eslint's config syntax was inverted)</a></li></ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[v0.0.2]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2022/03/31/v0.0.2</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2022/03/31/v0.0.2</guid>
+            <pubDate>Thu, 31 Mar 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Added Dnsmasq instructions]]></description>
+            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/docs/env/dnsmasq">Added Dnsmasq instructions</a></li></ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[v0.0.1]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2022/03/17/v0.0.1</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2022/03/17/v0.0.1</guid>
+            <pubDate>Thu, 17 Mar 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Added image exporting resolution instructions]]></description>
+            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/docs/html/image/export#for-supporting-high-resolution-display">Added image exporting resolution instructions</a></li><li><a href="/coding-style-guide/docs/html/image/export#webp-webp">Updated image exporting WebP type instructions</a></li><li><a href="/coding-style-guide/docs/html/tips/picture">Added coding tips for &lt;picture<!-- -->&gt;<!-- --> tag</a></li><li><a href="/coding-style-guide/docs/html/tips/flex">Added coding tips for Flex box layout</a></li></ul>]]></content:encoded>
+        </item>
+    </channel>
+</rss>
