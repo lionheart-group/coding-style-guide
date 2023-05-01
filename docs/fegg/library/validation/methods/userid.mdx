@@ -4,15 +4,13 @@ sidebar_position: 10
 
 # Validation::userId
 
-> Check allowed character for UserID (- _ . 0-9)
-
+> Check allowed character for UserID (- \_ . 0-9)
 
 ## Description
 
 ```php
 public boolean Validation::userId( string $name, mixed $value, [ mixed $code = '' ] )
 ```
-
 
 ## Arguments
 
@@ -21,7 +19,6 @@ public boolean Validation::userId( string $name, mixed $value, [ mixed $code = '
 | $name  | string    |         | Item label                  |
 | $value | mixed     |         | Check field value           |
 | $code  | mixed     | ""      | Error code or Error message |
-
 
 ## Example
 

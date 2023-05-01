@@ -7,16 +7,21 @@ sidebar_position: 3
 You must NOT use tag selector except for the inside of `Foundation`.
 
 :::tip TIPS
+
 We allowed the child selector before, but we changed the rule. Because, child selector has a week point. When you change the tag structures (e.g. when you change `<span>` to `<a>`), child selector won't be available.
+
 :::
 
 :::info REASON
+
 This rule will avoid the unintentional layout.
+
 :::
 
 ## Example
 
 :::danger BAD
+
 You must not use tag selector even if it's child selector.
 
 ```html
@@ -33,9 +38,11 @@ You must not use tag selector even if it's child selector.
     }
 }
 ```
+
 :::
 
 :::tip GOOD
+
 Prepare as the child component.
 
 ```html
@@ -52,9 +59,11 @@ Prepare as the child component.
     }
 }
 ```
+
 :::
 
 :::tip GOOD
+
 Please prepare as the child components even if for `<table>` that is needed complex structure.
 
 ```html
@@ -103,4 +112,5 @@ Please prepare as the child components even if for `<table>` that is needed comp
     }
 }
 ```
+
 :::

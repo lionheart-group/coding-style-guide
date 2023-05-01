@@ -6,13 +6,11 @@ sidebar_position: 16
 
 > Add close bracket on Where query
 
-
 ## Description
 
 ```php
 public self Model::whereClose()
 ```
-
 
 ## Example
 
@@ -23,7 +21,7 @@ $model = new Model(false, array(
   'visible' => 'visible',
 ));
 
-// 
+//
 $model->where('news_id = ?', array(1));
 $model->whereOpen();
 $model->where('title = ?', array('foo'));

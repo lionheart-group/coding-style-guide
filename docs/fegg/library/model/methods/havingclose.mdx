@@ -6,13 +6,11 @@ sidebar_position: 19
 
 > Add close bracket on Having query
 
-
 ## Description
 
 ```php
 public self Model::havingClose()
 ```
-
 
 ## Example
 
@@ -23,7 +21,7 @@ $model = new Model(false, array(
   'visible' => 'visible',
 ));
 
-// 
+//
 $model->having('news_id = ?', array(1));
 $model->havingOpen();
 $model->having('title = ?', array('foo'));

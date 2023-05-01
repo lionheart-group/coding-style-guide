@@ -84,10 +84,12 @@ class Controller extends Application
 }
 ```
 
-The difference between \__init and constructor is that \__init is run after make self instance, so **it can use Application method by** `$this`.
+The difference between \_\_init and constructor is that \_\_init is run after make self instance, so **it can use Application method by** `$this`.
 
 :::note
+
 You can omit a initialize.
+
 :::
 
 ### Method
@@ -124,10 +126,12 @@ class Controller extends Application
 ```
 
 :::note
+
 See [Initial settings](/docs/fegg/first/config) about initial method name.
+
 :::
 
-If you want to make a secret method, you should add **underbar(_)** head of method name.
+If you want to make a secret method, you should add **underbar(\_)** head of method name.
 
 ```php title="code/application/Controller.php"
 // http://example.com/controller/_secret
@@ -179,7 +183,6 @@ class Controller extends Application
     }
 }
 ```
-
 
 ## Template of Controller class
 

@@ -7,11 +7,15 @@ sidebar_position: 8
 Send email with attachment file
 
 :::note
+
 If there is no any attachment file, this method will call [Mail::send](/docs/fegg/library/mail/methods/send) automatically
+
 :::
 
 :::note
+
 If debug flag is enabled, this method will call [Mail::log](/docs/fegg/library/mail/methods/log) automatically
+
 :::
 
 ## Description
@@ -27,7 +31,6 @@ public self Mail::sendWithFile( string $to, [ string $from_name = null, string $
 | $to        | string    |         | Send email address |
 | $from_name | string    | null    | Sender name        |
 | $from_ad   | string    | null    | Sender address     |
-
 
 ## Example
 

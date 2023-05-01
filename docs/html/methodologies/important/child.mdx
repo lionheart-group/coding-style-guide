@@ -4,16 +4,18 @@ sidebar_position: 2
 
 # Don't include other component
 
-**You must NOT include other Components in a Component.**  
-And, **You must NOT use ONLY child components, without parent component.**
+**You must NOT include other Components in a Component.** And, **You must NOT use ONLY child components, without parent component.**
 
 :::info REASON
+
 When you make styles in one Component, you can avoid unintentional layout with Components combination.
+
 :::
 
 ## Example(1)
 
 :::danger BAD
+
 You must NOT include `.c-bar` into `.c-foo`, even if you want to change the layout of `.c-bar` inside of `.c-foo`.
 
 ```html
@@ -31,9 +33,11 @@ You must NOT include `.c-bar` into `.c-foo`, even if you want to change the layo
     }
 }
 ```
+
 :::
 
 :::tip GOOD
+
 You can resolved above issue by preparing a child component of `.c-foo` and assign it together with `.c-bar`.
 
 ```html
@@ -51,11 +55,13 @@ You can resolved above issue by preparing a child component of `.c-foo` and assi
     }
 }
 ```
+
 :::
 
 ## Example(2)
 
 :::danger BAD
+
 You must NOT use `.c-bar__child` except for parent component `.c-bar`.
 
 ```html
@@ -63,9 +69,11 @@ You must NOT use `.c-bar__child` except for parent component `.c-bar`.
     <div class="c-bar__child"></div>
 </div>
 ```
+
 :::
 
 :::tip GOOD
+
 You should wrap child component `.c-bar__child` by parent component `.c-bar`.
 
 ```html
@@ -83,4 +91,5 @@ Or
     <div class="c-bar__child"></div>
 </div>
 ```
+
 :::

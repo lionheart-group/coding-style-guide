@@ -7,17 +7,21 @@ sidebar_position: 4
 Please write a style of one element for PC/SP collectively.
 
 :::tip TIPS
+
 We separated PC/SP layout the above and the bottom.
+
 :::
 
 :::info REASON
-You can find the same style with PC and SP easily when you write it collectively.
-:::
 
+You can find the same style with PC and SP easily when you write it collectively.
+
+:::
 
 ## Example
 
 :::danger BAD
+
 Please don't write a different layout style to the bottom of a file.
 
 ```scss
@@ -38,9 +42,11 @@ Please don't write a different layout style to the bottom of a file.
     }
 }
 ```
+
 :::
 
 :::tip GOOD
+
 Please write media query under the each `.c-foo` and `.c-foo__bar` styles.
 
 ```scss
@@ -50,7 +56,7 @@ Please write media query under the each `.c-foo` and `.c-foo__bar` styles.
     @include mq_sp {
         // something SP layout style
     }
-    
+
     &__foo {
         // something PC layout style
         @include mq_sp {
@@ -59,4 +65,5 @@ Please write media query under the each `.c-foo` and `.c-foo__bar` styles.
     }
 }
 ```
+
 :::

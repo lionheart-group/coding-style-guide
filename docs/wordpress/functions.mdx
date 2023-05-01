@@ -4,7 +4,6 @@ sidebar_position: 5
 
 # Additional functions
 
-
 ## is_mobile
 
 ```php
@@ -12,7 +11,6 @@ is_mobile(): boolean
 ```
 
 Checking the client is mobile or others. This function is checking `mobile or not`, so Tablet will be returned `false`.
-
 
 ## is_new
 
@@ -22,7 +20,6 @@ is_new(number|WP_Post $post = null, number $gap = 2): boolean
 
 Checking the specified post is published within `$gap` days. If `$post` is null, the specified post is assigned current post in the loop.
 
-
 ## get_page_slug
 
 ```php
@@ -30,7 +27,6 @@ get_page_slug(number|WP_Post $page_id = null): string
 ```
 
 Returning the specified post slug and parent post slug separated by hyphen `-`. e.g. if the page has `child` slug, and it has the parent page that has `parent` slug, this function returns `parent-child`.
-
 
 ## remove_line_break
 
@@ -49,7 +45,6 @@ loadScript(string $name, string $path, string[] $dependencies = [], string $vers
 This function is wrapper of [wp_enqueue_script](https://developer.wordpress.org/reference/functions/wp_enqueue_script/) that is WordPress standard function. `loadScript` will be prefixed template path to `$path` if it's not absolute path, and appended `$version` to `$path`.  
 If `$version` is empty, it's assigned from the value specified on `config.php`.
 
-
 ## loadStyle
 
 ```php
@@ -59,7 +54,6 @@ loadStyle(string $name, string $path, string[] $dependencies = [], string $versi
 This function is wrapper of [wp_enqueue_style](https://developer.wordpress.org/reference/functions/wp_enqueue_style/) that is WordPress standard function. `loadStyle` will be prefixed template path to `$path` if it's not absolute path, and appended `$version` to `$path`.  
 If `$version` is empty, it's assigned from the value specified on `config.php`.
 
-
 ## get_asset_url
 
 ```php
@@ -68,7 +62,6 @@ get_asset_url(string $path, string $version = null): string
 
 Returns url that is prefixed template path and appended `$version` to `$path`.  
 If `$version` is empty, it's assigned from the value specified on `config.php`.
-
 
 ## the_asset_url
 

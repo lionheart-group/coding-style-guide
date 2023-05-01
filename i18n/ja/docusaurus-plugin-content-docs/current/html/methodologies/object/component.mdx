@@ -5,9 +5,9 @@ sidebar_position: 1
 # Component
 
 > 再利用できるパターンとして、小さな単位のモジュールを定義します。
-> 
+>
 > 一般的によく使われるパターンであり、例えばBootstrapのComponentカテゴリなどに見られるbuttonなどが該当します。
-> 
+>
 > 出来る限り、最低限の機能を持ったものとして定義されるべきであり、それ自体が固有の幅や色などの特色を持つことは避けるのが望ましいです。
 
 本来のFLOCSSでは小さな単位で分割を推奨していますが、**再利用する要素についてはすべてComponentに含める**ようにし、大きなパーツでも許可します。
@@ -28,7 +28,7 @@ sidebar_position: 1
 // scss/object/component/_button.scss
 .c-button {
     // something style
-    
+
     &.is-primary {
         // something style
     }
@@ -77,7 +77,9 @@ sidebar_position: 1
 ```
 
 :::tip TIPS
+
 Utility（`.u-anchor-tel`）や別のComponent（`.c-button`）を含んでいますが、`.c-contact-banner`内で上書きするのではなく、`.c-contact-banner__tel__anchor`や`.c-contact-banner__form__button`を用意して、このComponent内でスタイルを定義します。
 
 参考 : [別Componentを含めない](/docs/html/methodologies/important/child)
+
 :::

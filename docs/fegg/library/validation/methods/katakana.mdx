@@ -6,13 +6,11 @@ sidebar_position: 17
 
 > Check Katakana chracter for Japanese language
 
-
 ## Description
 
 ```php
 public boolean Validation::katakana( string $name, mixed $value, [ mixed $code = '', boolean $zenkakuFlag = false ] )
 ```
-
 
 ## Arguments
 
@@ -22,7 +20,6 @@ public boolean Validation::katakana( string $name, mixed $value, [ mixed $code =
 | $value       | mixed     |         | Check field value                      |
 | $code        | mixed     | ""      | Error code or Error message            |
 | $zenkakuFlag | boolean   | false   | Required full-width Katakana only flag |
-
 
 ## Example
 
@@ -46,7 +43,6 @@ var_dump($validation->isError()); // -> true
 var_dump($validation->getErrorMessage());
 // -> "failed" => "<strong>Failed Field</strong> はカタカナで入力してください"
 ```
-
 
 ### Optional Flag
 

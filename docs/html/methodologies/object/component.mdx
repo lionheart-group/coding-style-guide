@@ -17,9 +17,11 @@ You must use `.c-` prefix for Component.
 About modifire, you should use SMACSS State pattern (`.is-` prefix).
 
 :::tip TIPS
+
 About modifier, please put like `&.is-modifier`, because modifier is represent a different state of component.
 
 Reference : [Don't use single class for Modifier](../important/modifier)
+
 :::
 
 ## In case of small Component
@@ -83,7 +85,9 @@ Reference : [Don't use single class for Modifier](../important/modifier)
 ```
 
 :::tip TIPS
+
 This example Component has Utility (`.u-anchor-tel`) and another Component (`.c-button`), but you must NOT overwrite styles of those inside of `.c-contact-banner` Component. Please make Child Component (e.g. `.c-contact-banner__tel__anchor` and `.c-contact-banner__form__button`), then you can define the style of those elements.
 
 Reference : [Don't include other component](/docs/html/methodologies/important/child)
+
 :::

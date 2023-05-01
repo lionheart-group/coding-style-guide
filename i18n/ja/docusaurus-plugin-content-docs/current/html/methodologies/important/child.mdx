@@ -4,16 +4,18 @@ sidebar_position: 2
 
 # 別Componentを含めない
 
-**Componentの中に別のComponentを含めない**ようにしてください。  
-また、**子Componentを単独で利用しない**ようにしてください。
+**Componentの中に別のComponentを含めない**ようにしてください。また、**子Componentを単独で利用しない**ようにしてください。
 
 :::info REASON
+
 Componentの組み合わせで意図しないレイアウトが発生しないように、Component内で完結するようにします。
+
 :::
 
 ## 事例 (1)
 
 :::danger BAD
+
 含めないようにしてください。
 
 ```html
@@ -31,10 +33,12 @@ Componentの組み合わせで意図しないレイアウトが発生しない�
     }
 }
 ```
+
 :::
 
 :::tip GOOD
-上記例の解決作の一つとして、例えばc-barに並列でc-fooの子Componentを追加します。 
+
+上記例の解決作の一つとして、例えばc-barに並列でc-fooの子Componentを追加します。
 
 ```html
 <div class="c-foo">
@@ -51,11 +55,13 @@ Componentの組み合わせで意図しないレイアウトが発生しない�
     }
 }
 ```
+
 :::
 
 ## 事例 (2)
 
 :::danger BAD
+
 子Component`.c-bar`を親Component`.c-bar__child`無しで利用しないようにしてください。
 
 ```html
@@ -63,9 +69,11 @@ Componentの組み合わせで意図しないレイアウトが発生しない�
     <div class="c-bar__child"></div>
 </div>
 ```
+
 :::
 
 :::tip GOOD
+
 子Component`.c-bar__child`は必ず親Component`.c-bar`内に含まれる様に構築してください。
 
 ```html
@@ -83,4 +91,5 @@ Componentの組み合わせで意図しないレイアウトが発生しない�
     <div class="c-bar__child"></div>
 </div>
 ```
+
 :::
