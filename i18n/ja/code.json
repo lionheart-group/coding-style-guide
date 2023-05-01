@@ -173,7 +173,7 @@
   },
   "theme.ErrorPageContent.tryAgain": {
     "message": "Try again",
-    "description": "The label of the button to try again when the page crashed"
+    "description": "The label of the button to try again rendering when the React error boundary captures an error"
   },
   "theme.BackToTopButton.buttonAriaLabel": {
     "message": "Scroll back to top",
@@ -215,20 +215,8 @@
     "message": "On this page",
     "description": "The label used by the button on the collapsible TOC component"
   },
-  "Added image exporting resolution instructions": {
-    "message": "画像書出時の解像度設定についての説明を追加しました"
-  },
-  "Updated image exporting WebP type instructions": {
-    "message": "画像書出時のWebP形式の説明を更新しました"
-  },
   "Updated History": {
     "message": "更新履歴"
-  },
-  "Added coding tips for <picture> tag": {
-    "message": "コーディングTIPSの<picture>タグについての説明を追加しました"
-  },
-  "Added coding tips for Flex box layout": {
-    "message": "コーディングTIPSのFlex boxの使い方についての説明を追加しました"
   },
   "Environment": {
     "message": "環境構築"
@@ -257,9 +245,6 @@
   "Detail": {
     "message": "詳細確認"
   },
-  "Added Dnsmasq instructions": {
-    "message": "Dnsmasqの設定を追加しました"
-  },
   "theme.blog.post.readMoreLabel": {
     "message": "Read more about {title}",
     "description": "The ARIA label for the link to full blog posts from excerpts"
@@ -287,12 +272,6 @@
     "message": "言語",
     "description": "The label for the mobile language switcher dropdown"
   },
-  "Fixed VSCode plugin instruction (stylelint and eslint's config syntax was inverted)": {
-    "message": "VSCodeのプラグインの説明を修正しました (stylelintとeslintの記述が逆でした)"
-  },
-  "Added Node.js(Volta) installing instruction": {
-    "message": "Node.js(Volta)のインストール方法の説明を追加しました"
-  },
   "theme.docs.breadcrumbs.home": {
     "message": "Home page",
     "description": "The ARIA label for the home page in the breadcrumbs"
@@ -307,9 +286,6 @@
   },
   "JavaScript": {
     "message": "JavaScript"
-  },
-  "Prepared JavaScript library list": {
-    "message": "JavaScriptのライブラリリストを作成しました"
   },
   "theme.admonition.note": {
     "message": "メモ",
@@ -330,33 +306,6 @@
   "theme.admonition.caution": {
     "message": "注意",
     "description": "The default label used for the Caution admonition (:::caution)"
-  },
-  "Added coding tips for Grid layout": {
-    "message": "コーディングTIPSのGridの使い方についての説明を追加しました"
-  },
-  "Added coding tips for :has selector": {
-    "message": "コーディングTIPSの:hasセレクタの使い方についての説明を追加しました"
-  },
-  "Added coding tips for Accordion": {
-    "message": "コーディングTIPSのアコーディオンについての説明を追加しました"
-  },
-  "Added coding tips for Aspect Ratio property": {
-    "message": "コーディングTIPSのアスペクト比のプロパティについての説明を追加しました"
-  },
-  "Added PHPStorm information partialy": {
-    "message": "PHPStormの説明を一部追加しました"
-  },
-  "Revised some HTML instruction's mistake": {
-    "message": "HTMLルールの不備を修正しました"
-  },
-  "Updated task runner instruction": {
-    "message": "タスクランナーの説明を更新しました"
-  },
-  "Added validation library introduction for Validation": {
-    "message": "Validation JavaScriptライブラリの紹介を追加しました"
-  },
-  "Added CSS Methodologies important tips about Modifier": {
-    "message": "CSS構造の重要事項にModifierに関するページを追加しました"
   },
   "theme.NavBar.navAriaLabel": {
     "message": "Main",

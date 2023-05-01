@@ -12,10 +12,9 @@ module.exports = {
   organizationName: "lionheart-group", // Usually your GitHub org/user name.
   projectName: "coding-style-guide", // Usually your repo name.
   trailingSlash: false,
-  plugins: ["docusaurus-plugin-sass"],
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "ja"],
+    locales: ["en", "ja"]
   },
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
@@ -24,49 +23,54 @@ module.exports = {
         title: "Coding Style Guide",
         logo: {
           alt: "LionHeart",
-          src: "img/logo.svg",
+          src: "img/logo.svg"
         },
         items: [
           {
             type: "doc",
             docId: "env/index",
             position: "left",
-            label: "Environment",
+            label: "Environment"
           },
           {
             type: "doc",
             docId: "html/index",
             position: "left",
-            label: "HTML",
+            label: "HTML"
           },
           {
             type: "doc",
             docId: "javascript/index",
             position: "left",
-            label: "JavaScript",
+            label: "JavaScript"
           },
           {
             type: "doc",
             docId: "wordpress/index",
             position: "left",
-            label: "WordPress",
+            label: "WordPress"
           },
           {
             type: "doc",
             docId: "fegg/index",
             position: "left",
-            label: "Fegg",
+            label: "Fegg"
+          },
+          {
+            to: "updated",
+            label: "Updated History",
+            position: "right"
           },
           {
             type: "localeDropdown",
-            position: "right",
+            position: "right"
           },
           {
             href: "https://github.com/lionheart-group/coding-style-guide",
             label: "GitHub",
-            position: "right",
-          },
-        ],
+            position: "right"
+          }
+        ]
       },
       footer: {
         style: "dark",
@@ -76,41 +80,45 @@ module.exports = {
             items: [
               {
                 label: "Environment",
-                to: "/docs/env",
+                to: "/docs/env"
               },
               {
                 label: "HTML",
-                to: "/docs/html",
+                to: "/docs/html"
               },
               {
                 label: "JavaScript",
-                to: "/docs/javascript",
+                to: "/docs/javascript"
               },
               {
                 label: "WordPress",
-                to: "/docs/wordpress",
+                to: "/docs/wordpress"
               },
               {
                 label: "Fegg",
-                to: "/docs/fegg",
-              },
-            ],
+                to: "/docs/fegg"
+              }
+            ]
           },
           {
             title: "More",
             items: [
               {
-                label: "GitHub",
-                href: "https://github.com/lionheart-group/coding-style-guide",
+                label: "Updated History",
+                to: "/updated"
               },
-            ],
-          },
+              {
+                label: "GitHub",
+                href: "https://github.com/lionheart-group/coding-style-guide"
+              }
+            ]
+          }
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} LionHeart Group. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} LionHeart Group. Built with Docusaurus.`
       },
       prism: {
-        additionalLanguages: ["php"],
-      },
+        additionalLanguages: ["php"]
+      }
     }),
   presets: [
     [
@@ -121,18 +129,22 @@ module.exports = {
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
           editUrl:
-            "https://github.com/lionheart-group/coding-style-guide/edit/master/",
+            "https://github.com/lionheart-group/coding-style-guide/edit/master/"
         },
         blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            "https://github.com/lionheart-group/coding-style-guide/edit/master/",
+          path: "updated",
+          showReadingTime: false,
+          editUrl: ({ locale, blogDirPath, blogPath, permalink }) =>
+            `https://github.com/lionheart-group/coding-style-guide/edit/master/${blogDirPath}/${blogPath}`,
+          routeBasePath: "updated",
+          blogTitle: "Updated History",
+          blogSidebarTitle: "Recent update"
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css"),
-        },
-      }),
-    ],
+          customCss: require.resolve("./src/css/custom.css")
+        }
+      })
+    ]
   ],
+  plugins: ["docusaurus-plugin-sass"]
 };
