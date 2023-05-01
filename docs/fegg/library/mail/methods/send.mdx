@@ -1,0 +1,43 @@
+---
+sidebar_position: 7
+---
+
+# Mail::send
+
+Send email
+
+:::note
+
+If there is added attachment file, this method will call [Mail::sendWithFile](/docs/fegg/library/mail/methods/sendwithfile) automatically
+
+:::
+
+:::note
+
+If debug flag is enabled, this method will call [Mail::log](/docs/fegg/library/mail/methods/log) automatically
+
+:::
+
+## Description
+
+```php
+public self Mail::send( string $to, [ string $from_name = null, string $from_ad = null ] )
+```
+
+## Arguments
+
+| Name       | Data type | Default | Remarks            |
+| ---------- | --------- | ------- | ------------------ |
+| $to        | string    |         | Send email address |
+| $from_name | string    | null    | Sender name        |
+| $from_ad   | string    | null    | Sender address     |
+
+## Example
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->subject('Mail subject');
+$mail->body('Mail body');
+
+$mail->send('mail@example.com', 'John Doe', 'from@example.com');
+```

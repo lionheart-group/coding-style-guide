@@ -1,0 +1,30 @@
+---
+sidebar_position: 2
+---
+
+# If
+
+> if, else, else if
+
+## Description
+
+```php
+{{ if }}
+{{ else if }}
+{{ else }}
+{{ end }}
+```
+
+It converted if section from `{{ if }}` to `{{ end }}`. You can use PHP comparison operators and methods in `{{ if }}` section, for example **&&, ||, is_array**, and so on.
+
+## Example
+
+```php title="Template"
+{{ if $page.foo === 'bar' }}
+    foo is bar
+{{ else if $page.foo === 'baz' }}
+    foo is baz
+{{ else }}
+    foo is neither bar nor baz
+{{ end }}
+```

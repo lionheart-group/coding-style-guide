@@ -1,0 +1,90 @@
+---
+sidebar_position: 2
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import styles from '@site/src/css/docs/html/tips/flex.module.scss';
+
+# Flex box layout
+
+:::info
+
+You can choose [Grid layout](./grid) also instead using Flexbox.
+
+:::
+
+## For 2 columns layout
+
+You can use `justify-content: between;`.
+
+<div className={styles.flexbetween}>
+    <div className={styles.flexbetween__item}></div>
+    <div className={styles.flexbetween__item}></div>
+</div>
+
+## For 3 or more columns layout
+
+But, if you use `justify-content: between;` for 3 or more columns layout. Sometimes layout will be weired like the following:
+
+<div className={styles.flexbetween}>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']} ${styles['is-blank']}`}>BLANK</div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+</div>
+
+## Solution
+
+You can resolve flex box layout with negative margin for parent box.
+
+<div className={styles.flex}>
+    <div className={styles.flex__item}></div>
+    <div className={styles.flex__item}></div>
+    <div className={styles.flex__item}></div>
+    <div className={styles.flex__item}></div>
+    <div className={styles.flex__item}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-flex {
+    // Add negative margin half of gap size to horizontaly
+    margin: 0 -15px;
+
+    &__col {
+        height: 140px;
+        background: #999;
+
+        // Add margin half of gap size to horizontaly
+        margin: 0 15px;
+
+        // 100% divided by the number of column size and subtracted by gap size
+        width: calc(100% / 3 - 30px);
+
+        &:nth-child(n+4) {
+            margin-top: 30px;
+        }
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-flex">
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>

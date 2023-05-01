@@ -138,5 +138,33 @@
   "sidebar.html.category.Coding Tips": {
     "message": "コーディングTIPS",
     "description": "The label for category Coding Tips in sidebar html"
+  },
+  "sidebar.wordpress.category.How To Customize Website": {
+    "message": "Webサイト制作方法",
+    "description": "The label for category How To Customize Website in sidebar wordpress"
+  },
+  "sidebar.wordpress.category.Plugins": {
+    "message": "プラグイン",
+    "description": "The label for category Plugins in sidebar wordpress"
+  },
+  "sidebar.wordpress.category.General": {
+    "message": "各種設定用",
+    "description": "The label for category General in sidebar wordpress"
+  },
+  "sidebar.wordpress.category.Custom Post Type / Taxonomy": {
+    "message": "カスタム投稿/タクソノミー",
+    "description": "The label for category Custom Post Type / Taxonomy in sidebar wordpress"
+  },
+  "sidebar.wordpress.category.Custom Field": {
+    "message": "カスタムフィールド",
+    "description": "The label for category Custom Field in sidebar wordpress"
+  },
+  "sidebar.wordpress.category.Contact Form": {
+    "message": "お問い合わせフォーム",
+    "description": "The label for category Contact Form in sidebar wordpress"
+  },
+  "sidebar.wordpress.category.Custom Block": {
+    "message": "カスタムブロック",
+    "description": "The label for category Custom Block in sidebar wordpress"
   }
 }

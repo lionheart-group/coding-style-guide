@@ -1,0 +1,68 @@
+---
+sidebar_position: 4
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import styles from '@site/src/css/docs/html/tips/aspect-ratio.module.scss';
+
+# Aspect Ratio
+
+After finished supporting IE11, we can use `aspect-ratio` property.
+
+The following 2 images are square images and cropped 16/4 ratio. it looks same, but it's implemented different approach.
+
+<div className={styles.wrap}>
+    <div className={styles.wrap__item}>
+        <p className={styles.wrap__label}>Before</p>
+        <div className={styles.before}>
+            <img src="https://via.placeholder.com/640" className={styles.before__image} />
+        </div>
+    </div>
+    <div className={styles.wrap__item}>
+        <p className={styles.wrap__label}>After</p>
+        <img src="https://via.placeholder.com/640" className={styles.after} />
+    </div>
+</div>
+
+<Tabs>
+<TabItem value="before" label="Before">
+
+```html
+<div class="c-before">
+    <img src="(...)" class="c-before__image">
+</div>
+```
+
+```scss
+.c-before {
+    position: relative;
+    padding-top: 56.25%;
+}
+.c-before__image {
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+```
+
+</TabItem>
+<TabItem value="after" label="After">
+
+```html
+<img src="(...)" class="c-after">
+```
+
+```scss
+.c-after {
+    object-fit: cover;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+```
+
+</TabItem>
+</Tabs>

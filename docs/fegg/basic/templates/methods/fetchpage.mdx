@@ -1,0 +1,73 @@
+---
+sidebar_position: 3
+---
+
+# Application::fetchPage
+
+> Return compiled template with declared controller and template variables into a string
+
+## Description
+
+```php
+public string Application::fetchPage( string $template )
+```
+
+Returns the [Application::displayTemplate](/docs/fegg/basic/templates/methods/displaytemplate) result into string after including the assigned variables in controller class that can be use in template file.
+
+## Arguments
+
+| Name      | Data type | Default | Remarks            |
+| --------- | --------- | ------- | ------------------ |
+| $template | string    |         | Template file name |
+
+## Appended arguments when compiling
+
+- **className**
+  - Class name when running
+- **config**
+  - Basic configuration
+- **languageCode**
+  - Language code
+- **site**
+  - Site parameters, assigned from [Template helper (Application::setSiteinfo)](#)
+- **page**
+  - Assigned from Controller class
+- **in**
+  - Requested parameters ($\_POST / $\_GET)
+- **hiddenForTemplate**
+  - Input hidden parameters, assigned from [Template helper (Application::setHidden)](#)
+- **session**
+  - Session data
+- **cookie**
+  - Cookie data
+
+## Example
+
+```php title="code/application/Foo.php"
+// URI: http://example.com/foo/bar/?get=param
+
+<?php
+
+class Foo extends Application
+{
+    function bar(){
+      $this->page['baz'] = 'qux';
+      $content = $this->fetchPage( 'foo/bar' );
+      echo $content;
+    }
+}
+```
+
+```html title="code/template/foo/bar.tpl"
+Baz params : {{ $page.baz }}
+$_GET[get] params : {{ $in.get }}
+Controller name : {{ $classsName }}
+```
+
+```html title="Output"
+Baz params : qux
+$_GET[get] params : param
+Controller name : foo
+```
+
+After assigning arguments for template, run the [Application::fetchTemplate](/docs/fegg/basic/templates/methods/fetchtemplate) method.

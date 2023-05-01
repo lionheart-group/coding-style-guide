@@ -1,0 +1,15 @@
+{
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on",
+    "editor.trimAutoWhitespace": false,
+    "files.trimTrailingWhitespace": false
+  },
+  "[mdx]": {
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on",
+    "editor.trimAutoWhitespace": false,
+    "files.trimTrailingWhitespace": false
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}

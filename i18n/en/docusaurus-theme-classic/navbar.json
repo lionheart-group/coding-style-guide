@@ -15,8 +15,8 @@
     "message": "Fegg",
     "description": "Navbar item with label Fegg"
   },
-  "item.label.GitLab": {
-    "message": "GitLab",
-    "description": "Navbar item with label GitLab"
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
   }
 }

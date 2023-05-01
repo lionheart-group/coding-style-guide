@@ -23,9 +23,9 @@
     "message": "Fegg",
     "description": "The label of footer link with label=Fegg linking to /docs/fegg"
   },
-  "link.item.label.GitLab": {
-    "message": "GitLab",
-    "description": "The label of footer link with label=GitLab linking to https://github.com/lionheart-group/coding-style-guide"
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/lionheart-group/coding-style-guide"
   },
   "copyright": {
     "message": "Copyright © 2021 LionHeart Group. Built with Docusaurus.",

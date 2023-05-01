@@ -1,0 +1,29 @@
+---
+sidebar_position: 4
+---
+
+# Trim::resizeForce
+
+Resize the image forcely
+
+## Description
+
+```php
+public void Trim::resizeForce( number $w, number $h )
+```
+
+## Arguments
+
+| Name | Data type | Default | Remarks                |
+| ---- | --------- | ------- | ---------------------- |
+| $w   | number    |         | Converted image width  |
+| $h   | number    |         | Converted image height |
+
+## Example
+
+```php title="Controller"
+$trim = $this->getClass('Tool/RSS', 'https://example.com/feed');
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+
+$trim->resizeForce(300, 300);
+```

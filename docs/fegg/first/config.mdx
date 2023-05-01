@@ -1,0 +1,29 @@
+---
+sidebar_position: 2
+---
+
+# Initial settings
+
+## Basic settings
+
+You can change the basic setting in **fegg/settings.php**.
+
+Change the parameters of `$settings` in accordance to your environment.
+
+## Other settings
+
+### Changing initial class and method name
+
+By default, initial class and method name is set to 'Index' file name and its 'index' method respectively. If you want to change the initial class and method name you should set your parameters in **htdocs/index.php** as seen below.
+
+```php title="htdocs/index.php"
+<?php
+
+// Default class name and method name if not set.
+if (!$fileName) {
+    $fileName = 'Index';
+}
+if (!$methodName) {
+    $methodName = 'index';
+}
+```
