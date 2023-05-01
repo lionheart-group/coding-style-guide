@@ -1,0 +1,39 @@
+---
+sidebar_position: 31
+---
+
+# Model::updateWhere
+
+> Execute Update the records by specified condition
+
+## Description
+
+```php
+public void Model::updateWhere( string $item, array $data, string $where, array $wh_data )
+```
+
+## Arguments
+
+| Name     | Data type | Default | Remarks                  |
+| -------- | --------- | ------- | ------------------------ |
+| $item    | string    |         | Updating columns         |
+| $data    | array     |         | Updating datas           |
+| $where   | string    |         | Updating condition query |
+| $wh_data | array     |         | Updating condition data  |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$item = 'title, body';
+$data = array(
+    'title' => 'Sample title',
+    'body' => 'Sample body',
+);
+$model->updateWhere($item, $data, 'id = ?', [1]);
+```

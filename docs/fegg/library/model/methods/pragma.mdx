@@ -1,0 +1,36 @@
+---
+sidebar_position: 42
+---
+
+# Model::pragma
+
+> Execute Pragma
+
+## Description
+
+```php
+public void Model::pragma( string $mode )
+```
+
+## Arguments
+
+| Name  | Data type | Default | Remarks     |
+| ----- | --------- | ------- | ----------- |
+| $mode | string    |         | Pragma mode |
+
+### Pragma mode
+
+- `table`
+- `index`
+- `index_list`
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table'   => 'cms_news',
+));
+
+// PRAGMA table_info(cms_news)
+$model->pragma('table');
+```

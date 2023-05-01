@@ -1,0 +1,46 @@
+---
+sidebar_position: 1
+---
+
+# Application::setCookie
+
+> Set COOKIE data
+
+## Description
+
+```php
+public void Application::setCookie( string $name, string $value, [ string $expire = "" ], [ string $path = "/" ] )
+```
+
+Set COOKIE data.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks          |
+| :------ | :-------- | :------ | :--------------- |
+| $name   | string    |         | Cookie param key |
+| $value  | string    |         | Value            |
+| $expire | string    | ""      | Expired time     |
+| $path   | string    |         | Enabled path     |
+
+## Example
+
+If you omit third argument, expired time will be **after 1 week** (604800 seconds).
+
+```php title="Controller"
+$this->setCookie('foo', 'bar');
+```
+
+You can set a expired time at 3rd argument.
+
+```php title="Controller"
+// This Cookie's expired time is after 60 seconds.
+$this->setCookie('foo', 'bar', 60);
+```
+
+You can set a Enabled path at 4th argument.
+
+```php title="Controller"
+// This Cookie enable under the "/test/" path.
+$this->setCookie('foo', 'bar', null, '/test/');
+```

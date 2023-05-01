@@ -1,0 +1,91 @@
+---
+sidebar_position: 3
+---
+
+# Atom
+
+:::warning 非推奨
+
+Atomは2022年12月15日に開発停止されますので、利用しないでください。
+
+:::
+
+## インストール
+
+### マニュアルインストール
+
+[公式サイト](https://atom.io/)からインストーラをダウンロードすることが可能です。
+
+### macOS
+
+**Homebrew Cask**
+
+```bash
+brew install --cask atom
+```
+
+### Windows
+
+**Scoop**
+
+```bash
+scoop install atom
+```
+
+## editorconfig
+
+ライオンハートのテンプレートでは[EditorConfig](https://editorconfig.org/)の設定ファイル（.editorconfig）が内包されています。 EditorConfigを利用すると、ある程度自動的にエディタの設定が行われます。
+
+### 必要プラグイン
+
+- [editorconfig](https://atom.io/packages/editorconfig)
+
+### 設定方法
+
+`insert_final_newline`と`trim_trailing_whitespace`の設定内容が、初期プラグインの設定内容と衝突してしまうため、`whitespace`のプラグインを無効化してください。
+
+1. 設定画面を開きます (`⌘ + ,`)
+2. "Packages"をクリックします
+3. "whitespace"のプラグインの"Disable"をクリックします
+
+## stylelint
+
+[stylelint](https://stylelint.io/)は、CSSの記述エラーを検知することでミスを防ぐことが可能なことと、ある程度の記述内容の統一を自動的に行われます。
+
+また、下記のプラグインのインストールと設定を行うと、stylelintが自動的に記法のチェックと自動修正を行ってくれるようになります。
+
+### 必要プラグイン
+
+- [linter](https://atom.io/packages/linter)
+- [linter-stylelint](https://atom.io/packages/linter-stylelint)
+- [linter-ui-default](https://atom.io/packages/linter-ui-default)
+- [intentions](https://atom.io/packages/intentions)
+- [busy-signal](https://atom.io/packages/busy-signal)
+
+### 設定方法
+
+1. 設定画面を開きます (`⌘ + ,`)
+2. "Packages"をクリックします
+3. "linter-stylelint"の"Settings"をクリックします
+4. "Attempt to fix styles on save"のチェックを有効化します
+
+## eslint
+
+[ESLint](https://eslint.org/)は、JavaScriptの記述エラーを検知することでミスを防ぐことが可能なことと、ある程度の記述内容の統一を自動的に行われます。
+
+また、下記のプラグインのインストールと設定を行うと、eslintが自動的に記法のチェックと自動修正を行ってくれるようになります。
+
+### 必要プラグイン
+
+- [linter](https://atom.io/packages/linter)
+- [linter-eslint](https://atom.io/packages/linter-eslint)
+- [linter-ui-default](https://atom.io/packages/linter-ui-default)
+- [intentions](https://atom.io/packages/intentions)
+- [busy-signal](https://atom.io/packages/busy-signal)
+
+### 設定方法
+
+1. 設定画面を開きます (`⌘ + ,`)
+2. "Packages"をクリックします
+3. "linter-eslint"の"Settings"をクリックします
+4. "Automatic Fixes"の中の"Fix errors on save"のチェックを有効化します

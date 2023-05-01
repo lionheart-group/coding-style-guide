@@ -1,0 +1,52 @@
+---
+sidebar_position: 7
+---
+
+# Dnsmasq
+
+For macOS environment, localhost subdomains are not able to confirm by browsers except for Google Chrome. But, if you install and setting [Dnsmasq](https://thekelleys.org.uk/dnsmasq/doc.html), you'll be able to confirm localhost on any browsers.
+
+:::info
+
+No need to install on Windows environment.
+
+:::
+
+## Install
+
+You need installing following applications.
+
+- [Homebrew](https://brew.sh/)
+- [Dnsmasq](https://thekelleys.org.uk/dnsmasq/doc.html)
+
+### How to install
+
+**Homebrew**
+
+Please check [Git page](/docs/env/git).
+
+**Dnsmasq**
+
+After installing Homebrew.
+
+```bash
+brew install dnsmasq
+```
+
+## Setting up
+
+```bash
+# Adding *.localhost setting to Dnsmasq configuration file
+echo 'address=/.localhost/::1' >> $(brew --prefix)/etc/dnsmasq.conf
+echo 'address=/.localhost/127.0.0.1' >> $(brew --prefix)/etc/dnsmasq.conf
+
+# Preparing *.localhost resolver file
+sudo mkdir -v /etc/resolver
+sudo bash -c 'echo "nameserver ::1" >> /etc/resolver/localhost'
+sudo bash -c 'echo "nameserver 127.0.0.1" >> /etc/resolver/localhost'
+
+# Run Dnsmasq and Setting up auto-start
+sudo brew services start dnsmasq
+
+# Then you can see it :)
+```

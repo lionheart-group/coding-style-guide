@@ -1,0 +1,21 @@
+---
+sidebar_position: 1
+---
+
+# About Other methods
+
+Fegg has other methods that you may use in your application code and display.
+
+## Config
+
+- [Application::loadConfig](/docs/fegg/basic/others/config/loadconfig)
+  - Loading config file
+
+## Ticket
+
+Ticket is useful in securing your own form processing. Setting ticket will return a hashed random string using md5 function and is going to be a part of your session. This ticket can also be applied as [Hidden](/docs/fegg/basic/templates/rules/hidden) input on the form. That means this ticket exists both on the server and client side and we can match them once the form is submitted and validate if they are the same.
+
+- [Application::setTicket](/docs/fegg/basic/others/tickets/setticket)
+  - Set ticket data and start ticket session
+- [Application::useTicket](/docs/fegg/basic/others/tickets/useticket)
+  - Use ticket once and destroy ticket session

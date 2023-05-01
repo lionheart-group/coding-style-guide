@@ -1,0 +1,95 @@
+---
+sidebar_position: 6
+---
+
+# VirtualBox
+
+:::warning 非推奨
+
+M1 macではVirtualBoxが動作しませんので、[Docker](/docs/env/docker)による環境構築をお願いします。
+
+:::
+
+## 必要アプリケーション
+
+下記アプリケーションをインストールする必要があります。
+
+- [VirtualBox](https://www.virtualbox.org/)
+- [Vagrant](https://www.vagrantup.com/)
+- [Homebrew](https://brew.sh/)
+- [Git](https://git-scm.com/)
+- [Ansible](https://www.ansible.com/)
+
+### インストール方法
+
+**VirtualBox**
+
+1. [公式サイト](https://www.virtualbox.org/)からダウンロードボタンをクリックします。
+2. "OS X hosts"のリンクをクリックしてダウンロードします。
+
+**Vagrant**
+
+1. [公式サイト](https://www.vagrantup.com/)からダウンロードボタンをクリックします。
+2. macOSの中の"64-bit"のリンクをクリックしてダウンロードします。
+
+**HomebrewとGit**
+
+[Gitの説明ページ](/docs/env/git)を確認してください。
+
+**Ansible**
+
+Homebrewのインストール後、下記のコマンドを実行します。
+
+```bash
+brew install ansible
+```
+
+### インストールの確認
+
+```bash
+# Vagrant
+vagrant -v
+  > Vagrant *.*.*
+
+# Git
+git --version
+  > git version *.*.*
+
+# Ansible
+ansible --version
+  > ansible *.*.*
+```
+
+## ローカル環境の設定
+
+[GitHub](https://github.com/sushat4692/VagrantAnsible)にVagrant環境の設定ファイルテンプレートが存在しています。
+
+### 初期設定
+
+Terminalアプリを起動して、下記のコマンドを実行します。
+
+```bash
+# 開発ディレクトリの準備
+mkdir ~/Virtual
+
+# ユーザディレクトリに移動（どのディレクトリでも問題ありません）
+cd ~/
+
+# GitHubよりテンプレートの取得
+git clone https://github.com/sushat4692/VagrantAnsible.git
+
+# ダウンロードしたディレクトリに移動
+cd VagrantAnsible
+
+# Vagrantコマンドの実行
+vagrant up --provision
+```
+
+## Vagrantコマンドの実行後
+
+初期設定後、ローカル環境を利用する事が可能です。また、localhostは`~/Virtual`ディレクトリに連携しています。
+
+```
+http://foo.localhost/ -> ~/Virtual/foo/htdocs
+http://bar.localhost/ -> ~/Virtual/bar/htdocs
+```

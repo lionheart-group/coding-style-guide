@@ -1,0 +1,42 @@
+---
+sidebar_position: 1
+---
+
+# Introduction
+
+Providing some functions for uploading/validating files
+
+## How to use
+
+You can load `Upload` class through `Application::getClass` method.
+
+```php title="Controller"
+$upload = $this->getClass('Tool/Upload');
+
+$upload->upload('file');
+```
+
+## Methods
+
+- [Upload::setUploadDir](/docs/fegg/library/upload/methods/setuploaddir)
+  - Set upload directory
+- [Upload::getUploadDir](/docs/fegg/library/upload/methods/getuploaddir)
+  - Get upload directory
+- [Upload::setMaxFileSize](/docs/fegg/library/upload/methods/setmaxfilesize)
+  - Set upload file size limitation
+- [Upload::getMaxFileSize](/docs/fegg/library/upload/methods/getmaxfileSize)
+  - Get upload file size limitation
+- [Upload::setFileType](/docs/fegg/library/upload/methods/setfiletype)
+  - Set upload file type limitation
+- [Upload::getFileType](/docs/fegg/library/upload/methods/getfiletype)
+  - Get upload file type limitation
+- [Upload::setUploadInfo](/docs/fegg/library/upload/methods/setuploadinfo)
+  - Set upload option once
+- [Upload::upload](/docs/fegg/library/upload/methods/upload)
+  - Validate uploaded file and move to upload directory
+- [Upload::getUploadedData](/docs/fegg/library/upload/methods/getuploadeddata)
+  - Get uploaded file information
+- [Upload::isError](/docs/fegg/library/upload/methods/iserror)
+  - Check uploaded file has error
+- [Upload::getErrorMessage](/docs/fegg/library/upload/methods/geterrormessage)
+  - Get uploaded file error

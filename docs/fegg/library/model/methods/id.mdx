@@ -1,0 +1,31 @@
+---
+sidebar_position: 27
+---
+
+# Model::id
+
+> Get one record by specified primary ID
+
+## Description
+
+```php
+public array Model::id( mixed $id )
+```
+
+## Arguments
+
+| Name | Data type | Default | Remarks           |
+| ---- | --------- | ------- | ----------------- |
+| $id  | mixed     |         | Target primary ID |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$records = $model->id(1);
+```

@@ -19,16 +19,20 @@
     "message": "Fegg",
     "description": "Navbar item with label Fegg"
   },
-  "item.label.GitLab": {
-    "message": "GitLab",
-    "description": "Navbar item with label GitLab"
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
   },
   "item.label.JavaScript": {
     "message": "JavaScript",
     "description": "Navbar item with label JavaScript"
   },
-  "item.label.GitHub": {
-    "message": "GitHub",
-    "description": "Navbar item with label GitHub"
+  "logo.alt": {
+    "message": "LionHeart",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Updated History": {
+    "message": "更新履歴",
+    "description": "Navbar item with label Updated History"
   }
 }

@@ -1,0 +1,33 @@
+---
+sidebar_position: 43
+---
+
+# Model::reset
+
+> Reset Model
+
+## Description
+
+```php
+public self Model::reset()
+```
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table'   => 'cms_news',
+));
+
+$model->where('news = ?', [1]);
+$model->listMax(5);
+$model->current(2);
+
+// SELECT * FROM cms_news WHERE news = 1 LIMIT 5, 5
+$model->find();
+
+$model->reset();
+
+// SELECT * FROM cms_news
+$model->find();
+```

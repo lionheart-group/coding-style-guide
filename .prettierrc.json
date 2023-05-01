@@ -1,0 +1,36 @@
+{
+  "arrowParens": "avoid",
+  "bracketSameLine": false,
+  "bracketSpacing": true,
+  "embeddedLanguageFormatting": "off",
+  "htmlWhitespaceSensitivity": "css",
+  "insertPragma": false,
+  "jsxSingleQuote": false,
+  "proseWrap": "never",
+  "quoteProps": "as-needed",
+  "requirePragma": false,
+  "semi": true,
+  "singleAttributePerLine": false,
+  "singleQuote": false,
+  "tabWidth": 2,
+  "trailingComma": "none",
+  "useTabs": false,
+  "vueIndentScriptAndStyle": false,
+  "jsxBracketSameLine": false,
+  "rangeStart": 0,
+  "printWidth": 80,
+  "overrides": [
+    {
+      "files": "*.md",
+      "options": {
+        "parser": "markdown-nocjsp"
+      }
+    },
+    {
+      "files": "*.mdx",
+      "options": {
+        "parser": "mdx-nocjsp"
+      }
+    }
+  ]
+}
