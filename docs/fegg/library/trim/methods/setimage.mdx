@@ -1,0 +1,30 @@
+---
+sidebar_position: 1
+---
+
+# Trim::setImage
+
+Set target image and output file path
+
+
+## Description
+
+```php
+public void Trim::setImage( string $org_image, string $cnv_path )
+```
+
+
+## Arguments
+
+| Name       | Data type | Default | Remarks                                |
+| ---------- | --------- | ------- | -------------------------------------- |
+| $org_image | string    |         | Target image path                      |
+| $cnv_path  | string    |         | The location of saving converted image |
+
+
+## Example
+
+```php title="Controller"
+$trim = $this->getClass('Tool/RSS', 'https://example.com/feed');
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+```

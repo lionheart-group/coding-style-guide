@@ -1,0 +1,85 @@
+---
+sidebar_position: 1
+---
+
+# URL
+
+## URL and Controller class
+
+Fegg FW also adopted the segment-based-approach. Here is how the URL and Controller class relationship work.
+
+```
+http://example.com/class/function/param1/param2...
+```
+
+1. Class of Controller
+2. Method of Controller class
+3. Arguments for Method
+
+You can have a more flexible URL by setting up your URL structure in [Routing](#routing) file.
+
+## Example
+
+```bash title="URL"
+http://example.com/post/edit/1
+```
+
+```php title="Running method"
+<?php
+// code/application/Post.php
+
+class Post extends Application
+{
+
+    // ...
+
+    public function edit( $id )
+    {
+        echo $id; // Result: 1
+    }
+
+    // ...
+
+}
+```
+
+## Routing
+
+You can set your URL structure without URL and Controller class relation by configuring your route file.
+
+You may set your `$route` in array in **code/config/route.php**.
+
+```php
+$route['from'] = 'to';
+```
+
+As described above, the Key of array is a segment of URL, whereas the Value of array is the value after remapping.
+
+:::note
+Routes will run in order when they are defined. Higher routes will always take precedence over lower ones.
+:::
+
+### Wildcards
+
+There are 2 types of available wildcards (`:any`, `:num`) you may use before mapping key.
+
+`:any` is **any types of words**. `:num` is **limited only numbers**.
+
+
+### Example
+
+```php title="code/config/route.php"
+<?php
+
+$route['foo'] = 'bar';
+// http://example.com/foo -> code/application/Bar.php
+
+$route['item/:any'] = 'product/item_lookup/$1';
+// http://example.com/item/foobar -> code/application/Product.php -> Product::item_lookup( 'foobar' )
+
+$route['archive/edit/:num'] = 'post/edit/$1';
+// http://example.com/archive/edit/1 -> code/application/Post.php -> Post::edit( 1 )
+
+$route['news/post_:num.html'] = 'news/detail/$1';
+// http://example.com/news/post_1.html -> code/application/News.php -> News::detail( 1 )
+```

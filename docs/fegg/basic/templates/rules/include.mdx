@@ -1,0 +1,95 @@
+---
+sidebar_position: 4
+---
+
+# Include
+
+> include, include head, head, include foot, foot
+
+## Description
+
+```php
+{{ include 'foo/bar' }}
+```
+
+```php
+{{ include head 'foo/bar' }}
+{{ head }}
+```
+
+```php
+{{ include foot 'foo/bar' }}
+{{ foot }}
+```
+
+Include another template.
+
+`{{ include }}` read template and display writed place, but `{{ include head }}` and `{{ include foot }}` read template and display at `{{ head }}` and `{{ foot }}`.
+
+
+## Example
+
+```php title="Template - child.tpl"
+<p>This file is child.tpl</p>
+```
+
+```php title="Template - parent.tpl"
+<p>This file is parent.tpl</p>
+{{ include 'parts' }}
+```
+
+```html title="Output"
+<p>This file is child.tpl</p>
+<p>This file is parent.tpl</p>
+```
+
+If use `{{ include head }}` and `{{ include foot }}`.
+
+```php title="Template - header.tpl"
+<link rel="stylesheet" type="text/css" href="path/to/style.css">
+```
+
+```php title="Template - footer.tpl"
+<script type="text/javascript" src="path/to/script.js"></script>
+```
+
+```php title="Template - parent.tpl"
+{{ include head 'header' }}
+{{ include foot 'footer' }}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page title</title>
+
+    {{ head }}
+
+</head>
+<body>
+    something
+
+    {{ foot }}
+
+</body>
+</html>
+```
+
+```html title="Output"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page title</title>
+
+    <link rel="stylesheet" type="text/css" href="path/to/style.css">
+
+</head>
+<body>
+    something
+
+    <script type="text/javascript" src="path/to/script.js"></script>
+
+</body>
+</html>
+```

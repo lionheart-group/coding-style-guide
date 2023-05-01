@@ -1,0 +1,43 @@
+---
+sidebar_position: 8
+---
+# Custom Block
+
+Sometimes we need to implement Custom layout into WYSIWYG part, and we can implement these requirements by using Custom Block function of WordPress.
+
+Basically, we're using the following plugin to implement Custom Block, so please check plugin page.
+
+* [Lazy Blocks](/docs/wordpress/plugins/custom-block/lazy-blocks)
+
+## Template structure
+
+If you use Lazy Blocks plugin, please match block slug and HTML classes, and SCSS files.
+
+* Block Template file
+  * blocks/lazyblock-`{slug}`/block.php
+* Block Template HTML classes
+  * .c-block-`{slug}`
+* Block Template scss file
+  * data/scss/object/component/_block-`{slug}`.scss
+
+### Example
+
+If you prepare `foo` custom block by using LazyBlocks.
+
+```php
+// blocks/lazyblock-foo/block.php
+<div class="c-block-foo">
+    <div class="c-block-foo__child">
+        <?php /** Something actions */ ?>
+    </div>
+</div>
+```
+
+```scss
+// data/scss/object/component/_block-foo.scss
+.c-block-foo {
+    &__child {
+        // Something styles
+    }
+}
+```

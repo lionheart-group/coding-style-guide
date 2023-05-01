@@ -1,0 +1,47 @@
+---
+sidebar_position: 16
+---
+
+# Validation::hankaku
+
+> Check half-width character for Multi byte string language
+
+
+## Description
+
+```php
+public boolean Validation::hankaku( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                     |
+| ------ | --------- | ------- | --------------------------- |
+| $name  | string    |         | Item label                  |
+| $value | mixed     |         | Check field value           |
+| $code  | mixed     | ""      | Error code or Error message |
+
+
+## Example
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// If $value has only half-width character
+$successName = 'Success Field';
+$successVar  = 'foo';
+$validation->hankaku('success', $successVar, array('@hankaku', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// If $value has not only half-width character
+$failedName = 'Failed Field';
+$failedVar  = 'テスト';
+$validation->required('failed', $failedVar, array('@required', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>Failed Field</strong> は半角で入力してください"
+```

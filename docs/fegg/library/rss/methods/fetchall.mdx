@@ -1,0 +1,31 @@
+---
+sidebar_position: 3
+---
+
+# RSS::fetchAll
+
+Fetch all records or specified number records of RSS Feed
+
+## Description
+
+```php
+public self RSS::fetchAll( [ number $max = 0 ] )
+```
+
+## Arguments
+
+| Name | Data type | Default | Remarks                                               |
+| ---- | --------- | ------- | ----------------------------------------------------- |
+| $max | number    | 0       | Maxmum record number / if `0` getting all the records |
+
+
+## Example
+
+```php title="Controller"
+$rss = $this->getClass('Tool/RSS', 'https://example.com/feed');
+$posts = $rss->fetchAll(5);
+
+foreach ($posts as $post) {
+    // Use $post
+}
+```

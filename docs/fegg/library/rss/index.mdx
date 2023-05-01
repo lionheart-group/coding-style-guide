@@ -1,0 +1,25 @@
+---
+sidebar_position: 1
+---
+
+# Introduction
+
+Providing some functions for analyzing RSS document
+
+## How to use
+
+You can load `RSS` class through `Application::getClass` method.
+
+```php title="Controller"
+$rss = $this->getClass('Tool/RSS', 'https://example.com/feed');
+$posts = $rss->fetchAll(10);
+```
+
+## Methods
+
+* [RSS::__construct](/docs/fegg/library/rss/methods/construct)
+  * Start loading RSS feed
+* [RSS::fetch](/docs/fegg/library/rss/methods/fetch)
+  * Fetch one record of RSS Feed
+* [RSS::fetchAll](/docs/fegg/library/rss/methods/fetchall)
+  * Fetch all records or specified number records of RSS Feed

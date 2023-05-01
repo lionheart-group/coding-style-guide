@@ -1,0 +1,60 @@
+---
+sidebar_position: 4
+---
+
+# Node.js (Volta)
+
+You can install Node.js through many kind of ways, and LH project has required different Node.js version depends on the project. so, we should install Node.js version manager to switch version easier.
+
+Then, we recommend to install [Volta](https://volta.sh/) for it.
+
+
+## If you already installed Node.js
+
+First, please check where to install Node.js.
+
+```bash
+which node
+# -> /Users/(user name)/.volta/bin/node : Already installed by Volta
+# -> /usr/local/bin/node (or other) : Need to uninstall exist Node.js
+```
+
+
+### Uninstall Node.js
+
+Please uninstall Node.js if you already installed Node.js.
+
+```bash
+brew uninstall node
+```
+
+
+## Install Volta
+
+```bash
+# Install volta
+curl https://get.volta.sh | bash
+
+# Install node LTS version
+volta install node@lts
+
+# Check Node.js place
+which node
+```
+
+
+## Install specific Node.js version
+
+Volta is able to install specific version.
+
+```bash
+# If you want to install Node.js 14
+volta install node@14
+```
+
+and, able to assign specific version to specific project.
+
+```bash
+# Please run the following command under the project directory
+volta pin node@14
+```

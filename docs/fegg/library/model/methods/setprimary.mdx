@@ -1,0 +1,34 @@
+---
+sidebar_position: 4
+---
+
+# Model::setPrimary
+
+> Set Primary ID name
+
+
+## Description
+
+```php
+public self Model::setPrimary( string $id )
+```
+
+
+## Arguments
+
+| Name | Data type | Default | Remarks         |
+| ---- | --------- | ------- | --------------- |
+| $id  | string    |         | Primary ID name |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model();
+$model->setPrimary('news_id');
+
+// Same with the following
+$model = new Model(false, array(
+    'id' => 'news_id',
+));
+```

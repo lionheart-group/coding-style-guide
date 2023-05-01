@@ -1,0 +1,45 @@
+---
+sidebar_position: 1
+---
+
+# Model::__construct
+
+> Model class constructor
+
+## Description
+
+```php
+public self Model::__construct( [ boolean $is_admin = false, array $options = [] ] )
+```
+
+## Arguments
+
+| Name      | Data type | Default | Remarks                                                                   |
+| --------- | --------- | ------- | ------------------------------------------------------------------------- |
+| $is_admin | boolean   | false   | Flag for displaying record that disabled visibility flag (For Admin page) |
+| $options  | array     | []      | Model options                                                             |
+
+
+## Example
+
+```php title="Controller"
+// For client page (Don't display hidden record)
+$model = new Model(false, array(
+    // Operate to `cms_news` table
+    'table'   => 'cms_news',
+
+    // Primary ID is `id`
+    'id'      => 'news_id',
+
+    // Visibility flag is `visible`
+    'visible' => 'visible',
+
+    // Bind columns data type
+    'bind'    => array(
+        'news_id'   => 'INTEGER',
+        'image_id'  => 'INTEGER',
+        'file_id'   => 'INTEGER',
+        'post_date' => 'DATETIME',
+    ),
+));
+```

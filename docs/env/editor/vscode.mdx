@@ -1,0 +1,83 @@
+---
+sidebar_position: 2
+---
+
+# Visual Studio Code
+
+## Installation
+
+### Manual install
+
+You can download installer from [Official website](https://code.visualstudio.com/).
+
+### macOS
+
+**Homebrew Cask**
+
+```bash
+brew install --cask vscode
+```
+
+### Windows
+
+**Scoop**
+
+```bash
+scoop install vscode
+```
+
+## editorconfig
+
+Our project has [EditorConfig](https://editorconfig.org/) setting file (.editorconfig). EditorConfig helps maintain consistent coding styles for multiple developers working on the same project across various editors and IDEs.
+
+### Required plugin
+
+* [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+
+
+## stylelint
+
+[stylelint](https://stylelint.io/) helps you avoid errors and enforce conventions in your styles.
+
+After you install the following plugin and settings, stylelint will automatically check and fix your syntax.
+
+### Required plugin
+
+* [stylelint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint)
+
+### Settings
+
+1. Open preferences (`⌘ + ,`)
+2. Click the top-right button and open `settings.json` file
+3. Insert the following syntax
+   `editor.codeActionsOnSave` is same with eslint configuration. so if it's already exists, just insert the content of it.
+
+```js
+"editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": true
+}
+```
+
+## eslint
+
+[ESLint](https://eslint.org/) statically analyzes your code to quickly find problems.
+
+After you install the following plugin and settings, ESLint will automatically check and fix your syntax.
+
+
+### Required plugin
+
+* [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+
+### Settings
+
+1. Open preferences (`⌘ + ,`)
+2. Click the top-right button and open `settings.json` file
+3. Insert the following syntax
+   `editor.codeActionsOnSave` is same with stylelint configuration. so if it's already exists, just insert the content of it.
+
+```js
+"editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+}
+```

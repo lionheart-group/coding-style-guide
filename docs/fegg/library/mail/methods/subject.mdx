@@ -1,0 +1,27 @@
+---
+sidebar_position: 2
+---
+
+# Mail::subject
+
+Set mail subject
+
+## Description
+
+```php
+public self Mail::subject( string $subject )
+```
+
+## Arguments
+
+| Name     | Data type | Default | Remarks       |
+| -------- | --------- | ------- | ------------- |
+| $subject | string    | null    | Email subject |
+
+
+## Example
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->subject('Mail subject');
+```

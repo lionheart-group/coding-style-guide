@@ -1,0 +1,49 @@
+---
+sidebar_position: 12
+---
+
+# Validation::maxbyte
+
+> Check character byte
+
+
+## Description
+
+```php
+public boolean Validation::maxbyte( string $name, mixed $value, numeric $byte, [ mixed $code = '' ] )
+```
+
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                     |
+| ------ | --------- | ------- | --------------------------- |
+| $name  | string    |         | Item label                  |
+| $value | mixed     |         | Check field value           |
+| $byte  | numeric   |         | Maximum byte value          |
+| $code  | mixed     | ""      | Error code or Error message |
+
+
+## Example
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// If $value is less than equal specific value
+$successName = 'Success Field';
+$successVar  = 'foo';
+$validation->maxbyte('success', $successVar, 10, array('@maxbyte', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// If $value is more than specific value
+$failedName = 'Failed Field';
+$failedVar  = '1234567890';
+$validation->maxbyte('failed', $failedVar, 5, array('@maxbyte', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => null
+// There is no default error text
+```

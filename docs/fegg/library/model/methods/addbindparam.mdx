@@ -1,0 +1,50 @@
+---
+sidebar_position: 9
+---
+
+# Model::addBindParam
+
+> Add Bind Parameter types
+
+
+## Description
+
+```php
+public self Model::addBindParam( string $column, string $type )
+```
+
+
+## Arguments
+
+| Name    | Data type | Default | Remarks     |
+| ------- | --------- | ------- | ----------- |
+| $column | string    |         | Bind Column |
+| $type   | string    |         | Bind Type   |
+
+
+### Prepared Type
+
+* `FLOAT`
+* `INTEGER`
+* `DATE`
+* `DATETIME`
+
+
+## Example
+
+```php title="Controller"
+$model = new Model();
+$model->addBindParam('news_id', 'INTEGER');
+$model->addBindParam('image_id', 'INTEGER');
+$model->addBindParam('file_id', 'INTEGER');
+$model->addBindParam('post_date', 'DATETIME');
+
+// Same with the following
+$model = new Model();
+$model->setBindParam(array(
+    'news_id'   => 'INTEGER',
+    'image_id'  => 'INTEGER',
+    'file_id'   => 'INTEGER',
+    'post_date' => 'DATETIME',
+));
+```

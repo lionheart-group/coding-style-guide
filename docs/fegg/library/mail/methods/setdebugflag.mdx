@@ -1,0 +1,29 @@
+---
+sidebar_position: 12
+---
+
+# Mail::setDebugFlag
+
+Set debug flag and log file name
+
+
+## Description
+
+```php
+public self Mail::setDebugFlag( boolean $is_debug, string $log_name )
+```
+
+## Arguments
+
+| Name      | Data type | Default | Remarks        |
+| --------- | --------- | ------- | -------------- |
+| $is_debug | boolean   |         | Debug flag     |
+| $log_name | string    |         | Debug log file |
+
+
+## Example
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->setDebugFlag(true, 'path/to/email.log');
+```

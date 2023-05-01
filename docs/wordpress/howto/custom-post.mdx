@@ -1,0 +1,44 @@
+---
+sidebar_position: 4
+---
+# Custom Post Type / Taxonomy
+
+In many cases, our website project is not only news/blog function. so, we need to prepare another management page by adding Custom Post Type or Custom Taxonomy.
+
+Mostly, we're using plugins for managing custom post type, so please check the following plugins pages.
+
+* [Custom Post Type UI](/docs/wordpress/plugins/custom-post/custom-post-type-ui)
+* [Custom Post Type Permalinks](/docs/wordpress/plugins/custom-post/custom-post-type-permalinks)
+
+
+## Template file structure
+
+WordPress provides template naming rules for Custom Post Type and Custom Taxonomy. Basically, we're using the following template naming rule:
+
+* Custom Post Type
+  * `archive-{slug}.php` : Archive page
+  * `single-{slug}.php` : Detail page
+* Custom Taxonomy
+  * `taxonomy-{taxonomy}.php` : Taxonomy archive page
+
+:::info
+If you need to implement same layout to custom post type archive and cust omtaxonomy archive, please prepare another template file and import from the above template file.
+
+e.g.) Prepared `foo` post type and `bar` taxonomy, and same layout for these pages
+```php
+// archive-foo.php and taxonomy-bar.php
+<?php
+get_template_file('templates/foo/archive');
+```
+
+```php
+// templates/foo/archive.php
+<?php
+get_header();
+
+while(have_posts()): the_post();
+  // will be shown `foo` post type list,
+  // or filtered `bar` taxonomy automatically
+endwhile;
+```
+:::

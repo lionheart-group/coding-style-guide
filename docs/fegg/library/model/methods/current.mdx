@@ -1,0 +1,34 @@
+---
+sidebar_position: 13
+---
+
+# Model::current
+
+> Set Current Page Parameter
+
+
+## Description
+
+```php
+public self Model::current( [ number $current = 1 ] )
+```
+
+## Arguments
+
+| Name     | Data type | Default | Remarks             |
+| -------- | --------- | ------- | ------------------- |
+| $current | number    | 1       | Current page number |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Get 2nd page's 5 records
+$records = $model->listMax(5)->current(2)->find();
+```

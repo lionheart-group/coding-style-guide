@@ -1,0 +1,97 @@
+---
+sidebar_position: 6
+---
+
+# VirtualBox
+
+:::warning Deprecated
+on M1 mac, VirtualBox won't work, so please implement local environment by [Docker](/docs/env/docker).
+:::
+
+## Install Applications
+
+You need installing following applications.
+
+* [VirtualBox](https://www.virtualbox.org/)
+* [Vagrant](https://www.vagrantup.com/)
+* [Homebrew](https://brew.sh/)
+* [Git](https://git-scm.com/)
+* [Ansible](https://www.ansible.com/)
+
+### How to install
+
+**VirtualBox**
+
+1. Access to [website](https://www.virtualbox.org/), and click download button.
+2. Click "OS X hosts" link
+
+**Vagrant**
+
+1. Access to [website](https://www.vagrantup.com/), and click download button.
+2. Click macOS > "64-bit" link
+
+**Homebrew and Git**
+
+Please check [Git page](/docs/env/git).
+
+**Ansible**
+
+After installing Homebrew.
+
+```bash
+brew install ansible
+```
+
+### Check the installation
+
+```bash
+# Vagrant
+vagrant -v
+  > Vagrant *.*.*
+
+# Git
+git --version
+  > git version *.*.*
+
+# Ansible
+ansible --version
+  > ansible *.*.*
+```
+
+
+
+## Set up Local environment
+
+There are ansible template of local environment on [GitHub](https://github.com/sushat4692/VagrantAnsible).
+
+### Initial setting up
+
+Open Terminal, and run following commands.
+
+```bash
+# Creating Developing Directory
+mkdir ~/Virtual
+
+# Anywhere is OK, move to your favorite place
+# For example, into your user directory
+cd ~/
+
+# Getting datas from GitHub
+git clone https://github.com/sushat4692/VagrantAnsible.git
+
+# Move to downloaded directory
+cd VagrantAnsible
+
+# Running Vagrant command
+vagrant up --provision
+```
+
+
+## After that
+
+After you setting up, you can use local environment and it's related localhost to `~/Virtual`.
+
+```
+http://foo.localhost/ -> ~/Virtual/foo/htdocs
+http://bar.localhost/ -> ~/Virtual/bar/htdocs
+```

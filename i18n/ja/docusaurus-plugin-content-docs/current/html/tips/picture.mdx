@@ -1,0 +1,57 @@
+---
+sidebar_position: 1
+---
+
+# 環境による画像の表示分けの方法について
+
+`<picture>`と`<source>`タグを利用することで、条件によって画像の出し分けを行うことが可能です。
+
+## ウィンドウサイズによる表示分け
+
+`<source>`タグの`media`属性を利用することで、ウィンドウサイズによる表示分けを行うことが出来ます。
+
+```html
+<picture>
+    <!-- 750pxより小さいウィンドウサイズの場合の画像 -->
+    <source media="(max-width: 750px)" srcset="path/to/sp-image.jpg">
+    <!-- 条件に合致しない場合の画像 -->
+    <img src="path/to/pc-image.jpg">
+</picture>
+```
+
+## サポートしている画像形式による表示分け
+
+`<source>`タグの`type`属性を利用することで、サポートしている画像形式による表示分けを行うことが出来ます。
+
+```html
+<picture>
+    <!-- ブラウザがWebP形式をサポートしている場合の画像 -->
+    <source type="image/webp" srcset="path/to/pc-image.webp">
+    <!-- 条件に合致しない場合の画像 -->
+    <img src="path/to/pc-image.jpg">
+</picture>
+```
+
+| 形式 | 属性に追記する値 |
+| -- | -- |
+| WebP | image/webp |
+| JPEG | image/jpeg |
+| PNG | image/png |
+| GIF | image/gif |
+
+## ウィンドウサイズと画像形式の組み合わせ
+
+上記条件は組み合わせて利用することが可能です。
+
+```html
+<picture>
+    <!-- ブラウザがWebP形式をサポートしており、ウィンドウサイズが750pxより小さい場合 -->
+    <source type="image/webp" media="(max-width: 750px)" srcset="path/to/sp-image.webp">
+    <!-- 750pxより小さいウィンドウサイズの場合の画像 -->
+    <source media="(max-width: 750px)" srcset="path/to/sp-image.jpg">
+    <!-- ブラウザがWebP形式をサポートしている場合の画像 -->
+    <source type="image/webp" srcset="path/to/pc-image.webp">
+    <!-- 条件に合致しない場合の画像 -->
+    <img src="path/to/pc-image.jpg">
+</picture>
+```

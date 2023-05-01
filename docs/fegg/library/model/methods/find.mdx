@@ -1,0 +1,33 @@
+---
+sidebar_position: 23
+---
+
+# Model::find
+
+> Get rows designated count
+
+
+## Description
+
+```php
+public array Model::find( [ string $options = [] ] )
+```
+
+## Arguments
+
+| Name     | Data type | Default | Remarks               |
+| -------- | --------- | ------- | --------------------- |
+| $options | array     | []      | Overwrite the options |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$records = $model->find();
+```

@@ -1,0 +1,26 @@
+---
+sidebar_position: 7
+---
+
+# Model::getVisible
+
+> Get Visible flag name
+
+
+## Description
+
+```php
+public string Model::getVisible()
+```
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'visible' => 'visible',
+));
+
+echo $model->getVisible();
+// -> 'visible'
+```

@@ -1,0 +1,28 @@
+---
+sidebar_position: 3
+---
+
+# Mail::body
+
+Set mail body
+
+
+## Description
+
+```php
+public self Mail::body( string $body )
+```
+
+## Arguments
+
+| Name  | Data type | Default | Remarks    |
+| ----- | --------- | ------- | ---------- |
+| $body | string    | null    | Email body |
+
+
+## Example
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->body('Mail body');
+```

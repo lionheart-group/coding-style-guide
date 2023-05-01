@@ -1,0 +1,54 @@
+---
+sidebar_position: 1
+---
+
+# Variable
+
+> The use of variables in the template
+
+## Description
+
+```php
+{{ $var }}
+```
+
+When display variables, you should write `{{ $var }}`. And when display array variables, you should separate period "." (ex: `{{ $var.key }}`).
+
+If you want to give variable from Controller to template, you can assignment array value to `$this->page`, and then can display `{{ $page.foo }}` in Temaplte.
+
+After compile, any variables display automatically through htmlSpecialChars method. If you want display raw variables, can display it use `noescape` modifire. Detail is see [modifire](/docs/fegg/basic/templates#modifiers).
+
+
+## Example
+
+```php title="Controller"
+$this->page['foo'] = 'bar';
+$this->displayPage( 'template' );
+```
+
+```php title="Template"
+{{ $page.foo }}
+```
+
+```html title="Output"
+bar
+```
+
+### If you use `noescape` modifire.
+
+```php title="Controller"
+$this->page['foo'] = '<p>bar</p>';
+$this->displayPage( 'template' );
+```
+
+```php title="Template"
+{{ $page.foo }}
+
+{{ $page.foo|noescape }}
+```
+
+```html title="Output"
+&lt;p&gt;bar&lt;/p&gt;
+
+<p>bar</p>
+```

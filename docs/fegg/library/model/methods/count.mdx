@@ -1,0 +1,27 @@
+---
+sidebar_position: 26
+---
+
+# Model::count
+
+> Get the number of record's count
+
+
+## Description
+
+```php
+public number Model::count()
+```
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$count = $model->count();
+```

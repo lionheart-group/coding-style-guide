@@ -1,0 +1,26 @@
+---
+sidebar_position: 5
+---
+
+# Model::getPrimary
+
+> Get Primary ID name
+
+
+## Description
+
+```php
+public string Model::getPrimary()
+```
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'id' => 'news_id',
+));
+
+echo $model->getPrimary();
+// -> 'news_id'
+```

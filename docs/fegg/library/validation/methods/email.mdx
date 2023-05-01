@@ -1,0 +1,47 @@
+---
+sidebar_position: 5
+---
+
+# Validation::email
+
+> Check valid E-mail string
+
+
+## Description
+
+```php
+public boolean Validation::email( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                     |
+| ------ | --------- | ------- | --------------------------- |
+| $name  | string    |         | Item label                  |
+| $value | mixed     |         | Check field value           |
+| $code  | mixed     | ""      | Error code or Error message |
+
+
+## Example
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// If $value is E-mail string
+$successName = 'Success Field';
+$successVar  = 'email@example.com';
+$validation->email('success', $successVar, array('@email', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// If $value is not E-mail string
+$failedName = 'Failed Field';
+$failedVar  = 'Something not email text';
+$validation->email('failed', $failedVar, array('@email', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>Failed Field</strong> は登録できない形式です"
+```

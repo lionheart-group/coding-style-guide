@@ -1,0 +1,124 @@
+---
+sidebar_position: 1
+---
+
+# Introduction
+
+import Badge from '../../../../src/components/Badge';
+
+> Extended Database Library for LH project
+
+
+## How to use
+
+`Model` is already imported on `Controller`, so you can call without include.
+
+```php title="Controller"
+$model = new Model(false, array(
+  'table'   => 'cms_news',
+  'id'      => 'news_id',
+  'visible' => 'visible',
+));
+
+$records = $model->find();
+```
+
+
+## Methods
+
+* [Model::__construct](/docs/fegg/library/model/methods/construct) <Badge color="yellow">Important</Badge>
+  * Model class constructor
+* [Model::setTableName](/docs/fegg/library/model/methods/settablename)
+  * Set Table Name
+* [Model::getTableName](/docs/fegg/library/model/methods/gettablename)
+  * Get Table name
+* [Model::setPrimary](/docs/fegg/library/model/methods/setprimary)
+  * Set Primary ID name
+* [Model::getPrimary](/docs/fegg/library/model/methods/getprimary)
+  * Get Primary ID name
+* [Model::setVisible](/docs/fegg/library/model/methods/setvisible)
+  * Set Visible flag name
+* [Model::getVisible](/docs/fegg/library/model/methods/getvisible)
+  * Get Visible flag name
+* [Model::setBindParam](/docs/fegg/library/model/methods/setbindparam)
+  * Set Bind Parameter types
+* [Model::addBindParam](/docs/fegg/library/model/methods/addbindparam)
+  * Add Bind Parameter types
+* [Model::getBindParam](/docs/fegg/library/model/methods/getbindparam)
+  * Get Bind Parameter types
+* [Model::select](/docs/fegg/library/model/methods/select) <Badge color="yellow">Important</Badge>
+  * Set Select Parameter
+* [Model::listMax](/docs/fegg/library/model/methods/listmax) <Badge color="yellow">Important</Badge>
+  * Set ListMax Parameter
+* [Model::current](/docs/fegg/library/model/methods/current) <Badge color="yellow">Important</Badge>
+  * Set Current Page Parameter
+* [Model::where](/docs/fegg/library/model/methods/where) <Badge color="yellow">Important</Badge>
+  * Set Where Parameter
+* [Model::whereOpen](/docs/fegg/library/model/methods/whereopen) <Badge color="yellow">Important</Badge>
+  * Add open bracket on Where query
+* [Model::whereClose](/docs/fegg/library/model/methods/whereclose) <Badge color="yellow">Important</Badge>
+  * Add close bracket on Where query
+* [Model::having](/docs/fegg/library/model/methods/having)
+  * Set Having Parameter
+* [Model::havingOpen](/docs/fegg/library/model/methods/havingopen)
+  * Add open bracket on Having query
+* [Model::havingClose](/docs/fegg/library/model/methods/havingclose)
+  * Add close bracket on Having query
+* [Model::order](/docs/fegg/library/model/methods/order) <Badge color="yellow">Important</Badge>
+  * Set Order Parameter
+* [Model::join](/docs/fegg/library/model/methods/join)
+  * Set Join Parameter
+* [Model::group](/docs/fegg/library/model/methods/group)
+  * Set Group Parameter
+* [Model::find](/docs/fegg/library/model/methods/find) <Badge color="yellow">Important</Badge>
+  * Get rows designated count
+* [Model::getPager](/docs/fegg/library/model/methods/getpager) <Badge color="yellow">Important</Badge>
+  * Get variables for making pager
+* [Model::one](/docs/fegg/library/model/methods/one) <Badge color="yellow">Important</Badge>
+  * Get one row from the records
+* [Model::count](/docs/fegg/library/model/methods/count) <Badge color="yellow">Important</Badge>
+  * Get the number of record's count
+* [Model::id](/docs/fegg/library/model/methods/id) <Badge color="yellow">Important</Badge>
+  * Get one record by specified primary ID
+* [Model::setOptions](/docs/fegg/library/model/methods/setoptions)
+  * Setting option parameter
+* [Model::resetOptions](/docs/fegg/library/model/methods/resetoptions)
+  * Reset Options Data
+* [Model::insert](/docs/fegg/library/model/methods/insert) <Badge color="yellow">Important</Badge>
+  * Execute Insert data
+* [Model::updateWhere](/docs/fegg/library/model/methods/updatewhere) <Badge color="yellow">Important</Badge>
+  * Execute Update the records by specified condition
+* [Model::update](/docs/fegg/library/model/methods/update) <Badge color="yellow">Important</Badge>
+  * Execute Update the record by specified primary ID
+* [Model::deleteWhere](/docs/fegg/library/model/methods/deletewhere) <Badge color="yellow">Important</Badge>
+  * Execute Logical Delete the records by specified condition
+* [Model::delete](/docs/fegg/library/model/methods/delete) <Badge color="yellow">Important</Badge>
+  * Execute Logical Delete the record by specified primary ID
+* [Model::eraseWhere](/docs/fegg/library/model/methods/erasewhere)
+  * Execute Physical Delete the records by specified condition
+* [Model::erase](/docs/fegg/library/model/methods/erase)
+  * Execute Physical Delete the record by specified primary ID
+* [Model::create](/docs/fegg/library/model/methods/create)
+  * Execute Create Table
+* [Model::dropTable](/docs/fegg/library/model/methods/droptable)
+  * Execute Drop table
+* [Model::dropIndex](/docs/fegg/library/model/methods/dropindex)
+  * Execute Drop index
+* [Model::alterAddColumn](/docs/fegg/library/model/methods/alteraddcolumn)
+  * Execute Alter Add Column
+* [Model::alterRenameTo](/docs/fegg/library/model/methods/alterrenameto)
+  * Execute Alter Rename
+* [Model::pragma](/docs/fegg/library/model/methods/pragma)
+  * Execute Pragma
+* [Model::reset](/docs/fegg/library/model/methods/reset)
+  * Reset Model
+* [Model::debug](/docs/fegg/library/model/methods/debug)
+  * Get last executed query
+* [Model::unsetRegularUseQuery](/docs/fegg/library/model/methods/unsetregularusequery)
+  * Disable automatic append query for a current query flag
+* [Model::unsetRegularUseQueryForTable](/docs/fegg/library/model/methods/unsetregularusequeryfortable)
+  * Disable automatic append query of the table for a current query flag
+* [Model::disabledRegularUseQuery](/docs/fegg/library/model/methods/disabledregularusequery)
+  * Disable automatic append query flag
+
+

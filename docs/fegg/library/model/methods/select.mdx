@@ -1,0 +1,33 @@
+---
+sidebar_position: 11
+---
+
+# Model::select
+
+> Set Select Parameter
+
+## Description
+
+```php
+public self Model::select( string $select )
+```
+
+## Arguments
+
+| Name    | Data type | Default | Remarks       |
+| ------- | --------- | ------- | ------------- |
+| $select | string    |         | Select fields |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Get `news_id` and `title` columns
+$records = $model->select('news_id, title')->find();
+```

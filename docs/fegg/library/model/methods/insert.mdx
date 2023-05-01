@@ -1,0 +1,42 @@
+---
+sidebar_position: 30
+---
+
+# Model::insert
+
+> Execute Insert data
+
+
+## Description
+
+```php
+public mixed Model::insert( string $item, array $data )
+```
+
+
+## Arguments
+
+| Name  | Data type | Default | Remarks           |
+| ----- | --------- | ------- | ----------------- |
+| $item | string    |         | Inserting columns |
+| $data | array     |         | Inserting datas   |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$item = 'title, body';
+$data = array(
+    'title' => 'Sample title',
+    'body' => 'Sample body',
+);
+
+// Return data is inserted ID
+$insertedId = $model->insert($item, $data);
+```

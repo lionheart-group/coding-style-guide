@@ -1,0 +1,30 @@
+---
+sidebar_position: 44
+---
+
+# Model::debug
+
+> Get last executed query
+
+
+## Description
+
+```php
+public string Model::debug()
+```
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table'   => 'cms_news',
+));
+
+$model->where('news = ?', [1])
+    ->listMax(5)
+    ->current(2)
+    ->find();
+
+echo $model->debug();
+// -> SELECT * FROM cms_news WHERE news = 1 LIMIT 5, 5
+```

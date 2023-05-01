@@ -1,0 +1,41 @@
+---
+sidebar_position: 32
+---
+
+# Model::update
+
+> Execute Update the record by specified primary ID
+
+
+## Description
+
+```php
+public void Model::update( string $item, array $data, mixed $id )
+```
+
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                    |
+| ----- | --------- | ------- | -------------------------- |
+| $item | string    |         | Updating columns           |
+| $data | array     |         | Updating datas             |
+| $id   | mixed     |         | Updating target Primary ID |
+
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$item = 'title, body';
+$data = array(
+    'title' => 'Sample title',
+    'body' => 'Sample body',
+);
+$model->update($item, $data, 1);
+```

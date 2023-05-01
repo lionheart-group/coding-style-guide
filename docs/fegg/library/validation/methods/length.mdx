@@ -1,0 +1,50 @@
+---
+sidebar_position: 13
+---
+
+# Validation::length
+
+> Check character length
+
+
+## Description
+
+```php
+public boolean Validation::length( string $name, mixed $value, numeric $length, [ mixed $code = '' ] )
+```
+
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                     |
+| ------- | --------- | ------- | --------------------------- |
+| $name   | string    |         | Item label                  |
+| $value  | mixed     |         | Check field value           |
+| $length | numeric   |         | Specific length value       |
+| $code   | mixed     | ""      | Error code or Error message |
+
+
+## Example
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// If $value is equal with specific length
+$successName = 'Success Field';
+$successVar  = 'foo';
+$length      = 3;
+$validation->length('success', $successVar, $length, array('@length', $successName, $length));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// If $value is not equal with specific length
+$failedName = 'Failed Field';
+$failedVar  = 'failed';
+$length     = 3;
+$validation->length('failed', $failedVarm, $length, array('@length', $failedName, $length));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => ''
+```
