@@ -6,15 +6,15 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import styles from '@site/src/css/docs/html/tips/has.module.scss';
 
-# :has selector
+# :has疑似クラスの使い方
 
-Now (May, 2023), [almost the modern browsers are supporting `:has` selector of CSS](https://caniuse.com/css-has). This selector is very useful when you want to style related with children/parent elements.
+2023年5月現在、[殆どのモダンブラウザは`:has`擬似クラスを利用することができるようになりました。](https://caniuse.com/css-has)この擬似クラスは親や子と連動したスタイルを適用する際に有用です。
 
-## Examples
+## 例
 
-### Change field row state that has error field
+### エラーのある入力行だけスタイルを変更する
 
-If you use `:has` selector, you can change styles that has something specified element. so, for example, you can change the color of field row that has error field.
+`:has`擬似クラスを利用することで、特定の要素を子要素に含めている要素にスタイルを適用する事ができます。そのため、エラーのある入力業にだけスタイルを適用する、といったことが可能です。
 
 <div className={styles.form}>
     <div className={styles.form__row}>
@@ -80,9 +80,9 @@ If you use `:has` selector, you can change styles that has something specified e
 </TabItem>
 </Tabs>
 
-### Change sibling element's style by hover action
+### マウスが乗っている要素以外の兄弟要素のスタイルを変更する
 
-When you want to change the sibling elements styles, it was needed to use JavaScript. But, if you use `:has` selector, it's able to implement by CSS only.
+兄弟要素のスタイルを変更する際、以前はJavaScriptを活用する必要がありました。しかし、`:has`擬似クラスを利用することで、CSSだけで実現することが可能です。
 
 <div className={styles.grid}>
     <div className={styles.grid__item}></div>

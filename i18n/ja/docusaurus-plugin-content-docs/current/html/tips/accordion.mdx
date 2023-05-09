@@ -1,0 +1,27 @@
+---
+sidebar_position: 6
+---
+
+import { Codepen } from '@site/src/components/Codepen';
+
+# アコーディオンの実装
+
+2023年5月現在、[全てのモダンブラウザは`<details>`と`<summary>`タグを利用することができるようになりました。](https://caniuse.com/details)これらのタグを利用することで、アコーディオン機能をアクセシビリティを保ちながら実現することができます。
+
+## スタイルなし
+
+<Codepen hash="NWMNPqv" user="sushat4692" defaultTab="html,result" />
+
+## スタイル適用
+
+<Codepen hash="ExLKaVr" user="sushat4692" defaultTab="css,result" />
+
+## アニメーション付き
+
+:::info
+
+この例では[Web Animation API](https://developer.mozilla.org/ja-JP/docs/Web/API/Web_Animations_API)を利用していますが、jQueryのアニメーションを使っても問題ありません。
+
+:::
+
+<Codepen hash="OJZNPzj" user="sushat4692" defaultTab="css,result" />

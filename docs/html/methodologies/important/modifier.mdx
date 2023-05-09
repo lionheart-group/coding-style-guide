@@ -65,13 +65,9 @@ Its differences are just background and border colors. so, please use modifier.
     font-family: inherit;
     cursor: pointer;
     padding: 1rem 2rem;
+    border: 1px solid #999;
+    background: #333;
     border-radius: .25rem;
-
-    // For gray button modifier
-    &.is-gray {
-        border: 1px solid #999;
-        background: #333;
-    }
 
     // For red button modifier
     &.is-red {
@@ -91,9 +87,9 @@ Its differences are just background and border colors. so, please use modifier.
 <TabItem value="html" label="HTML">
 
 ```html
-<button class="c-button is-gray">Button</button>
-<button class="c-button is-red">Button</button>
-<button class="c-button is-blue">Button</button>
+<button class="c-button">Base Button</button>
+<button class="c-button is-red">Red Button</button>
+<button class="c-button is-blue">Blue Button</button>
 ```
 
 </TabItem>
