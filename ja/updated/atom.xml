@@ -12,8 +12,8 @@
         <id>https://lionheart-group.github.io/coding-style-guide/ja/updated/2023/08/28/v0.1.1</id>
         <link href="https://lionheart-group.github.io/coding-style-guide/ja/updated/2023/08/28/v0.1.1"/>
         <updated>2023-08-28T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[- Updated Docker instruction]]></summary>
-        <content type="html"><![CDATA[<ul><li><a href="/coding-style-guide/ja/docs/env/docker">Updated Docker instruction</a></li></ul>]]></content>
+        <summary type="html"><![CDATA[- Docker環境の説明を更新しました]]></summary>
+        <content type="html"><![CDATA[<ul><li><a href="/coding-style-guide/ja/docs/env/docker">Docker環境の説明を更新しました</a></li></ul>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[v0.1.0]]></title>
