@@ -2,11 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lionheart-group.github.io/coding-style-guide/updated</id>
     <title>Coding Style Guide Blog</title>
-    <updated>2023-05-01T00:00:00.000Z</updated>
+    <updated>2023-08-28T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lionheart-group.github.io/coding-style-guide/updated"/>
     <subtitle>Coding Style Guide Blog</subtitle>
     <icon>https://lionheart-group.github.io/coding-style-guide/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[v0.1.1]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/updated/2023/08/28/v0.1.1</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2023/08/28/v0.1.1"/>
+        <updated>2023-08-28T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- Updated Docker instruction]]></summary>
+        <content type="html"><![CDATA[<ul><li><a href="/coding-style-guide/docs/env/docker">Updated Docker instruction</a></li></ul>]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v0.1.0]]></title>
         <id>https://lionheart-group.github.io/coding-style-guide/updated/2023/05/01/v0.1.0</id>

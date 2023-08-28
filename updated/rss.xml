@@ -4,10 +4,18 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Mon, 01 May 2023 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 28 Aug 2023 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[v0.1.1]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2023/08/28/v0.1.1</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2023/08/28/v0.1.1</guid>
+            <pubDate>Mon, 28 Aug 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Updated Docker instruction]]></description>
+            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/docs/env/docker">Updated Docker instruction</a></li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v0.1.0]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/updated/2023/05/01/v0.1.0</link>
