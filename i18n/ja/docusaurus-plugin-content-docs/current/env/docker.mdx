@@ -36,19 +36,34 @@ cp .env.sample .env
 docker-compose up
 ```
 
-### Dockerの起動
+## Dockerを操作するコマンド
+
+```bash
+# コンテナのビルド・起動
+./command.sh up
+
+# コンテナの開始
+./command.sh start
+
+# コンテナの停止
+./command.sh stop
+
+# コンテナ、イメージ、ボリュームの削除
+./command.sh delete
+```
+
+### PHPバージョンの切り替え
 
 このDockerテンプレートは、下記のようにコマンドによってPHPのバージョンを切り替えることが可能です。
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.php{version number}.yml up
-# `-f docker-compose.yml` は必須です
+./command.sh up {version number}
 ```
 
 もしPHP8.1で起動する場合は下記のようになります。
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.php81.yml up
+./command.sh up 81
 ```
 
 ## Dockerコマンドの実行後
