@@ -45,9 +45,9 @@ import TabItem from '@theme/TabItem';
 例えば下記のようなボタンを実装する場合、
 
 <div className={styles.sample_buttons}>
-    <button className={styles.sample_buttons__button}>Button</button>
-    <button className={`${styles.sample_buttons__button} ${styles['is-red']}`}>Button</button>
-    <button className={`${styles.sample_buttons__button} ${styles['is-blue']}`}>Button</button>
+    <button className={styles.sample_buttons__button}>Base Button</button>
+    <button className={`${styles.sample_buttons__button} ${styles['is-red']}`}>Red Button</button>
+    <button className={`${styles.sample_buttons__button} ${styles['is-blue']}`}>Blue Button</button>
 </div>
 
 違いは背景と線の色しかありません。その為、この場合はModifierを利用する様にしてください。
@@ -65,13 +65,9 @@ import TabItem from '@theme/TabItem';
     font-family: inherit;
     cursor: pointer;
     padding: 1rem 2rem;
+    border: 1px solid #999;
+    background: #333;
     border-radius: .25rem;
-
-    // 灰色のボタン用のModifier
-    &.is-gray {
-        border: 1px solid #999;
-        background: #333;
-    }
 
     // 赤色のボタン用のModifier
     &.is-red {
@@ -91,9 +87,9 @@ import TabItem from '@theme/TabItem';
 <TabItem value="html" label="HTML">
 
 ```html
-<button class="c-button is-gray">Button</button>
-<button class="c-button is-red">Button</button>
-<button class="c-button is-blue">Button</button>
+<button class="c-button">Base Button</button>
+<button class="c-button is-red">Red Button</button>
+<button class="c-button is-blue">Blue Button</button>
 ```
 
 </TabItem>

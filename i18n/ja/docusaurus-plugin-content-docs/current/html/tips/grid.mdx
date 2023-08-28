@@ -1,0 +1,123 @@
+---
+sidebar_position: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import styles from '@site/src/css/docs/html/tips/grid.module.scss';
+
+# Gridの使い方
+
+Gridレイアウトは若干複雑ですが、設定方法に慣れることで非常に便利な機能となります。
+
+## Flex boxで使っていたレイアウトでの例
+
+Gridを使ってFlex boxで使っていたレイアウトを実装する場合、子要素に対して横幅や余白の指定をする必要がない、というメリットがあります。
+
+Gridスタイルが設定されている親要素に対して横幅や余白の指定をすることが可能です。
+
+<div className={styles.grid}>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-grid {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    &__item {
+        background: #999;
+        height: 140px;
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-grid">
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+## 少し複雑なレイアウトの例
+
+Gridレイアウトは一つの要素が何列分・何行分表示するか、という指定が可能です。
+
+そのため、例えば1つ目の要素だけ他の要素よりも大きく、かつ各端を揃える必要がある場合、Gridレイアウトは力を発揮します。
+
+<div className={`${styles.grid} ${styles['has-first']}`}>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-grid {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    &__item {
+        background: #999;
+        height: 140px;
+
+        &:first-child {
+            height: auto;
+
+            grid-row-start: 1;
+            grid-row-end: span 2;
+            // Same with
+            // grid-row: 1 / span 2;
+
+            grid-column-start: 1;
+            grid-column-end: span 2;
+            // Same with
+            // grid-column: 1 / span 2;
+        }
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-grid">
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+## さらに詳しい情報について
+
+Gridレイアウトはここで紹介した機能以外にも沢山の設定項目があります。もし詳しい情報が知りたい場合は、[MDNにてGridレイアウトの解説がなされています](https://developer.mozilla.org/ja/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout)ので、そちらから確認が可能です。
