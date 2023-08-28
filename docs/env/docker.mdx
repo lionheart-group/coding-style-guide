@@ -34,19 +34,34 @@ cd docker-lamp
 cp .env.sample .env
 ```
 
-### Start Docker
+## Operating Docker commands
+
+```bash
+# Up (Build and Start) containers
+./command.sh up
+
+# Start containers
+./command.sh start
+
+# Stop containers
+./command.sh stop
+
+# Delete containers, images and volumes
+./command.sh delete
+```
+
+### How to change PHP versions
 
 This docker setting is able to change PHP version by the following command:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.php{version number}.yml up
-# `-f docker-compose.yml` is required
+./command.sh up {version number}
 ```
 
 so, for example if you want to run PHP 8.1:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.php81.yml up
+./command.sh up 81
 ```
 
 ## After that
