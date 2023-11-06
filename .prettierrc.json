@@ -18,19 +18,5 @@
   "vueIndentScriptAndStyle": false,
   "jsxBracketSameLine": false,
   "rangeStart": 0,
-  "printWidth": 80,
-  "overrides": [
-    {
-      "files": "*.md",
-      "options": {
-        "parser": "markdown-nocjsp"
-      }
-    },
-    {
-      "files": "*.mdx",
-      "options": {
-        "parser": "mdx-nocjsp"
-      }
-    }
-  ]
+  "printWidth": 80
 }
