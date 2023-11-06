@@ -34,5 +34,9 @@
   "link.item.label.JavaScript": {
     "message": "JavaScript",
     "description": "The label of footer link with label=JavaScript linking to /docs/javascript"
+  },
+  "link.item.label.Updated History": {
+    "message": "更新履歴",
+    "description": "The label of footer link with label=Updated History linking to /updated"
   }
 }

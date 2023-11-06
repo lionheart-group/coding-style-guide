@@ -39,7 +39,7 @@ We need to think about the loading speed, and the image's quality. so, we need t
 - SVG has gradation functions but it's not supported on some of browser yet
 - When SVG file has complex paths data, there is a possibility to effect to browser performance
 
-:::caution
+:::warning
 
 When you export SVG image, be careful about "text" element. If it's included, convert to path before exporting.
 
@@ -52,13 +52,13 @@ When you export SVG image, be careful about "text" element. If it's included, co
 
 :::info
 
-Please add WebP image for each embed images except for SVG through `<picture>` tag. Please see how to put [Embed flexible image](/docs/html/tips/picture#condition-by-image-format).
+We will support WebP format by using `.htaccess` file, so you don't need to implement `<picture>` tag for WebP format.
 
 :::
 
 ### Other format
 
-:::caution
+:::warning
 
 We won't use the following format.
 
