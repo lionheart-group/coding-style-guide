@@ -4,17 +4,37 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/ja/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Mon, 28 Aug 2023 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 06 Nov 2023 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>ja</language>
+        <item>
+            <title><![CDATA[v0.2.0]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2023/11/06/v0.2.0</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2023/11/06/v0.2.0</guid>
+            <pubDate>Mon, 06 Nov 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Docusaursと依存ライブラリを更新しました]]></description>
+            <content:encoded><![CDATA[<ul>
+<li>Docusaursと依存ライブラリを更新しました</li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript/layout">Layout JavaScriptライブラリの紹介を追加しました</a></li>
+<li>WebPフォーマットの対応方法を変更しました (<code>&lt;picture&gt;</code>タグから<code>.htaccess</code>を利用する方法に変更)<!-- -->
+<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/image/export#webp-webp">WebPフォーマットの書き出しについての説明を更新しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/picture">コーディングTIPSの<code>&lt;picture&gt;</code>タグについての説明を更新しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/task-runner/scripts/convert-webp"><code>convert:webp</code>のタスクランナーの説明を更新しました</a></li>
+</ul>
+</li>
+</ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v0.1.1]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2023/08/28/v0.1.1</link>
             <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2023/08/28/v0.1.1</guid>
             <pubDate>Mon, 28 Aug 2023 00:00:00 GMT</pubDate>
             <description><![CDATA[- Docker環境の説明を更新しました]]></description>
-            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/ja/docs/env/docker">Docker環境の説明を更新しました</a></li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/docker">Docker環境の説明を更新しました</a></li>
+</ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v0.1.0]]></title>
@@ -22,7 +42,17 @@
             <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2023/05/01/v0.1.0</guid>
             <pubDate>Mon, 01 May 2023 00:00:00 GMT</pubDate>
             <description><![CDATA[- WordPressのガイドラインを一部作成しました]]></description>
-            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/ja/docs/wordpress">WordPressのガイドラインを一部作成しました</a></li><li><a href="/coding-style-guide/ja/docs/javascript/scroll">Scroll Action JavaScriptライブラリの紹介を追加しました</a></li><li><a href="/coding-style-guide/ja/docs/javascript/modal">Modal JavaScriptライブラリの紹介を更新しました</a></li><li><a href="/coding-style-guide/ja/docs/javascript/validation">Validation JavaScriptライブラリの紹介を更新しました</a></li><li><a href="/coding-style-guide/ja/docs/env/docker">Docker環境の説明を更新しました</a></li><li>Docusaursと依存ライブラリを更新しました</li><li>ドキュメントファイルの構造を調整しました</li><li>更新履歴の一覧・詳細ページを作成しました</li><li>トップページを更新しました</li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/wordpress">WordPressのガイドラインを一部作成しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript/scroll">Scroll Action JavaScriptライブラリの紹介を追加しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript/modal">Modal JavaScriptライブラリの紹介を更新しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript/validation">Validation JavaScriptライブラリの紹介を更新しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/docker">Docker環境の説明を更新しました</a></li>
+<li>Docusaursと依存ライブラリを更新しました</li>
+<li>ドキュメントファイルの構造を調整しました</li>
+<li>更新履歴の一覧・詳細ページを作成しました</li>
+<li>トップページを更新しました</li>
+</ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v0.0.8]]></title>
@@ -30,7 +60,9 @@
             <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2023/02/07/v0.0.8</guid>
             <pubDate>Tue, 07 Feb 2023 00:00:00 GMT</pubDate>
             <description><![CDATA[- CSS構造の重要事項にModifierに関するページを追加しました]]></description>
-            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/ja/docs/html/methodologies/important/modifier">CSS構造の重要事項にModifierに関するページを追加しました</a></li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/methodologies/important/modifier">CSS構造の重要事項にModifierに関するページを追加しました</a></li>
+</ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v0.0.7]]></title>
@@ -38,7 +70,12 @@
             <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/11/28/v0.0.7</guid>
             <pubDate>Mon, 28 Nov 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[- PHPStormの説明を一部追加しました]]></description>
-            <content:encoded><![CDATA[<ul><li><del>PHPStormの説明を一部追加しました</del></li><li>HTMLルールの不備を修正しました</li><li><a href="/coding-style-guide/ja/docs/html/task-runner/scripts/optimize-image">タスクランナーの説明を更新しました</a></li><li><a href="/coding-style-guide/ja/docs/javascript/validation">Validation JavaScriptライブラリの紹介を追加しました</a></li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<ul>
+<li><del>PHPStormの説明を一部追加しました</del></li>
+<li>HTMLルールの不備を修正しました</li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/task-runner/scripts/optimize-image">タスクランナーの説明を更新しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript/validation">Validation JavaScriptライブラリの紹介を追加しました</a></li>
+</ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v0.0.6]]></title>
@@ -46,7 +83,12 @@
             <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/09/09/v0.0.6</guid>
             <pubDate>Fri, 09 Sep 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[- コーディングTIPSのGridの使い方についての説明を追加しました]]></description>
-            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/ja/docs/html/tips/grid">コーディングTIPSのGridの使い方についての説明を追加しました</a></li><li><a href="/coding-style-guide/ja/docs/html/tips/aspect-ratio">コーディングTIPSのアスペクト比のプロパティについての説明を追加しました</a></li><li><a href="/coding-style-guide/ja/docs/html/tips/has">コーディングTIPSの:hasセレクタの使い方についての説明を追加しました</a></li><li><a href="/coding-style-guide/ja/docs/html/tips/accordion">コーディングTIPSのアコーディオンについての説明を追加しました</a></li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/grid">コーディングTIPSのGridの使い方についての説明を追加しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/aspect-ratio">コーディングTIPSのアスペクト比のプロパティについての説明を追加しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/has">コーディングTIPSの<!-- -->:has<!-- -->セレクタの使い方についての説明を追加しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/accordion">コーディングTIPSのアコーディオンについての説明を追加しました</a></li>
+</ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v0.0.5]]></title>
@@ -54,7 +96,9 @@
             <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/08/04/v0.0.5</guid>
             <pubDate>Thu, 04 Aug 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[- JavaScriptのライブラリリストを作成しました]]></description>
-            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/ja/docs/javascript">JavaScriptのライブラリリストを作成しました</a></li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript">JavaScriptのライブラリリストを作成しました</a></li>
+</ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v0.0.4]]></title>
@@ -62,7 +106,9 @@
             <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/06/30/v0.0.4</guid>
             <pubDate>Thu, 30 Jun 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[- Node.js(Volta)のインストール方法の説明を追加しました]]></description>
-            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/ja/docs/env/node">Node.js(Volta)のインストール方法の説明を追加しました</a></li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/node">Node.js(Volta)のインストール方法の説明を追加しました</a></li>
+</ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v0.0.3]]></title>
@@ -70,7 +116,9 @@
             <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/05/02/v0.0.3</guid>
             <pubDate>Mon, 02 May 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[- VSCodeのプラグインの説明を修正しました (stylelintとeslintの記述が逆でした)]]></description>
-            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/ja/docs/env/editor/vscode">VSCodeのプラグインの説明を修正しました (stylelintとeslintの記述が逆でした)</a></li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/editor/vscode">VSCodeのプラグインの説明を修正しました (stylelintとeslintの記述が逆でした)</a></li>
+</ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v0.0.2]]></title>
@@ -78,7 +126,9 @@
             <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/03/31/v0.0.2</guid>
             <pubDate>Thu, 31 Mar 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[- Dnsmasqの設定を追加しました]]></description>
-            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/ja/docs/env/dnsmasq">Dnsmasqの設定を追加しました</a></li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/dnsmasq">Dnsmasqの設定を追加しました</a></li>
+</ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v0.0.1]]></title>
@@ -86,7 +136,12 @@
             <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/03/17/v0.0.1</guid>
             <pubDate>Thu, 17 Mar 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[- 画像書出時の解像度設定についての説明を追加しました]]></description>
-            <content:encoded><![CDATA[<ul><li><a href="/coding-style-guide/ja/docs/html/image/export#for-supporting-high-resolution-display">画像書出時の解像度設定についての説明を追加しました</a></li><li><a href="/coding-style-guide/ja/docs/html/image/export#webp-webp">画像書出時のWebP形式の説明を更新しました</a></li><li><a href="/coding-style-guide/ja/docs/html/tips/picture">コーディングTIPSの&lt;picture<!-- -->&gt;<!-- -->タグについての説明を追加しました</a></li><li><a href="/coding-style-guide/ja/docs/html/tips/flex">コーディングTIPSのFlex boxの使い方についての説明を追加しました</a></li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/image/export#for-supporting-high-resolution-display">画像書出時の解像度設定についての説明を追加しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/image/export#webp-webp">画像書出時のWebP形式の説明を更新しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/picture">コーディングTIPSの<code>&lt;picture&gt;</code>タグについての説明を追加しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/flex">コーディングTIPSのFlex boxの使い方についての説明を追加しました</a></li>
+</ul>]]></content:encoded>
         </item>
     </channel>
 </rss>

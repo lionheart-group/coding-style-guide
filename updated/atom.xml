@@ -2,18 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lionheart-group.github.io/coding-style-guide/updated</id>
     <title>Coding Style Guide Blog</title>
-    <updated>2023-08-28T00:00:00.000Z</updated>
+    <updated>2023-11-06T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lionheart-group.github.io/coding-style-guide/updated"/>
     <subtitle>Coding Style Guide Blog</subtitle>
     <icon>https://lionheart-group.github.io/coding-style-guide/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[v0.2.0]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/updated/2023/11/06/v0.2.0</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2023/11/06/v0.2.0"/>
+        <updated>2023-11-06T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- Updated Docusaurs and dependency libraries]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li>Updated Docusaurs and dependency libraries</li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/javascript/layout">Added JavaScript Layout library list</a></li>
+<li>Changed supporting way of WebP format image (from <code>&lt;picture&gt;</code> to use <code>.htaccess</code>)<!-- -->
+<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/image/export#webp-webp">Updated exporting WebP format image instruction</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/picture">Updated coding tips for <code>&lt;picture&gt;</code> tag</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/task-runner/scripts/convert-webp">Updated <code>convert:webp</code> task runner instruction</a></li>
+</ul>
+</li>
+</ul>]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v0.1.1]]></title>
         <id>https://lionheart-group.github.io/coding-style-guide/updated/2023/08/28/v0.1.1</id>
         <link href="https://lionheart-group.github.io/coding-style-guide/updated/2023/08/28/v0.1.1"/>
         <updated>2023-08-28T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- Updated Docker Environment instruction]]></summary>
-        <content type="html"><![CDATA[<ul><li><a href="/coding-style-guide/docs/env/docker">Updated Docker Environment instruction</a></li></ul>]]></content>
+        <content type="html"><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/env/docker">Updated Docker Environment instruction</a></li>
+</ul>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[v0.1.0]]></title>
@@ -21,7 +41,17 @@
         <link href="https://lionheart-group.github.io/coding-style-guide/updated/2023/05/01/v0.1.0"/>
         <updated>2023-05-01T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- Prepared WordPress Coding Style Guide partially]]></summary>
-        <content type="html"><![CDATA[<ul><li><a href="/coding-style-guide/docs/wordpress">Prepared WordPress Coding Style Guide partially</a></li><li><a href="/coding-style-guide/docs/javascript/scroll">Added JavaScript Scroll Action library list</a></li><li><a href="/coding-style-guide/docs/javascript/modal">Updated JavaScript Modal library list</a></li><li><a href="/coding-style-guide/docs/javascript/validation">Updated JavaScript Validation library list</a></li><li><a href="/coding-style-guide/docs/env/docker">Updated Docker Environment instruction</a></li><li>Updated Docusaurs and dependency libraries</li><li>Arranged documents file structures</li><li>Created Updated History list/detail page</li><li>Updated top page layout partially</li></ul>]]></content>
+        <content type="html"><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/wordpress">Prepared WordPress Coding Style Guide partially</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/javascript/scroll">Added JavaScript Scroll Action library list</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/javascript/modal">Updated JavaScript Modal library list</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/javascript/validation">Updated JavaScript Validation library list</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/env/docker">Updated Docker Environment instruction</a></li>
+<li>Updated Docusaurs and dependency libraries</li>
+<li>Arranged documents file structures</li>
+<li>Created Updated History list/detail page</li>
+<li>Updated top page layout partially</li>
+</ul>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[v0.0.8]]></title>
@@ -29,7 +59,9 @@
         <link href="https://lionheart-group.github.io/coding-style-guide/updated/2023/02/07/v0.0.8"/>
         <updated>2023-02-07T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- Added CSS Methodologies important tips about Modifier]]></summary>
-        <content type="html"><![CDATA[<ul><li><a href="/coding-style-guide/docs/html/methodologies/important/modifier">Added CSS Methodologies important tips about Modifier</a></li></ul>]]></content>
+        <content type="html"><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/important/modifier">Added CSS Methodologies important tips about Modifier</a></li>
+</ul>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[v0.0.7]]></title>
@@ -37,7 +69,12 @@
         <link href="https://lionheart-group.github.io/coding-style-guide/updated/2022/11/28/v0.0.7"/>
         <updated>2022-11-28T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- Added PHPStorm information partialy]]></summary>
-        <content type="html"><![CDATA[<ul><li><del>Added PHPStorm information partialy</del></li><li>Revised some HTML instruction's mistake</li><li><a href="/coding-style-guide/docs/html/task-runner/scripts/optimize-image">Updated task runner instruction</a></li><li><a href="/coding-style-guide/docs/javascript/validation">Added validation library introduction for Validation</a></li></ul>]]></content>
+        <content type="html"><![CDATA[<ul>
+<li><del>Added PHPStorm information partialy</del></li>
+<li>Revised some HTML instruction's mistake</li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/task-runner/scripts/optimize-image">Updated task runner instruction</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/javascript/validation">Added validation library introduction for Validation</a></li>
+</ul>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[v0.0.6]]></title>
@@ -45,7 +82,12 @@
         <link href="https://lionheart-group.github.io/coding-style-guide/updated/2022/09/09/v0.0.6"/>
         <updated>2022-09-09T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- Added coding tips for Grid layout]]></summary>
-        <content type="html"><![CDATA[<ul><li><a href="/coding-style-guide/docs/html/tips/grid">Added coding tips for Grid layout</a></li><li><a href="/coding-style-guide/docs/html/tips/aspect-ratio">Added coding tips for Aspect Ratio property</a></li><li><a href="/coding-style-guide/docs/html/tips/has">Added coding tips for :has selector</a></li><li><a href="/coding-style-guide/docs/html/tips/accordion">Added coding tips for Accordion</a></li></ul>]]></content>
+        <content type="html"><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/grid">Added coding tips for Grid layout</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/aspect-ratio">Added coding tips for Aspect Ratio property</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/has">Added coding tips for <!-- -->:has<!-- --> selector</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/accordion">Added coding tips for Accordion</a></li>
+</ul>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[v0.0.5]]></title>
@@ -53,7 +95,9 @@
         <link href="https://lionheart-group.github.io/coding-style-guide/updated/2022/08/04/v0.0.5"/>
         <updated>2022-08-04T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- Prepared JavaScript library list]]></summary>
-        <content type="html"><![CDATA[<ul><li><a href="/coding-style-guide/docs/javascript">Prepared JavaScript library list</a></li></ul>]]></content>
+        <content type="html"><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/javascript">Prepared JavaScript library list</a></li>
+</ul>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[v0.0.4]]></title>
@@ -61,7 +105,9 @@
         <link href="https://lionheart-group.github.io/coding-style-guide/updated/2022/06/30/v0.0.4"/>
         <updated>2022-06-30T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- Added Node.js(Volta) installing instruction]]></summary>
-        <content type="html"><![CDATA[<ul><li><a href="/coding-style-guide/docs/env/node">Added Node.js(Volta) installing instruction</a></li></ul>]]></content>
+        <content type="html"><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/env/node">Added Node.js(Volta) installing instruction</a></li>
+</ul>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[v0.0.3]]></title>
@@ -69,7 +115,9 @@
         <link href="https://lionheart-group.github.io/coding-style-guide/updated/2022/05/02/v0.0.3"/>
         <updated>2022-05-02T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- Fixed VSCode plugin instruction (stylelint and eslint's config syntax was inverted)]]></summary>
-        <content type="html"><![CDATA[<ul><li><a href="/coding-style-guide/docs/env/editor/vscode">Fixed VSCode plugin instruction (stylelint and eslint's config syntax was inverted)</a></li></ul>]]></content>
+        <content type="html"><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/env/editor/vscode">Fixed VSCode plugin instruction (stylelint and eslint's config syntax was inverted)</a></li>
+</ul>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[v0.0.2]]></title>
@@ -77,7 +125,9 @@
         <link href="https://lionheart-group.github.io/coding-style-guide/updated/2022/03/31/v0.0.2"/>
         <updated>2022-03-31T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- Added Dnsmasq instructions]]></summary>
-        <content type="html"><![CDATA[<ul><li><a href="/coding-style-guide/docs/env/dnsmasq">Added Dnsmasq instructions</a></li></ul>]]></content>
+        <content type="html"><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/env/dnsmasq">Added Dnsmasq instructions</a></li>
+</ul>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[v0.0.1]]></title>
@@ -85,6 +135,11 @@
         <link href="https://lionheart-group.github.io/coding-style-guide/updated/2022/03/17/v0.0.1"/>
         <updated>2022-03-17T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- Added image exporting resolution instructions]]></summary>
-        <content type="html"><![CDATA[<ul><li><a href="/coding-style-guide/docs/html/image/export#for-supporting-high-resolution-display">Added image exporting resolution instructions</a></li><li><a href="/coding-style-guide/docs/html/image/export#webp-webp">Updated image exporting WebP type instructions</a></li><li><a href="/coding-style-guide/docs/html/tips/picture">Added coding tips for &lt;picture<!-- -->&gt;<!-- --> tag</a></li><li><a href="/coding-style-guide/docs/html/tips/flex">Added coding tips for Flex box layout</a></li></ul>]]></content>
+        <content type="html"><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/image/export#for-supporting-high-resolution-display">Added image exporting resolution instructions</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/image/export#webp-webp">Updated image exporting WebP type instructions</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/picture">Added coding tips for <code>&lt;picture&gt;</code> tag</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/flex">Added coding tips for Flex box layout</a></li>
+</ul>]]></content>
     </entry>
 </feed>
