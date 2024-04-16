@@ -1,0 +1,56 @@
+---
+title: Node.js (Volta)
+sidebar:
+  order:  4
+---
+
+Node.js のインストール方法は様々な手法がありますが、LH ではプロジェクト毎に必要なバージョンが異なることがあります。
+
+そこで、LH では[Volta](https://volta.sh/)の利用をおすすめしています。
+
+## すでに Node.js がインストールされている場合
+
+まずはじめに、Node.js がインストールされている場所を確認します。
+
+```bash
+which node
+# -> /Users/(user name)/.volta/bin/node : すでにVoltaがインストールされています
+# -> /usr/local/bin/node (or other) : アンインストールが必要です
+```
+
+### Node.js のアンインストール
+
+既に Node.js がインストールされている場合、アンインストールをしてください。
+
+```bash
+brew uninstall node
+```
+
+## Volta のインストール
+
+```bash
+# Voltaのインストール
+curl https://get.volta.sh | bash
+
+# LTSバージョンのインストール
+volta install node@lts
+
+# Node.jsのインストール場所を確認
+which node
+```
+
+## 指定の Node.js のバージョンをインストール
+
+Volta は指定の Node.js のバージョンをインストールすることが可能です。
+
+```bash
+# もしバージョン14のNode.jsをインストールする場合
+volta install node@14
+```
+
+また、指定のプロジェクトだけに対して指定のバージョンを指定することが可能です。
+
+```bash
+# プロジェクトフォルダの配下で下記コマンドを実行します
+volta pin node@14
+```

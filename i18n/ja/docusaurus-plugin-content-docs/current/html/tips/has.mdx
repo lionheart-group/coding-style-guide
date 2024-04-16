@@ -1,14 +1,15 @@
 ---
-sidebar_position: 5
+sidebar:
+  order:  5
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import styles from '@site/src/css/docs/html/tips/has.module.scss';
 
-# :has疑似クラスの使い方
+# :has 疑似クラスの使い方
 
-2023年5月現在、[殆どのモダンブラウザは`:has`擬似クラスを利用することができるようになりました。](https://caniuse.com/css-has)この擬似クラスは親や子と連動したスタイルを適用する際に有用です。
+2023 年 5 月現在、[殆どのモダンブラウザは`:has`擬似クラスを利用することができるようになりました。](https://caniuse.com/css-has)この擬似クラスは親や子と連動したスタイルを適用する際に有用です。
 
 ## 例
 
@@ -82,7 +83,7 @@ import styles from '@site/src/css/docs/html/tips/has.module.scss';
 
 ### マウスが乗っている要素以外の兄弟要素のスタイルを変更する
 
-兄弟要素のスタイルを変更する際、以前はJavaScriptを活用する必要がありました。しかし、`:has`擬似クラスを利用することで、CSSだけで実現することが可能です。
+兄弟要素のスタイルを変更する際、以前は JavaScript を活用する必要がありました。しかし、`:has`擬似クラスを利用することで、CSS だけで実現することが可能です。
 
 <div className={styles.grid}>
     <div className={styles.grid__item}></div>

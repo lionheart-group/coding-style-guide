@@ -1,0 +1,79 @@
+---
+title: Visual Studio Code
+sidebar:
+  order:  2
+---
+
+## インストール
+
+### マニュアルインストール
+
+[公式サイト](https://code.visualstudio.com/)からインストーラをダウンロードすることが可能です。
+
+### macOS
+
+**Homebrew Cask**
+
+```bash
+brew install --cask vscode
+```
+
+### Windows
+
+**Scoop**
+
+```bash
+scoop install vscode
+```
+
+## editorconfig
+
+ライオンハートのテンプレートでは[EditorConfig](https://editorconfig.org/)の設定ファイル（.editorconfig）が内包されています。 EditorConfig を利用すると、ある程度自動的にエディタの設定が行われます。
+
+### 必要プラグイン
+
+- [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+
+## stylelint
+
+[stylelint](https://stylelint.io/)は、CSS の記述エラーを検知することでミスを防ぐことが可能なことと、ある程度の記述内容の統一を自動的に行われます。
+
+また、下記のプラグインのインストールと設定を行うと、stylelint が自動的に記法のチェックと自動修正を行ってくれるようになります。
+
+### 必要プラグイン
+
+- [stylelint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint)
+
+### 設定方法
+
+1. 設定画面を開きます (`⌘ + ,`)
+2. 画面右上のボタンを押下し`settings.json`ファイルを開きます
+3. `editor.codeActionsOnSave`の記述を追加します。既に`editor.codeActionsOnSave`の記述が存在している場合は、中の行を追記します。
+
+```json
+"editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": true
+}
+```
+
+## eslint
+
+[ESLint](https://eslint.org/)は、JavaScript の記述エラーを検知することでミスを防ぐことが可能なことと、ある程度の記述内容の統一を自動的に行われます。
+
+また、下記のプラグインのインストールと設定を行うと、eslint が自動的に記法のチェックと自動修正を行ってくれるようになります。
+
+### 必要プラグイン
+
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+
+### 設定方法
+
+1. 設定画面を開きます (`⌘ + ,`)
+2. 画面右上のボタンを押下し`settings.json`ファイルを開きます
+3. `editor.codeActionsOnSave`の記述を追加します。既に`editor.codeActionsOnSave`の記述が存在している場合は、中の行を追記します。
+
+```json
+"editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+}
+```

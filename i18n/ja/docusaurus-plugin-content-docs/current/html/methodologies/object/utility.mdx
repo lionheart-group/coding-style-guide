@@ -1,18 +1,19 @@
 ---
-sidebar_position: 3
+sidebar:
+  order:  3
 ---
 
 # Utility
 
-> ComponentとProjectレイヤーのObjectのモディファイアで解決することが難しい・適切では無い、わずかなスタイルの調整のための便利クラスなどを定義します。
+> Component と Project レイヤーの Object のモディファイアで解決することが難しい・適切では無い、わずかなスタイルの調整のための便利クラスなどを定義します。
 >
-> Utilityは、Component、ProjectレイヤーのObjectを無尽蔵に増やしてしまうことを防いだり、またこれらのObject自体が持つべきではないmarginの代わりに`.mbs { margin-bottom: 10px; }`のようなUtility Objectを用いて、隣接するモジュールとの間隔をつくるといった役割を担います。
+> Utility は、Component、Project レイヤーの Object を無尽蔵に増やしてしまうことを防いだり、またこれらの Object 自体が持つべきではない margin の代わりに`.mbs { margin-bottom: 10px; }`のような Utility Object を用いて、隣接するモジュールとの間隔をつくるといった役割を担います。
 >
-> またclearfixテクニックのためのルールセットが定義されているヘルパークラスも、このレイヤーに含めます。
+> また clearfix テクニックのためのルールセットが定義されているヘルパークラスも、このレイヤーに含めます。
 
 接頭辞は`.u-`を利用します。
 
-## 代表的なUtilityクラス
+## 代表的な Utility クラス
 
 :::note
 
@@ -22,7 +23,7 @@ sidebar_position: 3
 
 ### .u-sp-only / .u-pc-only
 
-PCのみ、SPのみ表示させます。
+PC のみ、SP のみ表示させます。
 
 :::note
 

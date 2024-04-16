@@ -1,20 +1,21 @@
 ---
-sidebar_position: 2
+sidebar:
+  order:  2
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import styles from '@site/src/css/docs/html/tips/flex.module.scss';
 
-# Flex boxの使い方
+# Flex box の使い方
 
 :::info
 
-[Gridレイアウト](./grid)も各ブラウザにてサポートされましたので、そちらの利用も検討してください。
+[Grid レイアウト](./grid)も各ブラウザにてサポートされましたので、そちらの利用も検討してください。
 
 :::
 
-## 2カラムの場合
+## 2 カラムの場合
 
 `justify-content: between;`を使っても問題ありません。
 
@@ -23,9 +24,9 @@ import styles from '@site/src/css/docs/html/tips/flex.module.scss';
     <div className={styles.flexbetween__item}></div>
 </div>
 
-## 3カラム以上の場合の問題
+## 3 カラム以上の場合の問題
 
-3カラム以上の場合は`justify-content: between;`は、下記の様にレイアウトに空きが生じてしまう事が発生してしまうため推奨していません。
+3 カラム以上の場合は`justify-content: between;`は、下記の様にレイアウトに空きが生じてしまう事が発生してしまうため推奨していません。
 
 <div className={styles.flexbetween}>
     <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
@@ -38,7 +39,7 @@ import styles from '@site/src/css/docs/html/tips/flex.module.scss';
 
 ## 解決方法
 
-親の要素の左右のmarginに負の値を設定することで解決することが可能です。
+親の要素の左右の margin に負の値を設定することで解決することが可能です。
 
 <div className={styles.flex}>
     <div className={styles.flex__item}></div>

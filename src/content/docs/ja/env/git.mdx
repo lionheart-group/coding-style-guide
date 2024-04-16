@@ -1,0 +1,50 @@
+---
+title: Git
+sidebar:
+  order:  3
+---
+
+ライオンハートでは[GitHub](https://github.com)を利用してソースコードの管理をしています。
+
+GitHub のソースコードの取得・編集を行うには、Git コマンドを利用する必要があります。
+
+## インストール
+
+### macOS
+
+[Homebrew](https://brew.sh/)を利用してインストールをすることが可能です。
+
+**Homebrew**
+
+```bash
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+**Git**
+
+Homebrew のインストール後、下記のコマンドを実行します。
+
+```bash
+brew install git
+```
+
+### Windows
+
+[Scoop](https://scoop.sh)を利用してインストールをすることが可能です。
+
+**Scoop**
+
+```bash
+Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+
+# または下記でも可
+iwr -useb get.scoop.sh | iex
+```
+
+**Git**
+
+Scoop のインストール後、下記のコマンドを実行します。
+
+```bash
+scoop install git
+```

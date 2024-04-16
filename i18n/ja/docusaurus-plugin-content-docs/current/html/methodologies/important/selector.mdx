@@ -1,14 +1,15 @@
 ---
-sidebar_position: 3
+sidebar:
+  order:  3
 ---
 
 # タグセレクタは使用しないこと
 
-Foundationを除き、タグセレクタは使用しないこと。
+Foundation を除き、タグセレクタは使用しないこと。
 
 :::tip TIPS
 
-以前は子孫セレクタを許可していましたが、HTML構造を変更した際にルールが適用されないことが発生してしまうため、許可しないようにルールを変更しました。
+以前は子孫セレクタを許可していましたが、HTML 構造を変更した際にルールが適用されないことが発生してしまうため、許可しないようにルールを変更しました。
 
 :::
 
@@ -43,7 +44,7 @@ Foundationを除き、タグセレクタは使用しないこと。
 
 :::tip GOOD
 
-子Componentを作成してください。
+子 Component を作成してください。
 
 ```html
 <div class="c-foo">
@@ -64,7 +65,7 @@ Foundationを除き、タグセレクタは使用しないこと。
 
 :::tip GOOD
 
-`<table>`などタグ構造が複雑なものも子Componentを作成してください。
+`<table>`などタグ構造が複雑なものも子 Component を作成してください。
 
 ```html
 <table class="c-table">

@@ -1,0 +1,76 @@
+---
+title: Docker
+sidebar:
+  order:  5
+---
+
+## アプリケーションのインストール
+
+[Docker Desktop](https://www.docker.com/products/docker-desktop)のインストールが必要です。
+
+## ローカル環境の設定
+
+[GitHub](https://github.com/sushat4692/docker-lamp)に Dockerfile のテンプレートが存在しています。
+
+### ローカル開発環境
+
+Terminal アプリを起動して、下記のコマンドを実行します。
+
+```bash
+# 開発ディレクトリの準備
+mkdir ~/Virtual
+
+# ユーザディレクトリに移動（どのディレクトリでも問題ありません）
+cd ~/
+
+# GitHubよりテンプレートの取得
+git clone https://github.com/sushat4692/VagrantAnsible.git
+
+# ダウンロードしたディレクトリに移動
+cd docker-lamp
+
+# `.env.sample`を複製して`.env`を作成
+cp .env.sample .env
+
+# Dockerコマンドの実行
+docker-compose up
+```
+
+## Docker を操作するコマンド
+
+```bash
+# コンテナのビルド・起動
+./command.sh up
+
+# コンテナの開始
+./command.sh start
+
+# コンテナの停止
+./command.sh stop
+
+# コンテナ、イメージ、ボリュームの削除
+./command.sh delete
+```
+
+### PHP バージョンの切り替え
+
+この Docker テンプレートは、下記のようにコマンドによって PHP のバージョンを切り替えることが可能です。
+
+```bash
+./command.sh up {version number}
+```
+
+もし PHP8.1 で起動する場合は下記のようになります。
+
+```bash
+./command.sh up 81
+```
+
+## Docker コマンドの実行後
+
+初期設定後、ローカル環境を利用する事が可能です。また、localhost は`~/Virtual`ディレクトリに連携しています。
+
+```
+http://foo.localhost/ -> ~/Virtual/foo/htdocs
+http://bar.localhost/ -> ~/Virtual/bar/htdocs
+```

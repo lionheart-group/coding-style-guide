@@ -1,20 +1,21 @@
 ---
-sidebar_position: 3
+sidebar:
+  order:  3
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import styles from '@site/src/css/docs/html/tips/grid.module.scss';
 
-# Gridの使い方
+# Grid の使い方
 
-Gridレイアウトは若干複雑ですが、設定方法に慣れることで非常に便利な機能となります。
+Grid レイアウトは若干複雑ですが、設定方法に慣れることで非常に便利な機能となります。
 
-## Flex boxで使っていたレイアウトでの例
+## Flex box で使っていたレイアウトでの例
 
-Gridを使ってFlex boxで使っていたレイアウトを実装する場合、子要素に対して横幅や余白の指定をする必要がない、というメリットがあります。
+Grid を使って Flex box で使っていたレイアウトを実装する場合、子要素に対して横幅や余白の指定をする必要がない、というメリットがあります。
 
-Gridスタイルが設定されている親要素に対して横幅や余白の指定をすることが可能です。
+Grid スタイルが設定されている親要素に対して横幅や余白の指定をすることが可能です。
 
 <div className={styles.grid}>
     <div className={styles.grid__item}></div>
@@ -58,9 +59,9 @@ Gridスタイルが設定されている親要素に対して横幅や余白の�
 
 ## 少し複雑なレイアウトの例
 
-Gridレイアウトは一つの要素が何列分・何行分表示するか、という指定が可能です。
+Grid レイアウトは一つの要素が何列分・何行分表示するか、という指定が可能です。
 
-そのため、例えば1つ目の要素だけ他の要素よりも大きく、かつ各端を揃える必要がある場合、Gridレイアウトは力を発揮します。
+そのため、例えば 1 つ目の要素だけ他の要素よりも大きく、かつ各端を揃える必要がある場合、Grid レイアウトは力を発揮します。
 
 <div className={`${styles.grid} ${styles['has-first']}`}>
     <div className={styles.grid__item}></div>
@@ -120,4 +121,4 @@ Gridレイアウトは一つの要素が何列分・何行分表示するか、�
 
 ## さらに詳しい情報について
 
-Gridレイアウトはここで紹介した機能以外にも沢山の設定項目があります。もし詳しい情報が知りたい場合は、[MDNにてGridレイアウトの解説がなされています](https://developer.mozilla.org/ja/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout)ので、そちらから確認が可能です。
+Grid レイアウトはここで紹介した機能以外にも沢山の設定項目があります。もし詳しい情報が知りたい場合は、[MDN にて Grid レイアウトの解説がなされています](https://developer.mozilla.org/ja/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout)ので、そちらから確認が可能です。

@@ -325,7 +325,7 @@
   },
   "theme.admonition.warning": {
     "message": "警告",
-    "description": "The default label used for the Warning admonition (:::warning)"
+    "description": "The default label used for the Warning admonition (:::caution)"
   },
   "theme.DocSidebarItem.expandCategoryAriaLabel": {
     "message": "Expand sidebar category '{label}'",

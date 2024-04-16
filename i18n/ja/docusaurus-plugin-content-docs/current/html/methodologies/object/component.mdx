@@ -1,22 +1,23 @@
 ---
-sidebar_position: 1
+sidebar:
+  order:  1
 ---
 
 # Component
 
 > 再利用できるパターンとして、小さな単位のモジュールを定義します。
 >
-> 一般的によく使われるパターンであり、例えばBootstrapのComponentカテゴリなどに見られるbuttonなどが該当します。
+> 一般的によく使われるパターンであり、例えば Bootstrap の Component カテゴリなどに見られる button などが該当します。
 >
 > 出来る限り、最低限の機能を持ったものとして定義されるべきであり、それ自体が固有の幅や色などの特色を持つことは避けるのが望ましいです。
 
-本来のFLOCSSでは小さな単位で分割を推奨していますが、**再利用する要素についてはすべてComponentに含める**ようにし、大きなパーツでも許可します。
+本来の FLOCSS では小さな単位で分割を推奨していますが、**再利用する要素についてはすべて Component に含める**ようにし、大きなパーツでも許可します。
 
-また、モディファイアについてはSMACSSのStateパターン（`.is-`接頭辞）を利用します。
+また、モディファイアについては SMACSS の State パターン（`.is-`接頭辞）を利用します。
 
 接頭辞は`.c-`を利用します。
 
-## 小さなComponentの例
+## 小さな Component の例
 
 ```html
 <button class="c-button">ボタン</button>
@@ -38,7 +39,7 @@ sidebar_position: 1
 }
 ```
 
-## 大きなComponentの例
+## 大きな Component の例
 
 ```html
 <div class="c-contact-banner">
@@ -78,8 +79,8 @@ sidebar_position: 1
 
 :::tip TIPS
 
-Utility（`.u-anchor-tel`）や別のComponent（`.c-button`）を含んでいますが、`.c-contact-banner`内で上書きするのではなく、`.c-contact-banner__tel__anchor`や`.c-contact-banner__form__button`を用意して、このComponent内でスタイルを定義します。
+Utility（`.u-anchor-tel`）や別の Component（`.c-button`）を含んでいますが、`.c-contact-banner`内で上書きするのではなく、`.c-contact-banner__tel__anchor`や`.c-contact-banner__form__button`を用意して、この Component 内でスタイルを定義します。
 
-参考 : [別Componentを含めない](/docs/html/methodologies/important/child)
+参考 : [別 Component を含めない](/docs/html/methodologies/important/child)
 
 :::

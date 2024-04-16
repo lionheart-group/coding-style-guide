@@ -1,5 +1,6 @@
 ---
-sidebar_position: 2
+sidebar:
+  order:  2
 ---
 
 # 旧バージョンとの違い
@@ -10,18 +11,18 @@ sidebar_position: 2
 
 詳細: [タグセレクタは使用しないこと](/docs/html/methodologies/important/selector)
 
-## Viewsレイヤーの廃止
+## Views レイヤーの廃止
 
 ページごとのスタイルで`Views`レイヤーを用意していましたが、`Project`に役割を移して廃止しました。
 
-ページごとにCSSを読み込んでいる処理も不要になりました。
+ページごとに CSS を読み込んでいる処理も不要になりました。
 
 詳細: [Project](/docs/html/methodologies/object/project)
 
-## Utilityクラス名の変更
+## Utility クラス名の変更
 
-- SP/PCレイアウトのみの表示クラス
+- SP/PC レイアウトのみの表示クラス
   - `.sp`, `.pc` -> `.u-sp-only`, `.u-pc-only`
-- SPのみ有効化される電話番号リンク
+- SP のみ有効化される電話番号リンク
   - `.u-tel-anchor` -> `.u-anchor-tel`
-  - また、`<a href>`に直接指定することが可能になりました（以前は`<span data-href>`に指定してJSで処理していました）
+  - また、`<a href>`に直接指定することが可能になりました（以前は`<span data-href>`に指定して JS で処理していました）

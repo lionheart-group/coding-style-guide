@@ -1,5 +1,6 @@
 ---
-sidebar_position: 2
+sidebar:
+  order:  2
 ---
 
 # Exporting rules
@@ -39,7 +40,7 @@ We need to think about the loading speed, and the image's quality. so, we need t
 - SVG has gradation functions but it's not supported on some of browser yet
 - When SVG file has complex paths data, there is a possibility to effect to browser performance
 
-:::warning
+:::caution
 
 When you export SVG image, be careful about "text" element. If it's included, convert to path before exporting.
 
@@ -58,7 +59,7 @@ We will support WebP format by using `.htaccess` file, so you don't need to impl
 
 ### Other format
 
-:::warning
+:::caution
 
 We won't use the following format.
 
