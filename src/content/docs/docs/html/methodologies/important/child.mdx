@@ -1,0 +1,95 @@
+---
+title: Don't include other component
+sidebar:
+  order:  2
+---
+
+**You must NOT include other Components in a Component.** And, **You must NOT use ONLY child components, without parent component.**
+
+:::info REASON
+
+When you make styles in one Component, you can avoid unintentional layout with Components combination.
+
+:::
+
+## Example(1)
+
+:::danger BAD
+
+You must NOT include `.c-bar` into `.c-foo`, even if you want to change the layout of `.c-bar` inside of `.c-foo`.
+
+```html
+<div class="c-foo">
+    <div class="c-bar"></div>
+</div>
+```
+
+```scss
+// scss/object/component/_foo.scss
+.c-foo {
+    // something style
+    .c-bar {
+        // something style
+    }
+}
+```
+
+:::
+
+:::tip GOOD
+
+You can resolved above issue by preparing a child component of `.c-foo` and assign it together with `.c-bar`.
+
+```html
+<div class="c-foo">
+    <div class="c-foo__child c-bar"></div>
+</div>
+```
+
+```scss
+// scss/object/component/_foo.scss
+.c-foo {
+    // something style
+    &__child {
+        // something style
+    }
+}
+```
+
+:::
+
+## Example(2)
+
+:::danger BAD
+
+You must NOT use `.c-bar__child` except for parent component `.c-bar`.
+
+```html
+<div class="c-foo">
+    <div class="c-bar__child"></div>
+</div>
+```
+
+:::
+
+:::tip GOOD
+
+You should wrap child component `.c-bar__child` by parent component `.c-bar`.
+
+```html
+<div class="c-foo">
+    <div class="c-bar">
+        <div class="c-bar__child"></div>
+    </div>
+</div>
+```
+
+Or
+
+```html
+<div class="c-foo c-bar">
+    <div class="c-bar__child"></div>
+</div>
+```
+
+:::

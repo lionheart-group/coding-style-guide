@@ -7,17 +7,23 @@ export default defineConfig({
     starlight({
       title: "Coding Style Guide",
       editLink: {
-        baseUrl: 'https://github.com/lionheart-group/coding-style-guide/edit/master/docs/'
+        baseUrl:
+          "https://github.com/lionheart-group/coding-style-guide/edit/master/docs/"
       },
-      defaultLocale: 'en',
       locales: {
-        en: {
-          label: 'English',
+        root: {
+          label: "English",
+          lang: "en"
         },
         ja: {
-          label: '日本語',
-        },
-      }
+          label: "日本語",
+          lang: "ja"
+        }
+      },
+      sidebar: [
+        { label: "Environment", autogenerate: { directory: "docs/env" } },
+        { label: "HTML", autogenerate: { directory: "docs/html" } }
+      ]
     })
   ]
 });
