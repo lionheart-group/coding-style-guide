@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunklionheart_coding_style_guide=self.webpackChunklionheart_coding_style_guide||[]).push([[7412],{2969:e=>{e.exports=JSON.parse('{"permalink":"/coding-style-guide/ja/updated/page/2","page":2,"postsPerPage":10,"totalPages":2,"totalCount":12,"previousPage":"/coding-style-guide/ja/updated","blogDescription":"","blogTitle":"\u66f4\u65b0\u5c65\u6b74"}')}}]);

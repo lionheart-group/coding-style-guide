@@ -4,10 +4,21 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Mon, 06 Nov 2023 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 16 Apr 2024 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[v0.2.1]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2024/04/16/v0.2.1</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2024/04/16/v0.2.1</guid>
+            <pubDate>Tue, 16 Apr 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Updated Docusaurs and dependency libraries]]></description>
+            <content:encoded><![CDATA[<ul>
+<li>Updated Docusaurs and dependency libraries</li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/env/git">Added Git advanced command</a></li>
+</ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v0.2.0]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/updated/2023/11/06/v0.2.0</link>
