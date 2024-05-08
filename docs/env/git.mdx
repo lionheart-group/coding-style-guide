@@ -48,3 +48,36 @@ After installing Scoop.
 ```bash
 scoop install git
 ```
+
+## Advanced
+
+Git is able to make diff between target branches or commits. By using it, you can prepare the file list that was changed between branches or commits.
+
+If you're using [Zsh](https://www.zsh.org/) (Default shell of macOS), you can add the following function to your `~/.zshrc` file.
+
+```shell
+# Create diffrence files between current with specified commit
+# git_diff ${commit_no}
+function git_diff() {
+    git diff $1 --diff-filter=ACMR --name-only | sed -e 's/\(^.*$\)/"\1"/g' | xargs git archive --format=zip --prefix=_diff/ HEAD -o _diff.zip
+}
+```
+
+If you're using [Fish](https://fishshell.com/), you can add the following function to your `~/.config/fish/config.fish` file. **(I haven't check this works properly yet, so if it's not working, please let me know)**
+
+```shell
+# Create diffrence files between current with specified commit
+# git_diff ${commit_no}
+function git_diff
+    git diff $argv[1] --diff-filter=ACMR --name-only | sed -e 's/\(^.*$\)/"\1"/g' | xargs git archive --format=zip --prefix=_diff/ HEAD -o _diff.zip
+end
+```
+
+After adding the function, you can use `git_diff` command to create a zip file that contains the difference between the current branch and the specified commit.
+
+```shell
+git_diff ${commit_no}
+
+# Example usage : compare with the latest commit
+git_diff HEAD^
+```

@@ -91,17 +91,15 @@ export const Codepen: React.FC<Props> = ({
     }, [])
 
     return (
-        <>
-            <p
-                className="codepen"
-                {...props}
-                style={{...defaultStyle, ...style}}
-            >
-                <span>
-                    See the Pen <a href={`https://codepen.io/${user}/pen/${hash}`}>{title}</a> by {user} (<a href={`https://codepen.io/${user}`}>@{user}</a>)
-                    on <a href="https://codepen.io">CodePen</a>.
-                </span>
-            </p>
-        </>
+      <p
+        className="codepen"
+        {...props}
+        style={{...defaultStyle, ...style}}
+      >
+        <span>
+          See the Pen <a href={`https://codepen.io/${user}/pen/${hash}`}>{title}</a> by {user} (<a href={`https://codepen.io/${user}`}>@{user}</a>)
+          on <a href="https://codepen.io">CodePen</a>.
+        </span>
+      </p>
     );
 }
