@@ -1,0 +1,48 @@
+---
+sidebar_position: 5
+---
+
+# pnpm (corepack)
+
+pnpm is a fast, disk space efficient package manager for Node.js. It is a drop-in replacement for npm, but faster and more efficient.
+
+## If you already installed pnpm and corepack
+
+We're using [corepack](https://github.com/nodejs/corepack) to install pnpm. so you need to uninstall pnpm if you already installed pnpm.
+
+```bash
+# Uninstall from Homebrew
+brew uninstall pnpm
+# Uninstall from volta
+volta uninstall pnpm
+```
+
+corepack is a package manager for Node.js that installs packages from the npm registry. And, Node.js is managed by Volta. so, You can install corepack by Volta as well, and need to uninstall corepack if you already installed corepack.
+
+```bash
+brew uninstall corepack
+```
+
+## Install/Enable corepack
+
+### Install corepack
+
+```bash
+volta install corepack
+```
+
+### Enable corepack
+
+```bash
+corepack enable
+corepack pnpm enable
+```
+
+## How to use pnpm
+
+You can use pnpm as same as npm.
+
+```bash
+pnpm install
+pnpm run watch
+```
