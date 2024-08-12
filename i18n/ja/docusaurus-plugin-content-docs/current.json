@@ -162,5 +162,9 @@
   "sidebar.wordpress.category.Custom Block": {
     "message": "カスタムブロック",
     "description": "The label for category Custom Block in sidebar wordpress"
+  },
+  "sidebar.env.category.Deprecated": {
+    "message": "非推奨",
+    "description": "The label for category Deprecated in sidebar env"
   }
 }
