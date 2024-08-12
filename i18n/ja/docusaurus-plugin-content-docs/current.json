@@ -39,10 +39,6 @@
     "message": "コマンド",
     "description": "The label for category Scripts in sidebar html"
   },
-  "sidebar.wordpress.category.How To": {
-    "message": "使い方",
-    "description": "The label for category How To in sidebar wordpress"
-  },
   "sidebar.fegg.category.Install": {
     "message": "インストール",
     "description": "The label for category Install in sidebar fegg"
@@ -166,5 +162,9 @@
   "sidebar.wordpress.category.Custom Block": {
     "message": "カスタムブロック",
     "description": "The label for category Custom Block in sidebar wordpress"
+  },
+  "sidebar.env.category.Deprecated": {
+    "message": "非推奨",
+    "description": "The label for category Deprecated in sidebar env"
   }
 }

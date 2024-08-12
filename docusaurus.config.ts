@@ -1,5 +1,6 @@
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
+import { themes as prismThemes } from "prism-react-renderer";
 
 const config: Config = {
   title: "Coding Style Guide",
@@ -115,7 +116,8 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} LionHeart Group. Built with Docusaurus.`
     },
     prism: {
-      additionalLanguages: ["php", "json"]
+      additionalLanguages: ["php", "json", "bash", "scss"],
+      theme: prismThemes.vsDark
     }
   } satisfies Preset.ThemeConfig,
   presets: [

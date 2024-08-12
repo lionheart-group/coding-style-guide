@@ -24,8 +24,7 @@ sidebar_position: 4
 
 ファイル下部にまとめて別レイアウトのスタイルを記述しないようにしてください。
 
-```scss
-// scss/object/component/_foo.scss
+```scss title="scss/object/component/_foo.scss"
 .c-foo {
     // something PC layout style
     &__foo {
@@ -49,8 +48,7 @@ sidebar_position: 4
 
 `.c-foo`、`.c-foo__bar`それぞれの直下にメディアクエリのスタイルを記述します。
 
-```scss
-// scss/object/component/_foo.scss
+```scss title="scss/object/component/_foo.scss"
 .c-foo {
     // something PC layout style
     @include mq_sp {

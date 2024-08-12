@@ -48,3 +48,36 @@ Scoopのインストール後、下記のコマンドを実行します。
 ```bash
 scoop install git
 ```
+
+## 応用例
+
+Gitは、指定したブランチやコミット間の差分を取得することができます。この機能を利用することで、ブランチやコミット間で変更されたファイルのリストを作成することができます。
+
+もし、[Zsh](https://www.zsh.org/)（macOSのデフォルトシェル）を利用している場合、以下の関数を`~/.zshrc`ファイルに追加することで、`git_diff`コマンドを利用することができます。
+
+```shell
+# 現在のブランチと指定したコミットとの差分ファイルを作成する
+# git_diff ${commit_no}
+function git_diff() {
+    git diff $1 --diff-filter=ACMR --name-only | sed -e 's/\(^.*$\)/"\1"/g' | xargs git archive --format=zip --prefix=_diff/ HEAD -o _diff.zip
+}
+```
+
+もし、[Fish](https://fishshell.com/)を利用している場合、以下の関数を`~/.config/fish/config.fish`ファイルに追加することで、`git_diff`コマンドを利用することができます。 **（まだ動作確認をしていないため、動作しない場合はお知らせください）**
+
+```shell
+# 現在のブランチと指定したコミットとの差分ファイルを作成する
+# git_diff ${commit_no}
+function git_diff
+    git diff $argv[1] --diff-filter=ACMR --name-only | sed -e 's/\(^.*$\)/"\1"/g' | xargs git archive --format=zip --prefix=_diff/ HEAD -o _diff.zip
+end
+```
+
+上記の関数を追加した後、`git_diff`コマンドを利用することで、現在のブランチと指定したコミットとの間の差分ファイルを含んだzipファイルを作成することができます。
+
+```shell
+git_diff ${commit_no}
+
+# Example usage : compare with the latest commit
+git_diff HEAD^
+```
