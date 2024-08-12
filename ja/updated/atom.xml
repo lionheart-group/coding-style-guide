@@ -2,20 +2,32 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lionheart-group.github.io/coding-style-guide/ja/updated</id>
     <title>Coding Style Guide Blog</title>
-    <updated>2024-04-16T00:00:00.000Z</updated>
+    <updated>2024-08-12T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lionheart-group.github.io/coding-style-guide/ja/updated"/>
     <subtitle>Coding Style Guide Blog</subtitle>
     <icon>https://lionheart-group.github.io/coding-style-guide/ja/img/favicon.ico</icon>
     <entry>
+        <title type="html"><![CDATA[v0.3.0]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/ja/updated/2024/08/12/v0.3.0</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/ja/updated/2024/08/12/v0.3.0"/>
+        <updated>2024-08-12T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- Docusaursと依存ライブラリを更新しました]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li>Docusaursと依存ライブラリを更新しました</li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/pnpm">pnpm (corepack) ページを追加しました</a></li>
+<li>syntax highlighting の問題を修正しました</li>
+</ul>]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[v0.2.1]]></title>
         <id>https://lionheart-group.github.io/coding-style-guide/ja/updated/2024/04/16/v0.2.1</id>
         <link href="https://lionheart-group.github.io/coding-style-guide/ja/updated/2024/04/16/v0.2.1"/>
         <updated>2024-04-16T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[- Updated Docusaurs and dependency libraries]]></summary>
+        <summary type="html"><![CDATA[- Docusaursと依存ライブラリを更新しました]]></summary>
         <content type="html"><![CDATA[<ul>
-<li>Updated Docusaurs and dependency libraries</li>
-<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/git">Added Git advanced command</a></li>
+<li>Docusaursと依存ライブラリを更新しました</li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/git#%E5%BF%9C%E7%94%A8%E4%BE%8B">Gitの応用例を追加しました</a></li>
 </ul>]]></content>
     </entry>
     <entry>
@@ -127,7 +139,7 @@
         <updated>2022-05-02T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- VSCodeのプラグインの説明を修正しました (stylelintとeslintの記述が逆でした)]]></summary>
         <content type="html"><![CDATA[<ul>
-<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/editor/vscode">VSCodeのプラグインの説明を修正しました (stylelintとeslintの記述が逆でした)</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/vscode">VSCodeのプラグインの説明を修正しました (stylelintとeslintの記述が逆でした)</a></li>
 </ul>]]></content>
     </entry>
     <entry>
@@ -147,7 +159,7 @@
         <updated>2022-03-17T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- 画像書出時の解像度設定についての説明を追加しました]]></summary>
         <content type="html"><![CDATA[<ul>
-<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/image/export#for-supporting-high-resolution-display">画像書出時の解像度設定についての説明を追加しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/image/export#%E9%AB%98%E8%A7%A3%E5%83%8F%E5%BA%A6%E3%83%87%E3%82%A3%E3%82%B9%E3%83%97%E3%83%AC%E3%82%A4%E5%AF%BE%E5%BF%9C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">画像書出時の解像度設定についての説明を追加しました</a></li>
 <li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/image/export#webp-webp">画像書出時のWebP形式の説明を更新しました</a></li>
 <li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/picture">コーディングTIPSの<code>&lt;picture&gt;</code>タグについての説明を追加しました</a></li>
 <li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/flex">コーディングTIPSのFlex boxの使い方についての説明を追加しました</a></li>
