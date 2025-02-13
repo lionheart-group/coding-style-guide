@@ -1,0 +1,58 @@
+# Alt attribute of img tag
+
+- **You MUST put `alt` attribute** to every `img` tag
+- If the image has text, **you should use the text as the `alt` attribute**
+  - If you can't copy the text from the design (e.g. text in an image), **you should inform the designer or the project director** to provide the text
+- If the image is purely decorative, **you can use `alt=""`** to indicate that it doesn't convey any information
+
+:::info REASON
+
+- **Accessibility**: Screen readers use the `alt` text to describe the image to visually impaired users.
+- **Fallback**: If the image can't load (broken link, slow connection), the `alt` text is displayed instead, so users still understand the content.
+- **SEO**: Search engines use the `alt` text to understand the image, which can help your website rank better in search results.
+
+:::
+
+:::warning TIPS
+
+Why you should avoid `alt="image"` or `alt="filename.jpg"`:
+
+- It doesn't provide any useful information to users or search engines
+- It's redundant because the `img` tag already indicates that it's an image
+- Use descriptive text that conveys the content or function of the image.
+
+Why you should put `alt=""` for decorative images:
+
+- It tells screen readers that the image is purely decorative and doesn't convey any information
+- It prevents screen readers from reading out unnecessary information to visually impaired users
+  - If the img tag doesn't have alt attribute, screen readers will read out the filename or the URL of the image
+
+:::
+
+## Example
+
+:::danger BAD
+
+You should put `alt` attribute to every `img` tag
+
+```html
+<img src="logo.png">
+```
+
+:::
+
+:::tip GOOD
+
+You should use the text as the `alt` attribute
+
+```html
+<img src="logo.png" alt="Company name">
+```
+
+If the image is purely decorative, you can use `alt=""`
+
+```html
+<img src="decorative.png" alt="">
+```
+
+:::

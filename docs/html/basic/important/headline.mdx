@@ -1,0 +1,67 @@
+# Headline tags (hx tags)
+
+- `<h1>` - `<h6>`: Headline tags
+- `<h1>`: Most important headline, **you must have every page**, and **only one `<h1>` tag in a page**
+- `<h2>`: Subheading, used for sections within your main content
+- `<h3>` - `<h6>`: Used for further subdivisions of content
+- **You should use `<h1>` to `<h6>` tags in order**
+
+:::info REASON
+
+- **SEO**: Search engines use headline tags to understand the structure and content of your page
+- **Accessibility**: Screen readers use headline tags to help visually impaired users navigate your content
+- **Readability**: Headline tags help users quickly scan your content and understand the hierarchy of information
+
+:::
+
+## Example
+
+:::danger BAD
+
+You must include `<h1>` tag in every page
+
+```html
+<body>
+    <section>
+        <h2>Subheading</h2>
+        <h3>Sub-subheading</h3>
+    </section>
+</body>
+```
+
+You should not skip heading levels
+
+```html
+<body>
+    <h1>Heading Title</h1>
+
+    <section>
+        <h3>Sub-subheading</h3>
+    </section>
+
+    <section>
+        <h2>Subheading</h2>
+        <h3>Sub-subheading</h3>
+    </section>
+</body>
+```
+
+:::
+
+:::tip GOOD
+
+```html
+<body>
+    <h1>Heading Title</h1>
+
+    <section>
+        <h2>Subheading</h2>
+        <h3>Sub-subheading</h3>
+    </section>
+
+    <section>
+        <h2>Subheading</h2>
+        <h3>Sub-subheading</h3>
+    </section>
+</body>
+```
