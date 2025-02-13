@@ -145,7 +145,17 @@ const config: Config = {
       } satisfies Preset.Options
     ]
   ],
-  plugins: ["docusaurus-plugin-sass"]
+  plugins: ["docusaurus-plugin-sass"],
+  future: {
+    experimental_faster: {
+      swcJsLoader: true,
+      swcJsMinimizer: true,
+      swcHtmlMinimizer: true,
+      lightningCssMinimizer: true,
+      rspackBundler: true,
+      mdxCrossCompilerCache: true,
+    }
+  },
 };
 
 export default config;
