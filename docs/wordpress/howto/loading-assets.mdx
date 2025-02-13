@@ -1,0 +1,45 @@
+---
+sidebar_position: 3
+---
+
+# Loading assets in a theme
+
+LH WordPress template provides a way to load assets such as CSS, JavaScript, and Images files in a theme.
+
+## CSS
+
+[`loadStyle` function](../functions#loadstyle) is used to load CSS files in a theme. This function must call before `getHeader` function.
+
+```php
+<?php
+// load style.css
+loadStyle('style', 'data/css/style.css');
+
+getHeader();
+```
+
+## JavaScript
+
+[`loadScript` function](../functions#loadscript) is used to load JavaScript files in a theme. This function must call before `getHeader` function.
+
+```php
+<?php
+// load script.js after jQuery loaded
+loadScript('script', 'data/js/script.js', array('jquery'));
+
+getHeader();
+```
+
+## Images
+
+[`get_asset_url` function](../functions#get_asset_url) or [`the_asset_url` function](../functions#the_asset_url) are used to get the URL of the asset files in a theme.
+
+```php
+<?php
+// get the URL of the image file
+$image_url = get_asset_url('data/images/image.jpg');
+?>
+
+<!-- display the URL of the image file -->
+<img src="<?php the_asset_url('data/images/image.jpg'); ?>" alt="">
+```
