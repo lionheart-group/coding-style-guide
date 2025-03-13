@@ -7,7 +7,7 @@
 # Generated files
 .docusaurus
 .cache-loader
-static/merged_docs.md
+static/merged_docs.txt
 
 # Misc
 .DS_Store
