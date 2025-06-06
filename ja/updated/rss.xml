@@ -4,18 +4,43 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/ja/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Thu, 13 Mar 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 06 Jun 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>ja</language>
         <item>
             <title><![CDATA[v0.3.3]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/06/06/v0.3.4</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/06/06/v0.3.4</guid>
+            <pubDate>Fri, 06 Jun 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[- コーディングTIPSのFlex boxの使い方についての説明を更新しました]]></description>
+            <content:encoded><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/flex">コーディングTIPSのFlex boxの使い方についての説明を更新しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript/slider">スライダーJavaScriptライブラリの紹介を更新しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript/modal">モーダルJavaScriptライブラリの紹介を更新しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript/scroll">スクロールアクションJavaScriptライブラリの紹介を更新しました</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript/animation">アニメーションJavaScriptライブラリの紹介を更新しました</a></li>
+<li>いくつかのページを日本語に翻訳しました<!-- -->
+<ul>
+<li>HTMLの重要事項<!-- -->
+<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/basic/important/alt">imgタグのalt属性</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/basic/important/headline">見出しタグ (hx タグ)</a></li>
+</ul>
+</li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/wordpress">WordPressコーディングガイドライン</a></li>
+</ul>
+</li>
+</ul>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[v0.3.3]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/03/13/v0.3.3</link>
             <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/03/13/v0.3.3</guid>
             <pubDate>Thu, 13 Mar 2025 00:00:00 GMT</pubDate>
-            <description><![CDATA[- Prepared merged markdown files for importing to NotebookLM]]></description>
+            <description><![CDATA[- NotebookLM用のMarkdownファイルを結合したファイルを準備しました]]></description>
             <content:encoded><![CDATA[<ul>
-<li>Prepared merged markdown files for importing to NotebookLM</li>
+<li>NotebookLM用のMarkdownファイルを結合したファイルを準備しました</li>
 </ul>]]></content:encoded>
         </item>
         <item>
@@ -23,16 +48,16 @@
             <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/02/13/v0.3.2</link>
             <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/02/13/v0.3.2</guid>
             <pubDate>Thu, 13 Feb 2025 00:00:00 GMT</pubDate>
-            <description><![CDATA[- Updated Docusaurs and dependency libraries]]></description>
+            <description><![CDATA[- Docusaursと依存ライブラリを更新しました]]></description>
             <content:encoded><![CDATA[<ul>
-<li>Updated Docusaurs and dependency libraries</li>
-<li>Added HTML Basic Important instructions<!-- -->
+<li>Docusaursと依存ライブラリを更新しました</li>
+<li>HTMLの重要事項を追加しました<!-- -->
 <ul>
-<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/basic/important/alt">Alt attribute of img tag</a></li>
-<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/basic/important/headline">Headline tags (hx tags)</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/basic/important/alt">imgタグのalt属性</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/basic/important/headline">見出しタグ (hx タグ)</a></li>
 </ul>
 </li>
-<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/wordpress/howto/loading-assets">Added WordPress Loading assets in a theme instruction</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/ja/docs/wordpress/howto/loading-assets">WordPressのアセットファイルの読み込みページを追加しました</a></li>
 </ul>]]></content:encoded>
         </item>
         <item>

@@ -4,10 +4,25 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Thu, 13 Mar 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 06 Jun 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[v0.3.3]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2025/06/06/v0.3.4</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2025/06/06/v0.3.4</guid>
+            <pubDate>Fri, 06 Jun 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Updated coding tips for Flex box layout]]></description>
+            <content:encoded><![CDATA[<ul>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/flex">Updated coding tips for Flex box layout</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/javascript/slider">Updated slider library introduction</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/javascript/modal">Updated modal library introduction</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/javascript/scroll">Updated scroll action library introduction</a></li>
+<li><a href="https://lionheart-group.github.io/coding-style-guide/docs/javascript/animation">Updated animation library introduction</a></li>
+<li>Translated some pages into Japanese</li>
+</ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v0.3.3]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/updated/2025/03/13/v0.3.3</link>

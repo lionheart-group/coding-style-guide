@@ -437,6 +437,12 @@ sidebar_position: 5
 
 # pnpm (corepack)
 
+:::warning NOTICE
+
+pnpm is still experimental for LH project.
+
+:::
+
 pnpm is a fast, disk space efficient package manager for Node.js. It is a drop-in replacement for npm, but faster and more efficient.
 
 ## If you already installed pnpm and corepack
@@ -7898,7 +7904,7 @@ Why you should put `alt=""` for decorative images:
 
 :::danger BAD
 
-You should put `alt` attribute to every `img` tag
+You must put `alt` attribute to every `img` tag
 
 ```html
 <img src="logo.png">
@@ -9172,18 +9178,18 @@ import styles from '@site/src/css/docs/html/tips/aspect-ratio.module.scss';
 
 After finished supporting IE11, we can use `aspect-ratio` property.
 
-The following 2 images are square images and cropped 16/4 ratio. it looks same, but it's implemented different approach.
+The following 2 images are square images and cropped 16/9 ratio. it looks same, but it's implemented different approach.
 
 <div className={styles.wrap}>
     <div className={styles.wrap__item}>
         <p className={styles.wrap__label}>Before</p>
         <div className={styles.before}>
-            <img src="https://via.placeholder.com/640" className={styles.before__image} />
+            <img src="https://dummyimage.com/640x640" className={styles.before__image} />
         </div>
     </div>
     <div className={styles.wrap__item}>
         <p className={styles.wrap__label}>After</p>
-        <img src="https://via.placeholder.com/640" className={styles.after} />
+        <img src="https://dummyimage.com/640x640" className={styles.after} />
     </div>
 </div>
 
@@ -9272,6 +9278,55 @@ But, if you use `justify-content: between;` for 3 or more columns layout. Someti
 
 ## Solution
 
+You can resolve flex box layout with `gap` property.
+
+<div className={styles['flex-gap']}>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-flex {
+    // Add gap property
+    gap: 30px;
+
+    &__col {
+        height: 140px;
+        background: #999;
+
+        // 100% divided by the number of column size and subtracted by gap size
+        // gap size is divided by the number of column size and multiplied by column size minus 1
+        width: calc(100% / 3 - (30px / 3 * 2));
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-flex">
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+:::caution Deprecated
+
+**The following solution is deprecated. You can use `gap` property instead.**
+
 You can resolve flex box layout with negative margin for parent box.
 
 <div className={styles.flex}>
@@ -9322,6 +9377,8 @@ You can resolve flex box layout with negative margin for parent box.
 
 </TabItem>
 </Tabs>
+
+:::
 
 
 --- docs/html/tips/grid.mdx ---
@@ -9671,7 +9728,7 @@ sidebar_position: 6
 | [Popmotion](https://popmotion.io/) | ![Last Updated](https://img.shields.io/github/last-commit/popmotion/popmotion) |
 | [Tween24.js](https://github.com/a24/tween24js) | ![Last Updated](https://img.shields.io/github/last-commit/a24/tween24js) |
 
-\*1 GSAP is not open source library, [please see license page when you use it](https://greensock.com/licensing/)
+\*1 GSAP is not open source library, but [it's free to use for personal and commercial projects now](https://gsap.com/pricing/).
 
 
 --- docs/javascript/index.mdx ---
@@ -9719,12 +9776,13 @@ sidebar_position: 3
 
 :::info
 
-We didn't find best modal library yet...
+For Modal libraries, we can recommend **"GLightbox"** to use.
 
 :::
 
 | Libary name | Image | Video | iframe | Design | Gallery | Zoom | Swipe | Last updated |
 | --- | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-- |
+| [GLightbox](https://biati-digital.github.io/glightbox/) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ![Last Updated](https://img.shields.io/github/last-commit/biati-digital/glightbox) |
 | [PhotoSwipe](https://photoswipe.com/) | ✅ | 🚫 | 🚫 | ✅ | ✅ | ✅ | ✅ | ![Last Updated](https://img.shields.io/github/last-commit/dimsemenov/photoswipe) |
 | [SmartPhoto](https://appleple.github.io/SmartPhoto/) | ✅ | 🚫 | 🚫 | ✅ | ✅ | ✅ | ✅ | ![Last Updated](https://img.shields.io/github/last-commit/appleple/SmartPhoto) |
 | [Modal Video](https://github.com/appleple/modal-video) | 🚫 | ✅ | 🚫 | ✅ | 🚫 | 🚫 | 🚫 | ![Last Updated](https://img.shields.io/github/last-commit/appleple/modal-video) |
@@ -9758,6 +9816,12 @@ sidebar_position: 5
 
 # Scroll Action
 
+:::info
+
+For Scroll Action libraries, we can recommend **"GSAP ScrollTrigger"** to use.
+
+:::
+
 :::warning
 
 [AOS](https://michalsnik.github.io/aos/) has some bugs and not maintained for a long time, so please don't use that library
@@ -9766,7 +9830,14 @@ sidebar_position: 5
 
 | Libary name | Last updated |
 | --- | :-- |
+| [GSAP ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/) | ![Last Updated](https://img.shields.io/github/last-commit/greensock/GSAP) |
+
+## Deprecated libraries
+
+| Libary name | Last updated |
+| --- | :-- |
 | [ScrollFire.js](https://github.com/lionheart-co-jp/ScrollFire.js) \*1 | ![Last Updated](https://img.shields.io/github/last-commit/lionheart-co-jp/ScrollFire.js) |
+| [AOS](https://michalsnik.github.io/aos/) | ![Last Updated](https://img.shields.io/github/last-commit/michalsnik/aos) |
 
 \*1 Satoshi is developing `ScrollFire.js` library. if you have problem/question for that library, please let him know.
 
@@ -9781,20 +9852,21 @@ sidebar_position: 2
 
 :::info
 
-For Slider/Carousel libraries, we can recommend "Splide" to use.
+For Slider/Carousel libraries, we can recommend **"Swiper"** to use.
 
 :::
 
 | Libary name | Last updated |
 | --- | :-- |
-| [Splide](https://splidejs.com/) | ![Last Updated](https://img.shields.io/github/last-commit/Splidejs/splide) |
 | [Swiper](https://swiperjs.com/) | ![Last Updated](https://img.shields.io/github/last-commit/nolimits4web/swiper) |
+| [Embla Carousel](https://www.embla-carousel.com/) | ![Last Updated](https://img.shields.io/github/last-commit/davidjerleke/embla-carousel) |
 
 ## Deprecated libraries
 
 | Libary name | Last updated |
 | --- | :-- |
 | [Slick](https://kenwheeler.github.io/slick/) | ![Last Updated](https://img.shields.io/github/last-commit/kenwheeler/slick) |
+| [Splide](https://splidejs.com/) | ![Last Updated](https://img.shields.io/github/last-commit/Splidejs/splide) |
 
 
 --- docs/javascript/svg.mdx ---
@@ -9852,14 +9924,6 @@ sidebar_position: 5
 
 # Additional functions
 
-## is_mobile
-
-```php
-is_mobile(): boolean
-```
-
-Checking the client is mobile or others. This function is checking `mobile or not`, so Tablet will be returned `false`.
-
 ## is_new
 
 ```php
@@ -9890,7 +9954,7 @@ Removing line breaks and spacing each rows.
 loadScript(string $name, string $path, string[] $dependencies = [], string $version = null, boolean $isFoot = false): void
 ```
 
-This function is wrapper of [wp_enqueue_script](https://developer.wordpress.org/reference/functions/wp_enqueue_script/) that is WordPress standard function. `loadScript` will be prefixed template path to `$path` if it's not absolute path, and appended `$version` to `$path`.  
+This function is wrapper of [wp_enqueue_script](https://developer.wordpress.org/reference/functions/wp_enqueue_script/) that is WordPress standard function. `loadScript` will be prefixed template path to `$path` if it's not absolute path, and appended `$version` to `$path`.
 If `$version` is empty, it's assigned from the value specified on `config.php`.
 
 ## loadStyle
@@ -9899,7 +9963,7 @@ If `$version` is empty, it's assigned from the value specified on `config.php`.
 loadStyle(string $name, string $path, string[] $dependencies = [], string $version = null): void
 ```
 
-This function is wrapper of [wp_enqueue_style](https://developer.wordpress.org/reference/functions/wp_enqueue_style/) that is WordPress standard function. `loadStyle` will be prefixed template path to `$path` if it's not absolute path, and appended `$version` to `$path`.  
+This function is wrapper of [wp_enqueue_style](https://developer.wordpress.org/reference/functions/wp_enqueue_style/) that is WordPress standard function. `loadStyle` will be prefixed template path to `$path` if it's not absolute path, and appended `$version` to `$path`.
 If `$version` is empty, it's assigned from the value specified on `config.php`.
 
 ## get_asset_url
@@ -9908,7 +9972,7 @@ If `$version` is empty, it's assigned from the value specified on `config.php`.
 get_asset_url(string $path, string $version = null): string
 ```
 
-Returns url that is prefixed template path and appended `$version` to `$path`.  
+Returns url that is prefixed template path and appended `$version` to `$path`.
 If `$version` is empty, it's assigned from the value specified on `config.php`.
 
 ## the_asset_url
@@ -9988,6 +10052,10 @@ When we need to implement a contact form by using WordPress, mostly we're using 
 
 - [MW WP Form](/docs/wordpress/plugins/contact-form/mw-wp-form) : Basically, please use this contact form plugin
 - [Contact Form 7](/docs/wordpress/plugins/contact-form/contact-form-7)
+
+## Underimplemented
+
+- [Template Oriented Form Utilities](https://github.com/lionheart-group/template-oriented-form-utilities) : This is a library for creating contact forms in WordPress templates. It is not implemented yet, but it will be implemented in the future.
 
 
 --- docs/wordpress/howto/custom-block.mdx ---
@@ -10081,7 +10149,7 @@ WordPress provides template naming rules for Custom Post Type and Custom Taxonom
 
 :::info
 
-If you need to implement same layout to custom post type archive and cust omtaxonomy archive, please prepare another template file and import from the above template file.
+If you need to implement same layout to custom post type archive and cust om taxonomy archive, please prepare another template file and import from the above template file.
 
 e.g.) Prepared `foo` post type and `bar` taxonomy, and same layout for these pages
 
@@ -10298,11 +10366,9 @@ sidebar_position: 1
 
 # WordPress Coding Guide
 
-# WordPress Coding Guide
-
 Basically, we're developing Website by using WordPress or [Fegg Framework](/docs/fegg). This document is written our WordPress coding rules.
 
-## Template
+## Skeleton Template
 
 This template has some of custom function for our coding rule.
 
@@ -10424,6 +10490,7 @@ sidebar_position: 2
   │   ├ cf7.php  # Contact Form 7 plugin extension
   │   ├ functions.php  # Additional template method
   │   ├ init.php  # Template initialize
+  │   ├ mw-wp-form.php  # MW WP Form plugin extension
   │   ├ pagenavi.php  # WP-PageNavi plugin extension
   │   ├ query.php  # pre_get_posts hook
   │   ├ rewrite.php  # Arrange WordPress permalink setting
