@@ -1,0 +1,80 @@
+---
+sidebar_position: 10
+---
+
+# アップロード画像の取り扱い
+
+WordPressは、アップロードした画像をトリミング/リサイズする機能を持っていますが、この機能を使用するにはテーマファイルの設定を更新する必要があります。アーカイブページやスライダーなどでサムネイル画像を表示する必要がある場合は、以下の手順に従って、閲覧者が大きなリソースをダウンロードしないようにしてください。
+
+## 設定
+
+特定のサイズをトリミング/リサイズできるようにするには、[add_image_size](https://developer.wordpress.org/reference/functions/add_image_size/)関数をテーマに追加する必要があります。
+
+ベーステンプレートでは、`include/init.php`に`add_image_size`関数を配置する場所を見つけることができます。
+
+```php
+<?php
+
+add_action('init', function() {
+    // タイトルの有効化
+    // Enable Title
+    add_theme_support('title-tag');
+
+    // アイキャッチ画像の有効化
+    // Enable Post Thumbnail
+    add_theme_support('post-thumbnails');
+
+    // アイキャッチ画像のサイズ追加
+    // Adding image size for post thumbnail
+    add_image_size('name', 100, 100, true);
+
+    // Pタグを自動挿入させない
+    // Disable automatically adding <p> tags
+    remove_filter('the_excerpt', 'wpautop');
+    remove_filter('the_content', 'wpautop');
+});
+```
+
+`add_image_size`のパラメータは以下のようになります。
+
+```php
+add_image_size(
+    'foo_image_size', // 表示する画像サイズの識別子。
+    100, // 画像の幅
+    100, // 画像の高さ
+    true // 画像のトリミング動作
+         // falseの場合、画像はスケーリングされます（デフォルト）。
+         // trueの場合、画像は指定された寸法にトリミングされ、
+         // 中央位置を使用します。
+);
+```
+
+## テンプレート内での利用
+
+指定したサイズのサムネイル画像を表示するには、以下の関数を使用します。
+
+```php
+<?php
+    if (has_post_thumbnail()):
+        the_post_thumbnail('foo_image_size');
+    else:
+?>
+        <img src="<?php the_asset_url('data/path/to/noimage.jpg') ?>">
+<?php
+    endif;
+?>
+```
+
+また、サムネイル画像の`<img>`タグに指定したクラスを追加する必要がある場合は、第二引数に属性パラメータを指定できます。
+
+```php
+<?php
+    if (has_post_thumbnail()):
+        the_post_thumbnail('foo_image_size', ['class' => 'c-image']);
+    else:
+?>
+        <img src="<?php the_asset_url('data/path/to/noimage.jpg') ?>" class="c-image">
+<?php
+    endif;
+?>
+```

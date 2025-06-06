@@ -1,0 +1,45 @@
+---
+sidebar_position: 3
+---
+
+# アセットファイルの読み込み
+
+LH WordPressテンプレートは、テーマ内でCSS、JavaScript、画像ファイルなどのアセットを読み込む関数を用意しています。
+
+## CSS
+
+[`loadStyle`関数](../functions#loadstyle)は、テーマ内でCSSファイルを読み込むために使用されます。この関数は、`getHeader`関数の前に呼び出す必要があります。
+
+```php
+<?php
+// style.css を読み込む
+loadStyle('style', 'data/css/style.css');
+
+getHeader();
+```
+
+## JavaScript
+
+[`loadScript`関数](../functions#loadscript)は、テーマ内でJavaScriptファイルを読み込むために使用されます。この関数は、`getHeader`関数の前に呼び出す必要があります。
+
+```php
+<?php
+// jQueryが読み込まれた後にscript.jsを読み込む
+loadScript('script', 'data/js/script.js', array('jquery'));
+
+getHeader();
+```
+
+## 画像
+
+[`get_asset_url`関数](../functions#get_asset_url)または[`the_asset_url`関数](../functions#the_asset_url)は、テーマ内のアセットファイルのURLを取得するために使用されます。
+
+```php
+<?php
+// get the URL of the image file
+$image_url = get_asset_url('data/images/image.jpg');
+?>
+
+<!-- display the URL of the image file -->
+<img src="<?php the_asset_url('data/images/image.jpg'); ?>" alt="">
+```

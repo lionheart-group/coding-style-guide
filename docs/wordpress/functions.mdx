@@ -4,14 +4,6 @@ sidebar_position: 5
 
 # Additional functions
 
-## is_mobile
-
-```php
-is_mobile(): boolean
-```
-
-Checking the client is mobile or others. This function is checking `mobile or not`, so Tablet will be returned `false`.
-
 ## is_new
 
 ```php
@@ -42,7 +34,7 @@ Removing line breaks and spacing each rows.
 loadScript(string $name, string $path, string[] $dependencies = [], string $version = null, boolean $isFoot = false): void
 ```
 
-This function is wrapper of [wp_enqueue_script](https://developer.wordpress.org/reference/functions/wp_enqueue_script/) that is WordPress standard function. `loadScript` will be prefixed template path to `$path` if it's not absolute path, and appended `$version` to `$path`.  
+This function is wrapper of [wp_enqueue_script](https://developer.wordpress.org/reference/functions/wp_enqueue_script/) that is WordPress standard function. `loadScript` will be prefixed template path to `$path` if it's not absolute path, and appended `$version` to `$path`.
 If `$version` is empty, it's assigned from the value specified on `config.php`.
 
 ## loadStyle
@@ -51,7 +43,7 @@ If `$version` is empty, it's assigned from the value specified on `config.php`.
 loadStyle(string $name, string $path, string[] $dependencies = [], string $version = null): void
 ```
 
-This function is wrapper of [wp_enqueue_style](https://developer.wordpress.org/reference/functions/wp_enqueue_style/) that is WordPress standard function. `loadStyle` will be prefixed template path to `$path` if it's not absolute path, and appended `$version` to `$path`.  
+This function is wrapper of [wp_enqueue_style](https://developer.wordpress.org/reference/functions/wp_enqueue_style/) that is WordPress standard function. `loadStyle` will be prefixed template path to `$path` if it's not absolute path, and appended `$version` to `$path`.
 If `$version` is empty, it's assigned from the value specified on `config.php`.
 
 ## get_asset_url
@@ -60,7 +52,7 @@ If `$version` is empty, it's assigned from the value specified on `config.php`.
 get_asset_url(string $path, string $version = null): string
 ```
 
-Returns url that is prefixed template path and appended `$version` to `$path`.  
+Returns url that is prefixed template path and appended `$version` to `$path`.
 If `$version` is empty, it's assigned from the value specified on `config.php`.
 
 ## the_asset_url

@@ -38,6 +38,55 @@ import styles from '@site/src/css/docs/html/tips/flex.module.scss';
 
 ## 解決方法
 
+`gap`プロパティを使うことで、レイアウトの空きが生じる問題を解決することが可能です。
+
+<div className={styles['flex-gap']}>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-flex {
+    // `gap`プロパティを追加します
+    gap: 30px;
+
+    &__col {
+        height: 140px;
+        background: #999;
+
+        // 100%からカラム数で割った数字から、
+        // gapの値をカラム数で割り、カラム数-1を掛けた値で引きます
+        width: calc(100% / 3 - (30px / 3 * 2));
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-flex">
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+:::caution 非推奨
+
+**The following solution is deprecated. You can use `gap` property instead.**
+
 親の要素の左右のmarginに負の値を設定することで解決することが可能です。
 
 <div className={styles.flex}>
@@ -87,3 +136,5 @@ import styles from '@site/src/css/docs/html/tips/flex.module.scss';
 
 </TabItem>
 </Tabs>
+
+:::

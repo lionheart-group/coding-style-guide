@@ -1,0 +1,67 @@
+# 見出しタグ (hx タグ)
+
+- `<h1>` - `<h6>`: 見出しタグ
+- `<h1>`: 最も重要な見出しで、**すべてのページに必ず存在しなければならず**、**1ページに1つだけ`<h1>`タグを使用します**
+- `<h2>`: サブ見出しで、メインコンテンツ内のセクションに使用されます
+- `<h3>` - `<h6>`: コンテンツのさらなる細分化に使用されます
+- **`<h1>`から`<h6>`タグは順番に使用するべきです**
+
+:::info 理由
+
+- **SEO**: 検索エンジンは見出しタグを使用してページの構造や内容を理解します
+- **アクセシビリティ**: スクリーンリーダーは見出しタグを使用して、視覚障害者がコンテンツをナビゲートするのを助けます
+- **読みやすさ**: 見出しタグはユーザーがコンテンツを素早く把握し、情報の階層を理解するのに役立ちます
+
+:::
+
+## Example
+
+:::danger BAD
+
+全てのページに`<h1>`タグを含める必要があります
+
+```html
+<body>
+    <section>
+        <h2>Subheading</h2>
+        <h3>Sub-subheading</h3>
+    </section>
+</body>
+```
+
+見出しレベルをスキップしてはいけません
+
+```html
+<body>
+    <h1>Heading Title</h1>
+
+    <section>
+        <h3>Sub-subheading</h3>
+    </section>
+
+    <section>
+        <h2>Subheading</h2>
+        <h3>Sub-subheading</h3>
+    </section>
+</body>
+```
+
+:::
+
+:::tip GOOD
+
+```html
+<body>
+    <h1>Heading Title</h1>
+
+    <section>
+        <h2>Subheading</h2>
+        <h3>Sub-subheading</h3>
+    </section>
+
+    <section>
+        <h2>Subheading</h2>
+        <h3>Sub-subheading</h3>
+    </section>
+</body>
+```

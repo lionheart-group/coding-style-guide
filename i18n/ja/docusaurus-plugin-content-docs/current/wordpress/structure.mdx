@@ -1,0 +1,35 @@
+---
+sidebar_position: 2
+---
+
+# テンプレート内のファイル構造
+
+```bash
+- Template/  # テンプレートのルートディレクトリ
+  ├ data/  # CSS/JSファイルなど、HTMLコーディングルールに従って配置
+  ├ include/
+  │   ├ acf.php  # Advanced Custom Fieldsプラグイン拡張
+  │   ├ admin.php  # 管理画面拡張
+  │   ├ cf7.php  # Contact Form 7プラグイン拡張
+  │   ├ functions.php  # テンプレートの追加メソッド
+  │   ├ init.php  # テンプレート初期化
+  │   ├ mw-wp-form.php  # MW WP Formプラグイン拡張
+  │   ├ pagenavi.php  # WP-PageNaviプラグイン拡張
+  │   ├ query.php  # pre_get_postsフック
+  │   ├ rewrite.php  # WordPressパーマリンク設定
+  │   ├ scf.php  # Smart Custom Fieldsプラグイン拡張
+  │   └ template.php  # WordPressテンプレート拡張
+  ├ templates/  # 再利用可能なテンプレートファイルを配置
+  ├ 404.php  # 404ページテンプレート
+  ├ archive.php  # 基本投稿タイプアーカイブページテンプレート
+  ├ config.php  # テンプレートの設定ファイル
+  ├ footer.php  # フッターテンプレート
+  ├ functions.php  # /include/ ディレクトリ内のファイルを読み込む
+  ├ header.php  # ヘッダーテンプレート
+  ├ home.php  # トップページテンプレート
+  ├ page-sample.php  # 静的ページのサンプルファイル
+  ├ page-sample__child.php  # 静的ページのサンプルファイル
+  ├ page.php  # 静的ページのサンプルファイル (管理画面を更新することで)
+  ├ single.php  # 基本投稿タイプ詳細ページテンプレート
+  └ style.css  # 更新の必要なし
+```
