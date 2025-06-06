@@ -1,0 +1,48 @@
+---
+sidebar_position: 1
+---
+
+# 静的ページの作成
+
+静的ページを作成する際は、WordPressの管理画面から`page`を作成し、`page-{slug}.php`というテンプレートファイルを用意してください。
+
+## 子ページのテンプレート
+
+LH WordPress Templateは、以下のような階層化されたページ用のテンプレートを作成することが可能です。
+
+```
+http://example.com/parent/child/
+ -> page-parent__child.php
+```
+
+そのため、子ページを作成する場合は、上記のテンプレートファイル名に従ってください。
+
+:::warning
+
+上記のURLの場合、`page-child.php`も有効ですが、親のスラッグ名を含むファイル名（例：`page-parent__child.php`）を使用してください。これにより、URL構造からページテンプレートを見つけやすくなり、同じスラッグ名を異なる親に使用する場合でも、テンプレートファイルを分離できます。
+
+:::
+
+## CSS構造
+
+WordPressのテンプレートであっても、[CSS Methodologies](/docs/html/methodologies)に従ってください。したがって、ページテンプレートとSCSSファイルの関係は以下のようになります。
+
+```
+http://example.com/foo/
+ -> page-foo.php
+ -> data/scss/object/project/_foo.scss
+ -> `.p-foo` class
+```
+
+```
+http://example.com/parent/child/
+ -> page-parent__child.php
+ -> data/scss/object/project/_parent-child.scss
+ -> `.p-parent-child` class
+```
+
+:::info
+
+CSS構造の[プロジェクトの命名規則](/docs/html/methodologies/object/project#file-naming-rules)についても確認してください。
+
+:::

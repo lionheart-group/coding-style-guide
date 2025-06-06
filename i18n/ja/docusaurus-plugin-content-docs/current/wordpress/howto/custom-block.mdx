@@ -1,0 +1,44 @@
+---
+sidebar_position: 8
+---
+
+# カスタムブロック
+
+WYSIWYG部分にカスタムレイアウトを実装する必要がある場合がありますが、WordPressのカスタムブロック機能を使用して、これらの要件を実装できます。
+
+基本的には、以下のプラグインを使用してカスタムブロックを実装していますので、プラグインページを確認してください。
+
+- [Lazy Blocks](/docs/wordpress/plugins/custom-block/lazy-blocks)
+
+## テンプレート構造
+
+Lazy Blocksプラグインを使用する場合は、ブロックのスラッグとHTMLクラス、SCSSファイルを一致させてください。
+
+- ブロックテンプレートのPHPファイル
+  - blocks/lazyblock-`{slug}`/block.php
+- ブロックテンプレートのHTMLクラス
+  - .c-block-`{slug}`
+- ブロックテンプレートのSCSSファイル
+  - data/scss/object/component/\_block-`{slug}`.scss
+
+### 例
+
+LazyBlocksを使用して`foo`カスタムブロックを準備する場合。
+
+```php
+// blocks/lazyblock-foo/block.php
+<div class="c-block-foo">
+    <div class="c-block-foo__child">
+        <?php /** Something actions */ ?>
+    </div>
+</div>
+```
+
+```scss
+// data/scss/object/component/_block-foo.scss
+.c-block-foo {
+    &__child {
+        // Something styles
+    }
+}
+```

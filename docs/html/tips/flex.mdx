@@ -38,6 +38,55 @@ But, if you use `justify-content: between;` for 3 or more columns layout. Someti
 
 ## Solution
 
+You can resolve flex box layout with `gap` property.
+
+<div className={styles['flex-gap']}>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-flex {
+    // Add gap property
+    gap: 30px;
+
+    &__col {
+        height: 140px;
+        background: #999;
+
+        // 100% divided by the number of column size and subtracted by gap size
+        // gap size is divided by the number of column size and multiplied by column size minus 1
+        width: calc(100% / 3 - (30px / 3 * 2));
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-flex">
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+:::caution Deprecated
+
+**The following solution is deprecated. You can use `gap` property instead.**
+
 You can resolve flex box layout with negative margin for parent box.
 
 <div className={styles.flex}>
@@ -88,3 +137,5 @@ You can resolve flex box layout with negative margin for parent box.
 
 </TabItem>
 </Tabs>
+
+:::

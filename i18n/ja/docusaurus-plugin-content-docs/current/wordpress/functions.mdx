@@ -1,0 +1,61 @@
+---
+sidebar_position: 5
+---
+
+# 拡張関数
+
+## is_new
+
+```php
+is_new(number|WP_Post $post = null, number $gap = 2): boolean
+```
+
+指定の投稿が `$gap` 日以内に公開されているかどうかを確認します。 `$post` が null の場合、ループ内の現在の投稿が指定されます。
+
+## get_page_slug
+
+```php
+get_page_slug(number|WP_Post $page_id = null): string
+```
+
+指定の投稿のスラッグと親投稿のスラッグをハイフン `-` で区切って返します。例えば、ページが `child` スラッグを持ち、親ページが `parent` スラッグを持つ場合、この関数は `parent-child` を返します。
+
+## remove_line_break
+
+```php
+remove_line_break(string $text): string
+```
+
+改行とスペースを削除します。
+
+## loadScript
+
+```php
+loadScript(string $name, string $path, string[] $dependencies = [], string $version = null, boolean $isFoot = false): void
+```
+
+この関数は、WordPressの標準関数である [wp_enqueue_script](https://developer.wordpress.org/reference/functions/wp_enqueue_script/) のラッパーです。`loadScript` は、絶対パスでない場合、テンプレートパスを `$path` に接頭辞として付加し、`$version` を `$path` に追加します。もし `$version` が空の場合、`config.php` で指定された値が割り当てられます。
+
+## loadStyle
+
+```php
+loadStyle(string $name, string $path, string[] $dependencies = [], string $version = null): void
+```
+
+この関数は、WordPressの標準関数である [wp_enqueue_style](https://developer.wordpress.org/reference/functions/wp_enqueue_style/) のラッパーです。`loadStyle` は、絶対パスでない場合、テンプレートパスを `$path` に接頭辞として付加し、`$version` を `$path` に追加します。もし `$version` が空の場合、`config.php` で指定された値が割り当てられます。
+
+## get_asset_url
+
+```php
+get_asset_url(string $path, string $version = null): string
+```
+
+テンプレートパスを接頭辞として付加し、`$path` に `$version` を追加したURLを返します。もし `$version` が空の場合、`config.php` で指定された値が割り当てられます。
+
+## the_asset_url
+
+```php
+the_asset_url(string $path, string $version = null): string
+```
+
+`get_asset_url` の結果を表示します。

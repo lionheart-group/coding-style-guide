@@ -1,0 +1,47 @@
+---
+sidebar_position: 5
+---
+
+# カスタム投稿タイプとタクソノミー
+
+多くの場合、私たちのウェブサイトプロジェクトはニュース/ブログ機能だけではありません。そのため、カスタム投稿タイプやカスタムタクソノミーを追加して、別の管理ページを準備する必要があります。
+
+主に、カスタム投稿タイプを管理するためにプラグインを使用していますので、以下のプラグインページを確認してください。
+
+- [Custom Post Type UI](/docs/wordpress/plugins/custom-post/custom-post-type-ui)
+- [Custom Post Type Permalinks](/docs/wordpress/plugins/custom-post/custom-post-type-permalinks)
+
+## テンプレートファイル構造
+
+WordPressは、カスタム投稿タイプとカスタムタクソノミーのためのテンプレート命名規則を提供しています。基本的に、以下のテンプレート命名規則を使用しています。
+
+- Custom Post Type
+  - `archive-{slug}.php` : アーカイブページ
+  - `single-{slug}.php` : 詳細ページ
+- Custom Taxonomy
+  - `taxonomy-{taxonomy}.php` : タクソノミー選択時のアーカイブページ
+
+:::info
+
+もし、カスタム投稿タイプのアーカイブとカスタムタクソノミーのアーカイブに同じレイアウトを実装する必要がある場合は、レイアウト表示用のテンプレートを準備し、上記のテンプレートファイルからインポートしてください。
+
+例）`foo`投稿タイプと`bar`タクソノミーを準備し、これらのページに同じレイアウトを適用する場合
+
+```php
+// archive-foo.php and taxonomy-bar.php
+<?php
+get_template_file('templates/foo/archive');
+```
+
+```php
+// templates/foo/archive.php
+<?php
+get_header();
+
+while(have_posts()): the_post();
+  // ここには `foo`投稿タイプの一覧、もしくは、
+  // `bar`タクソノミーで絞り込まれた一覧が表示されます
+endwhile;
+```
+
+:::
