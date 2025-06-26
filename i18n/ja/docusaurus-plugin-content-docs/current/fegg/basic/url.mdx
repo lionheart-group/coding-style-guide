@@ -1,0 +1,86 @@
+---
+sidebar_position: 1
+---
+
+# URL
+
+## URLとコントローラークラス
+
+Fegg FWも、セグメントベースのアプローチを採用しています。URLとコントローラークラスの関係がどのように機能するかを以下に示します。
+
+```
+http://example.com/class/function/param1/param2...
+```
+
+1. コントローラーのクラス
+2. コントローラークラスのメソッド
+3. メソッドの引数
+
+[ルーティング](#routing)ファイルでURL構造を設定することで、より柔軟なURLを持つことができます。
+
+## 例
+
+```bash title="URL"
+http://example.com/post/edit/1
+```
+
+```php title="実行されるメソッド"
+<?php
+// code/application/Post.php
+
+class Post extends Application
+{
+
+    // ...
+
+    public function edit( $id )
+    {
+        echo $id; // 結果: 1
+    }
+
+    // ...
+
+}
+```
+
+## ルーティング
+
+ルートファイルを設定することで、URLとコントローラークラスの関係なしにURL構造を設定できます。
+
+**code/config/route.php**で配列内の`$route`を設定できます。
+
+```php
+$route['from'] = 'to';
+```
+
+上記のように、配列のキーはURLのセグメントであり、配列の値は再マッピング後の値です。
+
+:::note
+
+ルートは定義された順序で実行されます。上位のルートは常に下位のルートよりも優先されます。
+
+:::
+
+### ワイルドカード
+
+マッピングキーの前に使用できるワイルドカードは2種類（`:any`、`:num`）あります。
+
+`:any`は**任意の種類の単語**です。`:num`は**数字のみに限定**されます。
+
+### 例
+
+```php title="code/config/route.php"
+<?php
+
+$route['foo'] = 'bar';
+// http://example.com/foo -> code/application/Bar.php
+
+$route['item/:any'] = 'product/item_lookup/$1';
+// http://example.com/item/foobar -> code/application/Product.php -> Product::item_lookup( 'foobar' )
+
+$route['archive/edit/:num'] = 'post/edit/$1';
+// http://example.com/archive/edit/1 -> code/application/Post.php -> Post::edit( 1 )
+
+$route['news/post_:num.html'] = 'news/detail/$1';
+// http://example.com/news/post_1.html -> code/application/News.php -> News::detail( 1 )
+```

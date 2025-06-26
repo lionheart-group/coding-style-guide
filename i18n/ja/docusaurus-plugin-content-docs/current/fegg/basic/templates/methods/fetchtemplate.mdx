@@ -1,0 +1,36 @@
+---
+sidebar_position: 2
+---
+
+# Application::fetchTemplate
+
+> コンパイルされたテンプレートを文字列として返す
+
+## 説明
+
+```php
+public string Application::fetchTemplate( string $template, [ array $assignedValue = array() ] )
+```
+
+出力を表示せずに[Application::displayTemplate](/docs/fegg/basic/templates/methods/displaytemplate)を文字列として返します。
+
+## 引数
+
+| 名前           | データ型 | デフォルト | 備考                 |
+| -------------- | :------- | :--------- | :------------------- |
+| $template      | string   |            | テンプレートファイル名 |
+| $assignedValue | array    | array()    | テンプレート用の引数  |
+
+## 例
+
+```php
+$content = $this->fetchTemplate( 'foo/bar' );
+```
+
+これにより、コンパイルされたテンプレートから[Application::displayTemplate](/docs/fegg/basic/templates/methods/displaytemplate)が$content変数に割り当てられます。
+
+:::note
+
+パラメータに".tpl"拡張子を含めるべきではありません。
+
+:::

@@ -1,0 +1,36 @@
+---
+sidebar_position: 3
+---
+
+# Application::unsetCookie
+
+> COOKIEデータを削除
+
+## 説明
+
+```php
+public void Application::unsetCookie( [ string $name = "" ] )
+```
+
+COOKIEデータを削除します。
+
+## 引数
+
+| 名前  | データ型 | デフォルト | 備考               |
+| :---- | :------- | :--------- | :----------------- |
+| $name | string   |            | Cookieパラメータキー |
+
+## 例
+
+```php title="コントローラー - First.php"
+$this->setCookie('foo', 'bar');
+```
+
+```php title="コントローラー - Second.php"
+$this->getCookie('foo'); // -> bar
+```
+
+```php title="コントローラー - Third.php"
+$this->unsetCookie('foo');
+echo $this->getCookie('foo'); // -> ''
+```

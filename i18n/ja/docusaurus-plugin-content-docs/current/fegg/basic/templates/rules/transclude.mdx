@@ -1,0 +1,121 @@
+---
+sidebar_position: 5
+---
+
+# Transclude
+
+> transclude, section
+
+## 説明
+
+```php
+{{ transclude 'foo/bar' }}
+```
+
+```php
+{{ section baz }}
+{{ end section baz }}
+```
+
+他のテンプレートをトランスクルードします。`{{ transclude }}` でターゲットテンプレートを指定し、`{{ section }}` エリアに表示します。
+
+## 例
+
+```php title="Template - layout.tpl"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page title</title>
+</head>
+<body>
+    {{ section content }}
+    {{ end section content }}
+</body>
+</html>
+```
+
+```php title="Template - index.tpl"
+{{ transclude 'layout' }}
+
+{{ section content }}
+    <p>これはインデックスコンテンツです。</p>
+{{ end section content }}
+```
+
+```html title="Output"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page title</title>
+</head>
+<body>
+    <p>これはインデックスコンテンツです。</p>
+</body>
+</html>
+```
+
+### 複数のトランスクルード
+
+複数のトランスクルードが可能です。
+
+```php title="Template - grandparent.tpl"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page title</title>
+</head>
+<body>
+    <p>これは祖父母コンテンツです。</p>
+
+    {{ section content }}
+    {{ end section content }}
+</body>
+</html>
+```
+
+```php title="Template - parent.tpl"
+{{ transclude 'grandparent' }}
+
+{{ section content }}
+<div class="parent-box">
+    <p>これは親コンテンツです。</p>
+
+    {{ section main }}
+    {{ end section main }}
+</div>
+{{ end section content }}
+```
+
+```php title="Template - child.tpl"
+{{ transclude 'parent' }}
+
+{{ section main }}
+<div class="child-box">
+    <p>これは子コンテンツです。</p>
+</div>
+{{ end section main }}
+```
+
+```html title="Output"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page title</title>
+</head>
+<body>
+    <p>これは祖父母コンテンツです。</p>
+
+    <div class="parent-box">
+        <p>これは親コンテンツです。</p>
+
+        <div class="child-box">
+            <p>これは子コンテンツです。</p>
+        </div>
+    </div>
+</body>
+</html>
+```

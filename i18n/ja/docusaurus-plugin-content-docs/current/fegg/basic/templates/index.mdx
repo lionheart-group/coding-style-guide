@@ -1,0 +1,99 @@
+---
+sidebar_position: 1
+---
+
+# テンプレートについて
+
+## テンプレートについて
+
+Feggには独自のテンプレートエンジンが搭載されており、アプリケーションコード（PHPコード）と表示（HTML/CSS）を分離できます。Feggはテンプレートファイル内のアプリケーションコードに`{{}}`タグを使用します。コントローラークラスからテンプレートをコンパイルするメソッドを実行します。
+
+テンプレートファイルは`template_name.tpl`の名前形式で**code/template/**ディレクトリに保存されます。
+
+## 表示メソッド
+
+表示メソッドはコントローラークラスからテンプレートファイルを呼び出します。
+
+以下はFeggの表示メソッドですが、クリックジャッキング攻撃を避けるために`displayPage`メソッドのみを使用することを推奨します。
+
+- [Application::displayTemplate](/docs/fegg/basic/templates/methods/displaytemplate)
+  - コンパイルされたテンプレートを表示
+- [Application::fetchTemplate](/docs/fegg/basic/templates/methods/fetchtemplate)
+  - コンパイルされたテンプレートを文字列として返す
+- [Application::fetchPage](/docs/fegg/basic/templates/methods/fetchpage)
+  - 宣言されたコントローラーとテンプレート変数を含むコンパイルされたテンプレートを文字列として返す
+- [Application::displayPage](/docs/fegg/basic/templates/methods/displaypage)
+  - 宣言されたコントローラーとテンプレート変数を含むコンパイルされたテンプレートを表示し、クリックジャッキング攻撃に対する予防措置を講じる
+
+## テンプレートヘルパーメソッド
+
+テンプレートヘルパーメソッドは、テンプレートに特別な変数を渡すために使用されます。
+
+- [Application::setSiteinfo](/docs/fegg/basic/templates/helpers/setsiteinfo)
+  - ウェブサイト情報の設定（例：タイトル、説明、キーワード）
+- [Application::setHidden](/docs/fegg/basic/templates/helpers/sethidden)
+  - 隠しデータの設定
+- [Application::setHtmlHeader](/docs/fegg/basic/templates/helpers/sethtmlheader)
+  - HTMLヘッダーの設定
+
+## テンプレートルール
+
+テンプレートファイルにはいくつかの操作記法があります。
+
+- [変数](/docs/fegg/basic/templates/rules/variable)
+  - テンプレートでの変数の使用
+- [If](/docs/fegg/basic/templates/rules/if)
+  - if、else、else if
+- [ループ](/docs/fegg/basic/templates/rules/loop)
+  - loop、foreach
+- [インクルード](/docs/fegg/basic/templates/rules/include)
+  - include、include head、head、include foot、foot
+- [トランスクルード](/docs/fegg/basic/templates/rules/transclude)
+  - transclude、section
+- [チェック/選択](/docs/fegg/basic/templates/rules/checked_selected)
+  - checked、selected
+- [オプション](/docs/fegg/basic/templates/rules/options)
+  - オプションタグの作成
+- [隠し](/docs/fegg/basic/templates/rules/hidden)
+  - 隠しタグの表示
+- [コード](/docs/fegg/basic/templates/rules/code)
+  - call、code
+
+## 修飾子
+
+### 修飾子の使用方法
+
+修飾子を使用して、テンプレート内のアプリケーションコードで変数の戻り値を変更できます。
+
+修飾子はパイプ記号（|）を使用して変数から分離され、コロン記号（:）で分離されたオプションの引数を持つことができます。複数の修飾子を連鎖させることができ、左から右に変数を変更します。したがって、最初のフィルタリングの出力が次のフィルタリングに適用されます。
+
+```html
+{{ $var|noescape|function:param }}
+```
+
+### noescape
+
+Feggは自動的に文字値をエスケープします。エスケープ値が不要な場合は、noescape修飾子を使用できます。
+
+```php title="コントローラー"
+$this->page['foo'] = '<p>bar</p>';
+```
+
+```html title="テンプレート"
+{{ $page.foo }} -> <p>bar</p>
+{{ $page.foo|noescape }} -> bar
+```
+
+### br
+
+文字列内で見つかったすべての改行（\\n）にHTML改行を挿入します。
+
+```php title="コントローラー"
+$this->page['foo'] = "これはテストテキストです。\n これは新しい行のテキストです。";
+```
+
+```html title="テンプレート"
+{{ $page.foo }} -> これはテストテキストです。 これは新しい行のテキストです。
+{{ $page.foo|br }} -> これはテストテキストです。
+                      これは新しい行のテキストです。
+```

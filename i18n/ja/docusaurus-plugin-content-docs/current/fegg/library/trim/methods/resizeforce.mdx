@@ -1,0 +1,29 @@
+---
+sidebar_position: 4
+---
+
+# Trim::resizeForce
+
+画像を強制的にリサイズします
+
+## 説明
+
+```php
+public void Trim::resizeForce( number $w, number $h )
+```
+
+## 引数
+
+| 名前 | データ型 | デフォルト | 備考                 |
+| ---- | -------- | ---------- | -------------------- |
+| $w   | number   |            | 変換後の画像幅       |
+| $h   | number   |            | 変換後の画像高さ     |
+
+## 例
+
+```php title="Controller"
+$trim = $this->getClass('Tool/Trim');
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+
+$trim->resizeForce(300, 300);
+```

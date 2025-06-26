@@ -1,0 +1,53 @@
+---
+sidebar_position: 2
+---
+
+# 設定
+
+**code/config/validation_error_message.php**でエラーメッセージを変更できます。
+
+```php title="validation_error_message.php"
+<?php
+/**
+ * エラーメッセージ定義
+ * Validationクラスのエラーメッセージ定義
+ *
+ * @see Validation.php
+ */
+// @itemは半角英数字で入力してください
+$validation_error_message['@alphameric'] = '<strong>%s</strong> は半角英数で入力してください';
+// @itemは日付形式ではありません
+$validation_error_message['@date'] = '<strong>%s</strong> の日付では登録できません';
+// @itemはメール形式ではありません
+$validation_error_message['@email'] = '<strong>%s</strong> は登録できない形式です';
+// @itemは半角文字で入力してください
+$validation_error_message['@hankaku'] = '<strong>%s</strong> は半角で入力してください';
+// @itemはカタカナで入力してください
+$validation_error_message['@katakana'] = '<strong>%s</strong> はカタカナで入力してください';
+// @itemは@maxlength文字以内で入力してください
+$validation_error_message['@maxlength'] = '<strong>%s</strong> は <strong>%s</strong> 文字以内で入力してください';
+// @itemは@minlength文字以上で入力してください
+$validation_error_message['@minlength'] = '<strong>%s</strong> は <strong>%s</strong> 文字以上で入力してください';
+// @itemは数値で入力してください
+$validation_error_message['@numeric'] = '<strong>%s</strong> は 半角数字で入力してください';
+// @itemは整数または小数で入力してください
+$validation_error_message['@numeric_decimalpoint'] = '<strong>%s</strong> は 半角の整数もしくは小数で入力してください';
+// @itemは数字とマイナス記号を半角で入力してください
+$validation_error_message['@numeric_minus'] = '<strong>%s</strong> は 数字、マイナス符号とも半角で入力してください';
+// @itemは使用できない文字タイプです
+$validation_error_message['@password'] = '<strong>%s</strong> は登録できない形式です';
+// @itemは半角英数の混合で入力してください
+$validation_error_message['@password_mixed_letters'] = '<strong>%s</strong> は半角英数の混合で入力してください';
+// @itemは必須です
+$validation_error_message['@required'] = '<strong>%s</strong> をご入力ください';
+// @itemは電話番号形式ではありません
+$validation_error_message['@tel'] = '<strong>%s</strong> は登録できない形式です';
+// @itemは時刻形式ではありません
+$validation_error_message['@time'] = '<strong>%s</strong> の時間では登録できません';
+// @itemはURL形式ではありません
+$validation_error_message['@url'] = '<strong>%s</strong> は登録できない形式です';
+// @itemはユーザーID形式ではありません
+$validation_error_message['@userid'] = '<strong>%s</strong> は登録できない形式です';
+// @itemは郵便番号形式ではありません
+$validation_error_message['@zipcode'] = '<strong>%s</strong> は登録できない形式です';
+```

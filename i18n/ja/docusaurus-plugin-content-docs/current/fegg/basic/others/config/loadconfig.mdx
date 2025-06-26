@@ -1,0 +1,43 @@
+---
+sidebar_position: 1
+---
+
+# Application::loadConfig
+
+> 設定ファイルの読み込み
+
+## 説明
+
+```php
+public void Application::loadConfig( string $name, string $languageCode = '' )
+```
+
+設定ファイルを読み込み、コントローラーの設定変数に代入します。
+
+## 引数
+
+| 名前          | データ型 | デフォルト | 備考            |
+| ------------- | ------- | --------- | --------------- |
+| $name         | string  |           | 設定ファイル名   |
+| $languageCode | string  | ''        | 言語コード      |
+
+## 例
+
+```php title="code/config/sample.php"
+<?php
+// ファイル名と同じ変数名を準備する必要があります
+$sample = array();
+
+$sample['foo'] = 'bar';
+$sample['baz'] = 'qux';
+```
+
+```php title="コントローラー"
+$this->loadConfig('sample');
+
+var_dump($this->config['sample']);
+```
+
+```html title="出力"
+array(2) { ["foo"]=> string(3) "bar" ["baz"]=> string(3) "qux" }
+```

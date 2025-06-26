@@ -1,0 +1,36 @@
+---
+sidebar_position: 1
+---
+
+# Mail::\_\_construct
+
+メール送信を設定します
+
+## 説明
+
+```php
+public self Mail::__construct( [ string $subject = null, string $body = null, array $header = null ] )
+```
+
+## 引数
+
+| 名前     | データ型 | デフォルト | 備考                   |
+| -------- | -------- | ---------- | ---------------------- |
+| $subject | string   | null       | メール件名             |
+| $body    | string   | null       | メール本文             |
+| $header  | array    | null       | メールカスタムヘッダー |
+
+## 例
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail', 'Mail subject', 'Mail body');
+
+// 次と同じ
+$mail = $this->getClass('Tool/Mail');
+$mail->subject('Mail subject');
+$mail->body('Mail body');
+
+// または
+$this->getClass('Tool/Mail')
+$mail = new Mail('Mail subject', 'Mail body');
+```

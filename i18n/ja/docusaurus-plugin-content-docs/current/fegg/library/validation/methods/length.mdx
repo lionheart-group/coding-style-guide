@@ -1,0 +1,47 @@
+---
+sidebar_position: 13
+---
+
+# Validation::length
+
+> 文字の長さをチェック
+
+## 説明
+
+```php
+public boolean Validation::length( string $name, mixed $value, numeric $length, [ mixed $code = '' ] )
+```
+
+## 引数
+
+| 名前    | データ型 | デフォルト | 備考                   |
+| ------- | -------- | ---------- | ---------------------- |
+| $name   | string   |            | 項目ラベル             |
+| $value  | mixed    |            | チェック対象フィールド値 |
+| $length | numeric  |            | 指定長さの値           |
+| $code   | mixed    | ""         | エラーコードまたはエラーメッセージ |
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// $valueが指定長さと等しい場合
+$successName = '成功フィールド';
+$successVar  = 'foo';
+$length      = 3;
+$validation->length('success', $successVar, $length, array('@length', $successName, $length));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// $valueが指定長さと等しくない場合
+$failedName = '失敗フィールド';
+$failedVar  = 'failed';
+$length     = 3;
+$validation->length('failed', $failedVar, $length, array('@length', $failedName, $length));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>失敗フィールド</strong> は3文字で入力してください"
+```

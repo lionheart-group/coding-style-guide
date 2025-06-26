@@ -1,0 +1,100 @@
+---
+sidebar_position: 1
+---
+
+# 概要
+
+import Badge from "../../../../../../../src/components/Badge";
+
+> LHプロジェクト用拡張データベースライブラリ
+
+## 使用方法
+
+`Model`は`Controller`に既にインポートされているため、includeなしで呼び出すことができます。
+
+```php title="コントローラー"
+$model = new Model(false, array(
+  'table'   => 'cms_news',
+  'id'      => 'news_id',
+  'visible' => 'visible',
+));
+
+$records = $model->find();
+```
+
+## メソッド
+
+- [Model::\_\_construct](/docs/fegg/library/model/methods/construct) <Badge color="yellow">重要</Badge>
+  - Modelクラスのコンストラクタ
+- [Model::setTableName](/docs/fegg/library/model/methods/settablename)
+  - テーブル名の設定
+- [Model::getTableName](/docs/fegg/library/model/methods/gettablename)
+  - テーブル名の取得
+- [Model::setPrimary](/docs/fegg/library/model/methods/setprimary)
+  - プライマリID名の設定
+- [Model::getPrimary](/docs/fegg/library/model/methods/getprimary)
+  - プライマリID名の取得
+- [Model::setVisible](/docs/fegg/library/model/methods/setvisible)
+  - 表示フラグ名の設定
+- [Model::getVisible](/docs/fegg/library/model/methods/getvisible)
+  - 表示フラグ名の取得
+- [Model::setBindParam](/docs/fegg/library/model/methods/setbindparam)
+  - バインドパラメータタイプの設定
+- [Model::addBindParam](/docs/fegg/library/model/methods/addbindparam)
+  - バインドパラメータタイプの追加
+- [Model::getBindParam](/docs/fegg/library/model/methods/getbindparam)
+  - バインドパラメータタイプの取得
+- [Model::select](/docs/fegg/library/model/methods/select) <Badge color="yellow">重要</Badge>
+  - Selectパラメータの設定
+- [Model::listMax](/docs/fegg/library/model/methods/listmax) <Badge color="yellow">重要</Badge>
+  - ListMaxパラメータの設定
+- [Model::current](/docs/fegg/library/model/methods/current) <Badge color="yellow">重要</Badge>
+  - 現在のページパラメータの設定
+- [Model::where](/docs/fegg/library/model/methods/where) <Badge color="yellow">重要</Badge>
+  - Whereパラメータの設定
+- [Model::whereOpen](/docs/fegg/library/model/methods/whereopen) <Badge color="yellow">重要</Badge>
+  - Whereクエリに開きカッコを追加
+- [Model::whereClose](/docs/fegg/library/model/methods/whereclose) <Badge color="yellow">重要</Badge>
+  - Whereクエリに閉じカッコを追加
+- [Model::having](/docs/fegg/library/model/methods/having)
+  - Havingパラメータの設定
+- [Model::havingOpen](/docs/fegg/library/model/methods/havingopen)
+  - Havingクエリに開きカッコを追加
+- [Model::havingClose](/docs/fegg/library/model/methods/havingclose)
+  - Havingクエリに閉じカッコを追加
+- [Model::order](/docs/fegg/library/model/methods/order) <Badge color="yellow">重要</Badge>
+  - Orderパラメータの設定
+- [Model::join](/docs/fegg/library/model/methods/join)
+  - Joinパラメータの設定
+- [Model::group](/docs/fegg/library/model/methods/group)
+  - Groupパラメータの設定
+- [Model::find](/docs/fegg/library/model/methods/find) <Badge color="yellow">重要</Badge>
+  - 指定された件数の行を取得
+- [Model::getPager](/docs/fegg/library/model/methods/getpager) <Badge color="yellow">重要</Badge>
+  - ページャー作成用の変数を取得
+- [Model::one](/docs/fegg/library/model/methods/one) <Badge color="yellow">重要</Badge>
+  - レコードから1行を取得
+- [Model::count](/docs/fegg/library/model/methods/count) <Badge color="yellow">重要</Badge>
+  - レコード数を取得
+- [Model::id](/docs/fegg/library/model/methods/id) <Badge color="yellow">重要</Badge>
+  - 指定されたプライマリIDで1つのレコードを取得
+- [Model::setOptions](/docs/fegg/library/model/methods/setoptions)
+  - オプションパラメータの設定
+- [Model::resetOptions](/docs/fegg/library/model/methods/resetoptions)
+  - オプションデータのリセット
+- [Model::insert](/docs/fegg/library/model/methods/insert) <Badge color="yellow">重要</Badge>
+  - データの挿入を実行
+- [Model::updateWhere](/docs/fegg/library/model/methods/updatewhere) <Badge color="yellow">重要</Badge>
+  - 指定された条件でレコードの更新を実行
+- [Model::update](/docs/fegg/library/model/methods/update) <Badge color="yellow">重要</Badge>
+  - 指定されたプライマリIDでレコードの更新を実行
+- [Model::deleteWhere](/docs/fegg/library/model/methods/deletewhere) <Badge color="yellow">重要</Badge>
+  - 指定された条件でレコードの論理削除を実行
+- [Model::delete](/docs/fegg/library/model/methods/delete) <Badge color="yellow">重要</Badge>
+  - 指定されたプライマリIDでレコードの論理削除を実行
+- [Model::eraseWhere](/docs/fegg/library/model/methods/erasewhere)
+  - 指定された条件でレコードの物理削除を実行
+- [Model::erase](/docs/fegg/library/model/methods/erase)
+  - 指定されたプライマリIDでレコードの物理削除を実行
+- [Model::create](/docs/fegg/library/model/methods/create)
+  - テーブルの作成を実行

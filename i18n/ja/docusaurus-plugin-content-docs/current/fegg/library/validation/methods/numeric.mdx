@@ -1,0 +1,67 @@
+---
+sidebar_position: 3
+---
+
+# Validation::numeric
+
+> 数値かどうかをチェック
+
+## 説明
+
+```php
+public boolean Validation::numeric( string $name, mixed $value, [ mixed $code = '', boolean $decimalPointFlag = false, boolean $minusFlag = false ] )
+```
+
+## 引数
+
+| 名前              | データ型 | デフォルト | 備考                   |
+| ----------------- | -------- | ---------- | ---------------------- |
+| $name             | string   |            | 項目ラベル             |
+| $value            | mixed    |            | チェック対象フィールド値 |
+| $code             | mixed    | ""         | エラーコードまたはエラーメッセージ |
+| $decimalPointFlag | boolean  | false      | "."を含むことを許可     |
+| $minusFlag        | boolean  | false      | "-"を含むことを許可     |
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// $valueが数値の場合
+$successName = '成功フィールド';
+$successVar  = '123';
+$validation->numeric('success', $successVar, array('@numeric', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// $valueが数値でない場合
+$failedName = '失敗フィールド';
+$failedVar  = 'abc123';
+$validation->numeric('failed', $failedVar, array('@numeric', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>失敗フィールド</strong> は 半角数字で入力してください"
+```
+
+### オプションフラグ
+
+```php title="Controller"
+// $valueが負の数値の場合
+$failedName = '失敗フィールド';
+$failedVar  = '-10';
+$validation->numeric('failed', $failedVar, array('@numeric', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>失敗フィールド</strong> は 半角数字で入力してください"
+
+// $minusFlagを有効にして負の数値の場合
+$successName = '成功フィールド';
+$successVar  = '-10';
+$validation->numeric('success', $successVar, array('@numeric_minus', $successName), false, true);
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+```

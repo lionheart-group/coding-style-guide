@@ -1,0 +1,44 @@
+---
+sidebar_position: 2
+---
+
+# Validation::alphameric
+
+> 英数字かどうかをチェック
+
+## 説明
+
+```php
+public boolean Validation::alphameric( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+## 引数
+
+| 名前   | データ型 | デフォルト | 備考                   |
+| ------ | -------- | ---------- | ---------------------- |
+| $name  | string   |            | 項目ラベル             |
+| $value | mixed    |            | チェック対象フィールド値 |
+| $code  | mixed    | ""         | エラーコードまたはエラーメッセージ |
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// $valueが英数字の場合
+$successName = '成功フィールド';
+$successVar  = 'abc123';
+$validation->alphameric('success', $successVar, array('@alphameric', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// $valueが英数字でない場合
+$failedName = '失敗フィールド';
+$failedVar  = 'abc!';
+$validation->alphameric('failed', $failedVar, array('@alphameric', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>失敗フィールド</strong> は半角英数で入力してください"
+```

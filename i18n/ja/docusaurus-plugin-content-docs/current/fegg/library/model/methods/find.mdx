@@ -1,0 +1,26 @@
+---
+sidebar_position: 36
+---
+
+# Model::find
+
+> レコードを検索して取得
+
+## 説明
+
+```php
+public array Model::find( [ mixed $id = null ] )
+```
+
+## 引数
+
+| 名前 | データ型 | デフォルト | 備考         |
+| ---- | -------- | ---------- | ------------ |
+| $id  | mixed    | null       | レコードID   |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$record = $model->find(1);
+```

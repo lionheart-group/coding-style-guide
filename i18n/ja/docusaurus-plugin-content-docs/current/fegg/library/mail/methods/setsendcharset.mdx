@@ -1,0 +1,32 @@
+---
+sidebar_position: 11
+---
+
+# Mail::setSendCharset
+
+メール文字セットを設定します
+
+:::note
+
+メール本文が文字化けする場合は、このメソッドまたは[Mail::setInputCharset](/docs/fegg/library/mail/methods/setinputcharset)を使用してください。
+
+:::
+
+## 説明
+
+```php
+public self Mail::setSendCharset( string $charset )
+```
+
+## 引数
+
+| 名前     | データ型 | デフォルト | 備考           |
+| -------- | -------- | ---------- | -------------- |
+| $charset | string   |            | メール文字セット |
+
+## 例
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->setSendCharset('utf-8');
+```

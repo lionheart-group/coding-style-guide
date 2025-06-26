@@ -1,0 +1,44 @@
+---
+sidebar_position: 1
+---
+
+# Application::setTicket
+
+> チケットデータを設定し、チケットセッションを開始
+
+## 説明
+
+```php
+public void Application::setTicket( string $name )
+```
+
+チケットデータを設定し、チケットセッションを開始します
+
+## 引数
+
+| 名前  | データ型 | デフォルト | 備考              |
+| :---- | :------- | :--------- | :---------------- |
+| $name | string   |            | チケットパラメータキー |
+
+## 例
+
+```php title="コントローラー"
+$this->setTicket('foo');
+
+$foo = $this->getSession('ticket_foo');
+echo $foo;
+```
+
+```html title="出力"
+670f2f1232f30d4d716c1bc9c8a58388
+```
+
+`setTicket`メソッドが呼び出されると、ハッシュ化されたランダム文字列を返し、与えられたパラメータをキーとしてticket\_をプレフィックスとした新しいセッションを開始し、返された文字列がその値になります。これにより、セキュリティ評価のためにフォームに設定できる`setHidden`メソッドも自動的に使用されます。
+
+```php title="テンプレート"
+{{ hidden }}
+```
+
+```html title="出力"
+<input type='hidden' name='ticket_foo' value='670f2f1232f30d4d716c1bc9c8a58388' />
+```

@@ -1,0 +1,28 @@
+---
+sidebar_position: 1
+---
+
+# Application::setSession
+
+> SESSIONデータを設定（session_startを呼び出し）
+
+## 説明
+
+```php
+public void Application::setSession( string $name, mixed $value )
+```
+
+SESSIONデータを設定し、自動的に`session_start`メソッドを呼び出します。
+
+## 引数
+
+| 名前    | データ型 | デフォルト | 備考                |
+| :------ | :------- | :--------- | :------------------ |
+| $name   | string   |            | セッションパラメータキー |
+| $value  | mixed    |            | 値                  |
+
+## 例
+
+```php title="コントローラー"
+$this->setSession('foo', 'bar');
+```

@@ -1,0 +1,53 @@
+---
+sidebar_position: 1
+---
+
+# 変数
+
+> テンプレートでの変数の使用
+
+## 説明
+
+```php
+{{ $var }}
+```
+
+変数を表示する場合は、`{{ $var }}`と記述する必要があります。配列変数を表示する場合は、ピリオド"."で区切る必要があります（例：`{{ $var.key }}`）。
+
+コントローラーからテンプレートに変数を渡したい場合は、`$this->page`に配列値を割り当てることができ、その後テンプレートで`{{ $page.foo }}`を表示できます。
+
+コンパイル後、すべての変数はhtmlSpecialCharsメソッドを通して自動的に表示されます。生の変数を表示したい場合は、`noescape`修飾子を使用して表示できます。詳細は[修飾子](/docs/fegg/basic/templates#modifiers)を参照してください。
+
+## 例
+
+```php title="コントローラー"
+$this->page['foo'] = 'bar';
+$this->displayPage( 'template' );
+```
+
+```php title="テンプレート"
+{{ $page.foo }}
+```
+
+```html title="出力"
+bar
+```
+
+### `noescape`修飾子を使用する場合
+
+```php title="コントローラー"
+$this->page['foo'] = '<p>bar</p>';
+$this->displayPage( 'template' );
+```
+
+```php title="テンプレート"
+{{ $page.foo }}
+
+{{ $page.foo|noescape }}
+```
+
+```html title="出力"
+&lt;p&gt;bar&lt;/p&gt;
+
+<p>bar</p>
+```

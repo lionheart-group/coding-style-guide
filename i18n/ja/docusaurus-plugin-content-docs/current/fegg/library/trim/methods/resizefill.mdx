@@ -1,0 +1,29 @@
+---
+sidebar_position: 3
+---
+
+# Trim::resizeFill
+
+比率を保ったままサイズ変更し、白/黒色で塗りつぶします（`object-fit: contain`のように）
+
+## 説明
+
+```php
+public void Trim::resizeFill( number $w, number $h )
+```
+
+## 引数
+
+| 名前 | データ型 | デフォルト | 備考                 |
+| ---- | -------- | ---------- | -------------------- |
+| $w   | number   |            | 変換後の画像幅       |
+| $h   | number   |            | 変換後の画像高さ     |
+
+## 例
+
+```php title="Controller"
+$trim = $this->getClass('Tool/Trim');
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+
+$trim->resizeFill(300, 300);
+```

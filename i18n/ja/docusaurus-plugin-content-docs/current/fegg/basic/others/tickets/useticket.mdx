@@ -1,0 +1,30 @@
+---
+sidebar_position: 2
+---
+
+# Application::useTicket
+
+> チケットを一度使用し、チケットセッションを破棄
+
+## 説明
+
+```php
+public void Application::useTicket( string $name )
+```
+
+チケットを一度使用し、チケットセッションを破棄します。`useTicket`はbooleanを返し、隠し入力の値がサーバーのチケットセッションと同じ場合のみTRUEを返します。[Application::setTicket](/docs/fegg/basic/others/tickets/setticket)を参照してください。
+
+## 引数
+
+| 名前  | データ型 | デフォルト | 備考              |
+| :---- | :------- | :--------- | :---------------- |
+| $name | string   |            | チケットパラメータキー |
+
+## 例
+
+```php title="コントローラー"
+if($this->useTicket('foo'))
+{
+    //コード
+}
+```

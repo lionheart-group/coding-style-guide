@@ -1,0 +1,33 @@
+---
+sidebar_position: 1
+---
+
+# DB_pdo::select
+
+SELECTクエリを設定
+
+## 説明
+
+```php
+public self DB_pdo::select( string $table )
+```
+
+## 引数
+
+| 名前   | データ型 | デフォルト | 備考               |
+| ------ | -------- | ---------- | ------------------ |
+| $table | string   |            | 対象テーブル名     |
+
+## 例
+
+```php title="Controller"
+$db = $this->getClass('DB');
+
+// 基本的なSELECT
+$result = $db->select('users')->fetchAll();
+
+// 条件付きSELECT
+$result = $db->select('users')
+             ->where('status', 1)
+             ->fetchAll();
+```

@@ -28,7 +28,7 @@
     "description": "The label of footer link with label=GitHub linking to https://github.com/lionheart-group/coding-style-guide"
   },
   "copyright": {
-    "message": "Copyright © 2021 LionHeart Group. Built with Docusaurus.",
+    "message": "Copyright © 2021-2025 LionHeart Group. Built with Docusaurus.",
     "description": "The footer copyright"
   },
   "link.item.label.JavaScript": {

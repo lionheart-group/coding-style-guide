@@ -1,0 +1,20 @@
+---
+sidebar_position: 25
+---
+
+# Model::one
+
+> 単一レコードを取得
+
+## 説明
+
+```php
+public array Model::one()
+```
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$record = $model->one();
+```

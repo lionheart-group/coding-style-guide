@@ -1,0 +1,42 @@
+---
+sidebar_position: 4
+---
+
+# Application::displayPage
+
+> 自動変数を含むコンパイルされたテンプレートを表示し、クリックジャッキング対策を実行
+
+## 説明
+
+```php
+public string Application::fetchPage( string $template )
+```
+
+`displayPage`メソッドは、他のサイトからの他のコンテンツがWebサイトに埋め込まれないように、X-Frame-Options HTTP応答ヘッダーをDenyに設定して装備されています。
+
+## 引数
+
+| 名前      | データ型 | デフォルト | 備考               |
+| --------- | :------- | :--------- | :----------------- |
+| $template | string   |            | テンプレートファイル名 |
+
+## 例
+
+```php title="code/application/Foo.php"
+<?php
+
+class Foo extends Application
+{
+    function bar(){
+        $this->displayPage( 'foo/bar' );
+    }
+}
+```
+
+クリックジャッキング攻撃からの予防措置を講じた後、[Application::fetchPage](/docs/fegg/basic/templates/methods/fetchpage)の結果を表示します。
+
+:::note
+
+Webユーザー/訪問者のセキュリティのため、テンプレートファイルのコンパイルには`displayPage`メソッドを使用することを推奨します。
+
+:::

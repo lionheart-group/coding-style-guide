@@ -1,0 +1,26 @@
+---
+sidebar_position: 21
+---
+
+# Model::group
+
+> Group パラメータを設定
+
+## 説明
+
+```php
+public self Model::group( string $group )
+```
+
+## 引数
+
+| 名前   | データ型 | デフォルト | 備考           |
+| ------ | -------- | ---------- | -------------- |
+| $group | string   |            | GROUP BY条件   |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$model->group('category_id');
+```

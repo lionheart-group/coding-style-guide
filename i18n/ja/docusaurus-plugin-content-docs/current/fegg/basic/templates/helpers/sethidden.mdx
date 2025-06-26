@@ -1,0 +1,50 @@
+---
+sidebar_position: 2
+---
+
+# Application::setHidden
+
+> 隠しデータの設定
+
+## 説明
+
+```php
+public void Application::setHidden( mixed $name, [ string $value = "" ] )
+```
+
+コントローラーからテンプレートに入力フィールドの隠し値を設定します。テンプレートで`{{ hidden }}`と記述すると、割り当てられた名前と値を持つ`<input type="hidden">`が表示されます。
+
+[Hidden](#)も参照してください。
+
+## 引数
+
+| 名前   | データ型        | デフォルト | 備考                                                            |
+| ------ | --------------- | ---------- | --------------------------------------------------------------- |
+| $id    | string / array  |            | 隠し名。配列の場合、構文は`array($name => $value)`である必要があります |
+| $value | string          | ""         | 隠し値                                                           |
+
+## 例
+
+```php title="コントローラー"
+$this->setHidden( 'foo', 'bar' );
+```
+
+```html title="テンプレート"
+{{ hidden }}
+```
+
+```html title="出力"
+<input type="hidden" name="foo" value="bar">
+```
+
+### 複数パラメータの割り当て
+
+複数のパラメータを割り当てることができます。
+
+```php title="コントローラー"
+$params = array(
+    'foo' => 'bar',
+    'baz' => 'qux',
+);
+$this->setHidden($params);
+```

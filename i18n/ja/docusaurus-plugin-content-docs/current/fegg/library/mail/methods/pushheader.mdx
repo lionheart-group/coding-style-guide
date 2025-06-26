@@ -1,0 +1,34 @@
+---
+sidebar_position: 4
+---
+
+# Mail::pushHeader
+
+カスタムヘッダーを追加
+
+## 説明
+
+```php
+public self Mail::pushHeader( mixed $key, [ string $val = null ] )
+```
+
+## 引数
+
+| 名前 | データ型 | デフォルト | 備考                                  |
+| ---- | -------- | ---------- | ------------------------------------- |
+| $key | mixed    |            | ヘッダーキー文字列またはキーと値の配列 |
+| $val | string   | null       | $keyが文字列の場合のヘッダー値        |
+
+## 例
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->pushHeader('foo', 'bar');
+$mail->pushHeader('baz', 'qux');
+
+// 以下と同じ
+$mail->pushHeader(array(
+    'foo' => 'bar',
+    'baz' => 'qux'
+));
+```

@@ -1,0 +1,26 @@
+---
+sidebar_position: 3
+---
+
+# Mail::body
+
+メールの本文を設定
+
+## 説明
+
+```php
+public self Mail::body( string $body )
+```
+
+## 引数
+
+| 名前  | データ型 | デフォルト | 備考           |
+| ----- | -------- | ---------- | -------------- |
+| $body | string   | null       | メールの本文   |
+
+## 例
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->body('メールの本文');
+```

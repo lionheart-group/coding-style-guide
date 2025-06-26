@@ -1,0 +1,23 @@
+---
+sidebar_position: 7
+---
+
+# Trim::view
+
+変換された画像を表示します
+
+## 説明
+
+```php
+public void Trim::view()
+```
+
+## 例
+
+```php title="Controller"
+$trim = $this->getClass('Tool/Trim');
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+
+$trim->resizeTrim(300, 300, 'm');
+$trim->view();
+```

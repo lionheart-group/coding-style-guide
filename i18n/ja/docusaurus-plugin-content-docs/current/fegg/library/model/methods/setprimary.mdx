@@ -1,0 +1,31 @@
+---
+sidebar_position: 4
+---
+
+# Model::setPrimary
+
+> プライマリID名を設定
+
+## 説明
+
+```php
+public self Model::setPrimary( string $primary )
+```
+
+## 引数
+
+| 名前     | データ型 | デフォルト | 備考           |
+| -------- | -------- | ---------- | -------------- |
+| $primary | string   |            | プライマリキー名 |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->setPrimary('user_id');
+```

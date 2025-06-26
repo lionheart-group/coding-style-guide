@@ -1,0 +1,45 @@
+---
+sidebar_position: 17
+---
+
+# Validation::katakana
+
+> 日本語のカタカナ文字をチェック
+
+## 説明
+
+```php
+public boolean Validation::katakana( string $name, mixed $value, [ mixed $code = '', boolean $zenkakuFlag = false ] )
+```
+
+## 引数
+
+| 名前         | データ型 | デフォルト | 備考                       |
+| ------------ | -------- | ---------- | -------------------------- |
+| $name        | string   |            | 項目ラベル                 |
+| $value       | mixed    |            | チェック対象フィールド値   |
+| $code        | mixed    | ""         | エラーコードまたはエラーメッセージ |
+| $zenkakuFlag | boolean  | false      | 全角カタカナのみ必須フラグ |
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// $valueが日本語カタカナのみの場合
+$successName = '成功フィールド';
+$successVar  = 'テスト';
+$validation->katakana('success', $successVar, array('@katakana', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// $valueが日本語カタカナのみでない場合
+$failedName = '失敗フィールド';
+$failedVar  = 'てすと';
+$validation->katakana('failed', $failedVar, array('@katakana', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>失敗フィールド</strong> はカタカナで入力してください"
+```

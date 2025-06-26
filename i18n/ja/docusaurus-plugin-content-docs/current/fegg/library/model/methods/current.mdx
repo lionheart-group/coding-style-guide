@@ -1,0 +1,20 @@
+---
+sidebar_position: 41
+---
+
+# Model::current
+
+> 現在のレコードデータを取得
+
+## 説明
+
+```php
+public array Model::current()
+```
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$current = $model->current();
+```

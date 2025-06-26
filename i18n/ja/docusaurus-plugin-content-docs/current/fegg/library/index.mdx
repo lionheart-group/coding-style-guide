@@ -1,0 +1,34 @@
+---
+sidebar_position: 1
+---
+
+# 拡張ライブラリについて
+
+Feggの目標は軽量で記述量を少なくすることなので、コアクラスには必要最小限の機能のみがあります。そのため、追加機能が必要な場合は、拡張ライブラリをインストールできます。
+
+## 拡張ライブラリ
+
+- [バリデーション](/docs/fegg/library/validation)
+  - バリデーション用の関数を提供
+- [データベース](/docs/fegg/library/database)
+  - データベース使用に必要な関数を提供
+- [モデル](/docs/fegg/library/model)
+  - LHプロジェクト用の拡張データベースライブラリ
+- [ファイル](/docs/fegg/library/file)
+  - ファイル/ディレクトリ管理用の関数を提供
+- [アップロード](/docs/fegg/library/upload)
+  - ファイルのアップロード/検証用の関数を提供
+- [メール](/docs/fegg/library/mail)
+  - メール送信用の関数を提供
+- [RSS](/docs/fegg/library/rss)
+  - RSS文書の解析用の関数を提供
+- [Trim](/docs/fegg/library/trim)
+  - 画像処理（特に画像クロップ）用の関数を提供
+
+## 外部ライブラリ
+
+- [Spyc](https://github.com/mustangostang/spyc)
+  - YAML文書ローダー
+- [JSON](https://github.com/pear/Services_JSON)
+  - Json文書ローダー
+  - 主にこれを使用する必要はなく、`json_encode`と`json_decode`を使用できます

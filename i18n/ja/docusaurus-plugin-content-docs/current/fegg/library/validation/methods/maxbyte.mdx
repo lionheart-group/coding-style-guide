@@ -1,0 +1,46 @@
+---
+sidebar_position: 12
+---
+
+# Validation::maxbyte
+
+> 文字バイト数をチェック
+
+## 説明
+
+```php
+public boolean Validation::maxbyte( string $name, mixed $value, numeric $byte, [ mixed $code = '' ] )
+```
+
+## 引数
+
+| 名前   | データ型 | デフォルト | 備考                        |
+| ------ | -------- | ---------- | --------------------------- |
+| $name  | string   |            | 項目ラベル                  |
+| $value | mixed    |            | チェック対象フィールド値    |
+| $byte  | numeric  |            | 最大バイト値                |
+| $code  | mixed    | ""         | エラーコードまたはエラーメッセージ |
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// $valueが指定値以下の場合
+$successName = 'Success Field';
+$successVar  = 'foo';
+$validation->maxbyte('success', $successVar, 10, array('@maxbyte', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// $valueが指定値より大きい場合
+$failedName = 'Failed Field';
+$failedVar  = '1234567890';
+$validation->maxbyte('failed', $failedVar, 5, array('@maxbyte', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => null
+// デフォルトエラーテキストはありません
+```

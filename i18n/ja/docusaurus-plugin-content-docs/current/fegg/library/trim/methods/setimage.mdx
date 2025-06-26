@@ -1,0 +1,27 @@
+---
+sidebar_position: 1
+---
+
+# Trim::setImage
+
+対象画像と出力ファイルパスを設定
+
+## 説明
+
+```php
+public void Trim::setImage( string $org_image, string $cnv_path )
+```
+
+## 引数
+
+| 名前       | データ型 | デフォルト | 備考                   |
+| ---------- | -------- | ---------- | ---------------------- |
+| $org_image | string   |            | 対象画像のパス         |
+| $cnv_path  | string   |            | 変換後画像の保存場所   |
+
+## 例
+
+```php title="Controller"
+$trim = $this->getClass('Tool/Trim');
+$trim->setImage('path/to/original.jpg', 'path/to/converted.jpg');
+```

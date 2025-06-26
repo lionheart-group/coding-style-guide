@@ -1,0 +1,28 @@
+---
+sidebar_position: 6
+---
+
+# Mail::pushAttached
+
+添付ファイルを追加
+
+## 説明
+
+```php
+public self Mail::pushAttached( string $filePath, [ string $fileName = null ] )
+```
+
+## 引数
+
+| 名前      | データ型 | デフォルト | 備考                     |
+| --------- | -------- | ---------- | ------------------------ |
+| $filePath | string   |            | 添付ファイルのパス       |
+| $fileName | string   | null       | メール上の指定ファイル名 |
+
+## 例
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->pushAttached('path/to/file.jpg');
+$mail->pushAttached('path/to/document.pdf', 'レポート.pdf');
+```

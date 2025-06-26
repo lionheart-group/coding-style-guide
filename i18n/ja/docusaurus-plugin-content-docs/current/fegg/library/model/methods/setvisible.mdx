@@ -1,0 +1,26 @@
+---
+sidebar_position: 6
+---
+
+# Model::setVisible
+
+> 可視性フィールド名を設定
+
+## 説明
+
+```php
+public self Model::setVisible( string $visible )
+```
+
+## 引数
+
+| 名前     | データ型 | デフォルト | 備考               |
+| -------- | -------- | ---------- | ------------------ |
+| $visible | string   |            | 可視性フィールド名 |
+
+## 例
+
+```php title="Controller"
+$model = new Model();
+$model->setVisible('is_active');
+```
