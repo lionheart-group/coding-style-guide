@@ -1,0 +1,52 @@
+---
+sidebar_position: 5
+---
+
+# Trim::resizeTrim
+
+比率を保ったままリサイズし、はみ出した部分をトリミングします（`object-fit: cover`のように）
+
+## 説明
+
+```php
+public void Trim::resizeTrim( number $w, number $h, string $cp )
+```
+
+## 引数
+
+| 名前 | データ型 | デフォルト | 備考                 |
+| ---- | -------- | ---------- | -------------------- |
+| $w   | number   |            | 変換後の画像幅       |
+| $h   | number   |            | 変換後の画像高さ     |
+| $cp  | string   |            | クロップ位置         |
+
+### クロップ位置
+
+<table style={{textAlign: 'center'}}>
+    <tbody>
+        <tr>
+            <td>lt</td>
+            <td>t</td>
+            <td>rt</td>
+        </tr>
+        <tr>
+            <td>l</td>
+            <td>m</td>
+            <td>r</td>
+        </tr>
+        <tr>
+            <td>lb</td>
+            <td>b</td>
+            <td>rb</td>
+        </tr>
+    </tbody>
+</table>
+
+## 例
+
+```php title="Controller"
+$trim = $this->getClass('Tool/Trim');
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+
+$trim->resizeTrim(300, 300, 'm');
+```

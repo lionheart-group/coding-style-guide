@@ -1,0 +1,36 @@
+---
+sidebar_position: 1
+---
+
+# パラメータについて
+
+FeggにはPOST、GET、SESSION、COOKIEのためのヘルパーメソッドがあります。
+
+## POST/GET
+
+シングル/ダブルクォートと文字コードが自動的に変換されたリクエストデータを取得します。
+
+- [Application::in](/docs/fegg/basic/parameters/post_get/in)
+  - リクエストデータの取得（POST/GET）
+
+## SESSION
+
+セッションパラメータの設定と読み込み。これは自動的に`session_start`を呼び出すため、手動で呼び出す必要はありません。
+
+- [Application::setSession](/docs/fegg/basic/parameters/session/setsession)
+  - SESSIONデータの設定（session_startを呼び出し）
+- [Application::getSession](/docs/fegg/basic/parameters/session/getsession)
+  - SESSIONデータの取得
+- [Application::unsetSession](/docs/fegg/basic/parameters/session/unsetsession)
+  - SESSIONデータの削除
+
+## COOKIE
+
+COOKIEパラメータの設定と読み込み。
+
+- [Application::setCookie](/docs/fegg/basic/parameters/cookie/setcookie)
+  - COOKIEデータの設定
+- [Application::getCookie](/docs/fegg/basic/parameters/cookie/getcookie)
+  - COOKIEデータの取得
+- [Application::unsetCookie](/docs/fegg/basic/parameters/cookie/unsetcookie)
+  - COOKIEデータの削除

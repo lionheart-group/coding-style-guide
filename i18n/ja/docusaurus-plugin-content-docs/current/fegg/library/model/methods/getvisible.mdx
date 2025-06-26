@@ -1,0 +1,24 @@
+---
+sidebar_position: 7
+---
+
+# Model::getVisible
+
+> 可視性フィールド名を取得
+
+## 説明
+
+```php
+public string Model::getVisible()
+```
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'visible' => 'is_visible'
+));
+
+$visible = $model->getVisible();
+```

@@ -1,0 +1,50 @@
+---
+sidebar_position: 1
+---
+
+# Application::displayTemplate
+
+> コンパイルされたテンプレートを表示
+
+## 説明
+
+```php
+public void Application::displayTemplate( string $template, [ array $assignedValue = array() ] )
+```
+
+テンプレートファイルを読み込み -> コンパイル -> 出力を表示します。
+
+## 引数
+
+| 名前           | データ型 | デフォルト | 備考                 |
+| -------------- | :------- | :--------- | :------------------- |
+| $template      | string   |            | テンプレートファイル名 |
+| $assignedValue | array    | array()    | テンプレート用の引数  |
+
+## 例
+
+これは**code/template/foo/bar.tpl**の**bar.tpl**テンプレートファイルを読み込み、コンパイルしてコンパイルされた出力を表示します。
+
+```php title="code/application/Foo.php"
+<?php
+
+class Foo extends Application
+{
+    function bar(){
+        $this->displayTemplate( 'foo/bar' );
+    }
+}
+```
+
+:::note
+
+パラメータに".tpl"拡張子を含めるべきではありません。
+
+:::
+
+```html title="code/template/foo/bar.tpl"
+<p>変数 : {{ $page.baz }}</p>
+<p>If else : {{ if true }}True{{ end }}</p>
+<p>ループ  : {{ foreach $array as $k => $v }}{{ end foreach }}</p>
+<p>テンプレートルール  : {{ Feggテンプレートルールに従う }}</p>
+```

@@ -1,0 +1,36 @@
+---
+sidebar_position: 19
+---
+
+# Validation::setErrorMessage
+
+> エラーメッセージを設定
+
+## 説明
+
+```php
+public boolean Validation::setErrorMessage( string $name, string $message )
+```
+
+## 引数
+
+| 名前     | データ型 | デフォルト | 備考          |
+| -------- | -------- | ---------- | ------------- |
+| $name    | string   |            | 項目ラベル    |
+| $message | string   |            | エラーメッセージ |
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// エラーメッセージを設定
+$validation->setErrorMessage('failed', 'Something Error');
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "Something Error"
+```

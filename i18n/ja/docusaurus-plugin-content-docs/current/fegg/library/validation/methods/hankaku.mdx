@@ -1,0 +1,44 @@
+---
+sidebar_position: 16
+---
+
+# Validation::hankaku
+
+> マルチバイト文字列言語における半角文字をチェック
+
+## 説明
+
+```php
+public boolean Validation::hankaku( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+## 引数
+
+| 名前   | データ型 | デフォルト | 備考                   |
+| ------ | -------- | ---------- | ---------------------- |
+| $name  | string   |            | 項目ラベル             |
+| $value | mixed    |            | チェック対象フィールド値 |
+| $code  | mixed    | ""         | エラーコードまたはエラーメッセージ |
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// $valueが半角文字のみの場合
+$successName = '成功フィールド';
+$successVar  = 'foo';
+$validation->hankaku('success', $successVar, array('@hankaku', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// $valueが半角文字のみでない場合
+$failedName = '失敗フィールド';
+$failedVar  = 'テスト';
+$validation->hankaku('failed', $failedVar, array('@hankaku', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>失敗フィールド</strong> は半角で入力してください"
+```

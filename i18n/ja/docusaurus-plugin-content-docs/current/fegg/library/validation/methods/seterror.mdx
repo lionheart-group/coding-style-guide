@@ -1,0 +1,36 @@
+---
+sidebar_position: 18
+---
+
+# Validation::setError
+
+> エラーステータスを設定
+
+## 説明
+
+```php
+public boolean Validation::setError( string $name, [ mixed $code = '' ] )
+```
+
+## 引数
+
+| 名前  | データ型 | デフォルト | 備考                   |
+| ----- | -------- | ---------- | ---------------------- |
+| $name | string   |            | 項目ラベル             |
+| $code | mixed    | ""         | エラーコードまたはエラーメッセージ |
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// エラーステータスを設定
+$validation->setError('custom_field', array('@custom_error', 'カスタムフィールド'));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "custom_field" => "カスタムエラーメッセージ"
+```

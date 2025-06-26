@@ -1,0 +1,26 @@
+---
+sidebar_position: 37
+---
+
+# Model::create
+
+> テーブル作成を実行
+
+## 説明
+
+```php
+public void Model::create( array $fields )
+```
+
+## 引数
+
+| 名前     | データ型 | デフォルト | 備考           |
+| -------- | -------- | ---------- | -------------- |
+| $fields  | array    |            | フィールド定義 |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$model->create(['id' => 'INT PRIMARY KEY', 'title' => 'VARCHAR(255)']);
+```

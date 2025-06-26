@@ -1,0 +1,26 @@
+---
+sidebar_position: 27
+---
+
+# Model::id
+
+> 特定カラムのIDリストを取得
+
+## 説明
+
+```php
+public array Model::id( string $column )
+```
+
+## 引数
+
+| 名前    | データ型 | デフォルト | 備考       |
+| ------- | -------- | ---------- | ---------- |
+| $column | string   |            | カラム名   |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$ids = $model->id('id');
+```

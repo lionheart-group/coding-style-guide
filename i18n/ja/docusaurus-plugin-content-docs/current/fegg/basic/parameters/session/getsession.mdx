@@ -1,0 +1,48 @@
+---
+sidebar_position: 2
+---
+
+# Application::getSession
+
+> SESSIONデータを取得
+
+## 説明
+
+```php
+public void Application::getSession( [ string $name = "" ] )
+```
+
+SESSIONデータを取得します。引数を省略した場合、`getSession`はすべてのSESSIONデータを返します。
+
+## 引数
+
+| 名前  | データ型 | デフォルト | 備考                |
+| :---- | :------- | :--------- | :------------------ |
+| $name | string   |            | セッションパラメータキー |
+
+## 例
+
+```php title="コントローラー - First.php"
+$this->setSession('foo', 'bar');
+```
+
+```php title="コントローラー - Second.php"
+$this->getSession('foo'); // -> bar
+```
+
+### すべてのセッションデータを取得
+
+引数を省略した場合、`getSession`はすべてのSESSIONデータを返します。
+
+```php title="コントローラー - First.php"
+$this->setSession('foo', 'bar');
+$this->setSession('baz', 'qux');
+```
+
+```php title="コントローラー - Second.php"
+var_dump( $this->getSession() );
+```
+
+```html title="出力"
+array(2) { ["foo"]=> string(3) "bar" ["baz"]=> string(3) "qux" }
+```

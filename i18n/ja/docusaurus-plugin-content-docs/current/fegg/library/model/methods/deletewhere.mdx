@@ -1,0 +1,32 @@
+---
+sidebar_position: 33
+---
+
+# Model::deleteWhere
+
+> 指定された条件でレコードの論理削除を実行
+
+## 説明
+
+```php
+public void Model::deleteWhere( string $where, array $wh_data )
+```
+
+## 引数
+
+| 名前     | データ型 | デフォルト | 備考                     |
+| -------- | -------- | ---------- | ------------------------ |
+| $where   | string   |            | 削除条件クエリ           |
+| $wh_data | array    |            | 削除条件データ           |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->deleteWhere('id = ?', [1]);
+```

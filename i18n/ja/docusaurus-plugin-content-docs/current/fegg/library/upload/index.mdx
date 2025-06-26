@@ -1,0 +1,42 @@
+---
+sidebar_position: 1
+---
+
+# はじめに
+
+ファイルのアップロード/検証のための各種関数を提供します
+
+## 使用方法
+
+`Application::getClass`メソッドを通じて`Upload`クラスを読み込むことができます。
+
+```php title="Controller"
+$upload = $this->getClass('Tool/Upload');
+
+$upload->upload('file');
+```
+
+## メソッド
+
+- [Upload::setUploadDir](/docs/fegg/library/upload/methods/setuploaddir)
+  - アップロードディレクトリを設定
+- [Upload::getUploadDir](/docs/fegg/library/upload/methods/getuploaddir)
+  - アップロードディレクトリを取得
+- [Upload::setMaxFileSize](/docs/fegg/library/upload/methods/setmaxfilesize)
+  - アップロードファイルサイズの上限を設定
+- [Upload::getMaxFileSize](/docs/fegg/library/upload/methods/getmaxfilesize)
+  - アップロードファイルサイズの上限を取得
+- [Upload::setFileType](/docs/fegg/library/upload/methods/setfiletype)
+  - アップロードファイルタイプの制限を設定
+- [Upload::getFileType](/docs/fegg/library/upload/methods/getfiletype)
+  - アップロードファイルタイプの制限を取得
+- [Upload::setUploadInfo](/docs/fegg/library/upload/methods/setuploadinfo)
+  - アップロードオプションを一度に設定
+- [Upload::upload](/docs/fegg/library/upload/methods/upload)
+  - アップロードされたファイルを検証してアップロードディレクトリに移動
+- [Upload::getUploadedData](/docs/fegg/library/upload/methods/getuploadeddata)
+  - アップロードされたファイル情報を取得
+- [Upload::isError](/docs/fegg/library/upload/methods/iserror)
+  - アップロードされたファイルにエラーがあるかチェック
+- [Upload::getErrorMessage](/docs/fegg/library/upload/methods/geterrormessage)
+  - アップロードされたファイルのエラーを取得

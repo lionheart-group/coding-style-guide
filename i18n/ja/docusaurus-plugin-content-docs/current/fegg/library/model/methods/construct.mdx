@@ -1,0 +1,26 @@
+---
+sidebar_position: 1
+---
+
+# Model::construct
+
+> モデルコンストラクタ
+
+## 説明
+
+```php
+public void Model::construct( [ boolean $is_fetch = true, array $options = [] ] )
+```
+
+## 引数
+
+| 名前      | データ型 | デフォルト | 備考               |
+| --------- | -------- | ---------- | ------------------ |
+| $is_fetch | boolean  | true       | 自動フェッチフラグ |
+| $options  | array    | []         | オプション設定     |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+```

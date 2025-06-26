@@ -1,0 +1,29 @@
+---
+sidebar_position: 8
+---
+
+# 隠し
+
+> 隠しタグの表示
+
+```php
+{{ hidden }}
+```
+
+`Application::setHidden`で割り当てられた値から`<input type="hidden">`を表示します。
+
+[Application::setHidden](/docs/fegg/basic/templates/helpers/sethidden)も参照してください。
+
+## 例
+
+```php title="コントローラー"
+$this->setHidden('foo', 'bar');
+```
+
+```php title="テンプレート"
+{{ hidden }}
+```
+
+```html title="出力"
+<input type="hidden" name="foo" value="bar">
+```

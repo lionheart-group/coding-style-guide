@@ -1,0 +1,26 @@
+---
+sidebar_position: 20
+---
+
+# Model::order
+
+> Orderパラメータを設定
+
+## 説明
+
+```php
+public self Model::order( string $order )
+```
+
+## 引数
+
+| 名前   | データ型 | デフォルト | 備考           |
+| ------ | -------- | ---------- | -------------- |
+| $order | string   |            | ORDER BY条件   |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$model->order('created_at DESC');
+```

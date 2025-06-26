@@ -1,0 +1,21 @@
+---
+sidebar_position: 1
+---
+
+# その他のメソッドについて
+
+Feggには、アプリケーションコードと表示で使用できるその他のメソッドがあります。
+
+## 設定
+
+- [Application::loadConfig](/docs/fegg/basic/others/config/loadconfig)
+  - 設定ファイルの読み込み
+
+## チケット
+
+チケットは、独自のフォーム処理を保護するのに便利です。チケットを設定すると、md5関数を使用してハッシュ化されたランダム文字列が返され、セッションの一部になります。このチケットは、フォーム上の[Hidden](/docs/fegg/basic/templates/rules/hidden)入力としても適用できます。つまり、このチケットはサーバー側とクライアント側の両方に存在し、フォームが送信されたときにそれらを照合して、同じかどうかを検証できます。
+
+- [Application::setTicket](/docs/fegg/basic/others/tickets/setticket)
+  - チケットデータを設定し、チケットセッションを開始
+- [Application::useTicket](/docs/fegg/basic/others/tickets/useticket)
+  - チケットを一度使用し、チケットセッションを破棄

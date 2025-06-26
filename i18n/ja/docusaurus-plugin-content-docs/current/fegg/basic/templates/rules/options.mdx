@@ -1,0 +1,36 @@
+---
+sidebar_position: 7
+---
+
+# オプション
+
+> オプションタグの作成
+
+```php
+{{ options source=$array selected=$selected }}
+```
+
+`$array`から`<option>`を作成します。
+
+## 例
+
+```php title="テンプレート"
+/*
+$values = array(
+    'foo' => 'bar',
+    'baz' => 'qux'
+);
+$selected = 'foo';
+*/
+
+<select name="select">
+    {{ options source=$values selected=$selected }}
+</select>
+```
+
+```html title="出力"
+<select name="select">
+    <option value="foo" selected="selected">bar</option>
+    <option value="baz">qux</option>
+</select>
+```

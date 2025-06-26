@@ -1,0 +1,44 @@
+---
+sidebar_position: 7
+---
+
+# Validation::time
+
+> 有効な時刻文字（: 0-9）をチェック
+
+## 説明
+
+```php
+public boolean Validation::time( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+## 引数
+
+| 名前   | データ型 | デフォルト | 備考                   |
+| ------ | -------- | ---------- | ---------------------- |
+| $name  | string   |            | 項目ラベル             |
+| $value | mixed    |            | チェック対象フィールド値 |
+| $code  | mixed    | ""         | エラーコードまたはエラーメッセージ |
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// $valueが時刻文字列の場合
+$successName = '成功フィールド';
+$successVar  = '00:00:00';
+$validation->time('success', $successVar, array('@time', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// $valueが時刻文字列でない場合
+$failedName = '失敗フィールド';
+$failedVar  = '2000/01/01';
+$validation->time('failed', $failedVar, array('@time', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>失敗フィールド</strong> の時間では登録できません"
+```

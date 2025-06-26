@@ -1,0 +1,47 @@
+---
+sidebar_position: 14
+---
+
+# Validation::maxlength
+
+> 最大長以下かどうかをチェック
+
+## 説明
+
+```php
+public boolean Validation::maxlength( string $name, mixed $value, numeric $length, [ mixed $code = '' ] )
+```
+
+## 引数
+
+| 名前    | データ型 | デフォルト | 備考                   |
+| ------- | -------- | ---------- | ---------------------- |
+| $name   | string   |            | 項目ラベル             |
+| $value  | mixed    |            | チェック対象フィールド値 |
+| $length | numeric  |            | 指定長さの値           |
+| $code   | mixed    | ""         | エラーコードまたはエラーメッセージ |
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// $valueが指定長さ以下の場合
+$successName = '成功フィールド';
+$successVar  = 'foo';
+$length      = 5;
+$validation->maxlength('success', $successVar, $length, array('@maxlength', $successName, $length));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// $valueが指定長さより長い場合
+$failedName = '失敗フィールド';
+$failedVar  = 'failed';
+$length     = 5;
+$validation->maxlength('failed', $failedVar, $length, array('@maxlength', $failedName, $length));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>失敗フィールド</strong> は <strong>5</strong> 文字以内で入力してください"
+```

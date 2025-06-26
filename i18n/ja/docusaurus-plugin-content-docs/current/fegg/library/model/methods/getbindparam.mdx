@@ -1,0 +1,20 @@
+---
+sidebar_position: 10
+---
+
+# Model::getBindParam
+
+> バインドパラメータを取得
+
+## 説明
+
+```php
+public array Model::getBindParam()
+```
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$bindParams = $model->getBindParam();
+```

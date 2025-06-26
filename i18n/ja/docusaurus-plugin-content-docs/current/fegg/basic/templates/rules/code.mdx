@@ -1,0 +1,47 @@
+---
+sidebar_position: 9
+---
+
+# コード
+
+> call、code
+
+```php
+{{ code some_php_scripts(); }}
+```
+
+`eval`メソッドのように、記述されたPHPスクリプトを実行します。
+
+```php
+{{ call '/controller/method/params' }}
+```
+
+他のコントローラーメソッドを呼び出します。
+
+## 例
+
+### code
+
+```php title="テンプレート"
+{{ code phpinfo(); }}
+// phpinfo();を実行
+```
+
+```php title="テンプレート"
+{{ code $array = array('foo', 'bar'); var_dump( array_reverse($array) ); }}
+// $array = array('foo', 'bar'); var_dump( array_reverse($array) );を実行
+```
+
+```html title="出力"
+array(2) { [0]=> string(3) "bar" [1]=> string(3) "foo" }
+```
+
+### call
+
+```php title="テンプレート"
+{{ call '/controller/method/params' }}
+// Controller::method('params');を呼び出し
+
+{{ call '/Person/get/id/1' }}
+// Person::get('id', '1');を呼び出し
+```

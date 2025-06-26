@@ -1,0 +1,28 @@
+---
+sidebar_position: 17
+---
+
+# Model::having
+
+> Havingパラメータを設定
+
+## 説明
+
+```php
+public self Model::having( string $query, [ array $data = [], string $andOr = 'AND' ] )
+```
+
+## 引数
+
+| 名前   | データ型 | デフォルト | 備考               |
+| ------ | -------- | ---------- | ------------------ |
+| $query | string   |            | HAVING条件クエリ   |
+| $data  | array    | []         | バインドデータ     |
+| $andOr | string   | 'AND'      | 論理演算子         |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$model->having('COUNT(*) > ?', [5]);
+```

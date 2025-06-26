@@ -1,0 +1,26 @@
+---
+sidebar_position: 23
+---
+
+# Model::select
+
+> SELECTクエリを実行
+
+## 説明
+
+```php
+public array Model::select( [ array $fields = ['*'] ] )
+```
+
+## 引数
+
+| 名前     | データ型 | デフォルト | 備考           |
+| -------- | -------- | ---------- | -------------- |
+| $fields  | array    | ['*']      | 選択フィールド |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$result = $model->select(['id', 'title']);
+```

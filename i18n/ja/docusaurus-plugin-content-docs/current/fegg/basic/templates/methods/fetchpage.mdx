@@ -1,0 +1,73 @@
+---
+sidebar_position: 3
+---
+
+# Application::fetchPage
+
+> 宣言されたコントローラーとテンプレート変数を含むコンパイルされたテンプレートを文字列として返す
+
+## 説明
+
+```php
+public string Application::fetchPage( string $template )
+```
+
+テンプレートファイルで使用できるコントローラークラス内の割り当てられた変数を含めた後、[Application::displayTemplate](/docs/fegg/basic/templates/methods/displaytemplate)の結果を文字列として返します。
+
+## 引数
+
+| 名前      | データ型 | デフォルト | 備考               |
+| --------- | :------- | :--------- | :----------------- |
+| $template | string   |            | テンプレートファイル名 |
+
+## コンパイル時に追加される引数
+
+- **className**
+  - 実行時のクラス名
+- **config**
+  - 基本設定
+- **languageCode**
+  - 言語コード
+- **site**
+  - サイトパラメータ、[テンプレートヘルパー (Application::setSiteinfo)](#)から割り当て
+- **page**
+  - コントローラークラスから割り当て
+- **in**
+  - リクエストパラメータ ($\_POST / $\_GET)
+- **hiddenForTemplate**
+  - 入力隠しパラメータ、[テンプレートヘルパー (Application::setHidden)](#)から割り当て
+- **session**
+  - セッションデータ
+- **cookie**
+  - クッキーデータ
+
+## 例
+
+```php title="code/application/Foo.php"
+// URI: http://example.com/foo/bar/?get=param
+
+<?php
+
+class Foo extends Application
+{
+    function bar(){
+      $this->page['baz'] = 'qux';
+      $content = $this->fetchPage( 'foo/bar' );
+      echo $content;
+    }
+}
+```
+
+```html title="code/template/foo/bar.tpl"
+Baz params : {{ $page.baz }}
+$_GET[get] params : {{ $in.get }}
+Controller name : {{ $classsName }}
+```
+
+```html title="出力"
+Baz params : qux
+$_GET[get] params : param
+Controller name : foo
+```
+
+テンプレート用の引数を割り当てた後、[Application::fetchTemplate](/docs/fegg/basic/templates/methods/fetchtemplate)メソッドを実行します。

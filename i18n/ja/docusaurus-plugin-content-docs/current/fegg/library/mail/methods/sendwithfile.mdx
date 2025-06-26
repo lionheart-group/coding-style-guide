@@ -1,0 +1,43 @@
+---
+sidebar_position: 8
+---
+
+# Mail::sendWithFile
+
+添付ファイル付きでメールを送信します
+
+:::note
+
+添付ファイルがない場合、このメソッドは自動的に[Mail::send](/docs/fegg/library/mail/methods/send)を呼び出します
+
+:::
+
+:::note
+
+デバッグフラグが有効な場合、このメソッドは自動的に[Mail::log](/docs/fegg/library/mail/methods/log)を呼び出します
+
+:::
+
+## 説明
+
+```php
+public self Mail::sendWithFile( string $to, [ string $from_name = null, string $from_ad = null ] )
+```
+
+## 引数
+
+| 名前       | データ型 | デフォルト | 備考             |
+| ---------- | -------- | ---------- | ---------------- |
+| $to        | string   |            | 送信先メールアドレス |
+| $from_name | string   | null       | 送信者名         |
+| $from_ad   | string   | null       | 送信者アドレス   |
+
+## 例
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->subject('Mail subject');
+$mail->body('Mail body');
+
+$mail->sendWithFile('mail@example.com', 'John Doe', 'from@example.com');
+```

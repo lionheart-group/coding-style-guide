@@ -1,0 +1,46 @@
+---
+sidebar_position: 1
+---
+
+# Application::setCookie
+
+> COOKIEデータを設定
+
+## 説明
+
+```php
+public void Application::setCookie( string $name, string $value, [ string $expire = "" ], [ string $path = "/" ] )
+```
+
+COOKIEデータを設定します。
+
+## 引数
+
+| 名前    | データ型 | デフォルト | 備考               |
+| :------ | :------- | :--------- | :----------------- |
+| $name   | string   |            | Cookieパラメータキー |
+| $value  | string   |            | 値                 |
+| $expire | string   | ""         | 有効期限           |
+| $path   | string   |            | 有効パス           |
+
+## 例
+
+第3引数を省略した場合、有効期限は**1週間後**（604800秒）になります。
+
+```php title="コントローラー"
+$this->setCookie('foo', 'bar');
+```
+
+第3引数で有効期限を設定できます。
+
+```php title="コントローラー"
+// このCookieの有効期限は60秒後です。
+$this->setCookie('foo', 'bar', 60);
+```
+
+第4引数で有効パスを設定できます。
+
+```php title="コントローラー"
+// このCookieは"/test/"パス以下で有効です。
+$this->setCookie('foo', 'bar', null, '/test/');
+```

@@ -1,0 +1,48 @@
+---
+sidebar_position: 2
+---
+
+# Application::getCookie
+
+> COOKIEデータを取得
+
+## 説明
+
+```php
+public void Application::getCookie( [ string $name = "" ] )
+```
+
+COOKIEデータを取得します。引数を省略した場合、`getCookie`はすべてのCOOKIEデータを返します。
+
+## 引数
+
+| 名前  | データ型 | デフォルト | 備考               |
+| :---- | :------- | :--------- | :----------------- |
+| $name | string   |            | Cookieパラメータキー |
+
+## 例
+
+```php title="コントローラー - First.php"
+$this->setCookie('foo', 'bar');
+```
+
+```php title="コントローラー - Second.php"
+$this->getCookie('foo'); // -> bar
+```
+
+### すべてのクッキーデータを取得
+
+引数を省略した場合、`getCookie`はすべてのCOOKIEデータを返します。
+
+```php title="コントローラー - First.php"
+$this->setCookie('foo', 'bar');
+$this->setCookie('baz', 'qux');
+```
+
+```php title="コントローラー - Second.php"
+var_dump( $this->getCookie() );
+```
+
+```html title="出力"
+array(2) { ["foo"]=> string(3) "bar" ["baz"]=> string(3) "qux" }
+```

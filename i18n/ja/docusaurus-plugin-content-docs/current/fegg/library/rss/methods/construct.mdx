@@ -1,0 +1,25 @@
+---
+sidebar_position: 1
+---
+
+# RSS::\_\_construct
+
+RSSフィードの読み込みを開始
+
+## 説明
+
+```php
+public self RSS::__construct( string $url )
+```
+
+## 引数
+
+| 名前 | データ型 | デフォルト | 備考          |
+| ---- | -------- | ---------- | ------------- |
+| $url | string   |            | RSSフィードURL |
+
+## 例
+
+```php title="Controller"
+$rss = $this->getClass('Tool/RSS', 'https://example.com/feed');
+```

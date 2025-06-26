@@ -1,0 +1,27 @@
+---
+sidebar_position: 12
+---
+
+# Mail::setDebugFlag
+
+デバッグフラグとログファイル名を設定します
+
+## 説明
+
+```php
+public self Mail::setDebugFlag( boolean $is_debug, string $log_name )
+```
+
+## 引数
+
+| 名前      | データ型 | デフォルト | 備考               |
+| --------- | -------- | ---------- | ------------------ |
+| $is_debug | boolean  |            | デバッグフラグ     |
+| $log_name | string   |            | デバッグログファイル |
+
+## 例
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->setDebugFlag(true, 'path/to/email.log');
+```

@@ -1,0 +1,25 @@
+---
+sidebar_position: 1
+---
+
+# はじめに
+
+RSSドキュメント解析のための各種関数を提供します
+
+## 使用方法
+
+`Application::getClass`メソッドを通じて`RSS`クラスを読み込むことができます。
+
+```php title="Controller"
+$rss = $this->getClass('Tool/RSS', 'https://example.com/feed');
+$posts = $rss->fetchAll(10);
+```
+
+## メソッド
+
+- [RSS::\_\_construct](/docs/fegg/library/rss/methods/construct)
+  - RSSフィードの読み込みを開始
+- [RSS::fetch](/docs/fegg/library/rss/methods/fetch)
+  - RSSフィードの1つのレコードを取得
+- [RSS::fetchAll](/docs/fegg/library/rss/methods/fetchall)
+  - RSSフィードのすべてのレコードまたは指定された数のレコードを取得

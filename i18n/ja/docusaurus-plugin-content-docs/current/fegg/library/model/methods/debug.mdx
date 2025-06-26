@@ -1,0 +1,25 @@
+---
+sidebar_position: 44
+---
+
+# Model::debug
+
+> 最後に実行されたクエリを取得
+
+## 説明
+
+```php
+public string Model::debug()
+```
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$result = $model->debug();
+```

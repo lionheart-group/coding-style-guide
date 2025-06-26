@@ -1,0 +1,44 @@
+---
+sidebar_position: 4
+---
+
+# Validation::date
+
+> 有効な日付文字列をチェック
+
+## 説明
+
+```php
+public boolean Validation::date( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+## 引数
+
+| 名前   | データ型 | デフォルト | 備考                   |
+| ------ | -------- | ---------- | ---------------------- |
+| $name  | string   |            | 項目ラベル             |
+| $value | mixed    |            | チェック対象フィールド値 |
+| $code  | mixed    | ""         | エラーコードまたはエラーメッセージ |
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// $valueが日付文字列の場合
+$successName = '成功フィールド';
+$successVar  = '2017/01/01';
+$validation->date('success', $successVar, array('@date', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// $valueが日付文字列でない場合
+$failedName = '失敗フィールド';
+$failedVar  = '00:00';
+$validation->date('failed', $failedVar, array('@date', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>失敗フィールド</strong> の日付では登録できません"
+```

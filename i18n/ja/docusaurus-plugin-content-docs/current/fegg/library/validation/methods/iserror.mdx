@@ -1,0 +1,29 @@
+---
+sidebar_position: 20
+---
+
+# Validation::isError
+
+> エラーステータスを確認
+
+## 説明
+
+```php
+public boolean Validation::isError()
+```
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// バリデーションの実行
+$validation->required('name', '', array('@required', '名前'));
+
+// エラーステータスの確認
+if ($validation->isError()) {
+    echo 'バリデーションエラーがあります';
+} else {
+    echo 'バリデーションは成功しました';
+}
+```

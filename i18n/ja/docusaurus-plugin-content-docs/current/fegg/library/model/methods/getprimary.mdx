@@ -1,0 +1,24 @@
+---
+sidebar_position: 5
+---
+
+# Model::getPrimary
+
+> プライマリID名を取得
+
+## 説明
+
+```php
+public string Model::getPrimary()
+```
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id'
+));
+
+$primary = $model->getPrimary();
+```

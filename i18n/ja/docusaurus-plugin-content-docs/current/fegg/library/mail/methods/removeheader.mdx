@@ -1,0 +1,30 @@
+---
+sidebar_position: 5
+---
+
+# Mail::removeHeader
+
+カスタムヘッダーを削除します
+
+## 説明
+
+```php
+public self Mail::removeHeader( [ $key = null ] )
+```
+
+## 引数
+
+| 名前 | データ型 | デフォルト | 備考 |
+| --- | --- | --- | --- |
+| $key | string |  | ヘッダーキー / $keyを省略した場合、すべてのメールヘッダーを削除 |
+
+## 例
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->pushHeader('foo', 'bar');
+$mail->removeHeader('foo');
+
+// すべてのメールヘッダーを削除
+$mail->removeHeader();
+```

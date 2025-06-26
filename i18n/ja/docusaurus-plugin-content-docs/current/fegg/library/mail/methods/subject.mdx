@@ -1,0 +1,26 @@
+---
+sidebar_position: 2
+---
+
+# Mail::subject
+
+メールの件名を設定
+
+## 説明
+
+```php
+public self Mail::subject( string $subject )
+```
+
+## 引数
+
+| 名前     | データ型 | デフォルト | 備考           |
+| -------- | -------- | ---------- | -------------- |
+| $subject | string   | null       | メールの件名   |
+
+## 例
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->subject('メールの件名');
+```

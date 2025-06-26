@@ -1,0 +1,27 @@
+---
+sidebar_position: 9
+---
+
+# Model::addBindParam
+
+> バインドパラメータを追加
+
+## 説明
+
+```php
+public self Model::addBindParam( string $key, string $type )
+```
+
+## 引数
+
+| 名前 | データ型 | デフォルト | 備考           |
+| ---- | -------- | ---------- | -------------- |
+| $key | string   |            | パラメータキー |
+| $type | string  |            | パラメータタイプ |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$model->addBindParam('name', 's');
+```

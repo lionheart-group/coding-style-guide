@@ -1,0 +1,33 @@
+---
+sidebar_position: 31
+---
+
+# Model::updateWhere
+
+> 指定された条件でレコードを更新実行
+
+## 説明
+
+```php
+public void Model::updateWhere( array $data, string $where, array $wh_data )
+```
+
+## 引数
+
+| 名前     | データ型 | デフォルト | 備考           |
+| -------- | -------- | ---------- | -------------- |
+| $data    | array    |            | 更新データ     |
+| $where   | string   |            | WHERE条件      |
+| $wh_data | array    |            | WHERE条件データ |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->updateWhere(['title' => 'New Title'], 'id = ?', [1]);
+```

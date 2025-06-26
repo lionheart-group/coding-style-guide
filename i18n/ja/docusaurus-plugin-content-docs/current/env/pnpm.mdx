@@ -1,0 +1,54 @@
+---
+sidebar_position: 5
+---
+
+# pnpm (corepack)
+
+:::warning 注意
+
+pnpmはLHプロジェクトではまだ実験的です。
+
+:::
+
+pnpmは、Node.js用の高速で、ディスク容量効率の良いパッケージマネージャーです。npmのドロップイン代替品ですが、より高速で効率的です。
+
+## すでにpnpmとcorepackがインストールされている場合
+
+私たちは[corepack](https://github.com/nodejs/corepack)を使用してpnpmをインストールしています。そのため、すでにpnpmがインストールされている場合は、pnpmをアンインストールする必要があります。
+
+```bash
+# Homebrewからアンインストール
+brew uninstall pnpm
+# voltaからアンインストール
+volta uninstall pnpm
+```
+
+corepackは、npmレジストリからパッケージをインストールするNode.js用のパッケージマネージャーです。また、Node.jsはVoltaによって管理されています。そのため、Voltaからもcorepackをインストールでき、すでにcorepackがインストールされている場合はアンインストールする必要があります。
+
+```bash
+brew uninstall corepack
+```
+
+## corepackのインストール/有効化
+
+### corepackのインストール
+
+```bash
+volta install corepack
+```
+
+### corepackの有効化
+
+```bash
+corepack enable
+corepack pnpm enable
+```
+
+## pnpmの使用方法
+
+pnpmはnpmと同じように使用できます。
+
+```bash
+pnpm install
+pnpm run watch
+```

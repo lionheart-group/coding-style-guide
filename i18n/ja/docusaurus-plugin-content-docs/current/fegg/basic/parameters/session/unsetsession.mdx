@@ -1,0 +1,51 @@
+---
+sidebar_position: 3
+---
+
+# Application::unsetSession
+
+> SESSIONデータを削除
+
+## 説明
+
+```php
+public void Application::unsetSession( [ string $name = "" ] )
+```
+
+SESSIONデータを削除します。引数を省略した場合、`unsetSession`はすべてのSESSIONデータを削除します。
+
+## 引数
+
+| 名前  | データ型 | デフォルト | 備考                |
+| :---- | :------- | :--------- | :------------------ |
+| $name | string   |            | セッションパラメータキー |
+
+## 例
+
+```php title="コントローラー - First.php"
+$this->setSession('foo', 'bar');
+```
+
+```php title="コントローラー - Second.php"
+$this->getSession('foo'); // -> bar
+```
+
+```php title="コントローラー - Third.php"
+$this->unsetSession('foo');
+echo $this->getSession('foo'); // -> ''
+```
+
+### すべてのセッションデータを削除
+
+引数を省略した場合、`unsetSession`はすべてのSESSIONデータを削除します。
+
+```php title="コントローラー - First.php"
+$this->setSession('foo', 'bar');
+$this->setSession('baz', 'qux');
+```
+
+```php title="コントローラー - Second.php"
+$this->unsetSession();
+echo $this->getSession('foo'); // -> ''
+echo $this->getSession('baz'); // -> ''
+```

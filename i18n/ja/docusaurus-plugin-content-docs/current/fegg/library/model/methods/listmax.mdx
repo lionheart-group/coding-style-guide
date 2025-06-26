@@ -1,0 +1,31 @@
+---
+sidebar_position: 12
+---
+
+# Model::listMax
+
+> ListMaxパラメータを設定
+
+## 説明
+
+```php
+public self Model::listMax( number $listmax )
+```
+
+## 引数
+
+| 名前     | データ型 | デフォルト | 備考           |
+| -------- | -------- | ---------- | -------------- |
+| $listmax | number   |            | 最大リスト数   |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->listMax(20);
+```

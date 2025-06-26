@@ -1,0 +1,31 @@
+---
+sidebar_position: 28
+---
+
+# Model::setOptions
+
+> オプションパラメータを設定
+
+## 説明
+
+```php
+public self Model::setOptions( array $options )
+```
+
+## 引数
+
+| 名前     | データ型 | デフォルト | 備考           |
+| -------- | -------- | ---------- | -------------- |
+| $options | array    |            | オプション配列 |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->setOptions(['debug' => true]);
+```

@@ -1,0 +1,237 @@
+---
+sidebar_position: 2
+---
+
+# コントローラー
+
+## コントローラーについて
+
+### コントローラーとは？
+
+コントローラーは、HTTPでのリクエストの処理方法を決定するため、アプリケーションの基礎となります。コントローラーは、URIに関連付けられた名前のクラスファイルです。
+
+URLとコントローラーは密接に関連しています。（[URL](/docs/fegg/basic/url)を参照）
+
+```
+http://exaple.com/foo/bar
+```
+
+上記の例では、フレームワークは**Foo.php**という名前のコントローラーで`bar`関数を見つけてロードしようとします。
+
+上記の例からURLにアクセスした場合、このファイルが存在すれば**code/application/Foo.php**をロードします。
+
+```php title="code/application/Foo.php"
+<?php
+
+class Foo extends Application
+{
+    function bar(){
+        //ここで処理...
+    }
+}
+```
+
+### クラス
+
+クラス名とファイル名は同じにし、`Application`クラスを継承する必要があります。
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+
+}
+```
+
+### コンストラクタ
+
+親（`Application`）クラスのコンストラクタを呼び出す必要があります。
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+    /**
+     * コンストラクタ
+     */
+    function __construct()
+    {
+        parent::__construct();
+    }
+}
+```
+
+### 初期化
+
+Feggには、コンストラクタとは別に初期化メソッドがあります。
+
+これは、コンストラクタの後に呼び出される`__init()`メソッドです。
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+    /**
+     * 初期化
+     */
+    function __init()
+    {
+        // 初期化処理
+    }
+}
+```
+
+\_\_initとコンストラクタの違いは、\_\_initは自身のインスタンスを作成した後に実行されるため、**`$this`でApplicationメソッドを使用できる**ことです。
+
+:::note
+
+初期化は省略できます。
+
+:::
+
+### メソッド
+
+URLの2番目のセグメント名のメソッドを実行します。
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+    // http://example.com/controller/foo でこの関数を実行
+    function foo()
+    {
+        // 何らかの処理
+    }
+}
+```
+
+2番目のセグメントが空で、基本設定を編集していない場合は、`index()`メソッドを実行します。
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+    // http://example.com/controller/index でこの関数を実行
+    //   または http://example.com/controller/
+    function index()
+    {
+        // 何らかの処理
+    }
+}
+```
+
+:::note
+
+初期メソッド名については[初期設定](/docs/fegg/first/config)を参照してください。
+
+:::
+
+秘密のメソッドを作りたい場合は、メソッド名の先頭に**アンダーバー(\_)**を追加する必要があります。
+
+```php title="code/application/Controller.php"
+// http://example.com/controller/_secret
+//   -> このURLは_secret()メソッドを呼び出しません
+
+<?php
+
+class Controller extends Application
+{
+    // このメソッドはURLディスパッチャから隠されています
+    function _secret()
+    {
+        // 何らかの処理
+    }
+}
+```
+
+### 引数
+
+3番目のセグメント以降がメソッドに渡されます。
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+    // http://example.com/controller/foo/bar により$paramに"bar"が代入されます
+    function foo( $param )
+    {
+        echo $param; // bar
+    }
+}
+```
+
+3番目のセグメント以降すべてが渡されます。
+
+```php title="code/application/Controller.php"
+<?php
+
+class Controller extends Application
+{
+    // http://example.com/controller/foo/bar/baz により$param1は"bar"、$param2は"baz"になります
+    function foo( $param1, $param2 )
+    {
+        echo $param1; // bar
+        echo $param2; // baz
+    }
+}
+```
+
+## コントローラークラスのテンプレート
+
+```php title="code/application/Index.php"
+<?php
+/**
+ * Index クラス
+ * // このファイル名はIndex.phpである必要があります
+ */
+class Index extends Application
+{
+    /**
+     * コンストラクタ
+     */
+    function __construct() {
+        parent::__construct();
+    }
+
+    /**
+     * 初期化処理
+     * このメソッドは自身のインスタンスを作成した後に実行されます。
+     * そのため、例えば"$this->in()"のようにApplicationクラスのメソッドを使用できます。
+     * これが__initとconstructの違いです。
+     * このメソッドが何もない場合、初期化処理は省略されます。
+     */
+    function __init()
+    {
+    }
+
+    /**
+     * 共通処理
+     * メソッド名の先頭にアンダーバー(_)を追加すると、内部メソッドになります。
+     * そのため、URLディスパッチャによって呼び出されることはありません。
+     */
+    function _common()
+    {
+    }
+
+    /**
+     * デフォルトページ表示メソッド
+     * クラス名のみのURLを入力した場合、このメソッドを実行します。
+     * 必須ではありませんが、デフォルトページ表示メソッド名はindexにすることを推奨します。
+     */
+    function index()
+    {
+        // 共通処理
+        $this->_common();
+
+        // コンパイルされたテンプレートを表示
+        $this->displayPage('index');
+    }
+}
+/* End Of File: Index.php */
+```

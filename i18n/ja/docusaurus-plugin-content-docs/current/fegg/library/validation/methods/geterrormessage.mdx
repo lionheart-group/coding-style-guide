@@ -1,0 +1,32 @@
+---
+sidebar_position: 21
+---
+
+# Validation::getErrorMessage
+
+> エラーメッセージを取得
+
+## 説明
+
+```php
+public array Validation::getErrorMessage()
+```
+
+## 例
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// バリデーションの実行
+$validation->required('name', '', array('@required', '名前'));
+$validation->email('email', 'invalid-email', array('@email', 'メールアドレス'));
+
+// エラーメッセージの取得
+$errors = $validation->getErrorMessage();
+
+if ($errors) {
+    foreach ($errors as $field => $message) {
+        echo "フィールド: {$field}, エラー: {$message}\n";
+    }
+}
+```
