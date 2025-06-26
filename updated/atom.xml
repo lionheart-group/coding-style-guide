@@ -2,11 +2,25 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lionheart-group.github.io/coding-style-guide/updated</id>
     <title>Coding Style Guide Blog</title>
-    <updated>2025-06-06T00:00:00.000Z</updated>
+    <updated>2025-06-26T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lionheart-group.github.io/coding-style-guide/updated"/>
     <subtitle>Coding Style Guide Blog</subtitle>
     <icon>https://lionheart-group.github.io/coding-style-guide/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[v0.3.5]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/updated/2025/06/26/v0.3.5</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2025/06/26/v0.3.5"/>
+        <updated>2025-06-26T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- Translated Fegg framework documentation into Japanese]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li>Translated Fegg framework documentation into Japanese</li>
+<li>Translated JavaScript documentation into Japanese</li>
+<li>Translated WordPress plugins documentation into Japanese</li>
+<li>Updated footer translations</li>
+<li>Updated package dependencies</li>
+</ul>]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v0.3.4]]></title>
         <id>https://lionheart-group.github.io/coding-style-guide/updated/2025/06/06/v0.3.4</id>

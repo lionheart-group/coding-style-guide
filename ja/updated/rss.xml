@@ -4,10 +4,24 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/ja/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Fri, 06 Jun 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 26 Jun 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>ja</language>
+        <item>
+            <title><![CDATA[v0.3.5]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/06/26/v0.3.5</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/06/26/v0.3.5</guid>
+            <pubDate>Thu, 26 Jun 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Feggフレームワークドキュメントを日本語に翻訳しました]]></description>
+            <content:encoded><![CDATA[<ul>
+<li>Feggフレームワークドキュメントを日本語に翻訳しました</li>
+<li>JavaScriptドキュメントを日本語に翻訳しました</li>
+<li>WordPressプラグインドキュメントを日本語に翻訳しました</li>
+<li>フッター翻訳を更新しました</li>
+<li>パッケージ依存関係を更新しました</li>
+</ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v0.3.4]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/06/06/v0.3.4</link>
