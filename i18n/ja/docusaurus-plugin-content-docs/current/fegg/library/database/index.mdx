@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # 概要
 
 > データベース使用に必要な機能を提供
@@ -25,85 +27,6 @@ $database = $this->getClass('DB_pdo');
 $result = $database->select('table_name')->execute()->all();
 ```
 
-## メソッド
+## 関数
 
-- [DB_pdo::select](/docs/fegg/library/database/methods/select)
-  - selectクエリの設定
-- [DB_pdo::count](/docs/fegg/library/database/methods/count)
-  - select countクエリの設定
-- [DB_pdo::insert](/docs/fegg/library/database/methods/insert)
-  - insertクエリの設定
-- [DB_pdo::update](/docs/fegg/library/database/methods/update)
-  - updateクエリの設定
-- [DB_pdo::delete](/docs/fegg/library/database/methods/delete)
-  - deleteクエリの設定
-- [DB_pdo::truncate](/docs/fegg/library/database/methods/truncate)
-  - truncateクエリの設定
-- [DB_pdo::createTable](/docs/fegg/library/database/methods/createtable)
-  - create tableクエリの設定
-- [DB_pdo::createIndex](/docs/fegg/library/database/methods/createindex)
-  - create indexクエリの設定
-- [DB_pdo::alterAddColumn](/docs/fegg/library/database/methods/alteraddcolumn)
-  - alter add columnクエリの設定
-- [DB_pdo::alterRenameTo](/docs/fegg/library/database/methods/alterrenameto)
-  - alter rename toクエリの設定
-- [DB_pdo::dropTable](/docs/fegg/library/database/methods/droptable)
-  - drop tableクエリの設定
-- [DB_pdo::dropIndex](/docs/fegg/library/database/methods/dropindex)
-  - drop indexクエリの設定
-- [DB_pdo::pragma](/docs/fegg/library/database/methods/pragma)
-  - pragmaクエリの設定
-- [DB_pdo::setGroup](/docs/fegg/library/database/methods/setgroup)
-  - groupクエリの設定
-- [DB_pdo::setItem](/docs/fegg/library/database/methods/setitem)
-  - クエリアイテム値の設定
-- [DB_pdo::setLimit](/docs/fegg/library/database/methods/setlimit)
-  - limit値の設定
-- [DB_pdo::setOrder](/docs/fegg/library/database/methods/setorder)
-  - order値の設定
-- [DB_pdo::setQuery](/docs/fegg/library/database/methods/setquery)
-  - クエリ文字列の直接設定
-- [DB_pdo::setWhere](/docs/fegg/library/database/methods/setwhere)
-  - where条件の設定
-- [DB_pdo::setHaving](/docs/fegg/library/database/methods/sethaving)
-  - having条件の設定
-- [DB_pdo::setJoin](/docs/fegg/library/database/methods/setjoin)
-  - 結合テーブルの設定
-- [DB_pdo::setOn](/docs/fegg/library/database/methods/seton)
-  - 結合テーブル用onクエリの設定
-- [DB_pdo::disabledRegularUseQuery](/docs/fegg/library/database/methods/disabledregularusequery)
-  - 自動追加クエリフラグの無効化
-- [DB_pdo::unsetRegularUseQuery](/docs/fegg/library/database/methods/unsetregularusequery)
-  - 現在のクエリに対する自動追加クエリフラグの無効化
-- [DB_pdo::unsetRegularUseQueryForTable](/docs/fegg/library/database/methods/unsetregularusequeryfortable)
-  - 現在のクエリに対するテーブルの自動追加クエリフラグの無効化
-- [DB_pdo::setInitQueryFlag](/docs/fegg/library/database/methods/setinitqueryflag)
-  - リセットクエリフラグの有効化
-- [DB_pdo::unsetInitQueryFlag](/docs/fegg/library/database/methods/unsetinitqueryflag)
-  - リセットクエリフラグの無効化
-- [DB_pdo::execute](/docs/fegg/library/database/methods/execute)
-  - 構築されたクエリの実行
-- [DB_pdo::compile](/docs/fegg/library/database/methods/compile)
-  - 構築されたクエリのコンパイル（実行なし）
-- [DB_pdo::all](/docs/fegg/library/database/methods/all)
-  - 実行されたselectクエリのすべての結果を取得
-- [DB_pdo::one](/docs/fegg/library/database/methods/one)
-  - 実行されたselectクエリの結果をシフト
-- [DB_pdo::id](/docs/fegg/library/database/methods/id)
-  - 実行されたselectクエリの特定カラムのリストを取得
-- [DB_pdo::simpleArray](/docs/fegg/library/database/methods/simplearray)
-  - 実行されたselectクエリの特定カラムのキーと値の配列を取得
-- [DB_pdo::getAffectedRow](/docs/fegg/library/database/methods/getaffectedrow)
-  - 実行されたupdateクエリの影響を受けた行数を取得
-- [DB_pdo::getLastIndexId](/docs/fegg/library/database/methods/getlastindexid)
-  - 実行されたinsertクエリの最後に挿入されたIDを取得
-- [DB_pdo::getLastQuery](/docs/fegg/library/database/methods/getlastquery)
-  - デバッグ用の最後に実行されたクエリを取得
-- [DB_pdo::getLastQueryDebug](/docs/fegg/library/database/methods/getlastquerydebug)
-  - デバッグ用の最後に実行されたクエリとパラメータを個別に取得
-- [DB_pdo::getReturnCode](/docs/fegg/library/database/methods/getreturncode)
-  - 最後に実行されたクエリのリターンコードを取得
-- [DB_pdo::masterServer](/docs/fegg/library/database/methods/masterserver)
-  - マスターサーバーに接続
-- [DB_pdo::slaveServer](/docs/fegg/library/database/methods/slaveserver)
-  - スレーブサーバーに接続
+<CategoryDocCardList label="関数" />

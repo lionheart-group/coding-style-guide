@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # はじめに
 
 メール送信のための各種関数を提供します
@@ -18,29 +20,6 @@ $mail->body('メールの本文');
 $mail->send('mail@example.com', 'John Doe', 'from@example.com');
 ```
 
-## メソッド
+## 関数
 
-- [Mail::\_\_construct](/docs/fegg/library/mail/methods/construct)
-  - 送信イメージのセットアップ
-- [Mail::subject](/docs/fegg/library/mail/methods/subject)
-  - メールの件名を設定
-- [Mail::body](/docs/fegg/library/mail/methods/body)
-  - メールの本文を設定
-- [Mail::pushHeader](/docs/fegg/library/mail/methods/pushheader)
-  - カスタムヘッダーを追加
-- [Mail::removeHeader](/docs/fegg/library/mail/methods/removeheader)
-  - カスタムヘッダーを削除
-- [Mail::pushAttached](/docs/fegg/library/mail/methods/pushattached)
-  - 添付ファイルを追加
-- [Mail::send](/docs/fegg/library/mail/methods/send)
-  - メールを送信
-- [Mail::sendWithFile](/docs/fegg/library/mail/methods/sendwithfile)
-  - 添付ファイル付きでメールを送信
-- [Mail::log](/docs/fegg/library/mail/methods/log)
-  - メール送信の代わりにログファイルを保存
-- [Mail::setInputCharset](/docs/fegg/library/mail/methods/setinputcharset)
-  - 入力文字セットを設定
-- [Mail::setSendCharset](/docs/fegg/library/mail/methods/setsendcharset)
-  - メール文字セットを設定
-- [Mail::setDebugFlag](/docs/fegg/library/mail/methods/setdebugflag)
-  - デバッグフラグとログファイル名を設定
+<CategoryDocCardList label="関数" />

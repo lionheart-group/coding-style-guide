@@ -8,7 +8,6 @@ const config: Config = {
   url: "https://lionheart-group.github.io",
   baseUrl: "/coding-style-guide/",
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
   organizationName: "lionheart-group", // Usually your GitHub org/user name.
   projectName: "coding-style-guide", // Usually your repo name.
@@ -145,7 +144,15 @@ const config: Config = {
       } satisfies Preset.Options
     ]
   ],
-  plugins: ["docusaurus-plugin-sass"],
+  plugins: [
+    "docusaurus-plugin-sass",
+    [
+      require.resolve("docusaurus-lunr-search"),
+      {
+        languages: ["en", "ja"]
+      }
+    ]
+  ],
   future: {
     experimental_faster: {
       swcJsLoader: true,
@@ -153,9 +160,14 @@ const config: Config = {
       swcHtmlMinimizer: true,
       lightningCssMinimizer: true,
       rspackBundler: true,
-      mdxCrossCompilerCache: true,
+      mdxCrossCompilerCache: true
     }
   },
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: "warn"
+    }
+  }
 };
 
 export default config;

@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # はじめに
 
 ファイル/ディレクトリ管理のための各種関数を提供します
@@ -16,27 +18,6 @@ $file = $this->getClass('Tool/File');
 $file->copyAll('path/to/foo', 'path/to/bar');
 ```
 
-## メソッド
+## 関数
 
-- [File::copyAll](/docs/fegg/library/file/methods/copyall)
-  - すべてのファイルを別のディレクトリにコピー
-- [File::copyDirectory](/docs/fegg/library/file/methods/copydirectory)
-  - 指定されたディレクトリを指定された場所にコピー
-- [File::copyFile](/docs/fegg/library/file/methods/copyfile)
-  - 指定されたファイルを指定された場所にコピー
-- [File::createDirectory](/docs/fegg/library/file/methods/createdirectory)
-  - 指定された場所にディレクトリを作成
-- [File::moveFile](/docs/fegg/library/file/methods/movefile)
-  - 指定されたファイルを指定された場所に移動
-- [File::readFile](/docs/fegg/library/file/methods/readfile)
-  - 指定されたファイルを読み取り
-- [File::removeDirectory](/docs/fegg/library/file/methods/removedirectory)
-  - 指定されたディレクトリとその中のファイルを削除
-- [File::removeExpiredFile](/docs/fegg/library/file/methods/removeexpiredfile)
-  - 指定された時間が経過した指定ファイルを削除
-- [File::removeFile](/docs/fegg/library/file/methods/removefile)
-  - 指定されたファイルを削除
-- [File::touchDirectory](/docs/fegg/library/file/methods/touchdirectory)
-  - 指定されたディレクトリ内のファイルの更新日時を更新
-- [File::writeFile](/docs/fegg/library/file/methods/writefile)
-  - 指定された場所にファイルを書き込み
+<CategoryDocCardList label="関数" />
