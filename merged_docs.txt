@@ -866,23 +866,21 @@ array(2) { ["foo"]=> string(3) "bar" ["baz"]=> string(3) "qux" }
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # About Other methods
 
 Fegg has other methods that you may use in your application code and display.
 
 ## Config
 
-- [Application::loadConfig](/docs/fegg/basic/others/config/loadconfig)
-  - Loading config file
+<CategoryDocCardList label="Config" />
 
 ## Ticket
 
 Ticket is useful in securing your own form processing. Setting ticket will return a hashed random string using md5 function and is going to be a part of your session. This ticket can also be applied as [Hidden](/docs/fegg/basic/templates/rules/hidden) input on the form. That means this ticket exists both on the server and client side and we can match them once the form is submitted and validate if they are the same.
 
-- [Application::setTicket](/docs/fegg/basic/others/tickets/setticket)
-  - Set ticket data and start ticket session
-- [Application::useTicket](/docs/fegg/basic/others/tickets/useticket)
-  - Use ticket once and destroy ticket session
+<CategoryDocCardList label="Ticket" />
 
 
 --- docs/fegg/basic/others/tickets/setticket.mdx ---
@@ -1115,6 +1113,8 @@ echo $this->getSession('foo'); // -> ''
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # About Parameters
 
 Fegg has a helper methods for POST, GET, SESSION, and COOKIE.
@@ -1123,30 +1123,19 @@ Fegg has a helper methods for POST, GET, SESSION, and COOKIE.
 
 Get request data that automatically converted single/double quote and character code.
 
-- [Application::in](/docs/fegg/basic/parameters/post_get/in)
-  - Get request data (POST/GET)
+<CategoryDocCardList label="POST/GET" />
 
 ## SESSION
 
 Set and read Session parameters. This automatically call `session_start`, so you don't need to call it.
 
-- [Application::setSession](/docs/fegg/basic/parameters/session/setsession)
-  - Set SESSION data (and call session_start)
-- [Application::getSession](/docs/fegg/basic/parameters/session/getsession)
-  - Get SESSION data
-- [Application::unsetSession](/docs/fegg/basic/parameters/session/unsetsession)
-  - Unset SESSION data
+<CategoryDocCardList label="SESSION" />
 
 ## COOKIE
 
 Set and read COOKIE parameters.
 
-- [Application::setCookie](/docs/fegg/basic/parameters/cookie/setcookie)
-  - Set COOKIE data
-- [Application::getCookie](/docs/fegg/basic/parameters/cookie/getcookie)
-  - Get COOKIE data
-- [Application::unsetCookie](/docs/fegg/basic/parameters/cookie/unsetcookie)
-  - Unset COOKIE data
+<CategoryDocCardList label="COOKIE" />
 
 
 --- docs/fegg/basic/parameters/post_get/in.mdx ---
@@ -1496,6 +1485,9 @@ $this->setSiteinfo( 'title', 'Site Title' );
 sidebar_position: 1
 ---
 
+import DocCardList from '@theme/DocCardList';
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # About Template
 
 ## About Template
@@ -1510,87 +1502,33 @@ Display methods call the template file from Controller class.
 
 Below are the display methods in Fegg but it is recommended to use only the `displayPage` method to avoid Clickjacking attacks.
 
-- [Application::displayTemplate](/docs/fegg/basic/templates/methods/displaytemplate)
-  - Display compiled template
-- [Application::fetchTemplate](/docs/fegg/basic/templates/methods/fetchtemplate)
-  - Return compiled template into a string
-- [Application::fetchPage](/docs/fegg/basic/templates/methods/fetchpage)
-  - Return compiled template with declared controller and template variables into a string
-- [Application::displayPage](/docs/fegg/basic/templates/methods/displaypage)
-  - Display compiled template with declared controller and template variables and taking precautionary measures on Clickjacking attacks
+<CategoryDocCardList label="Display methods" />
 
 ## Template helper methods
 
 Template helper methods are used for passing special variable to the template.
 
-- [Application::setSiteinfo](/docs/fegg/basic/templates/helpers/setsiteinfo)
-  - Set website information (ex. title, description, keywords)
-- [Application::setHidden](/docs/fegg/basic/templates/helpers/sethidden)
-  - Set hidden data
-- [Application::setHtmlHeader](/docs/fegg/basic/templates/helpers/sethtmlheader)
-  - Set HTML Header
+<CategoryDocCardList label="Helper methods" />
 
 ## Template rules
 
 There are several operating notation for template file.
 
-- [Variable](/docs/fegg/basic/templates/rules/variable)
-  - The use of variables in the template
-- [If](/docs/fegg/basic/templates/rules/if)
-  - if, else, else if
-- [Loop](/docs/fegg/basic/templates/rules/loop)
-  - loop, foreach
-- [Include](/docs/fegg/basic/templates/rules/include)
-  - include, include head, head, include foot, foot
-- [Transclude](/docs/fegg/basic/templates/rules/transclude)
-  - transclude, section
-- [Checked/Selected](/docs/fegg/basic/templates/rules/checked_selected)
-  - checked, selected
-- [Options](/docs/fegg/basic/templates/rules/options)
-  - Make option tags
-- [Hidden](/docs/fegg/basic/templates/rules/hidden)
-  - Display hidden tag
-- [Code](/docs/fegg/basic/templates/rules/code)
-  - call, code
+<CategoryDocCardList label="Rules" />
 
 ## Modifiers
 
-### How to use modifiers
-
 You can modify the returned values of your variable in your application code in template using modifiers.
 
-Modifiers are separated from the variable using pipe symbol ( | ) and may have an optional argument separated by colon symbol ( : ). Multiple modifiers can be chained, it modifies the variable from left to right. Thus, the output of the first filtering is applied to the next filtering.
-
-```html
-{{ $var|noescape|function:param }}
-```
-
-### noescape
-
-Fegg is automatically escaping character values. If you don’t want a escaping value, you can use the noescape modifier.
-
-```php title="Controller"
-$this->page['foo'] = '<p>bar</p>';
-```
-
-```html title="Template"
-{{ $page.foo }} -> <p>bar</p>
-{{ $page.foo|noescape }} -> bar
-```
-
-### br
-
-Insert HTML line breaks for all newline (\\n) found in a string.
-
-```php title="Controller"
-$this->page['foo'] = "This is a test text.\n This is a new line text.";
-```
-
-```html title="Template"
-{{ $page.foo }} -> This is a test text. This is a new line text.
-{{ $page.foo|br }} -> This is a test text.
-                      This is a new line text.
-```
+<DocCardList items={[
+  {
+    "type": "link",
+    "href": "/docs/fegg/basic/templates/modifiers",
+    "label": "Modifiers",
+    "docId": "fegg/basic/templates/modifiers",
+    "unlisted": false
+  }
+]} />
 
 
 --- docs/fegg/basic/templates/methods/displaypage.mdx ---
@@ -1817,6 +1755,52 @@ This assigned the [Application::displayTemplate](/docs/fegg/basic/templates/meth
 You should not include the “.tpl” extension in the parameter.
 
 :::
+
+
+--- docs/fegg/basic/templates/modifiers.mdx ---
+
+---
+sidebar_position: 5
+---
+
+# Modifiers
+
+You can modify the returned values of your variable in your application code in template using modifiers.
+
+## How to use modifiers
+
+Modifiers are separated from the variable using pipe symbol ( | ) and may have an optional argument separated by colon symbol ( : ). Multiple modifiers can be chained, it modifies the variable from left to right. Thus, the output of the first filtering is applied to the next filtering.
+
+```html
+{{ $var|noescape|function:param }}
+```
+
+## noescape
+
+Fegg is automatically escaping character values. If you don’t want a escaping value, you can use the noescape modifier.
+
+```php title="Controller"
+$this->page['foo'] = '<p>bar</p>';
+```
+
+```html title="Template"
+{{ $page.foo }} -> <p>bar</p>
+{{ $page.foo|noescape }} -> bar
+```
+
+## br
+
+Insert HTML line breaks for all newline (\\n) found in a string.
+
+```php title="Controller"
+$this->page['foo'] = "This is a test text.\n This is a new line text.";
+```
+
+```html title="Template"
+{{ $page.foo }} -> This is a test text. This is a new line text.
+{{ $page.foo|br }} -> This is a test text.
+                      This is a new line text.
+```
 
 
 --- docs/fegg/basic/templates/rules/checked_selected.mdx ---
@@ -2707,6 +2691,8 @@ $database_regular_use_query = array(
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # Introduction
 
 > Providing necessary functions for using database
@@ -2732,86 +2718,7 @@ $result = $database->select('table_name')->execute()->all();
 
 ## Methods
 
-- [DB_pdo::select](/docs/fegg/library/database/methods/select)
-  - Set select query
-- [DB_pdo::count](/docs/fegg/library/database/methods/count)
-  - Set select count query
-- [DB_pdo::insert](/docs/fegg/library/database/methods/insert)
-  - Set insert query
-- [DB_pdo::update](/docs/fegg/library/database/methods/update)
-  - Set update query
-- [DB_pdo::delete](/docs/fegg/library/database/methods/delete)
-  - Set delete query
-- [DB_pdo::truncate](/docs/fegg/library/database/methods/truncate)
-  - Set truncate query
-- [DB_pdo::createTable](/docs/fegg/library/database/methods/createtable)
-  - Set create table query
-- [DB_pdo::createIndex](/docs/fegg/library/database/methods/createindex)
-  - Set create index query
-- [DB_pdo::alterAddColumn](/docs/fegg/library/database/methods/alteraddcolumn)
-  - Set create alter add column query
-- [DB_pdo::alterRenameTo](/docs/fegg/library/database/methods/alterrenameto)
-  - Set create alter rename to query
-- [DB_pdo::dropTable](/docs/fegg/library/database/methods/droptable)
-  - Set create drop table query
-- [DB_pdo::dropIndex](/docs/fegg/library/database/methods/dropindex)
-  - Set create drop index query
-- [DB_pdo::pragma](/docs/fegg/library/database/methods/pragma)
-  - Set pragma query
-- [DB_pdo::setGroup](/docs/fegg/library/database/methods/setgroup)
-  - Set group query
-- [DB_pdo::setItem](/docs/fegg/library/database/methods/setitem)
-  - Set query item values
-- [DB_pdo::setLimit](/docs/fegg/library/database/methods/setlimit)
-  - Set limit value
-- [DB_pdo::setOrder](/docs/fegg/library/database/methods/setorder)
-  - Set order value
-- [DB_pdo::setQuery](/docs/fegg/library/database/methods/setquery)
-  - Set query string directly
-- [DB_pdo::setWhere](/docs/fegg/library/database/methods/setwhere)
-  - Set where condition
-- [DB_pdo::setHaving](/docs/fegg/library/database/methods/sethaving)
-  - Set having condition
-- [DB_pdo::setJoin](/docs/fegg/library/database/methods/setjoin)
-  - Set join table
-- [DB_pdo::setOn](/docs/fegg/library/database/methods/seton)
-  - Set on query for joined table
-- [DB_pdo::disabledRegularUseQuery](/docs/fegg/library/database/methods/disabledregularusequery)
-  - Disable automatic append query flag
-- [DB_pdo::unsetRegularUseQuery](/docs/fegg/library/database/methods/unsetregularusequery)
-  - Disable automatic append query for a current query flag
-- [DB_pdo::unsetRegularUseQueryForTable](/docs/fegg/library/database/methods/unsetregularusequeryfortable)
-  - Disable automatic append query of the table for a current query flag
-- [DB_pdo::setInitQueryFlag](/docs/fegg/library/database/methods/setinitqueryflag)
-  - Enable reset query flag
-- [DB_pdo::unsetInitQueryFlag](/docs/fegg/library/database/methods/unsetinitqueryflag)
-  - Disable reset query flag
-- [DB_pdo::execute](/docs/fegg/library/database/methods/execute)
-  - Execute built query
-- [DB_pdo::compile](/docs/fegg/library/database/methods/compile)
-  - Compile built query (not execute)
-- [DB_pdo::all](/docs/fegg/library/database/methods/all)
-  - Get all the result of executed select query
-- [DB_pdo::one](/docs/fegg/library/database/methods/one)
-  - Shift the result of executed select query
-- [DB_pdo::id](/docs/fegg/library/database/methods/id)
-  - Get the specific column's list of executed select query
-- [DB_pdo::simpleArray](/docs/fegg/library/database/methods/simplearray)
-  - Get the specific column's key and value array of executed select query
-- [DB_pdo::getAffectedRow](/docs/fegg/library/database/methods/getaffectedrow)
-  - Get affected row number of executed update query
-- [DB_pdo::getLastIndexId](/docs/fegg/library/database/methods/getlastindexid)
-  - Get the last inserted id of executed insert query
-- [DB_pdo::getLastQuery](/docs/fegg/library/database/methods/getlastquery)
-  - Get the last executed query for debugging
-- [DB_pdo::getLastQueryDebug](/docs/fegg/library/database/methods/getlastquerydebug)
-  - Get the last executed query and parameter separately for debugging
-- [DB_pdo::getReturnCode](/docs/fegg/library/database/methods/getreturncode)
-  - Get return code of the last executed query
-- [DB_pdo::masterServer](/docs/fegg/library/database/methods/masterserver)
-  - Connect to master server
-- [DB_pdo::slaveServer](/docs/fegg/library/database/methods/slaveserver)
-  - Connect to slave server
+<CategoryDocCardList label="Methods" />
 
 
 --- docs/fegg/library/database/methods/all.mdx ---
@@ -3434,6 +3341,8 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # Introduction
 
 Providing some functions for managing files/directories
@@ -3450,28 +3359,7 @@ $file->copyAll('path/to/foo', 'path/to/bar');
 
 ## Methods
 
-- [File::copyAll](/docs/fegg/library/file/methods/copyall)
-  - Copy all the files to another directory
-- [File::copyDirectory](/docs/fegg/library/file/methods/copydirectory)
-  - Copy specified directory to specified location
-- [File::copyFile](/docs/fegg/library/file/methods/copyfile)
-  - Copy specified file to specified location
-- [File::createDirectory](/docs/fegg/library/file/methods/createdirectory)
-  - Create directory to specified location
-- [File::moveFile](/docs/fegg/library/file/methods/movefile)
-  - Move specified file to specified location
-- [File::readFile](/docs/fegg/library/file/methods/readfile)
-  - Read specified file
-- [File::removeDirectory](/docs/fegg/library/file/methods/removedirectory)
-  - Delete specified directory and files in that directory
-- [File::removeExpiredFile](/docs/fegg/library/file/methods/removeexpiredfile)
-  - Delete specified file that elapsed specified time
-- [File::removeFile](/docs/fegg/library/file/methods/removefile)
-  - Delete specified file
-- [File::touchDirectory](/docs/fegg/library/file/methods/touchdirectory)
-  - Update modified date of files that inside of specified directory
-- [File::writeFile](/docs/fegg/library/file/methods/writefile)
-  - Put the file to the specified location
+<CategoryDocCardList label="Methods" />
 
 
 --- docs/fegg/library/file/methods/copyall.mdx ---
@@ -3683,6 +3571,8 @@ Fegg's goal is lightweight and less typing, so Core class has the only minimum r
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # Introduction
 
 Providing some functions for sending email
@@ -3701,30 +3591,7 @@ $mail->send('mail@example.com', 'John Doe', 'from@example.com');
 
 ## Methods
 
-- [Mail::\_\_construct](/docs/fegg/library/mail/methods/construct)
-  - Setup sending image
-- [Mail::subject](/docs/fegg/library/mail/methods/subject)
-  - Set mail subject
-- [Mail::body](/docs/fegg/library/mail/methods/body)
-  - Set mail body
-- [Mail::pushHeader](/docs/fegg/library/mail/methods/pushheader)
-  - Add custom header
-- [Mail::removeHeader](/docs/fegg/library/mail/methods/removeheader)
-  - Remove custom header
-- [Mail::pushAttached](/docs/fegg/library/mail/methods/pushattached)
-  - Add attachment file
-- [Mail::send](/docs/fegg/library/mail/methods/send)
-  - Send email
-- [Mail::sendWithFile](/docs/fegg/library/mail/methods/sendwithfile)
-  - Send email with attachment file
-- [Mail::log](/docs/fegg/library/mail/methods/log)
-  - Save log file instead sending email
-- [Mail::setInputCharset](/docs/fegg/library/mail/methods/setinputcharset)
-  - Set input character set
-- [Mail::setSendCharset](/docs/fegg/library/mail/methods/setsendcharset)
-  - Set email character set
-- [Mail::setDebugFlag](/docs/fegg/library/mail/methods/setdebugflag)
-  - Set debug flag and log file name
+<CategoryDocCardList label="Methods" />
 
 
 --- docs/fegg/library/mail/methods/body.mdx ---
@@ -3761,6 +3628,7 @@ $mail->body('Mail body');
 
 ---
 sidebar_position: 1
+title: Mail::__construct
 ---
 
 # Mail::\_\_construct
@@ -4168,6 +4036,8 @@ $mail->subject('Mail subject');
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # Introduction
 
 import Badge from '../../../../src/components/Badge';
@@ -4190,100 +4060,7 @@ $records = $model->find();
 
 ## Methods
 
-- [Model::\_\_construct](/docs/fegg/library/model/methods/construct) <Badge color="yellow">Important</Badge>
-  - Model class constructor
-- [Model::setTableName](/docs/fegg/library/model/methods/settablename)
-  - Set Table Name
-- [Model::getTableName](/docs/fegg/library/model/methods/gettablename)
-  - Get Table name
-- [Model::setPrimary](/docs/fegg/library/model/methods/setprimary)
-  - Set Primary ID name
-- [Model::getPrimary](/docs/fegg/library/model/methods/getprimary)
-  - Get Primary ID name
-- [Model::setVisible](/docs/fegg/library/model/methods/setvisible)
-  - Set Visible flag name
-- [Model::getVisible](/docs/fegg/library/model/methods/getvisible)
-  - Get Visible flag name
-- [Model::setBindParam](/docs/fegg/library/model/methods/setbindparam)
-  - Set Bind Parameter types
-- [Model::addBindParam](/docs/fegg/library/model/methods/addbindparam)
-  - Add Bind Parameter types
-- [Model::getBindParam](/docs/fegg/library/model/methods/getbindparam)
-  - Get Bind Parameter types
-- [Model::select](/docs/fegg/library/model/methods/select) <Badge color="yellow">Important</Badge>
-  - Set Select Parameter
-- [Model::listMax](/docs/fegg/library/model/methods/listmax) <Badge color="yellow">Important</Badge>
-  - Set ListMax Parameter
-- [Model::current](/docs/fegg/library/model/methods/current) <Badge color="yellow">Important</Badge>
-  - Set Current Page Parameter
-- [Model::where](/docs/fegg/library/model/methods/where) <Badge color="yellow">Important</Badge>
-  - Set Where Parameter
-- [Model::whereOpen](/docs/fegg/library/model/methods/whereopen) <Badge color="yellow">Important</Badge>
-  - Add open bracket on Where query
-- [Model::whereClose](/docs/fegg/library/model/methods/whereclose) <Badge color="yellow">Important</Badge>
-  - Add close bracket on Where query
-- [Model::having](/docs/fegg/library/model/methods/having)
-  - Set Having Parameter
-- [Model::havingOpen](/docs/fegg/library/model/methods/havingopen)
-  - Add open bracket on Having query
-- [Model::havingClose](/docs/fegg/library/model/methods/havingclose)
-  - Add close bracket on Having query
-- [Model::order](/docs/fegg/library/model/methods/order) <Badge color="yellow">Important</Badge>
-  - Set Order Parameter
-- [Model::join](/docs/fegg/library/model/methods/join)
-  - Set Join Parameter
-- [Model::group](/docs/fegg/library/model/methods/group)
-  - Set Group Parameter
-- [Model::find](/docs/fegg/library/model/methods/find) <Badge color="yellow">Important</Badge>
-  - Get rows designated count
-- [Model::getPager](/docs/fegg/library/model/methods/getpager) <Badge color="yellow">Important</Badge>
-  - Get variables for making pager
-- [Model::one](/docs/fegg/library/model/methods/one) <Badge color="yellow">Important</Badge>
-  - Get one row from the records
-- [Model::count](/docs/fegg/library/model/methods/count) <Badge color="yellow">Important</Badge>
-  - Get the number of record's count
-- [Model::id](/docs/fegg/library/model/methods/id) <Badge color="yellow">Important</Badge>
-  - Get one record by specified primary ID
-- [Model::setOptions](/docs/fegg/library/model/methods/setoptions)
-  - Setting option parameter
-- [Model::resetOptions](/docs/fegg/library/model/methods/resetoptions)
-  - Reset Options Data
-- [Model::insert](/docs/fegg/library/model/methods/insert) <Badge color="yellow">Important</Badge>
-  - Execute Insert data
-- [Model::updateWhere](/docs/fegg/library/model/methods/updatewhere) <Badge color="yellow">Important</Badge>
-  - Execute Update the records by specified condition
-- [Model::update](/docs/fegg/library/model/methods/update) <Badge color="yellow">Important</Badge>
-  - Execute Update the record by specified primary ID
-- [Model::deleteWhere](/docs/fegg/library/model/methods/deletewhere) <Badge color="yellow">Important</Badge>
-  - Execute Logical Delete the records by specified condition
-- [Model::delete](/docs/fegg/library/model/methods/delete) <Badge color="yellow">Important</Badge>
-  - Execute Logical Delete the record by specified primary ID
-- [Model::eraseWhere](/docs/fegg/library/model/methods/erasewhere)
-  - Execute Physical Delete the records by specified condition
-- [Model::erase](/docs/fegg/library/model/methods/erase)
-  - Execute Physical Delete the record by specified primary ID
-- [Model::create](/docs/fegg/library/model/methods/create)
-  - Execute Create Table
-- [Model::dropTable](/docs/fegg/library/model/methods/droptable)
-  - Execute Drop table
-- [Model::dropIndex](/docs/fegg/library/model/methods/dropindex)
-  - Execute Drop index
-- [Model::alterAddColumn](/docs/fegg/library/model/methods/alteraddcolumn)
-  - Execute Alter Add Column
-- [Model::alterRenameTo](/docs/fegg/library/model/methods/alterrenameto)
-  - Execute Alter Rename
-- [Model::pragma](/docs/fegg/library/model/methods/pragma)
-  - Execute Pragma
-- [Model::reset](/docs/fegg/library/model/methods/reset)
-  - Reset Model
-- [Model::debug](/docs/fegg/library/model/methods/debug)
-  - Get last executed query
-- [Model::unsetRegularUseQuery](/docs/fegg/library/model/methods/unsetregularusequery)
-  - Disable automatic append query for a current query flag
-- [Model::unsetRegularUseQueryForTable](/docs/fegg/library/model/methods/unsetregularusequeryfortable)
-  - Disable automatic append query of the table for a current query flag
-- [Model::disabledRegularUseQuery](/docs/fegg/library/model/methods/disabledregularusequery)
-  - Disable automatic append query flag
+<CategoryDocCardList label="Methods" />
 
 
 --- docs/fegg/library/model/methods/addbindparam.mdx ---
@@ -4408,6 +4185,7 @@ $model->alterRenameTo('cms_news_ex');
 
 ---
 sidebar_position: 1
+title: Model::__construct
 ---
 
 # Model::\_\_construct
@@ -6076,6 +5854,8 @@ $records = $model->find();
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # Introduction
 
 Providing some functions for analyzing RSS document
@@ -6091,18 +5871,14 @@ $posts = $rss->fetchAll(10);
 
 ## Methods
 
-- [RSS::\_\_construct](/docs/fegg/library/rss/methods/construct)
-  - Start loading RSS feed
-- [RSS::fetch](/docs/fegg/library/rss/methods/fetch)
-  - Fetch one record of RSS Feed
-- [RSS::fetchAll](/docs/fegg/library/rss/methods/fetchall)
-  - Fetch all records or specified number records of RSS Feed
+<CategoryDocCardList label="Methods" />
 
 
 --- docs/fegg/library/rss/methods/construct.mdx ---
 
 ---
 sidebar_position: 1
+title: RSS::__construct
 ---
 
 # RSS::\_\_construct
@@ -6195,26 +5971,15 @@ foreach ($posts as $post) {
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # Introduction
 
 Providing some functions for processing image (especially image crop)
 
 ## Methods
 
-- [Trim::setImage](/docs/fegg/library/trim/methods/setimage)
-  - Set target image and output file path
-- [Trim::resize](/docs/fegg/library/trim/methods/resize)
-  - Resize the image with keeping ratio
-- [Trim::resizeFill](/docs/fegg/library/trim/methods/resizefill)
-  - Resize the image with keeping ratio and filling white/black color (Like `object-fit: contain`)
-- [Trim::resizeForce](/docs/fegg/library/trim/methods/resizeforce)
-  - Resize the image forcely
-- [Trim::resizeTrim](/docs/fegg/library/trim/methods/resizetrim)
-  - Resize the image with keeping ratio and tirmming overwrapped (Like `object-fit: cover`)
-- [Trim::create](/docs/fegg/library/trim/methods/create)
-  - Save the image to specified location
-- [Trim::view](/docs/fegg/library/trim/methods/view)
-  - Display converted image
+<CategoryDocCardList label="Methods" />
 
 
 --- docs/fegg/library/trim/methods/create.mdx ---
@@ -6463,6 +6228,8 @@ $trim->view();
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # Introduction
 
 Providing some functions for uploading/validating files
@@ -6479,28 +6246,7 @@ $upload->upload('file');
 
 ## Methods
 
-- [Upload::setUploadDir](/docs/fegg/library/upload/methods/setuploaddir)
-  - Set upload directory
-- [Upload::getUploadDir](/docs/fegg/library/upload/methods/getuploaddir)
-  - Get upload directory
-- [Upload::setMaxFileSize](/docs/fegg/library/upload/methods/setmaxfilesize)
-  - Set upload file size limitation
-- [Upload::getMaxFileSize](/docs/fegg/library/upload/methods/getmaxfilesize)
-  - Get upload file size limitation
-- [Upload::setFileType](/docs/fegg/library/upload/methods/setfiletype)
-  - Set upload file type limitation
-- [Upload::getFileType](/docs/fegg/library/upload/methods/getfiletype)
-  - Get upload file type limitation
-- [Upload::setUploadInfo](/docs/fegg/library/upload/methods/setuploadinfo)
-  - Set upload option once
-- [Upload::upload](/docs/fegg/library/upload/methods/upload)
-  - Validate uploaded file and move to upload directory
-- [Upload::getUploadedData](/docs/fegg/library/upload/methods/getuploadeddata)
-  - Get uploaded file information
-- [Upload::isError](/docs/fegg/library/upload/methods/iserror)
-  - Check uploaded file has error
-- [Upload::getErrorMessage](/docs/fegg/library/upload/methods/geterrormessage)
-  - Get uploaded file error
+<CategoryDocCardList label="Methods" />
 
 
 --- docs/fegg/library/upload/methods/geterrormessage.mdx ---
@@ -6731,6 +6477,8 @@ $validation_error_message['@zipcode'] = '<stron>%s</strong> は登録できな�
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # Introduction
 
 > Providing some functions for validation
@@ -6753,48 +6501,7 @@ $errorMessage = $validation->getErrorMessage();
 
 ## Methods
 
-- [Validation::required](/docs/fegg/library/validation/methods/required)
-  - Check required
-- [Validation::alphameric](/docs/fegg/library/validation/methods/alphameric)
-  - Check alphanumeric or not
-- [Validation::numeric](/docs/fegg/library/validation/methods/numeric)
-  - Check numeric or not
-- [Validation::date](/docs/fegg/library/validation/methods/date)
-  - Check valid date string
-- [Validation::email](/docs/fegg/library/validation/methods/email)
-  - Check valid E-mail string
-- [Validation::tel](/docs/fegg/library/validation/methods/tel)
-  - Check valid tel character (+ - 0-9)
-- [Validation::time](/docs/fegg/library/validation/methods/time)
-  - Check valid time character (: 0-9)
-- [Validation::url](/docs/fegg/library/validation/methods/url)
-  - Check valid url character
-- [Validation::zipcode](/docs/fegg/library/validation/methods/zipcode)
-  - Check valid zip code character (for JP only)
-- [Validation::userId](/docs/fegg/library/validation/methods/userid)
-  - Check allowed character for UserID (- \_ . 0-9)
-- [Validation::password](/docs/fegg/library/validation/methods/password)
-  - Check allowed character to Password
-- [Validation::maxbyte](/docs/fegg/library/validation/methods/maxbyte)
-  - Check character byte
-- [Validation::length](/docs/fegg/library/validation/methods/length)
-  - Check character length
-- [Validation::maxlength](/docs/fegg/library/validation/methods/maxlength)
-  - Check character less than maximum length
-- [Validation::minlength](/docs/fegg/library/validation/methods/minlength)
-  - Check character more than minimum length
-- [Validation::hankaku](/docs/fegg/library/validation/methods/hankaku)
-  - Check half-width character for Multi byte string language
-- [Validation::katakana](/docs/fegg/library/validation/methods/katakana)
-  - Check Katakana chracter for Japanese language
-- [Validation::setError](/docs/fegg/library/validation/methods/seterror)
-  - Set Error status
-- [Validation::setErrorMessage](/docs/fegg/library/validation/methods/seterrormessage)
-  - Set Error message
-- [Validation::isError](/docs/fegg/library/validation/methods/iserror)
-  - Confirm Error status
-- [Validation::getErrorMessage](/docs/fegg/library/validation/methods/geterrormessage)
-  - Get Error message
+<CategoryDocCardList label="Methods" />
 
 
 --- docs/fegg/library/validation/methods/alphameric.mdx ---
@@ -9737,18 +9444,33 @@ sidebar_position: 6
 sidebar_position: 1
 ---
 
+import DocCardList from '@theme/DocCardList';
+
 # JavaScript
 
 Introducing recommended JavaScript libraries.
 
-- [Slider / Carousel](/docs/javascript/slider)
-- [Modal](/docs/javascript/modal)
-- [Parallax](/docs/javascript/parallax)
-- [Animation](/docs/javascript/animation)
-- [SVG](/docs/javascript/svg)
-- [WebGL (Canvas)](/docs/javascript/webgl)
-- [Validation](/docs/javascript/validation)
-- [Layout](/docs/javascript/layout)
+<DocCardList items={[{
+  docId: 'javascript/slider',
+  href: '/docs/javascript/slider',
+  label: 'Slider / Carousel',
+  type: 'link',
+  unlisted: false
+}, {
+
+docId: 'javascript/modal', href: '/docs/javascript/modal', label: 'Modal', type: 'link', unlisted: false }, {
+
+docId: 'javascript/parallax', href: '/docs/javascript/parallax', label: 'Parallax', type: 'link', unlisted: false }, {
+
+docId: 'javascript/animation', href: '/docs/javascript/animation', label: 'Animation', type: 'link', unlisted: false }, {
+
+docId: 'javascript/svg', href: '/docs/javascript/svg', label: 'SVG', type: 'link', unlisted: false }, {
+
+docId: 'javascript/webgl', href: '/docs/javascript/webgl', label: 'WebGL (Canvas)', type: 'link', unlisted: false }, {
+
+docId: 'javascript/validation', href: '/docs/javascript/validation', label: 'Validation', type: 'link', unlisted: false }, {
+
+docId: 'javascript/layout', href: '/docs/javascript/layout', label: 'Layout', type: 'link', unlisted: false }]} />
 
 
 --- docs/javascript/layout.mdx ---
