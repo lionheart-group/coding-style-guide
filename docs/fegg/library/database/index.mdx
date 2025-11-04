@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # Introduction
 
 > Providing necessary functions for using database
@@ -27,83 +29,4 @@ $result = $database->select('table_name')->execute()->all();
 
 ## Methods
 
-- [DB_pdo::select](/docs/fegg/library/database/methods/select)
-  - Set select query
-- [DB_pdo::count](/docs/fegg/library/database/methods/count)
-  - Set select count query
-- [DB_pdo::insert](/docs/fegg/library/database/methods/insert)
-  - Set insert query
-- [DB_pdo::update](/docs/fegg/library/database/methods/update)
-  - Set update query
-- [DB_pdo::delete](/docs/fegg/library/database/methods/delete)
-  - Set delete query
-- [DB_pdo::truncate](/docs/fegg/library/database/methods/truncate)
-  - Set truncate query
-- [DB_pdo::createTable](/docs/fegg/library/database/methods/createtable)
-  - Set create table query
-- [DB_pdo::createIndex](/docs/fegg/library/database/methods/createindex)
-  - Set create index query
-- [DB_pdo::alterAddColumn](/docs/fegg/library/database/methods/alteraddcolumn)
-  - Set create alter add column query
-- [DB_pdo::alterRenameTo](/docs/fegg/library/database/methods/alterrenameto)
-  - Set create alter rename to query
-- [DB_pdo::dropTable](/docs/fegg/library/database/methods/droptable)
-  - Set create drop table query
-- [DB_pdo::dropIndex](/docs/fegg/library/database/methods/dropindex)
-  - Set create drop index query
-- [DB_pdo::pragma](/docs/fegg/library/database/methods/pragma)
-  - Set pragma query
-- [DB_pdo::setGroup](/docs/fegg/library/database/methods/setgroup)
-  - Set group query
-- [DB_pdo::setItem](/docs/fegg/library/database/methods/setitem)
-  - Set query item values
-- [DB_pdo::setLimit](/docs/fegg/library/database/methods/setlimit)
-  - Set limit value
-- [DB_pdo::setOrder](/docs/fegg/library/database/methods/setorder)
-  - Set order value
-- [DB_pdo::setQuery](/docs/fegg/library/database/methods/setquery)
-  - Set query string directly
-- [DB_pdo::setWhere](/docs/fegg/library/database/methods/setwhere)
-  - Set where condition
-- [DB_pdo::setHaving](/docs/fegg/library/database/methods/sethaving)
-  - Set having condition
-- [DB_pdo::setJoin](/docs/fegg/library/database/methods/setjoin)
-  - Set join table
-- [DB_pdo::setOn](/docs/fegg/library/database/methods/seton)
-  - Set on query for joined table
-- [DB_pdo::disabledRegularUseQuery](/docs/fegg/library/database/methods/disabledregularusequery)
-  - Disable automatic append query flag
-- [DB_pdo::unsetRegularUseQuery](/docs/fegg/library/database/methods/unsetregularusequery)
-  - Disable automatic append query for a current query flag
-- [DB_pdo::unsetRegularUseQueryForTable](/docs/fegg/library/database/methods/unsetregularusequeryfortable)
-  - Disable automatic append query of the table for a current query flag
-- [DB_pdo::setInitQueryFlag](/docs/fegg/library/database/methods/setinitqueryflag)
-  - Enable reset query flag
-- [DB_pdo::unsetInitQueryFlag](/docs/fegg/library/database/methods/unsetinitqueryflag)
-  - Disable reset query flag
-- [DB_pdo::execute](/docs/fegg/library/database/methods/execute)
-  - Execute built query
-- [DB_pdo::compile](/docs/fegg/library/database/methods/compile)
-  - Compile built query (not execute)
-- [DB_pdo::all](/docs/fegg/library/database/methods/all)
-  - Get all the result of executed select query
-- [DB_pdo::one](/docs/fegg/library/database/methods/one)
-  - Shift the result of executed select query
-- [DB_pdo::id](/docs/fegg/library/database/methods/id)
-  - Get the specific column's list of executed select query
-- [DB_pdo::simpleArray](/docs/fegg/library/database/methods/simplearray)
-  - Get the specific column's key and value array of executed select query
-- [DB_pdo::getAffectedRow](/docs/fegg/library/database/methods/getaffectedrow)
-  - Get affected row number of executed update query
-- [DB_pdo::getLastIndexId](/docs/fegg/library/database/methods/getlastindexid)
-  - Get the last inserted id of executed insert query
-- [DB_pdo::getLastQuery](/docs/fegg/library/database/methods/getlastquery)
-  - Get the last executed query for debugging
-- [DB_pdo::getLastQueryDebug](/docs/fegg/library/database/methods/getlastquerydebug)
-  - Get the last executed query and parameter separately for debugging
-- [DB_pdo::getReturnCode](/docs/fegg/library/database/methods/getreturncode)
-  - Get return code of the last executed query
-- [DB_pdo::masterServer](/docs/fegg/library/database/methods/masterserver)
-  - Connect to master server
-- [DB_pdo::slaveServer](/docs/fegg/library/database/methods/slaveserver)
-  - Connect to slave server
+<CategoryDocCardList label="Methods" />

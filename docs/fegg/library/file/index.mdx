@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # Introduction
 
 Providing some functions for managing files/directories
@@ -18,25 +20,4 @@ $file->copyAll('path/to/foo', 'path/to/bar');
 
 ## Methods
 
-- [File::copyAll](/docs/fegg/library/file/methods/copyall)
-  - Copy all the files to another directory
-- [File::copyDirectory](/docs/fegg/library/file/methods/copydirectory)
-  - Copy specified directory to specified location
-- [File::copyFile](/docs/fegg/library/file/methods/copyfile)
-  - Copy specified file to specified location
-- [File::createDirectory](/docs/fegg/library/file/methods/createdirectory)
-  - Create directory to specified location
-- [File::moveFile](/docs/fegg/library/file/methods/movefile)
-  - Move specified file to specified location
-- [File::readFile](/docs/fegg/library/file/methods/readfile)
-  - Read specified file
-- [File::removeDirectory](/docs/fegg/library/file/methods/removedirectory)
-  - Delete specified directory and files in that directory
-- [File::removeExpiredFile](/docs/fegg/library/file/methods/removeexpiredfile)
-  - Delete specified file that elapsed specified time
-- [File::removeFile](/docs/fegg/library/file/methods/removefile)
-  - Delete specified file
-- [File::touchDirectory](/docs/fegg/library/file/methods/touchdirectory)
-  - Update modified date of files that inside of specified directory
-- [File::writeFile](/docs/fegg/library/file/methods/writefile)
-  - Put the file to the specified location
+<CategoryDocCardList label="Methods" />

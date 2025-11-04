@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # はじめに
 
 RSSドキュメント解析のための各種関数を提供します
@@ -15,11 +17,6 @@ $rss = $this->getClass('Tool/RSS', 'https://example.com/feed');
 $posts = $rss->fetchAll(10);
 ```
 
-## メソッド
+## 関数
 
-- [RSS::\_\_construct](/docs/fegg/library/rss/methods/construct)
-  - RSSフィードの読み込みを開始
-- [RSS::fetch](/docs/fegg/library/rss/methods/fetch)
-  - RSSフィードの1つのレコードを取得
-- [RSS::fetchAll](/docs/fegg/library/rss/methods/fetchall)
-  - RSSフィードのすべてのレコードまたは指定された数のレコードを取得
+<CategoryDocCardList label="関数" />

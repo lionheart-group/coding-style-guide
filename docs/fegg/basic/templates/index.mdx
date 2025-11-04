@@ -2,6 +2,9 @@
 sidebar_position: 1
 ---
 
+import DocCardList from '@theme/DocCardList';
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # About Template
 
 ## About Template
@@ -16,84 +19,30 @@ Display methods call the template file from Controller class.
 
 Below are the display methods in Fegg but it is recommended to use only the `displayPage` method to avoid Clickjacking attacks.
 
-- [Application::displayTemplate](/docs/fegg/basic/templates/methods/displaytemplate)
-  - Display compiled template
-- [Application::fetchTemplate](/docs/fegg/basic/templates/methods/fetchtemplate)
-  - Return compiled template into a string
-- [Application::fetchPage](/docs/fegg/basic/templates/methods/fetchpage)
-  - Return compiled template with declared controller and template variables into a string
-- [Application::displayPage](/docs/fegg/basic/templates/methods/displaypage)
-  - Display compiled template with declared controller and template variables and taking precautionary measures on Clickjacking attacks
+<CategoryDocCardList label="Display methods" />
 
 ## Template helper methods
 
 Template helper methods are used for passing special variable to the template.
 
-- [Application::setSiteinfo](/docs/fegg/basic/templates/helpers/setsiteinfo)
-  - Set website information (ex. title, description, keywords)
-- [Application::setHidden](/docs/fegg/basic/templates/helpers/sethidden)
-  - Set hidden data
-- [Application::setHtmlHeader](/docs/fegg/basic/templates/helpers/sethtmlheader)
-  - Set HTML Header
+<CategoryDocCardList label="Helper methods" />
 
 ## Template rules
 
 There are several operating notation for template file.
 
-- [Variable](/docs/fegg/basic/templates/rules/variable)
-  - The use of variables in the template
-- [If](/docs/fegg/basic/templates/rules/if)
-  - if, else, else if
-- [Loop](/docs/fegg/basic/templates/rules/loop)
-  - loop, foreach
-- [Include](/docs/fegg/basic/templates/rules/include)
-  - include, include head, head, include foot, foot
-- [Transclude](/docs/fegg/basic/templates/rules/transclude)
-  - transclude, section
-- [Checked/Selected](/docs/fegg/basic/templates/rules/checked_selected)
-  - checked, selected
-- [Options](/docs/fegg/basic/templates/rules/options)
-  - Make option tags
-- [Hidden](/docs/fegg/basic/templates/rules/hidden)
-  - Display hidden tag
-- [Code](/docs/fegg/basic/templates/rules/code)
-  - call, code
+<CategoryDocCardList label="Rules" />
 
 ## Modifiers
 
-### How to use modifiers
-
 You can modify the returned values of your variable in your application code in template using modifiers.
 
-Modifiers are separated from the variable using pipe symbol ( | ) and may have an optional argument separated by colon symbol ( : ). Multiple modifiers can be chained, it modifies the variable from left to right. Thus, the output of the first filtering is applied to the next filtering.
-
-```html
-{{ $var|noescape|function:param }}
-```
-
-### noescape
-
-Fegg is automatically escaping character values. If you don’t want a escaping value, you can use the noescape modifier.
-
-```php title="Controller"
-$this->page['foo'] = '<p>bar</p>';
-```
-
-```html title="Template"
-{{ $page.foo }} -> <p>bar</p>
-{{ $page.foo|noescape }} -> bar
-```
-
-### br
-
-Insert HTML line breaks for all newline (\\n) found in a string.
-
-```php title="Controller"
-$this->page['foo'] = "This is a test text.\n This is a new line text.";
-```
-
-```html title="Template"
-{{ $page.foo }} -> This is a test text. This is a new line text.
-{{ $page.foo|br }} -> This is a test text.
-                      This is a new line text.
-```
+<DocCardList items={[
+  {
+    "type": "link",
+    "href": "/docs/fegg/basic/templates/modifiers",
+    "label": "Modifiers",
+    "docId": "fegg/basic/templates/modifiers",
+    "unlisted": false
+  }
+]} />

@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # はじめに
 
 > バリデーションのための各種関数を提供します
@@ -22,47 +24,6 @@ $validation->required($id, $this->in($id), array('@required', $name));
 $errorMessage = $validation->getErrorMessage();
 ```
 
-## メソッド
+## 関数
 
-- [Validation::required](/docs/fegg/library/validation/methods/required)
-  - 必須チェック
-- [Validation::alphameric](/docs/fegg/library/validation/methods/alphameric)
-  - 英数字かどうかをチェック
-- [Validation::numeric](/docs/fegg/library/validation/methods/numeric)
-  - 数値かどうかをチェック
-- [Validation::date](/docs/fegg/library/validation/methods/date)
-  - 有効な日付文字列をチェック
-- [Validation::email](/docs/fegg/library/validation/methods/email)
-  - 有効なメールアドレス文字列をチェック
-- [Validation::tel](/docs/fegg/library/validation/methods/tel)
-  - 有効な電話番号文字（+ - 0-9）をチェック
-- [Validation::time](/docs/fegg/library/validation/methods/time)
-  - 有効な時刻文字（: 0-9）をチェック
-- [Validation::url](/docs/fegg/library/validation/methods/url)
-  - 有効なURL文字をチェック
-- [Validation::zipcode](/docs/fegg/library/validation/methods/zipcode)
-  - 有効な郵便番号文字をチェック（日本のみ）
-- [Validation::userId](/docs/fegg/library/validation/methods/userid)
-  - ユーザーIDに許可された文字をチェック（- \_ . 0-9）
-- [Validation::password](/docs/fegg/library/validation/methods/password)
-  - パスワードに許可された文字をチェック
-- [Validation::maxbyte](/docs/fegg/library/validation/methods/maxbyte)
-  - 文字のバイト数をチェック
-- [Validation::length](/docs/fegg/library/validation/methods/length)
-  - 文字の長さをチェック
-- [Validation::maxlength](/docs/fegg/library/validation/methods/maxlength)
-  - 最大長以下かどうかをチェック
-- [Validation::minlength](/docs/fegg/library/validation/methods/minlength)
-  - 最小長以上かどうかをチェック
-- [Validation::hankaku](/docs/fegg/library/validation/methods/hankaku)
-  - マルチバイト文字列言語における半角文字をチェック
-- [Validation::katakana](/docs/fegg/library/validation/methods/katakana)
-  - 日本語のカタカナ文字をチェック
-- [Validation::setError](/docs/fegg/library/validation/methods/seterror)
-  - エラーステータスを設定
-- [Validation::setErrorMessage](/docs/fegg/library/validation/methods/seterrormessage)
-  - エラーメッセージを設定
-- [Validation::isError](/docs/fegg/library/validation/methods/iserror)
-  - エラーステータスを確認
-- [Validation::getErrorMessage](/docs/fegg/library/validation/methods/geterrormessage)
-  - エラーメッセージを取得
+<CategoryDocCardList label="関数" />
