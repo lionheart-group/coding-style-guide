@@ -206,5 +206,9 @@
   "sidebar.fegg.category.fegg-library-trim-methods": {
     "message": "関数",
     "description": "The label for category 'Methods' in sidebar 'fegg'"
+  },
+  "sidebar.html.category.Video": {
+    "message": "動画",
+    "description": "The label for category 'Video' in sidebar 'html'"
   }
 }

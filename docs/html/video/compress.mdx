@@ -1,0 +1,40 @@
+# Compress Video Files
+
+## Estimated Size
+
+- **Audio-less videos to display as background images (with emphasis on loading speed)**
+  - Recommended file size: **1MB or less (ideal) to 3MB maximum**
+  - Note: Loading speed is critical. Since these videos impact the initial page load, they must be kept as lightweight as possible.
+- **Audio-enabled videos that play on click**
+  - Recommended file size: **Approximately 5MB to 20MB**
+  - Note: Since these videos are loaded via user interaction, slightly larger sizes are acceptable. Depending on the video length, aim for under 20MB for videos lasting 2 minutes or less.
+
+## Compression Tools
+
+[HandBrake](https://handbrake.fr/): A free and open-source tool for converting and compressing video files.
+
+### Installation
+
+1. Download HandBrake from the [official website](https://handbrake.fr/downloads.php).
+2. Follow the installation instructions for your operating system.
+
+or
+
+Installing by Homebrew (macOS):
+
+```bash
+brew install --cask handbrake
+```
+
+### Recommended Settings
+
+1. Open HandBrake and load your video file.
+2. Choose the "Preset" -> "Web" -> **"Social 25MB 2 Minutes 540p60"**.
+   - If the preset results in a file size larger than desired, you can change preset to **"Social 25MB 5 Minutes 360p60"** for smaller sizes.
+   - But note that reducing resolution may impact video quality.
+3. Under the "Video" tab, set the following:
+   - Video Codec: H.264 (x264)
+   - Framerate (FPS): Same as source
+4. Under the "Audio" tab, ensure that the audio codec is set to AAC with a bitrate of 128 kbps.
+   - If the video does not require audio, you can remove the audio track entirely to save space.
+5. Click "Start Encode" to begin the compression process
