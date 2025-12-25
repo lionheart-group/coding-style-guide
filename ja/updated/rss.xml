@@ -4,10 +4,20 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/ja/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Wed, 05 Nov 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 25 Dec 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>ja</language>
+        <item>
+            <title><![CDATA[v0.4.1]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/12/25/v0.4.1</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/12/25/v0.4.1</guid>
+            <pubDate>Thu, 25 Dec 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[- 動画ファイルの圧縮についてを追加しました]]></description>
+            <content:encoded><![CDATA[<ul>
+<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/video/compress">動画ファイルの圧縮についてを追加しました</a></li>
+</ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v0.4.0]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/11/05/v0.4.0</link>

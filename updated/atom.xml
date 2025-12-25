@@ -2,11 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lionheart-group.github.io/coding-style-guide/updated</id>
     <title>Coding Style Guide Blog</title>
-    <updated>2025-11-05T00:00:00.000Z</updated>
+    <updated>2025-12-25T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lionheart-group.github.io/coding-style-guide/updated"/>
     <subtitle>Coding Style Guide Blog</subtitle>
     <icon>https://lionheart-group.github.io/coding-style-guide/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[v0.4.1]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/updated/2025/12/25/v0.4.1</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2025/12/25/v0.4.1"/>
+        <updated>2025-12-25T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- Added Compression Video Files instruction]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/video/compress">Added Compression Video Files instruction</a></li>
+</ul>]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v0.4.0]]></title>
         <id>https://lionheart-group.github.io/coding-style-guide/updated/2025/11/05/v0.4.0</id>
