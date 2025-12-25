@@ -35,6 +35,6 @@ async function mergeMarkdownFiles(docsDir, outputFile) {
 
 // Example usage:
 const docsDirectory = "./docs"; // Replace with your 'docs' directory
-const outputFilename = "./static/merged_docs.txt";
+const outputFilename = "./static/llms.txt";
 
 mergeMarkdownFiles(docsDirectory, outputFilename);
