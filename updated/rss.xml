@@ -4,10 +4,20 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Thu, 25 Dec 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 09 Jan 2026 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[v0.4.2]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/01/09/v0.4.2</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2026/01/09/v0.4.2</guid>
+            <pubDate>Fri, 09 Jan 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Added Agentic Coding Environment guide]]></description>
+            <content:encoded><![CDATA[<ul>
+<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/env/agentic-coding">Added Agentic Coding Environment guide</a></li>
+</ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v0.4.1]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/updated/2025/12/25/v0.4.1</link>
@@ -239,19 +249,6 @@
             <description><![CDATA[- Added Dnsmasq instructions]]></description>
             <content:encoded><![CDATA[<ul>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/env/dnsmasq">Added Dnsmasq instructions</a></li>
-</ul>]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[v0.0.1]]></title>
-            <link>https://lionheart-group.github.io/coding-style-guide/updated/2022/03/17/v0.0.1</link>
-            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2022/03/17/v0.0.1</guid>
-            <pubDate>Thu, 17 Mar 2022 00:00:00 GMT</pubDate>
-            <description><![CDATA[- Added image exporting resolution instructions]]></description>
-            <content:encoded><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/image/export#for-supporting-high-resolution-display">Added image exporting resolution instructions</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/image/export#webp-webp">Updated image exporting WebP type instructions</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/picture">Added coding tips for <code>&lt;picture&gt;</code> tag</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/flex">Added coding tips for Flex box layout</a></li>
 </ul>]]></content:encoded>
         </item>
     </channel>

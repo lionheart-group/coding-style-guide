@@ -4,10 +4,20 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/ja/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Thu, 25 Dec 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 09 Jan 2026 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>ja</language>
+        <item>
+            <title><![CDATA[v0.4.2]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/01/09/v0.4.2</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/01/09/v0.4.2</guid>
+            <pubDate>Fri, 09 Jan 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[- エージェンティックコーディングについてを追加しました]]></description>
+            <content:encoded><![CDATA[<ul>
+<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/agentic-coding">エージェンティックコーディングについてを追加しました</a></li>
+</ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v0.4.1]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2025/12/25/v0.4.1</link>
@@ -249,19 +259,6 @@
             <description><![CDATA[- Dnsmasqの設定を追加しました]]></description>
             <content:encoded><![CDATA[<ul>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/dnsmasq">Dnsmasqの設定を追加しました</a></li>
-</ul>]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[v0.0.1]]></title>
-            <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/03/17/v0.0.1</link>
-            <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/03/17/v0.0.1</guid>
-            <pubDate>Thu, 17 Mar 2022 00:00:00 GMT</pubDate>
-            <description><![CDATA[- 画像書出時の解像度設定についての説明を追加しました]]></description>
-            <content:encoded><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/image/export#%E9%AB%98%E8%A7%A3%E5%83%8F%E5%BA%A6%E3%83%87%E3%82%A3%E3%82%B9%E3%83%97%E3%83%AC%E3%82%A4%E5%AF%BE%E5%BF%9C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">画像書出時の解像度設定についての説明を追加しました</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/image/export#webp-webp">画像書出時のWebP形式の説明を更新しました</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/picture">コーディングTIPSの<code>&lt;picture&gt;</code>タグについての説明を追加しました</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/flex">コーディングTIPSのFlex boxの使い方についての説明を追加しました</a></li>
 </ul>]]></content:encoded>
         </item>
     </channel>
