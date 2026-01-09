@@ -1,0 +1,44 @@
+---
+sidebar_position: 7
+---
+
+# エージェンティックコーディング (ベータ版)
+
+エージェンティックコーディング環境では、AIエージェントがコーディングタスクを自律的に実行できます。
+
+このガイドでは、FeggまたはWordPressプロジェクト向けのエージェンティックコーディング環境のインストールとセットアップについて説明します。Figmaデザインから直接ページを実装することが可能になります。
+
+## 要件
+
+- **Visual Studio Code**
+  - [インストールとセットアップガイド](./vscode)
+  - Agent Skills機能（`chat.useAgentSkills`）をサポートするには、バージョン **1.108.0** 以上が必要です。
+- **VS Codeの設定**
+  - 設定 `chat.useAgentSkills` を `true` に設定する必要があります。
+  - 参考: [VS Codeでエージェントスキルを使用する](https://code.visualstudio.com/docs/copilot/customization/agent-skills)
+- **GitHub Copilot**
+  - [VS Code用GitHub Copilot](https://code.visualstudio.com/docs/copilot/overview)がインストールおよび設定されている必要があります。
+  - 参考: [VS Code GitHub Copilotセットアップガイド](https://code.visualstudio.com/docs/copilot/setup)
+- **Figma MCPサーバー**
+  - Figma MCPサーバーがVS Codeにインストールされている必要があります。
+  - 参考: [Figma MCPサーバーセットアップガイド](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Figma-MCP-server)
+
+## スキル
+
+- `figma-to-page`: Figmaデザインをコードに変換します。
+
+## サンプルプロンプト
+
+以下のサンプルプロンプトを使用して、Figmaデザインからページを生成できます。
+
+```txt
+Generate the top page (/) of the following Figma design by using the `figma-to-page` skill.
+
+## PC
+
+[URL]
+
+## SP
+
+[URL]
+```
