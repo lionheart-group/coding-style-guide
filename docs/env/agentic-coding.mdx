@@ -1,0 +1,43 @@
+---
+sidebar_position: 7
+---
+
+# Agentic Coding (Beta)
+
+The Agentic Coding Environment allows AI agents to perform coding tasks autonomously.
+
+This guide covers the installation and setup of the Agentic Coding Environment for Fegg or WordPress projects, enabling you to implement pages directly from Figma designs.
+
+## Requirements
+
+- **[Visual Studio Code](./vscode)**
+  - Version **1.108.0** or higher is required to support the agentic coding feature (`chat.useAgentSkills`).
+- **GitHub Copilot**
+  - [GitHub Copilot in VS Code](https://code.visualstudio.com/docs/copilot/overview) must be installed and configured.
+  - Reference: [GitHub Copilot in VS Code Setup Guide](https://code.visualstudio.com/docs/copilot/setup)
+- **VS Code Settings**
+  - The setting `chat.useAgentSkills` must be set to `true`.
+  - Reference: [Use Agent Skills in VS Code](https://code.visualstudio.com/docs/copilot/customization/agent-skills)
+- **Figma MCP Server**
+  - The Figma MCP server must be installed.
+  - Reference: [Figma MCP Server Setup Guide](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Figma-MCP-server)
+
+## Skills
+
+- `figma-to-page`: Converts Figma designs into code.
+
+## Sample Prompts
+
+You can use the following sample prompt to generate pages from Figma designs.
+
+```txt
+Generate the top page (/) of the following Figma design by using the `figma-to-page` skill.
+
+## PC
+
+[URL]
+
+## SP
+
+[URL]
+```
