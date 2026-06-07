@@ -32,7 +32,7 @@ Please don't write a different layout style to the bottom of a file.
     }
 }
 
-@include mq_sp {
+@include mq_under(sp) {
     .c-foo {
         // something SP layout style
         &__foo {
@@ -46,18 +46,18 @@ Please don't write a different layout style to the bottom of a file.
 
 :::tip GOOD
 
-Please write media query under the each `.c-foo` and `.c-foo__bar` styles.
+Please write media queries under each `.c-foo` and `.c-foo__bar` style.
 
 ```scss title="scss/object/component/_foo.scss"
 .c-foo {
     // something PC layout style
-    @include mq_sp {
+    @include mq_under(sp) {
         // something SP layout style
     }
 
     &__foo {
         // something PC layout style
-        @include mq_sp {
+        @include mq_under(sp) {
             // something SP layout style
         }
     }

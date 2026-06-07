@@ -4,52 +4,87 @@ sidebar_position: 2
 
 # 代表的なmixin
 
-## mq_sp
+## ブレイクポイント
 
-SP向けレイアウト用@media生成
-
-```scss
-@include mq_sp {
-    // SPレイアウトスタイル
-}
-
-// @media (max-width: (ブレイクポイント)px)
-```
-
-## mq_pc
-
-PC向けレイアウト用@media生成
+メディアクエリ mixin は以下のブレイクポイントマップを使用します：
 
 ```scss
-@include mq_pc {
-    // PCレイアウトスタイル
-}
-
-// @media (min-width: (ブレイクポイント) + 1px)
+$breakpoints: (
+    sp: 750,   // 375 * 2
+    pc: 1060,
+);
 ```
 
 ## mq_under
 
-指定サイズ以上向け@media生成
+指定ブレイクポイント以下用の @media クエリ生成（max-width）
 
 ```scss
-@include mq_under(number) {
-    // 指定サイズ以上向けスタイル
+@include mq_under(sp) {
+    // 750px 以下向けスタイル
 }
 
-// @media (min-width: (number) + 1px)
+// @media screen and (max-width: 750px)
+```
+
+## mq_under_exact
+
+指定 px 値以下用の @media クエリ生成（max-width）
+
+```scss
+@include mq_under_exact(768) {
+    // 768px 以下向けスタイル
+}
+
+// @media screen and (max-width: 768px)
 ```
 
 ## mq_over
 
-指定サイズ以下向け@media生成
+指定ブレイクポイント以上用の @media クエリ生成（min-width）
 
 ```scss
-@include mq_over(number) {
-    // 指定サイズ以下向けスタイル
+@include mq_over(sp) {
+    // 751px 以上向けスタイル
 }
 
-// @media (max-width: (number)px)
+// @media screen and (min-width: 751px)
+```
+
+## mq_over_exact
+
+指定 px 値以上用の @media クエリ生成（min-width）
+
+```scss
+@include mq_over_exact(768) {
+    // 768px 以上向けスタイル
+}
+
+// @media screen and (min-width: 768px)
+```
+
+## mq_between
+
+2つのブレイクポイント間用の @media クエリ生成
+
+```scss
+@include mq_between(sp, pc) {
+    // 751px〜1060px 向けスタイル
+}
+
+// @media screen and (min-width: 751px) and (max-width: 1060px)
+```
+
+## mq_between_exact
+
+2つの px 値間の @media クエリ生成
+
+```scss
+@include mq_between_exact(768, 1024) {
+    // 768px〜1024px 向けスタイル
+}
+
+// @media screen and (min-width: 768px) and (max-width: 1024px)
 ```
 
 ## get_vw
