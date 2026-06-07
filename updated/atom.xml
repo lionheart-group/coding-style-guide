@@ -2,11 +2,32 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lionheart-group.github.io/coding-style-guide/updated</id>
     <title>Coding Style Guide Blog</title>
-    <updated>2026-01-09T00:00:00.000Z</updated>
+    <updated>2026-06-08T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lionheart-group.github.io/coding-style-guide/updated"/>
     <subtitle>Coding Style Guide Blog</subtitle>
     <icon>https://lionheart-group.github.io/coding-style-guide/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[v0.4.4]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/updated/2026/06/08/v0.4.4</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2026/06/08/v0.4.4"/>
+        <updated>2026-06-08T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- Updated media query mixin syntaxes and added new mixins (Typical mixins)]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li class="">Updated media query mixin syntaxes and added new mixins (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/foundation/mixin">Typical mixins</a>)</li>
+</ul>]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v0.4.3]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/updated/2026/06/07/v0.4.3</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2026/06/07/v0.4.3"/>
+        <updated>2026-06-07T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- Updated Docusaurus to v3.10.1 and dependency libraries]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li class="">Updated Docusaurus to v3.10.1 and dependency libraries</li>
+<li class="">Separated <code>llms.txt</code> into per-category files with improved generation script</li>
+</ul>]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v0.4.2]]></title>
         <id>https://lionheart-group.github.io/coding-style-guide/updated/2026/01/09/v0.4.2</id>
@@ -228,26 +249,6 @@
         <summary type="html"><![CDATA[- Added Node.js(Volta) installing instruction]]></summary>
         <content type="html"><![CDATA[<ul>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/env/node">Added Node.js(Volta) installing instruction</a></li>
-</ul>]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[v0.0.3]]></title>
-        <id>https://lionheart-group.github.io/coding-style-guide/updated/2022/05/02/v0.0.3</id>
-        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2022/05/02/v0.0.3"/>
-        <updated>2022-05-02T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[- Fixed VSCode plugin instruction (stylelint and eslint's config syntax was inverted)]]></summary>
-        <content type="html"><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/env/vscode">Fixed VSCode plugin instruction (stylelint and eslint's config syntax was inverted)</a></li>
-</ul>]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[v0.0.2]]></title>
-        <id>https://lionheart-group.github.io/coding-style-guide/updated/2022/03/31/v0.0.2</id>
-        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2022/03/31/v0.0.2"/>
-        <updated>2022-03-31T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[- Added Dnsmasq instructions]]></summary>
-        <content type="html"><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/env/dnsmasq">Added Dnsmasq instructions</a></li>
 </ul>]]></content>
     </entry>
 </feed>

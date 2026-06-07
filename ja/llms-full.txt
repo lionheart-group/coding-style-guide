@@ -7397,52 +7397,87 @@ And, you can store the variables and mixins into `Foundation`.
 
 # Typical mixins
 
-## mq_sp
+## Breakpoints
 
-Generating @media for SP layout
-
-```scss
-@include mq_sp {
-    // somthing style for SP layout
-}
-
-// @media (max-width: (break point)px)
-```
-
-## mq_pc
-
-Generating @media for PC layout
+The following breakpoint map is used by media query mixins:
 
 ```scss
-@include mq_pc {
-    // somthing style for PC layout
-}
-
-// @media (min-width: (break point) + 1px)
+$breakpoints: (
+    sp: 750,   // 375 * 2
+    pc: 1060,
+);
 ```
 
 ## mq_under
 
-Generating @media for specific number and under width
+Generating @media queries for a named breakpoint and below (max-width)
 
 ```scss
-@include mq_under(number) {
-    // somthing style for specific number and under width
+@include mq_under(sp) {
+    // something style for 750px and under
 }
 
-// @media (min-width: (number) + 1px)
+// @media screen and (max-width: 750px)
+```
+
+## mq_under_exact
+
+Generating @media queries for a specific pixel value and below (max-width)
+
+```scss
+@include mq_under_exact(768) {
+    // something style for 768px and under
+}
+
+// @media screen and (max-width: 768px)
 ```
 
 ## mq_over
 
-Generating @media for specific number and over width
+Generating @media queries for a named breakpoint and above (min-width)
 
 ```scss
-@include mq_over(number) {
-    // somthing style for specific number and over width
+@include mq_over(sp) {
+    // something style for 751px and over
 }
 
-// @media (max-width: (number)px)
+// @media screen and (min-width: 751px)
+```
+
+## mq_over_exact
+
+Generating @media queries for a specific pixel value and above (min-width)
+
+```scss
+@include mq_over_exact(768) {
+    // something style for 768px and over
+}
+
+// @media screen and (min-width: 768px)
+```
+
+## mq_between
+
+Generating @media queries between two named breakpoints
+
+```scss
+@include mq_between(sp, pc) {
+    // something style for 751px to 1060px
+}
+
+// @media screen and (min-width: 751px) and (max-width: 1060px)
+```
+
+## mq_between_exact
+
+Generating @media queries between two specific pixel values
+
+```scss
+@include mq_between_exact(768, 1024) {
+    // something style for 768px to 1024px
+}
+
+// @media screen and (min-width: 768px) and (max-width: 1024px)
 ```
 
 ## get_vw
@@ -7751,7 +7786,7 @@ Please don't write a different layout style to the bottom of a file.
     }
 }
 
-@include mq_sp {
+@include mq_under(sp) {
     .c-foo {
         // something SP layout style
         &__foo {
@@ -7765,18 +7800,18 @@ Please don't write a different layout style to the bottom of a file.
 
 :::tip GOOD
 
-Please write media query under the each `.c-foo` and `.c-foo__bar` styles.
+Please write media queries under each `.c-foo` and `.c-foo__bar` style.
 
 ```scss title="scss/object/component/_foo.scss"
 .c-foo {
     // something PC layout style
-    @include mq_sp {
+    @include mq_under(sp) {
         // something SP layout style
     }
 
     &__foo {
         // something PC layout style
-        @include mq_sp {
+        @include mq_under(sp) {
             // something SP layout style
         }
     }

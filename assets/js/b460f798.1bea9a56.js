@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunklionheart_coding_style_guide=self.webpackChunklionheart_coding_style_guide||[]).push([["778"],{66903(e){e.exports=JSON.parse('{"metadata":{"permalink":"/coding-style-guide/updated","page":1,"postsPerPage":10,"totalPages":3,"totalCount":23,"nextPage":"/coding-style-guide/updated/page/2","blogDescription":"Blog","blogTitle":"Updated History"}}')}}]);
