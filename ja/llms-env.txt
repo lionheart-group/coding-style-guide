@@ -1,0 +1,586 @@
+--- https://lionheart-group.github.io/coding-style-guide/docs/env ---
+
+
+# Environment
+
+We're using GitHub repository, and Developing project in local environment through Docker.
+
+Please check each documents, and prepare environment to your machine.
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/env/vscode ---
+
+
+# Visual Studio Code
+
+## Installation
+
+### Manual install
+
+You can download installer from [Official website](https://code.visualstudio.com/).
+
+### macOS
+
+**Homebrew Cask**
+
+```bash
+brew install --cask vscode
+```
+
+### Windows
+
+**Scoop**
+
+```bash
+scoop install vscode
+```
+
+## editorconfig
+
+Our project has [EditorConfig](https://editorconfig.org/) setting file (.editorconfig). EditorConfig helps maintain consistent coding styles for multiple developers working on the same project across various editors and IDEs.
+
+### Required plugin
+
+- [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+
+## stylelint
+
+[stylelint](https://stylelint.io/) helps you avoid errors and enforce conventions in your styles.
+
+After you install the following plugin and settings, stylelint will automatically check and fix your syntax.
+
+### Required plugin
+
+- [stylelint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint)
+
+### Settings
+
+1. Open preferences (`⌘ + ,`)
+2. Click the top-right button and open `settings.json` file
+3. Insert the following syntax `editor.codeActionsOnSave` is same with eslint configuration. so if it's already exists, just insert the content of it.
+
+```json
+"editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": true
+}
+```
+
+## eslint
+
+[ESLint](https://eslint.org/) statically analyzes your code to quickly find problems.
+
+After you install the following plugin and settings, ESLint will automatically check and fix your syntax.
+
+### Required plugin
+
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+
+### Settings
+
+1. Open preferences (`⌘ + ,`)
+2. Click the top-right button and open `settings.json` file
+3. Insert the following syntax `editor.codeActionsOnSave` is same with stylelint configuration. so if it's already exists, just insert the content of it.
+
+```json
+"editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+}
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/env/git ---
+
+
+# Git
+
+We're managing our project source code by [GitHub](https://github.com/).
+
+When you download/upload to GitHub, you need to use Git command.
+
+## Installation
+
+### For macOS
+
+You can install Git command through [Homebrew](https://brew.sh/).
+
+**Homebrew**
+
+```bash
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+**Git**
+
+After installing Homebrew.
+
+```bash
+brew install git
+```
+
+### For Windows
+
+You can install Git command through [Scoop](https://scoop.sh).
+
+**Scoop**
+
+```bash
+Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+
+# or shorter
+iwr -useb get.scoop.sh | iex
+```
+
+**Git**
+
+After installing Scoop.
+
+```bash
+scoop install git
+```
+
+## Advanced
+
+Git is able to make diff between target branches or commits. By using it, you can prepare the file list that was changed between branches or commits.
+
+If you're using [Zsh](https://www.zsh.org/) (Default shell of macOS), you can add the following function to your `~/.zshrc` file.
+
+```shell
+# Create diffrence files between current with specified commit
+# git_diff ${commit_no}
+function git_diff() {
+    git diff $1 --diff-filter=ACMR --name-only | sed -e 's/\(^.*$\)/"\1"/g' | xargs git archive --format=zip --prefix=_diff/ HEAD -o _diff.zip
+}
+```
+
+If you're using [Fish](https://fishshell.com/), you can add the following function to your `~/.config/fish/config.fish` file. **(I haven't check this works properly yet, so if it's not working, please let me know)**
+
+```shell
+# Create diffrence files between current with specified commit
+# git_diff ${commit_no}
+function git_diff
+    git diff $argv[1] --diff-filter=ACMR --name-only | sed -e 's/\(^.*$\)/"\1"/g' | xargs git archive --format=zip --prefix=_diff/ HEAD -o _diff.zip
+end
+```
+
+After adding the function, you can use `git_diff` command to create a zip file that contains the difference between the current branch and the specified commit.
+
+```shell
+git_diff ${commit_no}
+
+# Example usage : compare with the latest commit
+git_diff HEAD^
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/env/node ---
+
+
+# Node.js (Volta)
+
+You can install Node.js through many kind of ways, and LH project has required different Node.js version depends on the project. so, we should install Node.js version manager to switch version easier.
+
+Then, we recommend to install [Volta](https://volta.sh/) for it.
+
+## If you already installed Node.js
+
+First, please check where to install Node.js.
+
+```bash
+which node
+# -> /Users/(user name)/.volta/bin/node : Already installed by Volta
+# -> /usr/local/bin/node (or other) : Need to uninstall exist Node.js
+```
+
+### Uninstall Node.js
+
+Please uninstall Node.js if you already installed Node.js.
+
+```bash
+brew uninstall node
+```
+
+## Install Volta
+
+```bash
+# Install volta
+curl https://get.volta.sh | bash
+
+# Install node LTS version
+volta install node@lts
+
+# Check Node.js place
+which node
+```
+
+## Install specific Node.js version
+
+Volta is able to install specific version.
+
+```bash
+# If you want to install Node.js 14
+volta install node@14
+```
+
+and, able to assign specific version to specific project.
+
+```bash
+# Please run the following command under the project directory
+volta pin node@14
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/env/pnpm ---
+
+
+# pnpm (corepack)
+
+:::warning NOTICE
+
+pnpm is still experimental for LH project.
+
+:::
+
+pnpm is a fast, disk space efficient package manager for Node.js. It is a drop-in replacement for npm, but faster and more efficient.
+
+## If you already installed pnpm and corepack
+
+We're using [corepack](https://github.com/nodejs/corepack) to install pnpm. so you need to uninstall pnpm if you already installed pnpm.
+
+```bash
+# Uninstall from Homebrew
+brew uninstall pnpm
+# Uninstall from volta
+volta uninstall pnpm
+```
+
+corepack is a package manager for Node.js that installs packages from the npm registry. And, Node.js is managed by Volta. so, You can install corepack by Volta as well, and need to uninstall corepack if you already installed corepack.
+
+```bash
+brew uninstall corepack
+```
+
+## Install/Enable corepack
+
+### Install corepack
+
+```bash
+volta install corepack
+```
+
+### Enable corepack
+
+```bash
+corepack enable
+corepack pnpm enable
+```
+
+## How to use pnpm
+
+You can use pnpm as same as npm.
+
+```bash
+pnpm install
+pnpm run watch
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/env/docker ---
+
+
+# Docker
+
+## Install Applications
+
+You need to install [Docker Desktop](https://www.docker.com/products/docker-desktop).
+
+## Set up Local environment
+
+There are Dockerfile template of local environment on [GitHub](https://github.com/sushat4692/docker-lamp).
+
+### Initial setting up
+
+Open Terminal, and run following commands.
+
+```bash
+# Creating Developing Directory
+mkdir ~/Virtual
+
+# Anywhere is OK, move to your favorite place
+# For example, into your user directory
+cd ~/
+
+# Getting datas from GitHub
+git clone https://github.com/sushat4692/docker-lamp.git
+
+# Move to downloaded directory
+cd docker-lamp
+
+# Duplicate `.env.sample` to `.env`
+cp .env.sample .env
+```
+
+## Operating Docker commands
+
+```bash
+# Up (Build and Start) containers
+./command.sh up
+
+# Start containers
+./command.sh start
+
+# Stop containers
+./command.sh stop
+
+# Delete containers, images and volumes
+./command.sh delete
+```
+
+### How to change PHP versions
+
+This docker setting is able to change PHP version by the following command:
+
+```bash
+./command.sh up {version number}
+```
+
+so, for example if you want to run PHP 8.1:
+
+```bash
+./command.sh up 81
+```
+
+## After that
+
+After you setting up, you can use local environment and it's related localhost to `~/Virtual`.
+
+```
+http://foo.localhost/ -> ~/Virtual/foo/htdocs
+http://bar.localhost/ -> ~/Virtual/bar/htdocs
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/env/agentic-coding ---
+
+
+# Agentic Coding (Beta)
+
+The Agentic Coding Environment allows AI agents to perform coding tasks autonomously.
+
+This guide covers the installation and setup of the Agentic Coding Environment for Fegg or WordPress projects, enabling you to implement pages directly from Figma designs.
+
+## Requirements
+
+- **Visual Studio Code**
+  - [Installation and Setup Guide](./vscode)
+  - Version **1.108.0** or higher is required to support "Agent Skills" feature (`chat.useAgentSkills`).
+- **VS Code Settings**
+  - The setting `chat.useAgentSkills` must be set to `true`.
+  - Reference: [Use Agent Skills in VS Code](https://code.visualstudio.com/docs/copilot/customization/agent-skills)
+- **GitHub Copilot**
+  - [GitHub Copilot in VS Code](https://code.visualstudio.com/docs/copilot/overview) must be installed and configured.
+  - Reference: [GitHub Copilot in VS Code Setup Guide](https://code.visualstudio.com/docs/copilot/setup)
+- **Figma MCP Server**
+  - The Figma MCP server must be installed in VS Code.
+  - Reference: [Figma MCP Server Setup Guide](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Figma-MCP-server)
+
+## Skills
+
+- `figma-to-page`: Converts Figma designs into code.
+
+## Sample Prompts
+
+You can use the following sample prompt to generate pages from Figma designs.
+
+```txt
+Generate the top page (/) of the following Figma design by using the `figma-to-page` skill.
+
+## PC
+
+[URL]
+
+## SP
+
+[URL]
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/env/dnsmasq ---
+
+
+# Dnsmasq
+
+For macOS environment, localhost subdomains are not able to confirm by browsers except for Google Chrome. But, if you install and setting [Dnsmasq](https://thekelleys.org.uk/dnsmasq/doc.html), you'll be able to confirm localhost on any browsers.
+
+:::info
+
+No need to install on Windows environment.
+
+:::
+
+## Install
+
+You need installing following applications.
+
+- [Homebrew](https://brew.sh/)
+- [Dnsmasq](https://thekelleys.org.uk/dnsmasq/doc.html)
+
+### How to install
+
+**Homebrew**
+
+Please check [Git page](/docs/env/git).
+
+**Dnsmasq**
+
+After installing Homebrew.
+
+```bash
+brew install dnsmasq
+```
+
+## Setting up
+
+```bash
+# Adding *.localhost setting to Dnsmasq configuration file
+echo 'address=/.localhost/::1' >> $(brew --prefix)/etc/dnsmasq.conf
+echo 'address=/.localhost/127.0.0.1' >> $(brew --prefix)/etc/dnsmasq.conf
+
+# Preparing *.localhost resolver file
+sudo mkdir -v /etc/resolver
+sudo bash -c 'echo "nameserver ::1" >> /etc/resolver/localhost'
+sudo bash -c 'echo "nameserver 127.0.0.1" >> /etc/resolver/localhost'
+
+# Run Dnsmasq and Setting up auto-start
+sudo brew services start dnsmasq
+
+# Then you can see it :)
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/env/deprecated/virtualbox ---
+
+
+# VirtualBox
+
+:::danger Deprecated
+
+on M1 mac, VirtualBox won't work, so please implement local environment by [Docker](/docs/env/docker).
+
+:::
+
+## Install Applications
+
+You need installing following applications.
+
+- [VirtualBox](https://www.virtualbox.org/)
+- [Vagrant](https://www.vagrantup.com/)
+- [Homebrew](https://brew.sh/)
+- [Git](https://git-scm.com/)
+- [Ansible](https://www.ansible.com/)
+
+### How to install
+
+**VirtualBox**
+
+1. Access to [website](https://www.virtualbox.org/), and click download button.
+2. Click "OS X hosts" link
+
+**Vagrant**
+
+1. Access to [website](https://www.vagrantup.com/), and click download button.
+2. Click macOS > "64-bit" link
+
+**Homebrew and Git**
+
+Please check [Git page](/docs/env/git).
+
+**Ansible**
+
+After installing Homebrew.
+
+```bash
+brew install ansible
+```
+
+### Check the installation
+
+```bash
+# Vagrant
+vagrant -v
+  > Vagrant *.*.*
+
+# Git
+git --version
+  > git version *.*.*
+
+# Ansible
+ansible --version
+  > ansible *.*.*
+```
+
+## Set up Local environment
+
+There are ansible template of local environment on [GitHub](https://github.com/sushat4692/VagrantAnsible).
+
+### Initial setting up
+
+Open Terminal, and run following commands.
+
+```bash
+# Creating Developing Directory
+mkdir ~/Virtual
+
+# Anywhere is OK, move to your favorite place
+# For example, into your user directory
+cd ~/
+
+# Getting datas from GitHub
+git clone https://github.com/sushat4692/VagrantAnsible.git
+
+# Move to downloaded directory
+cd VagrantAnsible
+
+# Running Vagrant command
+vagrant up --provision
+```
+
+## After that
+
+After you setting up, you can use local environment and it's related localhost to `~/Virtual`.
+
+```
+http://foo.localhost/ -> ~/Virtual/foo/htdocs
+http://bar.localhost/ -> ~/Virtual/bar/htdocs
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/env/deprecated/watchman ---
+
+
+# Watchman
+
+:::warning Deprecated
+
+Watchman is no need to install for latest task runner.
+
+:::
+
+We are using [Watchman](https://facebook.github.io/watchman/) for file watching and automatically compiling. so, please install to your PC.
+
+## macOS
+
+You can install through Homebrew.
+
+```bash
+brew install watchman
+```
+
+## Windows
+
+Watchman does not provide installer for Windows, so it's a little hard...
+
+[Official website's instruction](https://facebook.github.io/watchman/docs/install.html#binary-downloads-for-linux-macos-and-windows-beta)
+
+1. Download from [GitHub Relase](https://github.com/facebook/watchman/releases)
+2. After extracting, copy to where you want (e.g. `Program Files`)
+3. Add directory path of `bin` inside of watchman to `PATH`（[Reference of how to add to PATH](https://helpdeskgeek.com/windows-10/add-windows-path-environment-variable/)）

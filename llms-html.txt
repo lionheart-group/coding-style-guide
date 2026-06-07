@@ -1,0 +1,1867 @@
+--- https://lionheart-group.github.io/coding-style-guide/docs/html ---
+
+
+# HTML Coding Guide
+
+We're creating web site/system with project members, and sometimes we give the project each other during project or for updating. so, we prepared specified coding guide for understanding project structure easier.
+
+Please check each documents, and follow these coding guide.
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/basic/directory ---
+
+
+# Directory structure
+
+```bash
+- htdocs/  # Document root
+  └ data/
+      ├ scss/ # SCSS directory
+      │  ├ foundation/
+      │  ├ layout/
+      │  └ object/
+      │     ├ component/
+      │     ├ project/
+      │     └ utility/
+      ├ css/  # Compiled css (Won't include into Repository)
+      ├ js/   # JavaScript directory
+      │  ├ vendor/  # Please put libraries e.g. Slider library
+      │  └ views/   # Each page's JavaScript files
+      └ img/  # Image directory
+          ├ common/  # Common images
+          └ views/   # Each page's images
+              └ index/  # Top page's images
+```
+
+> Image/JS file's place should be adjust by URL
+
+## Sample
+
+- http://example.com/
+  - **Image** : htdocs/data/img/views/index/
+  - **SCSS** : htdocs/data/scss/object/project/\_index.scss
+  - **JS** : htdocs/data/js/views/index.js
+- http://example.com/sample/
+  - Common for `sample`
+    - **Image** : htdocs/data/img/views/sample/common/
+    - **JS** : htdocs/data/js/views/sample/common.js
+  - **Image** : htdocs/data/img/views/sample/index/
+  - **SCSS** : htdocs/data/scss/object/project/\_sample.scss
+  - **JS** : htdocs/data/js/views/sample/index.js
+- http://example.com/sample/test.html
+  - Common for `sample`
+    - **Image** : htdocs/data/img/views/sample/common/
+    - **JS** : htdocs/data/js/views/sample/common.js
+  - **Image** : htdocs/data/img/views/sample/test/
+  - **SCSS** : htdocs/data/scss/object/project/\_sample-test.scss
+  - **JS** : htdocs/data/js/views/sample/test.js
+- http://example.com/sample/test/
+  - Common for `sample`
+    - **Image** : htdocs/data/img/views/sample/common/
+    - **JS** : htdocs/data/js/views/sample/common.js
+  - Common for `sample/test`
+    - **Image** : htdocs/data/img/views/sample/test/common/
+    - **JS** : htdocs/data/js/views/sample/test/common.js
+  - **Image** : htdocs/data/img/views/sample/test/index/
+  - **SCSS** : htdocs/data/scss/object/project/\_sample-test.scss
+  - **JS** : htdocs/data/js/views/sample/test/index.js
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/basic/important/alt ---
+
+# Alt attribute of img tag
+
+- **You MUST put `alt` attribute** to every `img` tag
+- If the image has text, **you should use the text as the `alt` attribute**
+  - If you can't copy the text from the design (e.g. text in an image), **you should inform the designer or the project director** to provide the text
+- If the image is purely decorative, **you can use `alt=""`** to indicate that it doesn't convey any information
+
+:::info REASON
+
+- **Accessibility**: Screen readers use the `alt` text to describe the image to visually impaired users.
+- **Fallback**: If the image can't load (broken link, slow connection), the `alt` text is displayed instead, so users still understand the content.
+- **SEO**: Search engines use the `alt` text to understand the image, which can help your website rank better in search results.
+
+:::
+
+:::warning TIPS
+
+Why you should avoid `alt="image"` or `alt="filename.jpg"`:
+
+- It doesn't provide any useful information to users or search engines
+- It's redundant because the `img` tag already indicates that it's an image
+- Use descriptive text that conveys the content or function of the image.
+
+Why you should put `alt=""` for decorative images:
+
+- It tells screen readers that the image is purely decorative and doesn't convey any information
+- It prevents screen readers from reading out unnecessary information to visually impaired users
+  - If the img tag doesn't have alt attribute, screen readers will read out the filename or the URL of the image
+
+:::
+
+## Example
+
+:::danger BAD
+
+You must put `alt` attribute to every `img` tag
+
+```html
+<img src="logo.png">
+```
+
+:::
+
+:::tip GOOD
+
+You should use the text as the `alt` attribute
+
+```html
+<img src="logo.png" alt="Company name">
+```
+
+If the image is purely decorative, you can use `alt=""`
+
+```html
+<img src="decorative.png" alt="">
+```
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/basic/important/headline ---
+
+# Headline tags (hx tags)
+
+- `<h1>` - `<h6>`: Headline tags
+- `<h1>`: Most important headline, **you must have every page**, and **only one `<h1>` tag in a page**
+- `<h2>`: Subheading, used for sections within your main content
+- `<h3>` - `<h6>`: Used for further subdivisions of content
+- **You should use `<h1>` to `<h6>` tags in order**
+
+:::info REASON
+
+- **SEO**: Search engines use headline tags to understand the structure and content of your page
+- **Accessibility**: Screen readers use headline tags to help visually impaired users navigate your content
+- **Readability**: Headline tags help users quickly scan your content and understand the hierarchy of information
+
+:::
+
+## Example
+
+:::danger BAD
+
+You must include `<h1>` tag in every page
+
+```html
+<body>
+    <section>
+        <h2>Subheading</h2>
+        <h3>Sub-subheading</h3>
+    </section>
+</body>
+```
+
+You should not skip heading levels
+
+```html
+<body>
+    <h1>Heading Title</h1>
+
+    <section>
+        <h3>Sub-subheading</h3>
+    </section>
+
+    <section>
+        <h2>Subheading</h2>
+        <h3>Sub-subheading</h3>
+    </section>
+</body>
+```
+
+:::
+
+:::tip GOOD
+
+```html
+<body>
+    <h1>Heading Title</h1>
+
+    <section>
+        <h2>Subheading</h2>
+        <h3>Sub-subheading</h3>
+    </section>
+
+    <section>
+        <h2>Subheading</h2>
+        <h3>Sub-subheading</h3>
+    </section>
+</body>
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/image/naming ---
+
+
+# Naming rules
+
+## Basically rules
+
+- You should be lower case, unless you have special reason.
+- You must not use full width character(e.g. Japanese character).
+- When you partition filename by words, you should use `"-"`, not "\_".
+- You must not use words that associated temporary meanings, because we're using version control tool.
+  - e.g. bu, backup, 20160101, Copy of ~, and so on.
+
+## Detail rules
+
+You should name images like below. and, you should not name serial number of whole images.
+
+- For button images
+  - `btn-`(place)-(purpose).(extension)
+  - _e.g.) btn-section01-inquiry.png_
+- For background images
+  - `bg-`(place)-(purpose).(extension)
+  - _e.g.) bg-contact-helper.png_
+- For banner images
+  - `ban-`(place)-(purpose).(extension)
+  - _e.g.) ban-footer-estate.png_
+- For list images
+  - `li-`(place)-(purpose).(extension)
+  - _e.g.) li-side-backquote.png_
+- For headline images
+  - `h-`(place)-(purpose).(extension)
+  - _e.g.) h-simulation.png_
+- For navigation images
+  - `nav-`(place)-(purpose).(extension)
+  - _e.g.) nav-side-guide.png_
+- For icon images
+  - `icon-`(place)-(purpose).(extension)
+  - _e.g.) icon-footer-mark.png_
+- For thumbnail images
+  - `thum-`(place)-(purpose).(extension)
+  - _e.g.) thum-news-photo01.png_
+- For line images
+  - `line-`(place)-(purpose).(extension)
+  - _e.g.) line-breadcrumbs-separator.png_
+- For text images
+  - `txt-`(place)-(purpose).(extension)
+  - _e.g.) txt-simulation-lead.png_
+- For the other images
+  - `img-`(place)-(purpose).(extension)
+  - _e.g.) img-news-daily.png_
+
+:::note
+
+If each page has the same purpose images, you should make it as the same name.
+
+**e.g.) Background image of main visual** Don't make it "bg-visual-about.jpg", "bg-visual-company.jpg". You should make it "bg-visual.jpg" for all the pages.
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/image/export ---
+
+
+# Exporting rules
+
+We need to think about the loading speed, and the image's quality. so, we need to think what format is the best for each image.
+
+## For supporting high resolution display
+
+- We should export SVG image for Logo, Icon and such as simple path images
+  - If those images are not created by Vector images, please let designers to know
+  - If there is no Vector images, we should export 2x images of JPG/PNG
+- Smaller than 600px in design data, we should export 2x images of JPG/PNG
+- If the images are same ratio with PC and SP designs, we should use same image
+- If we need to use separated image for PC/SP, we should use `<picture>` tag for it
+  - Please see [Embed flexible image](/docs/html/tips/picture)
+
+## Image format
+
+### JPEG <small>(.jpg)</small>
+
+- JPEG format is using a lossy compression method, and not support transparency color.
+- If the image has a lot of colors, JPG compression makes it smaller than PNG compression, so you should choose JPG format.
+- You should export JPG images with quality **80% (0.8)**, unless you have special reason.
+
+### PNG <small>(.png)</small>
+
+> You should choose PNG format when you need translucent expression.
+
+- PNG format is using lossless compression method, and support transparency color.
+- Recently, PNG format supported animation also (APNG), but several browsers are not supporting APNG format yet.
+
+### SVG <small>(.svg)</small>
+
+> You should use SVG format for the graphics made by combination of simple paths (e.g. Logo, Icon)
+
+- SVG format is vector-based graphics unlike other format, so SVG format does NOT lose any quality if they are zoomed or resized
+- SVG has gradation functions but it's not supported on some of browser yet
+- When SVG file has complex paths data, there is a possibility to effect to browser performance
+
+:::warning
+
+When you export SVG image, be careful about "text" element. If it's included, convert to path before exporting.
+
+:::
+
+### Webp <small>(.webp)</small>
+
+- WebP format is modern format that provides lossless and lossy compression for images on the web.
+- Can't export from XD directly, so please convert JPEG/PNG/GIF to WebP through [`convert:webp` task runner](/docs/html/task-runner/scripts/convert-webp).
+
+:::info
+
+We will support WebP format by using `.htaccess` file, so you don't need to implement `<picture>` tag for WebP format.
+
+:::
+
+### Other format
+
+:::warning
+
+We won't use the following format.
+
+:::
+
+#### GIF <small>(.gif)</small>
+
+- GIF format is also using lossless compression method.
+- GIF format is able to include only transparent color, not translucent color.
+<!-- * We won't use GIF format basically, but if you need GIF animation you can choose this. -->
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies ---
+
+
+# About Methodologies
+
+:::warning WARNING
+
+There are different rules from the old version. Please see the reference migration guide. [Migrations from Old rules](/docs/html/methodologies/migrations)
+
+:::
+
+Basically, We'll follow [FLOCSS](https://github.com/hiloki/flocss/blob/master/README_eng) CSS methodologies, and we have the enhanced rules.
+
+## Enhanced rules
+
+Originally in FLOCSS rules, `Project` is defined combination of `Component`, but we define that has own each page style.
+
+And, originally, `Component` should make a small part, but the small component is not so useful in the case of "Web site". so, we define `Component` that **the element that included in multiple pages**.
+
+## SCSS directory structure
+
+We prepare the directory structure same with FLOCSS basic rules.
+
+```
+- scss
+  ├ foundation/
+  ├ layout/
+  └ object/
+      ├ component/
+      ├ project/
+      └ utility/
+```
+
+## Important points
+
+We prepared several limitations, please see the following links.
+
+- [File name and Class name](/docs/html/methodologies/important/name)
+- [Don't include other component](/docs/html/methodologies/important/child)
+- [Don't use tag selector](/docs/html/methodologies/important/selector)
+- [Place of media query](/docs/html/methodologies/important/media_query)
+
+## Explaining of each layers
+
+- [Foundation](/docs/html/methodologies/foundation)
+- [Layout](/docs/html/methodologies/layout)
+- Object
+  - [Component](/docs/html/methodologies/object/component)
+  - [Project](/docs/html/methodologies/object/project)
+  - [Utility](/docs/html/methodologies/object/utility)
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/migrations ---
+
+
+# Migrations from Old rules
+
+## Don't use tag selector
+
+We allowed the child selector, but we changed the rule. Because, child selector has a week point. When you change the tag structures (e.g. when you change `<span>` to `<a>`), child selector won't be available.
+
+Detail: [Don't use tag selector](/docs/html/methodologies/important/selector)
+
+## Removed Views layer
+
+We removed `Views` layer, and we use `Project` as define patterns which are unique layout for each page.
+
+Then, you don't need to import each page's css from HTML.
+
+Detail: [Project](/docs/html/methodologies/object/project)
+
+## Change Utility class names
+
+- The class of displaying PC or SP style
+  - `.sp`, `.pc` -> `.u-sp-only`, `.u-pc-only`
+- The class of enabling anchor only displaying SP layout
+  - `.u-tel-anchor` -> `.u-anchor-tel`
+  - Also, you can assign this class to `<a href>` instead `<span data-href>`
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/layout ---
+
+
+# Layout
+
+> The layout layer defines the styles of large common containers such as the header area, main contents area, sidebar and footer.
+
+FLOCSS allows to use id for `Layout`, but we're using `.l-` prefix, unless you have special reason.
+
+## Example
+
+```html
+<header class="l-header">
+    <p class="l-header__logo">
+        <img class="l-header__logo__image">
+    </p>
+</header>
+```
+
+```scss title="scss/layout/_header.scss"
+.l-header {
+    &__logo {
+        &__image {
+        }
+    }
+}
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/foundation ---
+
+
+# Foundation
+
+> The Foundation layer defines the defaults. This includes resetting browser stylings with Reset.css and Normalize.css and defining basic styling. The background color and basic typography of the project should be included in this layer.
+
+We're using [Sanitize.css](https://csstools.github.io/sanitize.css/) for initializing styles, and putting into `foundation/_base.scss` about additional initial style. (e.g. we're removing margin of `h*`, bullet of `ul` and so on)
+
+And, you can store the variables and mixins into `Foundation`.
+
+:::tip TIPS
+
+[Typical mixins](/docs/html/methodologies/foundation/mixin)
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/foundation/mixin ---
+
+
+# Typical mixins
+
+## mq_sp
+
+Generating @media for SP layout
+
+```scss
+@include mq_sp {
+    // somthing style for SP layout
+}
+
+// @media (max-width: (break point)px)
+```
+
+## mq_pc
+
+Generating @media for PC layout
+
+```scss
+@include mq_pc {
+    // somthing style for PC layout
+}
+
+// @media (min-width: (break point) + 1px)
+```
+
+## mq_under
+
+Generating @media for specific number and under width
+
+```scss
+@include mq_under(number) {
+    // somthing style for specific number and under width
+}
+
+// @media (min-width: (number) + 1px)
+```
+
+## mq_over
+
+Generating @media for specific number and over width
+
+```scss
+@include mq_over(number) {
+    // somthing style for specific number and over width
+}
+
+// @media (max-width: (number)px)
+```
+
+## get_vw
+
+Calculating from px to vw
+
+`get_vw(original px, basis width)`
+
+```scss
+.c-foo {
+    font-size: get_vw(16, 1000);
+    // -> (100 / 1000) * 16
+    // -> font-size: 1.6vw
+}
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/important/name ---
+
+
+# File name and Class name
+
+- **You must create the file the same name with the prefix** of classes for `Layout`, `Project`, `Component`, `Utility`, except for the files in Foundation.
+- **You must not include multiple prefix class names in one file**, except for `Utility` files that have the special reason for preparing different layout for PC/SP (`.u-pc-***`, `.u-sp-***`).
+
+:::info REASON
+
+When you put the same name with a file name and class name, It will avoid the conflict with the class name.
+
+:::
+
+## Example
+
+:::danger BAD
+
+You must not include the following class name in one file, even if similar name.
+
+```scss title="scss/object/component/_foo.scss"
+.c-foo {
+    // something style
+}
+.c-foo-bar {
+    // something style
+}
+```
+
+:::
+
+:::tip GOOD
+
+Please separate files like this.
+
+```scss title="scss/object/component/_foo.scss"
+.c-foo {
+    // something style
+}
+```
+
+```scss title="scss/object/component/_foo-bar.scss"
+.c-foo-bar {
+    // something style
+}
+```
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/important/child ---
+
+
+# Don't include other component
+
+**You must NOT include other Components in a Component.** And, **You must NOT use ONLY child components, without parent component.**
+
+:::info REASON
+
+When you make styles in one Component, you can avoid unintentional layout with Components combination.
+
+:::
+
+## Example(1)
+
+:::danger BAD
+
+You must NOT include `.c-bar` into `.c-foo`, even if you want to change the layout of `.c-bar` inside of `.c-foo`.
+
+```html
+<div class="c-foo">
+    <div class="c-bar"></div>
+</div>
+```
+
+```scss title="scss/object/component/_foo.scss"
+.c-foo {
+    // something style
+    .c-bar {
+        // something style
+    }
+}
+```
+
+:::
+
+:::tip GOOD
+
+You can resolved above issue by preparing a child component of `.c-foo` and assign it together with `.c-bar`.
+
+```html
+<div class="c-foo">
+    <div class="c-foo__child c-bar"></div>
+</div>
+```
+
+```scss title="scss/object/component/_foo.scss"
+.c-foo {
+    // something style
+    &__child {
+        // something style
+    }
+}
+```
+
+:::
+
+## Example(2)
+
+:::danger BAD
+
+You must NOT use `.c-bar__child` except for parent component `.c-bar`.
+
+```html
+<div class="c-foo">
+    <div class="c-bar__child"></div>
+</div>
+```
+
+:::
+
+:::tip GOOD
+
+You should wrap child component `.c-bar__child` by parent component `.c-bar`.
+
+```html
+<div class="c-foo">
+    <div class="c-bar">
+        <div class="c-bar__child"></div>
+    </div>
+</div>
+```
+
+Or
+
+```html
+<div class="c-foo c-bar">
+    <div class="c-bar__child"></div>
+</div>
+```
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/important/selector ---
+
+
+# Don't use tag selector
+
+You must NOT use tag selector except for the inside of `Foundation`.
+
+:::tip TIPS
+
+We allowed the child selector before, but we changed the rule. Because, child selector has a week point. When you change the tag structures (e.g. when you change `<span>` to `<a>`), child selector won't be available.
+
+:::
+
+:::info REASON
+
+This rule will avoid the unintentional layout.
+
+:::
+
+## Example
+
+:::danger BAD
+
+You must not use tag selector even if it's child selector.
+
+```html
+<div class="c-foo">
+    <p></p>
+</div>
+```
+
+```scss title="scss/object/component/_foo.scss"
+.c-foo {
+    > p {
+        // something style
+    }
+}
+```
+
+:::
+
+:::tip GOOD
+
+Prepare as the child component.
+
+```html
+<div class="c-foo">
+    <p class="c-foo__child"></p>
+</div>
+```
+
+```scss title="scss/object/component/_foo.scss"
+.c-foo {
+    &__child {
+        // something style
+    }
+}
+```
+
+:::
+
+:::tip GOOD
+
+Please prepare as the child components even if for `<table>` that is needed complex structure.
+
+```html
+<table class="c-table">
+    <thead class="c-table__thead">
+        <tr class="c-table__thead__row">
+            <th class="c-table__thead__head"></th>
+            <td class="c-table__thead__data"></td>
+        </tr>
+    </thead>
+    <tbody class="c-table__tbody">
+        <tr class="c-table__tbody__row">
+            <th class="c-table__tbody__head"></th>
+            <td class="c-table__tbody__data"></td>
+        </tr>
+    </tbody>
+</table>
+```
+
+```scss title="scss/object/component/_table.scss"
+.c-table {
+    &__thead {
+        // something style
+        &__row {
+            // something style
+        }
+        &__head {
+            // something style
+        }
+        &__data {
+            // something style
+        }
+    }
+    &__tbody {
+        // something style
+        &__row {
+            // something style
+        }
+        &__head {
+            // something style
+        }
+        &__data {
+            // something style
+        }
+    }
+}
+```
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/important/media_query ---
+
+
+# Place of media query
+
+Please write a style of one element for PC/SP collectively.
+
+:::tip TIPS
+
+We separated PC/SP layout the above and the bottom.
+
+:::
+
+:::info REASON
+
+You can find the same style with PC and SP easily when you write it collectively.
+
+:::
+
+## Example
+
+:::danger BAD
+
+Please don't write a different layout style to the bottom of a file.
+
+```scss title="scss/object/component/_foo.scss"
+.c-foo {
+    // something PC layout style
+    &__foo {
+        // something PC layout style
+    }
+}
+
+@include mq_sp {
+    .c-foo {
+        // something SP layout style
+        &__foo {
+            // something SP layout style
+        }
+    }
+}
+```
+
+:::
+
+:::tip GOOD
+
+Please write media query under the each `.c-foo` and `.c-foo__bar` styles.
+
+```scss title="scss/object/component/_foo.scss"
+.c-foo {
+    // something PC layout style
+    @include mq_sp {
+        // something SP layout style
+    }
+
+    &__foo {
+        // something PC layout style
+        @include mq_sp {
+            // something SP layout style
+        }
+    }
+}
+```
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/important/modifier ---
+
+
+import styles from '@site/src/css/docs/html/methodologies/important/modifier.module.scss';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Don't use single class for Modifier
+
+"Modifier" cannot use as one class, it's needed to use with other component. Because, "Modifier" represents a different state or version of "Components".
+
+## Example
+
+:::danger BAD
+
+This example is not good, because modifier is specified as single class.
+
+```scss
+.c-component {
+    .is-child {
+        // something style
+    }
+}
+```
+
+:::
+
+:::tip GOOD
+
+Please change to component
+
+```scss
+.c-component {
+    &__child {
+        // something style
+    }
+}
+```
+
+:::
+
+## Example of that is needed Modifier
+
+For example, if you need to implement like the following buttons.
+
+<div className={styles.sample_buttons}>
+    <button className={styles.sample_buttons__button}>Base Button</button>
+    <button className={`${styles.sample_buttons__button} ${styles['is-red']}`}>Red Button</button>
+    <button className={`${styles.sample_buttons__button} ${styles['is-blue']}`}>Blue Button</button>
+</div>
+
+Its differences are just background and border colors. so, please use modifier.
+
+<Tabs>
+<TabItem value="scss" label="SCSS" default>
+
+```scss
+// `.c-button` is base style Component
+.c-button {
+    color: #fff;
+    appearance: none;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 1rem 2rem;
+    border: 1px solid #999;
+    background: #333;
+    border-radius: .25rem;
+
+    // For red button modifier
+    &.is-red {
+        border: 1px solid #f00;
+        background: #c00;
+    }
+
+    // For blue button modifier
+    &.is-blue {
+        border: 1px solid #00f;
+        background: #333;
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<button class="c-button">Base Button</button>
+<button class="c-button is-red">Red Button</button>
+<button class="c-button is-blue">Blue Button</button>
+```
+
+</TabItem>
+</Tabs>
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/object/component ---
+
+
+# Component
+
+> Defines small scale modules as patterns for re-use.
+>
+> This includes patterns commonly used such as button in the Bootstrap Component category.
+>
+> Modules defined in this layer should have minimal styling. For example, try to avoid defining a set width or color.
+
+FLOCSS recommends to separate by small units but we're allowing to make a big Component. Instead, **you must put into `Component` about the reuse layout of the website.**
+
+You must use `.c-` prefix for Component.
+
+About modifire, you should use SMACSS State pattern (`.is-` prefix).
+
+:::tip TIPS
+
+About modifier, please put like `&.is-modifier`, because modifier is represent a different state of component.
+
+Reference : [Don't use single class for Modifier](../important/modifier)
+
+:::
+
+## In case of small Component
+
+```html
+<button class="c-button">Button</button>
+<button class="c-button is-primary">Primary button</button>
+<button class="c-button is-secondary">Secondary button</button>
+```
+
+```scss title="scss/object/component/_button.scss"
+.c-button {
+    // something style
+
+    &.is-primary {
+        // something style
+    }
+    &.is-secondary {
+        // something style
+    }
+}
+```
+
+## In case of big Component
+
+```html
+<div class="c-contact-banner">
+    <h2 class="c-contact-banner__head">Contact</h2>
+    <div class="c-contact-banner__inner">
+        <div class="c-contact-banner__tel">
+            <p class="c-contact-banner__label">Phone</p>
+            <a class="tel:0000000000" class="c-contact-banner__tel__anchor u-anchor-tel">000-000-0000</a>
+        </div>
+        <div class="c-contact-banner__form">
+            <p class="c-contact-banner__label">Email</p>
+            <a href="/contact/" class="c-contact-banner__form__button c-button">Contact form</a>
+        </div>
+    </div>
+</div>
+```
+
+```scss title="scss/object/component/_contact-banner.scss"
+.c-contact-banner {
+    &__head {
+    }
+    &__inner {
+    }
+    &__label {
+    }
+    &__tel {
+        &__anchor {
+        }
+    }
+    &__form {
+        &__button {
+        }
+    }
+}
+```
+
+:::tip TIPS
+
+This example Component has Utility (`.u-anchor-tel`) and another Component (`.c-button`), but you must NOT overwrite styles of those inside of `.c-contact-banner` Component. Please make Child Component (e.g. `.c-contact-banner__tel__anchor` and `.c-contact-banner__form__button`), then you can define the style of those elements.
+
+Reference : [Don't include other component](/docs/html/methodologies/important/child)
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/object/project ---
+
+
+# Project
+
+> ~~Define patterns which are unique to the project which consists of several components and other elements.~~
+>
+> ~~Elements that make up contents for your project come under this layer, such as an article list, user profile, or image gallery.~~
+
+Original FLOCLSS is defined the above, but it's hard to categorize in case of Web site project, there are many unique styles for each page, so we define `Project` as **Define patterns which are unique layout for each page**.
+
+You must use `.p-` prefix for Project.
+
+## File naming rules
+
+Project is created for each page, so you must prepare the files naming related with URL. You should name **replaced "Slash(/)" to "Hyphen(-)" of URL** except for top page.
+
+About top page file name is "\_index.scss".
+
+- http://example.com/
+  - \_index.scss
+  - `.p-index`
+- http://example.com/about/
+  - \_about.scss
+  - `.p-about`
+- http://example.com/product/
+  - \_product.scss
+  - `.p-product`
+- http://example.com/product/foo/
+  - \_product-foo.scss
+  - `.p-product-foo`
+
+## Example
+
+```html
+<div class="p-index">
+    <section class="p-index__section">
+        <h2 class="p-index__section__head">SECTION TITLE</h2>
+
+        <ul class="p-index__section__nav">
+            <li class="p-index__section__nav__item">
+                <a href="#" class="c-button p-index__section__nav__anchor">BUTTON</a>
+            </li>
+        </ul>
+    </section>
+</div>
+```
+
+```scss title="scss/object/project/_index.scss"
+.p-index {
+    &__section {
+        // something style
+
+        &__head {
+            // something style
+        }
+
+        &__nav {
+            // something style
+
+            &__item {
+                // something style
+            }
+
+            &__anchor {
+                // something style
+            }
+        }
+    }
+}
+```
+
+:::tip TIPS
+
+This Example Project has has Component (`.c-button`), but you must NOT overwrite styles of those inside of Project. Please make Child Project (`.p-index__section__nav__anchor`), then you can define the style of that element.
+
+Reference : [Don't include other component](/docs/html/methodologies/important/child)
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/object/utility ---
+
+
+# Utility
+
+> Utility classes define small and simple styles used to adjust minimal style changes that are difficult to or not appropriate to define in the Object modifiers of Component and Project layer.
+>
+> Utility classes can prevent Object modifiers in the Component and Project layer from increasing inexhaustibly. In addition, Utility classes can be used to apply margins such as `.mbs { margin-bottom: 10px; }` that the Object itself should not hold.
+>
+> In addition, helper classes that define the rule sets such as the clearfix technique should also be included in this layer.
+
+You must use `.u-` prefix for Utility.
+
+## Typical Utility classes
+
+:::note
+
+There is a possibility to created unique Utility classes for each web site, so please check this just a reference.
+
+:::
+
+### .u-`{**}`-only
+
+Display only each break points layout.
+
+| Class Name       | \<= 750px | 750px \< and \<= 1060px | 1060px \< |
+| ---------------- | :-------: | :---------------------: | :-------: |
+| .u-pc-only       |    ❌     |           ❌            |    ✅     |
+| .u-under-pc-only |    ✅     |           ✅            |    ❌     |
+| .u-tb-only       |    ❌     |           ✅            |    ❌     |
+| .u-over-sp-only  |    ❌     |           ✅            |    ✅     |
+| .u-sp-only       |    ✅     |           ❌            |    ❌     |
+
+:::info
+
+The above breakpoint is just an example. You can change the breakpoint according to your project.
+
+:::
+
+:::note
+
+Before, we used these styles as `.pc` and `.sp` class names.
+
+:::
+
+### .u-font-sans / .u-font-serif
+
+Display text as Sans-serif or Serif font.
+
+### .u-anchor-tel
+
+Style for tel link. This class is used to prevent to click the tel link on the PC devices.
+
+### And more...
+
+There are many Utility classes that are used in each project. Please check the Utility classes that are used in your project.
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/task-runner ---
+
+
+# About Task Runner
+
+We have several task runner by Node.js.
+
+## Prepared Task Runner
+
+- [watch](/docs/html/task-runner/scripts/watch)
+  - Building SCSS files when edited the files automatically.
+- [build:scss](/docs/html/task-runner/scripts/build-scss)
+  - Building SCSS files.
+- [optimize:image](/docs/html/task-runner/scripts/optimize-image)
+  - Optimizing JPG/PNG images.
+- [convert:webp](/docs/html/task-runner/scripts/convert-webp)
+  - Converting JPG/PNG images to WebP images.
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/task-runner/scripts/watch ---
+
+
+# watch
+
+Building SCSS files when edited the files automatically.
+
+```bash
+npm run watch
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/task-runner/scripts/build-scss ---
+
+
+# build:scss
+
+Building SCSS files.
+
+```bash
+npm run build:scss
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/task-runner/scripts/optimize-image ---
+
+
+# optimize:image
+
+Optimizing JPG/PNG images.
+
+```bash
+npm run optimize:image
+```
+
+:::warning
+
+JPG image quality will be decrease when you run this command, so don't run this command multiple times
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/task-runner/scripts/convert-webp ---
+
+
+# convert:webp
+
+Converting JPG/PNG images to WebP images.
+
+```bash
+npm run convert:webp
+```
+
+:::info
+
+This command will run automatically when you run `git commit`.
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/tips/picture ---
+
+
+# Embed flexible image
+
+`<picture>` and `<source>` are able to provide flexible image by several conditions.
+
+## Condition by window width
+
+You can add condition by adding `media` attribute to `<source>` tag.
+
+```html
+<picture>
+    <!-- Under 750px width window -->
+    <source media="(max-width: 750px)" srcset="path/to/sp-image.jpg">
+    <!-- Default image -->
+    <img src="path/to/pc-image.jpg">
+</picture>
+```
+
+## Condition by image format
+
+You can add condition by adding `type` attribute to `<source>` tag.
+
+```html
+<picture>
+    <!-- If Browser is supported WebP format -->
+    <source type="image/webp" srcset="path/to/pc-image.webp">
+    <!-- Default image -->
+    <img src="path/to/pc-image.jpg">
+</picture>
+```
+
+| Format | Attribute  |
+| ------ | ---------- |
+| WebP   | image/webp |
+| JPEG   | image/jpeg |
+| PNG    | image/png  |
+| GIF    | image/gif  |
+
+## Combinate window width and image format
+
+You can combinate each condition.
+
+```html
+<picture>
+    <!-- If Browser is supported WebP format and Under 750px width window -->
+    <source type="image/webp" media="(max-width: 750px)" srcset="path/to/sp-image.webp">
+    <!-- Under 750px width window -->
+    <source media="(max-width: 750px)" srcset="path/to/sp-image.jpg">
+    <!-- If Browser is supported WebP format -->
+    <source type="image/webp" srcset="path/to/pc-image.webp">
+    <!-- Default image -->
+    <img src="path/to/pc-image.jpg">
+</picture>
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/tips/flex ---
+
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import styles from '@site/src/css/docs/html/tips/flex.module.scss';
+
+# Flex box layout
+
+:::info
+
+You can choose [Grid layout](./grid) also instead using Flexbox.
+
+:::
+
+## For 2 columns layout
+
+You can use `justify-content: between;`.
+
+<div className={styles.flexbetween}>
+    <div className={styles.flexbetween__item}></div>
+    <div className={styles.flexbetween__item}></div>
+</div>
+
+## For 3 or more columns layout
+
+But, if you use `justify-content: between;` for 3 or more columns layout. Sometimes layout will be weired like the following:
+
+<div className={styles.flexbetween}>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']} ${styles['is-blank']}`}>BLANK</div>
+    <div className={`${styles.flexbetween__item} ${styles['is-3-column']}`}></div>
+</div>
+
+## Solution
+
+You can resolve flex box layout with `gap` property.
+
+<div className={styles['flex-gap']}>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+    <div className={styles['flex-gap__item']}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-flex {
+    // Add gap property
+    gap: 30px;
+
+    &__col {
+        height: 140px;
+        background: #999;
+
+        // 100% divided by the number of column size and subtracted by gap size
+        // gap size is divided by the number of column size and multiplied by column size minus 1
+        width: calc(100% / 3 - (30px / 3 * 2));
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-flex">
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+:::caution Deprecated
+
+**The following solution is deprecated. You can use `gap` property instead.**
+
+You can resolve flex box layout with negative margin for parent box.
+
+<div className={styles.flex}>
+    <div className={styles.flex__item}></div>
+    <div className={styles.flex__item}></div>
+    <div className={styles.flex__item}></div>
+    <div className={styles.flex__item}></div>
+    <div className={styles.flex__item}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-flex {
+    // Add negative margin half of gap size to horizontaly
+    margin: 0 -15px;
+
+    &__col {
+        height: 140px;
+        background: #999;
+
+        // Add margin half of gap size to horizontaly
+        margin: 0 15px;
+
+        // 100% divided by the number of column size and subtracted by gap size
+        width: calc(100% / 3 - 30px);
+
+        &:nth-child(n+4) {
+            margin-top: 30px;
+        }
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-flex">
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+    <div class="c-flex__col"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/tips/grid ---
+
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import styles from '@site/src/css/docs/html/tips/grid.module.scss';
+
+# Grid layout
+
+Grid layout property is a little complicated... but, if you learned it, it must be useful for your work.
+
+## Flexbox example layout
+
+If you use Grid layout instead Flexbox for Flexbox example layout, there is a good point that no need to put spacing/width styles to child element.
+
+You can assign width/spacing property to only parent that has Grid style element.
+
+<div className={styles.grid}>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-grid {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    &__item {
+        background: #999;
+        height: 140px;
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-grid">
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+## A little complex example
+
+Grid layout is able to set how length width/height fill by a element.
+
+so, for example, if you want to be bigger the first element than other lements, and should be aligned edge, you can use Grid layout.
+
+<div className={`${styles.grid} ${styles['has-first']}`}>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-grid {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    &__item {
+        background: #999;
+        height: 140px;
+
+        &:first-child {
+            height: auto;
+
+            grid-row-start: 1;
+            grid-row-end: span 2;
+            // Same with
+            // grid-row: 1 / span 2;
+
+            grid-column-start: 1;
+            grid-column-end: span 2;
+            // Same with
+            // grid-column: 1 / span 2;
+        }
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-grid">
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+## For More Information
+
+Actually, Grid layout has more poweful functions, so if you want to know more informations, [MDN has detail instructions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout).
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/tips/aspect-ratio ---
+
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import styles from '@site/src/css/docs/html/tips/aspect-ratio.module.scss';
+
+# Aspect Ratio
+
+After finished supporting IE11, we can use `aspect-ratio` property.
+
+The following 2 images are square images and cropped 16/9 ratio. it looks same, but it's implemented different approach.
+
+<div className={styles.wrap}>
+    <div className={styles.wrap__item}>
+        <p className={styles.wrap__label}>Before</p>
+        <div className={styles.before}>
+            <img src="https://dummyimage.com/640x640" className={styles.before__image} />
+        </div>
+    </div>
+    <div className={styles.wrap__item}>
+        <p className={styles.wrap__label}>After</p>
+        <img src="https://dummyimage.com/640x640" className={styles.after} />
+    </div>
+</div>
+
+<Tabs>
+<TabItem value="before" label="Before">
+
+```html
+<div class="c-before">
+    <img src="(...)" class="c-before__image">
+</div>
+```
+
+```scss
+.c-before {
+    position: relative;
+    padding-top: 56.25%;
+}
+.c-before__image {
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+```
+
+</TabItem>
+<TabItem value="after" label="After">
+
+```html
+<img src="(...)" class="c-after">
+```
+
+```scss
+.c-after {
+    object-fit: cover;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+```
+
+</TabItem>
+</Tabs>
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/tips/has ---
+
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import styles from '@site/src/css/docs/html/tips/has.module.scss';
+
+# :has selector
+
+Now (May, 2023), [almost the modern browsers are supporting `:has` selector of CSS](https://caniuse.com/css-has). This selector is very useful when you want to style related with children/parent elements.
+
+## Examples
+
+### Change field row state that has error field
+
+If you use `:has` selector, you can change styles that has something specified element. so, for example, you can change the color of field row that has error field.
+
+<div className={styles.form}>
+    <div className={styles.form__row}>
+        <label className={styles.form__label}>Don't have error</label>
+        <input type="text" className={styles.form__field} />
+    </div>
+    <div className={styles.form__row}>
+        <label className={styles.form__label}>Have error *</label>
+        <input type="text" className={`${styles.form__field} ${styles['has-error']}`} />
+    </div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-form {
+    max-width: 320px;
+
+    &__row {
+        padding: 1rem;
+    }
+
+    &__label {
+        display: block;
+    }
+
+    &__field {
+        border: 1px solid #aaa;
+        color: #333;
+        background: #fff;
+
+        &.has-error {
+            border-color: #f00;
+        }
+    }
+
+    &__row:has(&__field.has-error) {
+        background: #fdd;
+    }
+    &__row:has(&__field.has-error) &__label {
+        color: #f00;
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-form">
+    <div class="c-form__row">
+        <label class="c-form__label">Don't have error</label>
+        <input type="text" class="c-form__field" />
+    </div>
+    <div class="c-form__row">
+        <label class="c-form__label">Have error *</label>
+        <input type="text" class="c-form__field has-error" />
+    </div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+### Change sibling element's style by hover action
+
+When you want to change the sibling elements styles, it was needed to use JavaScript. But, if you use `:has` selector, it's able to implement by CSS only.
+
+<div className={styles.grid}>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+    <div className={styles.grid__item}></div>
+</div>
+
+<Tabs>
+<TabItem value="scss" label="SCSS">
+
+```scss
+.c-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    flex-grow: 1;
+    max-width: 320px;
+
+    &__item {
+        background: #ccc;
+        aspect-ratio: 1 / 1;
+        transition: opacity .3s;
+    }
+
+    &:has(&__item:hover) &__item:not(:hover) {
+        opacity: .6;
+    }
+}
+```
+
+</TabItem>
+<TabItem value="html" label="HTML">
+
+```html
+<div class="c-grid">
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+    <div class="c-grid__item"></div>
+</div>
+```
+
+</TabItem>
+</Tabs>
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/tips/accordion ---
+
+
+import { Codepen } from '@site/src/components/Codepen';
+
+# Accordion
+
+Now, [all the modern browsers are supporting `<details>` and `<summary>` tags.](https://caniuse.com/details) It's able to implement accordion functions and good for accessibility. Please check how to implement to accordion by using those tags.
+
+## No styles
+
+<Codepen hash="NWMNPqv" user="sushat4692" defaultTab="html,result" />
+
+## With styles
+
+<Codepen hash="ExLKaVr" user="sushat4692" defaultTab="css,result" />
+
+## With animations
+
+:::info
+
+This example is using [Web Animation API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API), but of course you can use jQuery animation instead.
+
+:::
+
+<Codepen hash="OJZNPzj" user="sushat4692" defaultTab="css,result" />
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/html/video/compress ---
+
+# Compress Video Files
+
+## Estimated Size
+
+- **Audio-less videos to display as background images (with emphasis on loading speed)**
+  - Recommended file size: **1MB or less (ideal) to 3MB maximum**
+  - Note: Loading speed is critical. Since these videos impact the initial page load, they must be kept as lightweight as possible.
+- **Audio-enabled videos that play on click**
+  - Recommended file size: **Approximately 5MB to 20MB**
+  - Note: Since these videos are loaded via user interaction, slightly larger sizes are acceptable. Depending on the video length, aim for under 20MB for videos lasting 2 minutes or less.
+
+## Compression Tools
+
+[HandBrake](https://handbrake.fr/): A free and open-source tool for converting and compressing video files.
+
+### Installation
+
+1. Download HandBrake from the [official website](https://handbrake.fr/downloads.php).
+2. Follow the installation instructions for your operating system.
+
+or
+
+Installing by Homebrew (macOS):
+
+```bash
+brew install --cask handbrake
+```
+
+### Recommended Settings
+
+1. Open HandBrake and load your video file.
+2. Choose the "Preset" -> "Web" -> **"Social 25MB 2 Minutes 540p60"**.
+   - If the preset results in a file size larger than desired, you can change preset to **"Social 25MB 5 Minutes 360p60"** for smaller sizes.
+   - But note that reducing resolution may impact video quality.
+3. Under the "Video" tab, set the following:
+   - Video Codec: H.264 (x264)
+   - Framerate (FPS): Same as source
+4. Under the "Audio" tab, ensure that the audio codec is set to AAC with a bitrate of 128 kbps.
+   - If the video does not require audio, you can remove the audio track entirely to save space.
+5. Click "Start Encode" to begin the compression process

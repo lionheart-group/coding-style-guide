@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunklionheart_coding_style_guide=self.webpackChunklionheart_coding_style_guide||[]).push([["3220"],{1912(e){e.exports=JSON.parse('{"blogBasePath":"/coding-style-guide/ja/updated","blogTitle":"\u66F4\u65B0\u5C65\u6B74","authorsListPath":"/coding-style-guide/ja/updated/authors"}')}}]);

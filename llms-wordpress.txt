@@ -1,0 +1,558 @@
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress ---
+
+
+# WordPress Coding Guide
+
+Basically, we're developing Website by using WordPress or [Fegg Framework](/docs/fegg). This document is written our WordPress coding rules.
+
+## Skeleton Template
+
+This template has some of custom function for our coding rule.
+
+:::info
+
+[LH WordPress Template](https://github.com/lionheart-group/wordpress-template)
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/structure ---
+
+
+# Template Structure
+
+```bash
+- Template/  # Template directory root
+  ├ data/  # Assets files, Please check HTML coding rule
+  ├ include/
+  │   ├ acf.php  # Advanced Custom Fields plugin extension
+  │   ├ admin.php  # Admin page extension
+  │   ├ cf7.php  # Contact Form 7 plugin extension
+  │   ├ functions.php  # Additional template method
+  │   ├ init.php  # Template initialize
+  │   ├ mw-wp-form.php  # MW WP Form plugin extension
+  │   ├ pagenavi.php  # WP-PageNavi plugin extension
+  │   ├ query.php  # pre_get_posts hook
+  │   ├ rewrite.php  # Arrange WordPress permalink setting
+  │   ├ scf.php  # Smart Custom Fields plugin extension
+  │   └ template.php  # WordPress template extension
+  ├ templates/  # Re-usable template files
+  ├ 404.php  # Not found page template
+  ├ archive.php  # Basic post type archive page template
+  ├ config.php  # Configuration file of the template
+  ├ footer.php  # Footer template
+  ├ functions.php  # Will include /include/ directory files
+  ├ header.php  # Header template
+  ├ home.php  # Top page template
+  ├ page-sample.php  # Sample file for static page
+  ├ page-sample__child.php  # Sample file for static page
+  ├ page.php  # Sample file for static page (by updating Admin page)
+  ├ single.php  # Basic post type detail page template
+  └ style.css  # No need to update
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/functions ---
+
+
+# Additional functions
+
+## is_new
+
+```php
+is_new(number|WP_Post $post = null, number $gap = 2): boolean
+```
+
+Checking the specified post is published within `$gap` days. If `$post` is null, the specified post is assigned current post in the loop.
+
+## get_page_slug
+
+```php
+get_page_slug(number|WP_Post $page_id = null): string
+```
+
+Returning the specified post slug and parent post slug separated by hyphen `-`. e.g. if the page has `child` slug, and it has the parent page that has `parent` slug, this function returns `parent-child`.
+
+## remove_line_break
+
+```php
+remove_line_break(string $text): string
+```
+
+Removing line breaks and spacing each rows.
+
+## loadScript
+
+```php
+loadScript(string $name, string $path, string[] $dependencies = [], string $version = null, boolean $isFoot = false): void
+```
+
+This function is wrapper of [wp_enqueue_script](https://developer.wordpress.org/reference/functions/wp_enqueue_script/) that is WordPress standard function. `loadScript` will be prefixed template path to `$path` if it's not absolute path, and appended `$version` to `$path`.
+If `$version` is empty, it's assigned from the value specified on `config.php`.
+
+## loadStyle
+
+```php
+loadStyle(string $name, string $path, string[] $dependencies = [], string $version = null): void
+```
+
+This function is wrapper of [wp_enqueue_style](https://developer.wordpress.org/reference/functions/wp_enqueue_style/) that is WordPress standard function. `loadStyle` will be prefixed template path to `$path` if it's not absolute path, and appended `$version` to `$path`.
+If `$version` is empty, it's assigned from the value specified on `config.php`.
+
+## get_asset_url
+
+```php
+get_asset_url(string $path, string $version = null): string
+```
+
+Returns url that is prefixed template path and appended `$version` to `$path`.
+If `$version` is empty, it's assigned from the value specified on `config.php`.
+
+## the_asset_url
+
+```php
+the_asset_url(string $path, string $version = null): string
+```
+
+Displaying the result of `get_asset_url`.
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/howto/page ---
+
+
+# Creating Page
+
+When you create a static page, please create `page` by WordPress admin page, and prepare page-`{slug}`.php template file.
+
+## Sub page template
+
+LH WordPress Template has function to support nested page template like the following.
+
+```
+http://example.com/parent/child/
+ -> page-parent__child.php
+```
+
+so, if you need to create sub pages, please follow the above template file name.
+
+:::warning
+
+In case of the above url, `page-child.php` is also valid. but, please use the file name that is included parent slug name e.g. `page-parent__child.php`, because easier to find the page template from the url structure, and if you need to use same slug name to different parent, it's able to separate template file.
+
+:::
+
+## CSS Methodologies
+
+Even wordpress template, please follow [CSS Methodologies](/docs/html/methodologies). so, page template and scss file relation is like the below.
+
+```
+http://example.com/foo/
+ -> page-foo.php
+ -> data/scss/object/project/_foo.scss
+ -> `.p-foo` class
+```
+
+```
+http://example.com/parent/child/
+ -> page-parent__child.php
+ -> data/scss/object/project/_parent-child.scss
+ -> `.p-parent-child` class
+```
+
+:::info
+
+Please check CSS Methodologies [Project file naming rules](/docs/html/methodologies/object/project#file-naming-rules) also.
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/howto/component ---
+
+
+# Component
+
+If there is the same contents element, you can create component template file `templates/c-{component name}.php`.
+
+When you create component template file, please put the same file name with the component class name.
+
+```php
+// templates/c-component.php
+<?php
+<div class="c-component">
+    // Something
+</div>
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/howto/loading-assets ---
+
+
+# Loading assets in a theme
+
+LH WordPress template provides a way to load assets such as CSS, JavaScript, and Images files in a theme.
+
+## CSS
+
+[`loadStyle` function](../functions#loadstyle) is used to load CSS files in a theme. This function must call before `getHeader` function.
+
+```php
+<?php
+// load style.css
+loadStyle('style', 'data/css/style.css');
+
+getHeader();
+```
+
+## JavaScript
+
+[`loadScript` function](../functions#loadscript) is used to load JavaScript files in a theme. This function must call before `getHeader` function.
+
+```php
+<?php
+// load script.js after jQuery loaded
+loadScript('script', 'data/js/script.js', array('jquery'));
+
+getHeader();
+```
+
+## Images
+
+[`get_asset_url` function](../functions#get_asset_url) or [`the_asset_url` function](../functions#the_asset_url) are used to get the URL of the asset files in a theme.
+
+```php
+<?php
+// get the URL of the image file
+$image_url = get_asset_url('data/images/image.jpg');
+?>
+
+<!-- display the URL of the image file -->
+<img src="<?php the_asset_url('data/images/image.jpg'); ?>" alt="">
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/howto/basic-post ---
+
+
+# Basic post type
+
+When you use WordPress Basic Post type, please update `archive.php` and `single.php` template file.
+
+## How to change archive page url
+
+LH WordPress template is able to change basic post type archive url. When you need to change basic post type archive url, please check `config.php`.
+
+After changin the following function's value,
+
+```php
+<?php
+
+/**
+ * 投稿アーカイブのスラッグ
+ * Slug of post archive URL
+ */
+function get_post_slug() {
+    return 'news';
+}
+```
+
+you need to display `settings` -> `permalinks` page of WordPress admin page. (When you show this page, WordPress apply permalink setting from template also)
+
+## How to change detail page url
+
+You can change basic post type detail page url by `settings` -> `permalinks` page of WordPress admin page.
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/howto/custom-post ---
+
+
+# Custom Post Type / Taxonomy
+
+In many cases, our website project is not only news/blog function. so, we need to prepare another management page by adding Custom Post Type or Custom Taxonomy.
+
+Mostly, we're using plugins for managing custom post type, so please check the following plugins pages.
+
+- [Custom Post Type UI](/docs/wordpress/plugins/custom-post/custom-post-type-ui)
+- [Custom Post Type Permalinks](/docs/wordpress/plugins/custom-post/custom-post-type-permalinks)
+
+## Template file structure
+
+WordPress provides template naming rules for Custom Post Type and Custom Taxonomy. Basically, we're using the following template naming rule:
+
+- Custom Post Type
+  - `archive-{slug}.php` : Archive page
+  - `single-{slug}.php` : Detail page
+- Custom Taxonomy
+  - `taxonomy-{taxonomy}.php` : Taxonomy archive page
+
+:::info
+
+If you need to implement same layout to custom post type archive and cust om taxonomy archive, please prepare another template file and import from the above template file.
+
+e.g.) Prepared `foo` post type and `bar` taxonomy, and same layout for these pages
+
+```php
+// archive-foo.php and taxonomy-bar.php
+<?php
+get_template_file('templates/foo/archive');
+```
+
+```php
+// templates/foo/archive.php
+<?php
+get_header();
+
+while(have_posts()): the_post();
+  // will be shown `foo` post type list,
+  // or filtered `bar` taxonomy automatically
+endwhile;
+```
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/howto/custom-field ---
+
+
+# Custom Field
+
+WordPress is prepared only one WYSIWYG field, but mostly our WordPress project is needed to prepare other input fields for easier to updating the website by using WordPress. so, we need to prepare additional input fields by adding Custom Field.
+
+Mostly, we're using plugins for managing custom field, so please check the following plugin pages.
+
+- [Smart Custom Fields](/docs/wordpress/plugins/custom-field/smart-custom-fields)
+- [Advanced Custom Fields](/docs/wordpress/plugins/custom-field/advanced-custom-fields)
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/howto/custom-block ---
+
+
+# Custom Block
+
+Sometimes we need to implement Custom layout into WYSIWYG part, and we can implement these requirements by using Custom Block function of WordPress.
+
+Basically, we're using the following plugin to implement Custom Block, so please check plugin page.
+
+- [Lazy Blocks](/docs/wordpress/plugins/custom-block/lazy-blocks)
+
+## Template structure
+
+If you use Lazy Blocks plugin, please match block slug and HTML classes, and SCSS files.
+
+- Block Template file
+  - blocks/lazyblock-`{slug}`/block.php
+- Block Template HTML classes
+  - .c-block-`{slug}`
+- Block Template scss file
+  - data/scss/object/component/\_block-`{slug}`.scss
+
+### Example
+
+If you prepare `foo` custom block by using LazyBlocks.
+
+```php
+// blocks/lazyblock-foo/block.php
+<div class="c-block-foo">
+    <div class="c-block-foo__child">
+        <?php /** Something actions */ ?>
+    </div>
+</div>
+```
+
+```scss
+// data/scss/object/component/_block-foo.scss
+.c-block-foo {
+    &__child {
+        // Something styles
+    }
+}
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/howto/contact-form ---
+
+
+# Contact Form
+
+When we need to implement a contact form by using WordPress, mostly we're using either one of the following 2 plugins. Please check detail information at those plugin page.
+
+- [MW WP Form](/docs/wordpress/plugins/contact-form/mw-wp-form) : Basically, please use this contact form plugin
+- [Contact Form 7](/docs/wordpress/plugins/contact-form/contact-form-7)
+
+## Underimplemented
+
+- [Template Oriented Form Utilities](https://github.com/lionheart-group/template-oriented-form-utilities) : This is a library for creating contact forms in WordPress templates. It is not implemented yet, but it will be implemented in the future.
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/howto/uploaded-media ---
+
+
+# Uploaded media
+
+WordPress has the function that is able to trim/resize images that you upload, but it's needed to update setting on theme files to use this function. so, when you need to display thumbnail images for archive pages or something sliders, please check the following instruction to avoid downloading big resouces for viewer.
+
+## Settings
+
+For enable to trim/resize specific size, you need to add [add_image_size](https://developer.wordpress.org/reference/functions/add_image_size/) function into the theme.
+
+On our theme template, you can find the place that you should put `add_image_size` function in `include/init.php`.
+
+```php
+<?php
+
+add_action('init', function() {
+    // タイトルの有効化
+    // Enable Title
+    add_theme_support('title-tag');
+
+    // アイキャッチ画像の有効化
+    // Enable Post Thumbnail
+    add_theme_support('post-thumbnails');
+
+    // アイキャッチ画像のサイズ追加
+    // Adding image size for post thumbnail
+    add_image_size('name', 100, 100, true);
+
+    // Pタグを自動挿入させない
+    // Disable automatically adding <p> tags
+    remove_filter('the_excerpt', 'wpautop');
+    remove_filter('the_content', 'wpautop');
+});
+```
+
+`add_image_size` parameter is like this:
+
+```php
+add_image_size(
+    'foo_image_size', // Image size identifier.
+    100, // Image width
+    100, // Image height
+    true // Image cropping behavior.
+         // If false, the image will be scaled (default),
+         // If true, image will be cropped to the specified dimensions
+         // using center positions.
+);
+```
+
+## In Template
+
+You can display thumbnail image by the specified size by the following function.
+
+```php
+<?php
+    if (has_post_thumbnail()):
+        the_post_thumbnail('foo_image_size');
+    else:
+?>
+        <img src="<?php the_asset_url('data/path/to/noimage.jpg') ?>">
+<?php
+    endif;
+?>
+```
+
+and, if you need to add specified class to thumbnaiil image `<img>` tag, you can put attribute parameter to second argument.
+
+```php
+<?php
+    if (has_post_thumbnail()):
+        the_post_thumbnail('foo_image_size', ['class' => 'c-image']);
+    else:
+?>
+        <img src="<?php the_asset_url('data/path/to/noimage.jpg') ?>" class="c-image">
+<?php
+    endif;
+?>
+```
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/plugins/contact-form/contact-form-7 ---
+
+# Contact Form 7
+
+:::warning
+
+Please don't use this plugin, if you need to implement confirmation page
+
+:::
+
+:::danger Under construction
+
+Please wait for the further notice
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/plugins/contact-form/mw-wp-form ---
+
+# MW WP Form
+
+:::danger Under construction
+
+Please wait for the further notice
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/plugins/custom-block/lazy-blocks ---
+
+# Lazy Blocks
+
+:::danger Under construction
+
+Please wait for the further notice
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/plugins/custom-field/advanced-custom-fields ---
+
+# Advanced Custom Fields
+
+:::danger Under construction
+
+Please wait for the further notice
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/plugins/custom-field/smart-custom-fields ---
+
+# Smart Custom Fields
+
+:::danger Under construction
+
+Please wait for the further notice
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/plugins/custom-post/custom-post-type-permalinks ---
+
+# Custom Post Type Permalinks
+
+:::danger Under construction
+
+Please wait for the further notice
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/plugins/custom-post/custom-post-type-ui ---
+
+# Custom Post Type UI
+
+:::danger Under construction
+
+Please wait for the further notice
+
+:::
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/wordpress/plugins/general/rank-math-seo ---
+
+# Rank Math SEO
+
+:::danger Under construction
+
+Please wait for the further notice
+
+:::

@@ -1,0 +1,185 @@
+--- https://lionheart-group.github.io/coding-style-guide/docs/javascript ---
+
+
+import DocCardList from '@theme/DocCardList';
+
+# JavaScript
+
+Introducing recommended JavaScript libraries.
+
+<DocCardList items={[{
+  docId: 'javascript/slider',
+  href: '/docs/javascript/slider',
+  label: 'Slider / Carousel',
+  type: 'link',
+  unlisted: false
+}, {
+
+docId: 'javascript/modal', href: '/docs/javascript/modal', label: 'Modal', type: 'link', unlisted: false }, {
+
+docId: 'javascript/parallax', href: '/docs/javascript/parallax', label: 'Parallax', type: 'link', unlisted: false }, {
+
+docId: 'javascript/animation', href: '/docs/javascript/animation', label: 'Animation', type: 'link', unlisted: false }, {
+
+docId: 'javascript/svg', href: '/docs/javascript/svg', label: 'SVG', type: 'link', unlisted: false }, {
+
+docId: 'javascript/webgl', href: '/docs/javascript/webgl', label: 'WebGL (Canvas)', type: 'link', unlisted: false }, {
+
+docId: 'javascript/validation', href: '/docs/javascript/validation', label: 'Validation', type: 'link', unlisted: false }, {
+
+docId: 'javascript/layout', href: '/docs/javascript/layout', label: 'Layout', type: 'link', unlisted: false }]} />
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/javascript/slider ---
+
+
+# Slider / Carousel
+
+:::info
+
+For Slider/Carousel libraries, we can recommend **"Swiper"** to use.
+
+:::
+
+| Libary name | Last updated |
+| --- | :-- |
+| [Swiper](https://swiperjs.com/) | ![Last Updated](https://img.shields.io/github/last-commit/nolimits4web/swiper) |
+| [Embla Carousel](https://www.embla-carousel.com/) | ![Last Updated](https://img.shields.io/github/last-commit/davidjerleke/embla-carousel) |
+
+## Deprecated libraries
+
+| Libary name | Last updated |
+| --- | :-- |
+| [Slick](https://kenwheeler.github.io/slick/) | ![Last Updated](https://img.shields.io/github/last-commit/kenwheeler/slick) |
+| [Splide](https://splidejs.com/) | ![Last Updated](https://img.shields.io/github/last-commit/Splidejs/splide) |
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/javascript/modal ---
+
+
+# Modal
+
+:::info
+
+For Modal libraries, we can recommend **"GLightbox"** to use.
+
+:::
+
+| Libary name | Image | Video | iframe | Design | Gallery | Zoom | Swipe | Last updated |
+| --- | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-- |
+| [GLightbox](https://biati-digital.github.io/glightbox/) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ![Last Updated](https://img.shields.io/github/last-commit/biati-digital/glightbox) |
+| [PhotoSwipe](https://photoswipe.com/) | ✅ | 🚫 | 🚫 | ✅ | ✅ | ✅ | ✅ | ![Last Updated](https://img.shields.io/github/last-commit/dimsemenov/photoswipe) |
+| [SmartPhoto](https://appleple.github.io/SmartPhoto/) | ✅ | 🚫 | 🚫 | ✅ | ✅ | ✅ | ✅ | ![Last Updated](https://img.shields.io/github/last-commit/appleple/SmartPhoto) |
+| [Modal Video](https://github.com/appleple/modal-video) | 🚫 | ✅ | 🚫 | ✅ | 🚫 | 🚫 | 🚫 | ![Last Updated](https://img.shields.io/github/last-commit/appleple/modal-video) |
+| [Micromodal.js](https://micromodal.vercel.app/) | \*1 | \*1 | \*1 | 🚫 | 🚫 | 🚫 | 🚫 | ![Last Updated](https://img.shields.io/github/last-commit/Ghosh/micromodal) |
+| [Modaal](https://www.humaan.com/modaal/) | ✅ | ✅ | ✅ | ✅ | ✅ | 🚫 | 🚫 | ![Last Updated](https://img.shields.io/github/last-commit/humaan/Modaal) |
+| [Lity](https://sorgalla.com/lity/) | ✅ | ✅ | ✅ | ✅ | 🚫 | 🚫 | 🚫 | ![Last Updated](https://img.shields.io/github/last-commit/jsor/lity) |
+
+\*1: Micromodal is able show custom HTML contents, so you can display any contents as modal
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/javascript/parallax ---
+
+
+# Parallax
+
+| Libary name | Last updated |
+| --- | :-- |
+| [Rellax](https://dixonandmoe.com/rellax/) | ![Last Updated](https://img.shields.io/github/last-commit/dixonandmoe/rellax) |
+| [Simple Parallax](https://simpleparallax.com/) | ![Last Updated](https://img.shields.io/github/last-commit/geosigno/simpleParallax.js) |
+| [skrollr](https://prinzhorn.github.io/skrollr/) | ![Last Updated](https://img.shields.io/github/last-commit/prinzhorn/skrollr) |
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/javascript/scroll ---
+
+
+# Scroll Action
+
+:::info
+
+For Scroll Action libraries, we can recommend **"GSAP ScrollTrigger"** to use.
+
+:::
+
+:::warning
+
+[AOS](https://michalsnik.github.io/aos/) has some bugs and not maintained for a long time, so please don't use that library
+
+:::
+
+| Libary name | Last updated |
+| --- | :-- |
+| [GSAP ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/) | ![Last Updated](https://img.shields.io/github/last-commit/greensock/GSAP) |
+
+## Deprecated libraries
+
+| Libary name | Last updated |
+| --- | :-- |
+| [ScrollFire.js](https://github.com/lionheart-co-jp/ScrollFire.js) \*1 | ![Last Updated](https://img.shields.io/github/last-commit/lionheart-co-jp/ScrollFire.js) |
+| [AOS](https://michalsnik.github.io/aos/) | ![Last Updated](https://img.shields.io/github/last-commit/michalsnik/aos) |
+
+\*1 Satoshi is developing `ScrollFire.js` library. if you have problem/question for that library, please let him know.
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/javascript/animation ---
+
+
+# Animation
+
+| Libary name | Last updated |
+| --- | :-- |
+| [GSAP](https://greensock.com/gsap/) \*1 | ![Last Updated](https://img.shields.io/github/last-commit/greensock/GSAP) |
+| [Popmotion](https://popmotion.io/) | ![Last Updated](https://img.shields.io/github/last-commit/popmotion/popmotion) |
+| [Tween24.js](https://github.com/a24/tween24js) | ![Last Updated](https://img.shields.io/github/last-commit/a24/tween24js) |
+
+\*1 GSAP is not open source library, but [it's free to use for personal and commercial projects now](https://gsap.com/pricing/).
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/javascript/svg ---
+
+
+# SVG
+
+| Libary name | Remarks | Last updated |
+| --- | :-- | :-- |
+| [vivus.js](https://maxwellito.github.io/vivus/) | Line drawing animation | ![Last Updated](https://img.shields.io/github/last-commit/maxwellito/vivus) |
+| [SVG.js](https://svgjs.dev/) | Manipulating and animating SVG | ![Last Updated](https://img.shields.io/github/last-commit/svgdotjs/svg.js) |
+| [Snap.svg](http://snapsvg.io/) | Animating SVG | ![Last Updated](https://img.shields.io/github/last-commit/adobe-webplatform/snap.svg) |
+| [BonsaiJS](https://bonsaijs.org/) |  | ![Last Updated](https://img.shields.io/github/last-commit/uxebu/bonsai) |
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/javascript/webgl ---
+
+
+# WebGL (Canvas)
+
+| Libary name | 2D | 3D | Last updated |
+| --- | :-: | :-: | :-- |
+| [Three.js](https://threejs.org/) | 🚫 | ✅ | ![Last Updated](https://img.shields.io/github/last-commit/mrdoob/three.js) |
+| [PixiJS](https://pixijs.com/) | ✅ | 🚫 | ![Last Updated](https://img.shields.io/github/last-commit/pixijs/pixijs) |
+| [Babylon.js](https://www.babylonjs.com/) | 🚫 | ✅ | ![Last Updated](https://img.shields.io/github/last-commit/BabylonJS/Babylon.js) |
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/javascript/validation ---
+
+
+# Validation
+
+| Library name | Last updated |
+| :-- | :-- |
+| [inputfollow.js](https://github.com/sushat4692/inputfollow.js) \*1 | ![Last Updated](https://img.shields.io/github/last-commit/sushat4692/inputfollow.js) |
+| [Parsley](https://parsleyjs.org/) | ![Last Updated](https://img.shields.io/github/last-commit/guillaumepotier/Parsley.js) |
+
+\*1 Satoshi is developing `inputfollow.js` library. if you have problem/question for that library, please let him know.
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/javascript/layout ---
+
+
+# Layout
+
+## Masonry layout
+
+| Library name | Last updated |
+| :-- | :-- |
+| [InfiniteGrid](https://naver.github.io/egjs-infinitegrid/) | ![Last Updated](https://img.shields.io/github/last-commit/naver/egjs-infinitegrid) |
