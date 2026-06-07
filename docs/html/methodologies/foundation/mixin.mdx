@@ -17,7 +17,7 @@ $breakpoints: (
 
 ## mq_under
 
-Generating @media for a named breakpoint and under (max-width)
+Generating @media queries for a named breakpoint and below (max-width)
 
 ```scss
 @include mq_under(sp) {
@@ -29,7 +29,7 @@ Generating @media for a named breakpoint and under (max-width)
 
 ## mq_under_exact
 
-Generating @media for a specific pixel value and under (max-width)
+Generating @media queries for a specific pixel value and below (max-width)
 
 ```scss
 @include mq_under_exact(768) {
@@ -41,7 +41,7 @@ Generating @media for a specific pixel value and under (max-width)
 
 ## mq_over
 
-Generating @media for above a named breakpoint (min-width)
+Generating @media queries for a named breakpoint and above (min-width)
 
 ```scss
 @include mq_over(sp) {
@@ -53,7 +53,7 @@ Generating @media for above a named breakpoint (min-width)
 
 ## mq_over_exact
 
-Generating @media for a specific pixel value and over (min-width)
+Generating @media queries for a specific pixel value and above (min-width)
 
 ```scss
 @include mq_over_exact(768) {
@@ -65,7 +65,7 @@ Generating @media for a specific pixel value and over (min-width)
 
 ## mq_between
 
-Generating @media between two named breakpoints
+Generating @media queries between two named breakpoints
 
 ```scss
 @include mq_between(sp, pc) {
@@ -77,7 +77,7 @@ Generating @media between two named breakpoints
 
 ## mq_between_exact
 
-Generating @media between two specific pixel values
+Generating @media queries between two specific pixel values
 
 ```scss
 @include mq_between_exact(768, 1024) {

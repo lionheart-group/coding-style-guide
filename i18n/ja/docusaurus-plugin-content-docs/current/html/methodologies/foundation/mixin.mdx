@@ -17,7 +17,7 @@ $breakpoints: (
 
 ## mq_under
 
-指定ブレイクポイント以下向け @media 生成（max-width）
+指定ブレイクポイント以下用の @media クエリ生成（max-width）
 
 ```scss
 @include mq_under(sp) {
@@ -29,7 +29,7 @@ $breakpoints: (
 
 ## mq_under_exact
 
-指定 px 値以下向け @media 生成（max-width）
+指定 px 値以下用の @media クエリ生成（max-width）
 
 ```scss
 @include mq_under_exact(768) {
@@ -41,7 +41,7 @@ $breakpoints: (
 
 ## mq_over
 
-指定ブレイクポイントより大きい向け @media 生成（min-width）
+指定ブレイクポイント以上用の @media クエリ生成（min-width）
 
 ```scss
 @include mq_over(sp) {
@@ -53,7 +53,7 @@ $breakpoints: (
 
 ## mq_over_exact
 
-指定 px 値以上向け @media 生成（min-width）
+指定 px 値以上用の @media クエリ生成（min-width）
 
 ```scss
 @include mq_over_exact(768) {
@@ -65,7 +65,7 @@ $breakpoints: (
 
 ## mq_between
 
-2つのブレイクポイント間向け @media 生成
+2つのブレイクポイント間用の @media クエリ生成
 
 ```scss
 @include mq_between(sp, pc) {
@@ -77,7 +77,7 @@ $breakpoints: (
 
 ## mq_between_exact
 
-2つの px 値の範囲向け @media 生成
+2つの px 値間の @media クエリ生成
 
 ```scss
 @include mq_between_exact(768, 1024) {
