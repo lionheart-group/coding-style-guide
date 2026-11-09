@@ -58,16 +58,23 @@ class News extends Controller
 
 ### Base classes
 
+There are two kinds of controllers, with a base class each: **public pages** and **CMS screens**.
+
 ```
-Fegg\Application                        core/src/Application.php
-└ Fegg\Controller\Controller (abstract)  core/controller/Controller.php
-  └ Site\Controller\Controller (abstract) site/controller/Controller.php
-    └ Site\Controller\Index, News, Cms\News, ...
+Fegg\Application                                  core/src/Application.php
+└ Fegg\Controller\Controller (abstract)            core/controller/Controller.php
+  ├ Site\Controller\Controller (abstract)          site/controller/Controller.php       public pages
+  │ └ Site\Controller\Index, News, Contact, ...
+  └ Fegg\Controller\Cms\Controller (abstract)      core/controller/Cms/Controller.php   CMS screens (core)
+    ├ Fegg\Controller\Cms\Image, Media, Login, ...
+    └ Site\Controller\Cms\Controller (abstract)    site/controller/Cms/Controller.php   CMS screens (project)
+      └ Site\Controller\Cms\News, Lab, ...
 ```
 
 - `Fegg\Application` provides the methods you call with `$this->...`: [request parameters](./parameters/index.mdx), templates (`displayPage()`, ...), `redirect()`, `loadConfig()`, ...
 - `Fegg\Controller\Controller` (core) loads `site/config/category_info.php` and `site/config/site_info.php` in its `__init()`, and declares the properties `$_model` and `$_lh` used by the CMS.
-- `Site\Controller\Controller` (site) is yours. Put what every page of the site needs here (shared assigns, authentication, ...). It replaces `MyApplication` of Fegg 4.
+- `Site\Controller\Controller` (site) is yours: the base of the **public pages**. Put what every public page needs here (shared assigns, ...). It replaces `MyApplication` of Fegg 4.
+- `Fegg\Controller\Cms\Controller` (core) and `Site\Controller\Cms\Controller` (site) are the bases of the **CMS screens**: see [CMS screens](#cms-screens). Put what every CMS screen of the project needs in `Site\Controller\Cms\Controller`.
 
 ```php title="htdocs/_fegg/site/controller/Controller.php"
 <?php
@@ -229,6 +236,60 @@ class Media extends \Fegg\Controller\Cms\Media
 ```
 
 Keep the parent method's signature (the same arguments with the same defaults).
+
+## CMS screens
+
+A CMS screen extends `Site\Controller\Cms\Controller` (in `site/controller/Cms/`, where `Controller` is that class without a `use`). Before your method runs, the base class:
+
+- sends a visitor who is not logged in to the login page,
+- creates `$this->_lh` (`Fegg\Cms\Helper`) for the section set in `$_cmsSection`, and sets `$this->page['prefix']` and `$this->page['prev_num']`,
+- sends `Cache-Control: no-store` and `X-Robots-Tag: noindex`,
+- checks the CSRF token of every POST request: a POST without the session's token gets a 403 page.
+
+```php title="htdocs/_fegg/site/controller/Cms/Event.php"
+<?php
+namespace Site\Controller\Cms;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Model;
+
+class Event extends Controller
+{
+    // The URL segment under /cms/ (/cms/event/...)
+    protected $_cmsSection = 'event';
+
+    public function __init()
+    {
+        parent::__init();
+        $this->_model = new Model(true, array('table' => 'cms_event', 'id' => 'event_id'));
+    }
+
+    public function delete($internalId)
+    {
+        // Data changes only on POST (a link or a URL typed in the browser gets a 405)
+        $this->requirePost();
+        $this->_model->delete($internalId);
+        $this->redirect($this->_lh->getBackPath('index/DELETED'));
+    }
+}
+```
+
+### Forms and the CSRF token
+
+- A form that prints `{{ hidden }}` sends the token already (the base class adds it to the hidden values).
+- Any other POST form adds it with `{{ include '/cms/parts/csrf' }}`.
+- Delete buttons are small POST forms, not links. `link-alert` asks for confirmation before sending:
+
+```html title="htdocs/_fegg/site/template/cms/event/lists.tpl"
+<form class="link-alert" action="{{ $site.prefix }}/delete/{{ $post[$page.this_id] }}" method="post" data-message="削除してもよろしいですか？" style="display: inline;">
+    {{ include '/cms/parts/csrf' }}
+    <button type="submit" class="c-button is-micro is-danger">削除</button>
+</form>
+```
+
+- JavaScript can read the token from `<meta name="csrf-token">` and send it as the `cms_csrf` POST field.
+- The token is the same for the whole session (several tabs work) and changes when you log in.
 
 ## Template of Controller class
 
