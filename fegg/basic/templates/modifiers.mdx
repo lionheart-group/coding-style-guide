@@ -18,7 +18,7 @@ A modifier follows the variable after a pipe (`|`). Arguments follow the modifie
 - Any PHP function works as a modifier: `{{ $x|name:arg1:arg2 }}` calls `name($x, arg1, arg2)`.
 - Arguments are PHP expressions: quote strings (`'Y/m/d'`), and use template variables freely (`feggDate:$format`). A `:` or `|` inside a quoted string is part of the string.
 - The result is HTML-escaped like any output, unless `noescape` is in the chain.
-- Modifiers only run when the variable is set and is not an array. `{{ $missing|feggDefault:'-' }}` and `{{ $array|feggImplode:', ' }}` output nothing. Use `{{ if }}` for defaults, and call the function in `{{ assign }}` for arrays (examples below).
+- Modifiers only run when the variable is set: `{{ $missing|feggDefault:'-' }}` outputs nothing, so use `{{ if }}` for defaults. Arrays are passed to modifiers (`{{ $tags|feggImplode:', ' }}`); when the result is still an array, nothing is output.
 - An unknown modifier is reported by `fegg-cli template:lint` (see [Lint and errors](./lint.mdx)).
 
 ## Built into the template engine
@@ -73,7 +73,7 @@ Defined in `htdocs/_fegg/core/functions/modifier.php`.
 | Modifier | Description |
 | --- | --- |
 | `feggDate:'Y/m/d'` | Formats a date string or a Unix timestamp with the `date()` format. Also accepts `x` / `X` (Japanese day of the week: `火` / `火曜日`) and `V` / `v` (Japanese era and year: `令和` / `7`). Outputs nothing for an empty or invalid date |
-| `feggImplode:', '` | Joins an array with the glue (see the note on arrays above) |
+| `feggImplode:', '` | Joins an array with the glue |
 | `feggDefault:'-'` | The replacement when the value is an empty string or an empty array. Does not apply to unset variables |
 | `feggCheck:'value':'yes':'no'` | `'yes'` when the value is identical (`===`) to `'value'`, otherwise `'no'` |
 | `feggReplace:'a':'b'` | `str_replace('a', 'b', $value)` |
@@ -107,8 +107,7 @@ $this->setSiteinfo('prefix', '/news/');
 ### Joining an array
 
 ```html title="Template"
-{{ assign $tags = feggImplode($page.tags, ', ') }}
-{{ $tags }}
+{{ $page.tags|feggImplode:', ' }}
 ```
 
 ## CMS modifiers

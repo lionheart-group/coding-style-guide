@@ -19,7 +19,7 @@ Adds a condition with `?` placeholders. Values are always bound, never written i
 - A `?` inside a quoted string literal (`'?'`) is not a placeholder.
 - An empty `$query` (`''`) adds nothing, which is handy for optional search conditions.
 
-The conditions the model adds by itself (the visible flag and `valid = 1`) are joined with `AND` after yours. When you use `OR`, put your conditions in brackets with [whereOpen](./whereopen.mdx) and [whereClose](./whereclose.mdx), or the `OR` will also apply to them.
+The conditions the model adds by itself (the visible flag and `valid = 1`) are joined with `AND` after yours. When your conditions have an `OR` outside brackets, the model puts them in brackets first (`Where (a = ? OR b = ?) AND ...`), so hidden and deleted rows never match. To group conditions inside your own, use [whereOpen](./whereopen.mdx) and [whereClose](./whereclose.mdx).
 
 For common cases there are helpers that also check the column name: [whereIn](./wherein.mdx), [whereNotIn](./wherenotin.mdx), [whereLike](./wherelike.mdx), [whereNull](./wherenull.mdx), [whereNotNull](./wherenotnull.mdx) and [whereBetween](./wherebetween.mdx).
 

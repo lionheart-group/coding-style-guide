@@ -131,6 +131,8 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 - `updateWhere()`, `deleteWhere()` and `eraseWhere()` with an **empty condition** throw instead of affecting every row. Pass `'1 = 1'` where every row was really meant.
 - `Model::order()`, `join()` and the `table` / `id` / `visible` options accept **only plain names**. Move expressions to `orderRaw()`.
 - `{{ options }}` escapes labels and values, and `{{ hidden }}` escapes values.
+- **`OR` in conditions** is put in brackets before the model adds the visible flag and `valid = 1`. In Fegg 4, `where('a = ?', 1)->where('b = ?', 2, 'OR')` also returned unpublished and deleted rows matching `b`; such lists can get shorter.
+- **Arrays reach modifiers**: `{{ $tags|feggImplode:', ' }}` now prints the joined tags (it printed nothing).
 - **Route-only controllers**: controllers that implement `Fegg\Http\RouteOnly` (such as the skeleton's `Site\Controller\Page`) are only reached through `site/config/route.php`. Add a route such as `$route['about/'] = 'page/render/about';` for each static page that was reached as `/page/render/...` (see [URL](../basic/url.mdx#static-pages)).
 
 ### Additional work for v3 projects

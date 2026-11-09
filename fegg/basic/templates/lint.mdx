@@ -87,7 +87,7 @@ Visitors from a developer IP (`developer_ip` in the settings) also see the error
 - **Text outside sections**: in a template that uses `{{ transclude }}`, everything outside `{{ section }}` blocks is output before the parent layout.
 - **Loop variables** share the namespace of `$page`, `$site` …: `{{ foreach $list as $page }}` overwrites `$page`.
 - **Concatenation**: in tags, `$a.b` is always array access. Write `$a . $b`, with spaces, to concatenate.
-- **Arrays are not output**: `{{ $array|anyModifier }}` outputs nothing, even when the modifier returns a string. Call the function in `{{ assign }}` (`{{ assign $tags = feggImplode($page.tags, ', ') }}`).
+- **Arrays need a modifier**: `{{ $array }}` outputs nothing; `{{ $array|feggImplode:', ' }}` or `{{ $array|feggJs|noescape }}` turns it into text.
 - **Defaults for unset values**: `{{ $missing|feggDefault:'-' }}` outputs nothing, because output is skipped for unset values before the modifier runs. Use `{{ if $x }}...{{ else }}-{{ end }}`.
 - **Null-safe only in some places**: an unset variable reads as `null` in `if`, `else if`, `assign` and `loop`. In modifier arguments and `{{ code }}`, it raises a warning on PHP 8, which Fegg turns into an error.
 - **Relative paths**: a path without `/` in `include` / `transclude` is relative to the template that contains the tag. Counting `../` is the classic mistake: prefer `/`-rooted paths.

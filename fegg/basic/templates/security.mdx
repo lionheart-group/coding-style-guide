@@ -47,21 +47,18 @@ URLs built by the CMS modifiers (`getImageUrl`, `getImageUrlFromDB`, `getFileUrl
 
 In an attribute, the browser decodes the HTML escaping before it runs the JavaScript, so the normal `{{ }}` escaping must stay: never add `noescape` there.
 
-:::warning
+:::tip
 
-An array variable is never output, even with modifiers (see [Variable](./rules/variable.mdx)): `var items = {{ $page.items|feggJs|noescape }};` becomes `var items = ;`. To pass structured data, wrap it in an object in the controller:
-
-```php title="Controller"
-$this->page['map'] = (object) array('items' => $items, 'zoom' => 3);
-```
+Arrays and objects work too, so a whole data set can go to a script in one line:
 
 ```html title="Template"
 <script>
-    var map = {{ $page.map|feggJs|noescape }};   // {"items":[...],"zoom":3}
+    var items = {{ $page.items|feggJs|noescape }};   // [{"id":1,"title":"..."}, ...]
 </script>
 ```
 
 :::
+
 
 ### `noescape`
 

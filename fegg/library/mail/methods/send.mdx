@@ -20,7 +20,7 @@ When the debug flag is enabled with [Mail::setDebugFlag](./setdebugflag.mdx), th
 
 `$from_ad` is required in practice: without a valid sender address the send throws.
 
-Recipients are added on every call. Calling `send()` twice on the same object sends the second email to the first recipient as well. Create a new `Mail` for each recipient, or pass all the recipients of one email as an array.
+Each call sends only to the addresses given to it, so one `Mail` object can send the same message to several people in turn. To send one email to several recipients, pass them as an array.
 
 :::
 

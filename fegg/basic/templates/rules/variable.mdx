@@ -20,7 +20,7 @@ Values from the controller are set in `$this->page` and read as `$page` in the t
 
 The output is escaped with `htmlspecialchars` (`ENT_QUOTES`), which is right for HTML text and quoted attribute values. Other places (URLs, JavaScript) need a modifier: see [Security](../security.mdx). To output trusted HTML as it is, use the `noescape` modifier (see [Modifiers](../modifiers.mdx)).
 
-Nothing is output (and no error is raised) when the variable is not set or is an array. This check is made on the variable itself, before any modifier runs.
+Nothing is output (and no error is raised) when the variable is not set, or when it is an array and no modifier is applied. Modifiers receive arrays, so `{{ $tags|feggImplode:', ' }}` and `{{ $items|feggJs|noescape }}` work; a chain whose result is still an array outputs nothing.
 
 Inside a tag, `$a.b` is always array access. To concatenate strings in an expression (`if`, `assign` …), write the PHP operator with spaces: `$a . $b`.
 
