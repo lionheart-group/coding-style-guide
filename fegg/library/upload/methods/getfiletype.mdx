@@ -1,11 +1,22 @@
 ---
-sidebar_position: 6
+sidebar_position: 7
 ---
 
 # Upload::getFileType
 
-Get upload file type limitation
+> Get the allowed file types (extensions)
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public array Upload::getFileType()
+```
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+var_dump($upload->getFileType()); // -> array('jpg', 'jpeg', 'png', 'gif')
+```

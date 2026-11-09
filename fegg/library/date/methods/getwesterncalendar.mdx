@@ -1,0 +1,32 @@
+---
+sidebar_position: 5
+---
+
+# Date::getWesternCalendar
+
+> Convert a Japanese era date to the Western calendar
+
+## Description
+
+```php
+public string Date::getWesternCalendar( string $date )
+```
+
+`$date` is the era letter followed by a 2-digit year, month and day (`H310430`). The era letters are `M` (Meiji), `T` (Taisho), `S` (Showa), `H` (Heisei) and `R` (Reiwa). Returns `YYYY-MM-DD`.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                                 |
+| ----- | --------- | ------- | --------------------------------------- |
+| $date | string    |         | Japanese era date, e.g. `R060401`       |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Date;
+
+$date = new Date();
+
+echo $date->getWesternCalendar('H310430'); // -> "2019-04-30"
+echo $date->getWesternCalendar('R060401'); // -> "2024-04-01"
+```

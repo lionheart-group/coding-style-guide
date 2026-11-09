@@ -1,0 +1,26 @@
+---
+sidebar_position: 42
+---
+
+# Pdo::getQuery
+
+> Get the built query
+
+## Description
+
+```php
+public string Pdo::getQuery()
+```
+
+Returns the last query built by [compile](./compile.mdx) or [execute](./execute.mdx), with its `?` placeholders. [getParam](./getparam.mdx) returns the values.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$db->setWhere('category = ?', 2)->select('cms_news')->compile();
+
+echo $db->getQuery();
+// -> Select * From "cms_news" Where category = ? And "cms_news".valid = 1
+```

@@ -1,0 +1,153 @@
+---
+sidebar_position: 5
+---
+
+# Migrating a Fegg 3 / 4 project
+
+Fegg 5 separates the core from the project code and moves classes into namespaces. Projects built on v3 or v4 are migrated by hand. Once migrated, they are updated with `fegg-cli core:update` like any Fegg 5 project.
+
+This page is a summary. The full steps, with the commands and the complete path tables, are in [docs/migration-v3-v4-to-v5.md](https://github.com/lionheart-group/lh-fegg-skelton/blob/master/docs/migration-v3-v4-to-v5.md) of the skeleton repository.
+
+Work on a separate branch and test against a copy of the production database.
+
+## 1. Find the changes the project made to the core
+
+Find the skeleton version the project started from (`version` in `package.json`, or `@version` in `fegg/Application.php`). Check out the skeleton at that tag, copy the project's core files over it (`fegg/`, `code/lib/`, `code/application/cms/`, `code/template/cms/`, `htdocs/cms/`, `htdocs/index.php`, `htdocs/.htaccess`) and look at `git diff`. Keep the list; each item is moved to `site/` in step 3.
+
+## 2. Move files into the new structure
+
+| v3 / v4                                                         | Fegg 5                                                          |
+| :-------------------------------------------------------------- | :-------------------------------------------------------------- |
+| `fegg/*.php`, `code/lib/` (DB_pdo, LH_FW, Validation, Tool, ...) | `htdocs/_fegg/core/` (use the new version)                       |
+| Project values in `fegg/settings.php`                           | `htdocs/_fegg/site/config/settings.php`                          |
+| `fegg/MyApplication.php`                                        | `htdocs/_fegg/site/controller/Controller.php`                    |
+| `code/lib/Modifire.php`                                         | `htdocs/_fegg/site/functions/modifier.php`                       |
+| Other project libraries in `code/lib/`                          | `htdocs/_fegg/site/src/` (`Site\`)                               |
+| Shared CMS screens in `code/application/cms/` (Index, Login, Logout, Media, Image, Multi, Migrate, Register) | `htdocs/_fegg/core/controller/` (use the new version) |
+| Everything else in `code/application/`                          | `htdocs/_fegg/site/controller/` (`cms/` becomes `Cms/`)          |
+| Shared CMS templates in `code/template/cms/`                    | `htdocs/_fegg/core/template/cms/` (use the new version)          |
+| Everything else in `code/template/`                             | `htdocs/_fegg/site/template/`                                    |
+| `code/config/`, `code/config/database/` (project tables)        | `htdocs/_fegg/site/config/`, `htdocs/_fegg/site/config/database/` |
+| `code/data/`                                                    | `htdocs/_fegg/site/data/`                                        |
+| `htdocs/index.php`, `fegg-cli`                                  | Recreate from `core/dist/index.php.dist` and `core/dist/fegg-cli.dist` |
+| `htdocs/.htaccess`                                              | Add the Fegg rules from `core/dist/htaccess.dist`                |
+
+Then:
+
+1. Copy `htdocs/_fegg/core/`, `htdocs/_fegg/.htaccess` and `htdocs/cms/` from the Fegg 5 skeleton, and run `npm run build:scss`.
+2. Recreate the entry files. If the project changed the paths in `index.php`, set the three constants (`FEGG_HTML_DIR`, `FEGG_CORE_DIR`, `FEGG_SITE_DIR`) to match (see [Directory structure](./cont.mdx#entry-files-and-layout)).
+3. Add the `FilesMatch` block and the `RewriteRule (^|/)_fegg(/|$) - [F,L]` line from `htaccess.dist` to `htdocs/.htaccess`.
+4. Move the project files with `git mv` (keeps the history).
+5. Carry over the changed values of the old `fegg/settings.php` (`developer_ip`, `run_mode`, `maintenance_page_url`, Basic authentication, languages) to `site/config/settings.php`.
+6. Create `site/config/cms_menu.php` with one block per post type that was in the old CMS menu.
+7. Replace the removed constants until `grep -rn "FEGG_DIR\|FEGG_CODE_DIR" htdocs/_fegg/site` finds nothing:
+
+   | v3 / v4                              | Fegg 5                                 |
+   | :----------------------------------- | :------------------------------------- |
+   | `FEGG_CODE_DIR . '/config/...'`      | `FEGG_SITE_DIR . '/config/...'`        |
+   | `FEGG_CODE_DIR . '/data/...'`        | `FEGG_SITE_DIR . '/data/...'`          |
+   | `FEGG_CODE_DIR . '/application/...'` | `FEGG_SITE_DIR . '/controller/...'`    |
+   | `FEGG_CODE_DIR . '/lib/...'`         | A namespaced class in `site/src/`      |
+   | `FEGG_DIR . '/...'`                  | Not needed (autoloaded)                |
+
+At this point the site should work again. Old-style controllers (no namespace, `extends MyApplication`, `getClass()`) still run.
+
+## 3. Move core changes into overrides in `site/`
+
+Go through the list from step 1:
+
+- Changed template of a shared CMS screen: put the changed file at the same path in `site/template/cms/`.
+- Changed controller of a shared CMS screen: extend the core class (`class Media extends \Fegg\Controller\Cms\Media`) and write only the changed methods (see [Controller](../basic/controller.mdx#extending-a-core-controller)).
+- Code added to `MyApplication`: move it to `__init()` of `site/controller/Controller.php`.
+- Changed shared library: create a subclass in `site/src/` and use it.
+
+When `./fegg-cli core:status` prints `No changes to core files.`, this step is done.
+
+## 4. Move to namespaces
+
+The Fegg 4 style keeps working through `Fegg\Legacy`, but every use writes `Fegg deprecated: ...` to the PHP error log, and the compatibility layer will be removed in Fegg 6. Use the log to fix the code step by step.
+
+```php title="Fegg 4: code/application/cms/News.php"
+<?php
+class News extends MyApplication
+{
+    public function __init()
+    {
+        parent::__init();
+        $this->_lh = $this->getClass('LH_FW', 'news');
+        $this->_model = new Model(true, array('table' => 'cms_news', 'id' => 'news_id'));
+    }
+}
+```
+
+```php title="Fegg 5: htdocs/_fegg/site/controller/Cms/News.php"
+<?php
+namespace Site\Controller\Cms;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Cms\Helper;
+use Fegg\Model;
+use Site\Controller\Controller;
+
+class News extends Controller
+{
+    public function __init()
+    {
+        parent::__init();
+        $this->_lh = new Helper('news');
+        $this->_model = new Model(true, array('table' => 'cms_news', 'id' => 'news_id'));
+    }
+}
+```
+
+| v3 / v4                                    | Fegg 5                                              |
+| :----------------------------------------- | :-------------------------------------------------- |
+| `MyApplication`                            | `Site\Controller\Controller`                        |
+| `Application` / `CommandApplication`       | `Fegg\Application` / `Fegg\CommandApplication`      |
+| `Model`, `ModelWhere`, `ModelOrder`, ...   | `Fegg\Model`, `Fegg\Model\Where`, `Fegg\Model\Order`, ... |
+| `DB_pdo`                                   | `Fegg\Database\Pdo`                                 |
+| `LH_FW`                                    | `Fegg\Cms\Helper`                                   |
+| `Validation`                               | `Fegg\Validation`                                   |
+| `ReCAPTCHA`, `Turnstile`                   | `Fegg\Captcha\ReCAPTCHA`, `Fegg\Captcha\Turnstile`  |
+| `Tool/Date`, `Tool/File`, `Tool/Mail`, `Tool/OEmbed`, `Tool/RSS`, `Tool/Trim`, `Tool/Upload` | `Fegg\Tool\Date`, `Fegg\Tool\File`, ... |
+| `$this->getClass('LH_FW', 'news')`         | `new \Fegg\Cms\Helper('news')`                      |
+| `$this->getClass('Validation')`            | `new \Fegg\Validation()`                            |
+| `$this->getClass('Tool/Upload')`           | `new \Fegg\Tool\Upload()`                           |
+| `$this->getClass('MyLib/Foo')`             | `new \Site\MyLib\Foo()` in `site/src/MyLib/Foo.php` |
+
+Inside a namespace, prefix PHP's own classes with `\` (`new \Exception`, `new \DateTime`, `\PDO::PARAM_INT`).
+
+You are done when `grep -rn "getClass\|MyApplication\|extends Model\b" htdocs/_fegg/site` finds nothing and the error log has no `Fegg deprecated` entries.
+
+## Behaviour changes to check
+
+Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 section of `htdocs/_fegg/core/UPGRADE.md`. The ones most likely to affect an old project:
+
+- **Database errors** throw `Fegg\Database\QueryException` (the message includes the SQL and its parameters) instead of printing and calling `exit`. Uncaught, it is a logged HTTP 500.
+- **Missing templates**, `include` targets and `transclude` parents throw `Fegg\Template\TemplateException` (HTTP 500) instead of printing "Can't Read" into the page. `./fegg-cli template:lint` lists them all.
+- **Template blocks are checked**: an unclosed block or an extra `{{ end }}` throws with the line number.
+- **Sections** are passed to the parent template as closures. Code that called the global `section_<name>()` functions directly must be rewritten.
+- `updateWhere()`, `deleteWhere()` and `eraseWhere()` with an **empty condition** throw instead of affecting every row. Pass `'1 = 1'` where every row was really meant.
+- `Model::order()`, `join()` and the `table` / `id` / `visible` options accept **only plain names**. Move expressions to `orderRaw()`.
+- `{{ options }}` escapes labels and values, and `{{ hidden }}` escapes values.
+- **Route-only controllers**: controllers that implement `Fegg\Http\RouteOnly` (such as the skeleton's `Site\Controller\Page`) are only reached through `site/config/route.php`. Add a route such as `$route['about/'] = 'page/render/about';` for each static page that was reached as `/page/render/...` (see [URL](../basic/url.mdx#static-pages)).
+
+### Additional work for v3 projects
+
+- **Mail** (`Fegg\Tool\Mail`) uses PHPMailer. `sendWithFile()`, `setInputCharset()` and `setSendCharset()` were removed: add attachments with `pushAttached()` and call `send()`. A failed send throws `PHPMailer\PHPMailer\Exception`.
+- **Trailing slash**: URLs without an extension are redirected (301) to the same URL with a trailing `/`. Check the keys in `route.php` and the links in templates.
+- **PHP 8**: fix deprecation warnings in the project code (for example passing `null` to string functions).
+
+## 5. Check
+
+- [ ] `./fegg-cli template:lint` prints OK
+- [ ] `php -l` reports no syntax errors for the PHP files under `htdocs/_fegg` (excluding `vendor/` and `data/`)
+- [ ] `./fegg-cli migration` against a copy of the production database prints `Not changed` (no table definition is missing)
+- [ ] `./fegg-cli core:status` prints `No changes to core files.`
+- [ ] Public pages, the contact form (through to sending), CMS login, create / edit / delete for each post type, and media and image uploads work
+- [ ] Every post type appears in the CMS side menu and on the dashboard
+- [ ] The PHP error log has no warnings and no `Fegg deprecated` entries
+- [ ] After deploying, `./fegg-cli doctor https://<production URL>` prints OK and the CMS dashboard shows no protection warnings
+
+To roll back, redeploy the old branch. The table definitions are compatible, so the same database file works before and after the migration.

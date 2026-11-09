@@ -1,11 +1,40 @@
 ---
-sidebar_position: 18
+sidebar_position: 21
 ---
 
-# DB_pdo::setQuery
+# Pdo::setQuery
 
-Set query string directly
+> Set query string directly
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::setQuery( string $query, [ array $parameter = [] ] )
+```
+
+Sets the SQL to run with [execute](./execute.mdx), as it is.
+
+- `$parameter` is the list of values for the `?` placeholders, in order. Arrays are not expanded here (they are in [setWhere](./setwhere.mdx)); write one `?` per value.
+- Nothing is added automatically: write `valid = 1` yourself.
+- Only queries that start with `SELECT` or `PRAGMA` return rows ([all](./all.mdx), [one](./one.mdx)) and run on a slave. Any other query (including `WITH ... SELECT`) runs on the master as a statement; read [getAffectedRow](./getaffectedrow.mdx) after it.
+
+## Arguments
+
+| Name       | Data type | Default | Remarks                              |
+| ---------- | --------- | ------- | ------------------------------------ |
+| $query     | string    |         | SQL with `?` placeholders            |
+| $parameter | array     | []      | Values, in placeholder order         |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$rows = $db->setQuery(
+    'SELECT category, count(*) AS n FROM cms_news WHERE valid = 1 GROUP BY category HAVING n > ?',
+    array(1)
+)->execute()->all();
+
+$db->setQuery('UPDATE cms_news SET visible = ? WHERE post_date < ?', array(0, '2020-01-01'))->execute();
+$updated = $db->getAffectedRow();
+```

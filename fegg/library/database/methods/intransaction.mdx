@@ -1,0 +1,25 @@
+---
+sidebar_position: 52
+---
+
+# Pdo::inTransaction
+
+> Check whether a transaction is open
+
+## Description
+
+```php
+public bool Pdo::inTransaction()
+```
+
+Returns `true` while a transaction opened with [beginTransaction](./begintransaction.mdx) (by any instance, or by `Model::transaction()`) is open.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+if (!$db->inTransaction()) {
+    $db->beginTransaction();
+}
+```

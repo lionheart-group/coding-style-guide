@@ -1,11 +1,27 @@
 ---
-sidebar_position: 39
+sidebar_position: 45
 ---
 
-# DB_pdo::masterServer
+# Pdo::masterServer
 
-Connect to master server
+> Connect to master server
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::masterServer()
+```
+
+Connects to the master database (see [Configuration](../configuration.mdx)) and runs the next query on it, also when it is a SELECT. Use it to read a row right after writing it when the slaves may lag behind. Throws `Fegg\Database\QueryException` when the connection fails.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$db->setValues(array('title' => 'Sample'))->insert('cms_news')->execute();
+$id = $db->getLastIndexId();
+
+// Read it back from the master
+$row = $db->masterServer()->setWhere('news_id = ?', $id)->select('cms_news')->execute()->one();
+```

@@ -1,11 +1,38 @@
 ---
-sidebar_position: 9
+sidebar_position: 10
 ---
 
-# DB_pdo::alterAddColumn
+# Pdo::alterAddColumn
 
-Set create alter add column query
+> Set create alter add column query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::alterAddColumn( string $table, array $field )
+```
+
+Builds `Alter Table "table" ADD COLUMN ...`.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                                                                  |
+| ------ | --------- | ------- | ------------------------------------------------------------------------ |
+| $table | string    |         | Table name                                                               |
+| $field | array     |         | Column definition, with every key described in [createTable](./createtable.mdx) |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Alter Table "sample" ADD COLUMN note TEXT
+$db->alterAddColumn('sample', array(
+    'name'       => 'note',
+    'type'       => 'TEXT',
+    'notnull'    => false,
+    'dflt_value' => null,
+    'pk'         => false,
+    'ai'         => false,
+))->execute();
+```

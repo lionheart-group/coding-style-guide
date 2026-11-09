@@ -1,11 +1,30 @@
 ---
-sidebar_position: 32
+sidebar_position: 36
 ---
 
-# DB_pdo::id
+# Pdo::id
 
-Get the specific column's list of executed select query
+> Get the specific column's list of executed select query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public array Pdo::id( string $index )
+```
+
+Returns the values of one column of every row of the last SELECT, as a list.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks     |
+| ------ | --------- | ------- | ----------- |
+| $index | string    |         | Column name |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$titles = $db->setItem('title')->select('cms_news')->execute()->id('title');
+// -> array('A', 'B', 'C')
+```

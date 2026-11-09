@@ -12,6 +12,8 @@ sidebar_position: 2
 public self Model::setTableName( string $table )
 ```
 
+Throws `InvalidArgumentException` when `$table` is not a plain name (letters, digits and `_`).
+
 ## Arguments
 
 | Name   | Data type | Default | Remarks           |
@@ -24,8 +26,8 @@ public self Model::setTableName( string $table )
 $model = new Model();
 $model->setTableName('cms_news');
 
-// Same with the following
+// Same as the following
 $model = new Model(false, array(
-    'table'   => 'cms_news',
+    'table' => 'cms_news',
 ));
 ```

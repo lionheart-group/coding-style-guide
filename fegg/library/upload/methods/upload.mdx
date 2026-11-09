@@ -1,11 +1,46 @@
 ---
-sidebar_position: 8
+sidebar_position: 9
 ---
 
 # Upload::upload
 
-Validate uploaded file and move to upload directory
+> Validate uploaded file and move to upload directory
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public boolean Upload::upload( string $name, string $up_name, [ string $label = 'ファイル', boolean $required = true ] )
+```
+
+Checks the file posted as `$_FILES[$name]` (upload errors, size, extension) and moves it to `{upload directory}/{$up_name}.{extension}`. The extension is the lower-cased extension of the original file name.
+
+Returns `true` on success. On failure it returns `false` and the error messages are available with [Upload::getErrorMessage](./geterrormessage.mdx). When `$required` is `false` and no file was selected, it returns `true` without saving anything.
+
+Set the upload directory with [Upload::setUploadDir](./setuploaddir.mdx) before calling this method.
+
+## Arguments
+
+| Name      | Data type | Default    | Remarks                                                   |
+| --------- | --------- | ---------- | --------------------------------------------------------- |
+| $name     | string    |            | `name` attribute of the `input[type="file"]`              |
+| $up_name  | string    |            | File name to save, without extension                      |
+| $label    | string    | 'ファイル' | Item label used in the error messages                     |
+| $required | boolean   | true       | `false`: no error when no file is selected                |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+$upload->setUploadDir($this->config['upload_dir']['path']);
+
+if ($upload->upload('image', uniqid('i_'), 'Image')) {
+    $data = $upload->getUploadedData('image');
+} else {
+    $errors = $upload->getErrorMessage('image');
+}
+
+// Optional file
+$upload->upload('attachment', uniqid('a_'), 'Attachment', false);
+```

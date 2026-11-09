@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Mail::subject
 
-Set mail subject
+> Set mail subject
 
 ## Description
 
@@ -16,11 +16,13 @@ public self Mail::subject( string $subject )
 
 | Name     | Data type | Default | Remarks       |
 | -------- | --------- | ------- | ------------- |
-| $subject | string    | null    | Email subject |
+| $subject | string    |         | Email subject |
 
 ## Example
 
 ```php title="Controller"
-$mail = $this->getClass('Tool/Mail');
+use Fegg\Tool\Mail;
+
+$mail = new Mail();
 $mail->subject('Mail subject');
 ```

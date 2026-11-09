@@ -1,11 +1,30 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
-# DB_pdo::count
+# Pdo::count
 
-Set select count query
+> Set select count query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::count( string $table )
+```
+
+Builds `Select Count(*) as number_of_records From (...) AS "count_temp"` around the SELECT that [select](./select.mdx) would build, so conditions, joins and groups are counted correctly. Read the result with `one()['number_of_records']`.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks           |
+| ------ | --------- | ------- | ----------------- |
+| $table | string    |         | Target table name |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$record = $db->setWhere('category = ?', 2)->count('cms_news')->execute()->one();
+$count = (int) $record['number_of_records'];
+```

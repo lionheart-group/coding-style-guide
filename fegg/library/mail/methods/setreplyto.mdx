@@ -1,0 +1,32 @@
+---
+sidebar_position: 6
+---
+
+# Mail::setReplyTo
+
+> Add a Reply-To address
+
+## Description
+
+```php
+public self Mail::setReplyTo( string $address, [ string $name = null ] )
+```
+
+Each call adds one more Reply-To address. Use [Mail::clearReplyTo](./clearreplyto.mdx) to remove them.
+
+## Arguments
+
+| Name     | Data type | Default | Remarks          |
+| -------- | --------- | ------- | ---------------- |
+| $address | string    |         | Reply-To address |
+| $name    | string    | null    | Reply-To name    |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Mail;
+
+$mail = new Mail('Mail subject', 'Mail body');
+$mail->setReplyTo($this->in('mail'), $this->in('name'));
+$mail->send('admin@example.com', 'Contact form', 'noreply@example.com');
+```

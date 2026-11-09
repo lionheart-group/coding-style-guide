@@ -1,0 +1,29 @@
+---
+sidebar_position: 1
+title: ReCAPTCHA::__construct
+---
+
+# ReCAPTCHA::\_\_construct
+
+> Set the reCAPTCHA secret key and score threshold
+
+## Description
+
+```php
+public ReCAPTCHA::__construct( string $secret, [ float $threshold = 0.5 ] )
+```
+
+## Arguments
+
+| Name       | Data type | Default | Remarks                                                                 |
+| ---------- | --------- | ------- | ----------------------------------------------------------------------- |
+| $secret    | string    |         | reCAPTCHA secret key                                                    |
+| $threshold | float     | 0.5     | Minimum score (0.0 to 1.0) / a lower score fails [ReCAPTCHA::auth](./recaptcha-auth.mdx) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Captcha\ReCAPTCHA;
+
+$recaptcha = new ReCAPTCHA('your-recaptcha-secret', 0.5);
+```

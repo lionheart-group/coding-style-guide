@@ -5,33 +5,31 @@ title: Mail::__construct
 
 # Mail::\_\_construct
 
-Setup sending image
+> Create a new email
 
 ## Description
 
 ```php
-public self Mail::__construct( [ string $subject = null, string $body = null, array $header = null ] )
+public Mail::__construct( [ string $subject = null, string $body = null, array $header = null ] )
 ```
 
 ## Arguments
 
-| Name     | Data type | Default | Remarks             |
-| -------- | --------- | ------- | ------------------- |
-| $subject | string    | null    | Email subject       |
-| $body    | string    | null    | Email body          |
-| $header  | array     | null    | Email custom header |
+| Name     | Data type | Default | Remarks                                                    |
+| -------- | --------- | ------- | ---------------------------------------------------------- |
+| $subject | string    | null    | Email subject                                              |
+| $body    | string    | null    | Email body (plain text)                                    |
+| $header  | array     | null    | Custom headers, passed to [Mail::pushHeader](./pushheader.mdx) |
 
 ## Example
 
 ```php title="Controller"
-$mail = $this->getClass('Tool/Mail', 'Mail subject', 'Mail body');
+use Fegg\Tool\Mail;
+
+$mail = new Mail('Mail subject', 'Mail body');
 
 // Same with
-$mail = $this->getClass('Tool/Mail');
+$mail = new Mail();
 $mail->subject('Mail subject');
 $mail->body('Mail body');
-
-// or
-$this->getClass('Tool/Mail')
-$mail = new Mail('Mail subject', 'Mail body');
 ```

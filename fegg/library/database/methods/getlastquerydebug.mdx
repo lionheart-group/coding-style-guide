@@ -1,11 +1,37 @@
 ---
-sidebar_position: 37
+sidebar_position: 41
 ---
 
-# DB_pdo::getLastQueryDebug
+# Pdo::getLastQueryDebug
 
-Get the last executed query and parameter separately for debugging
+> Get the last executed query and parameter separately for debugging
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public array Pdo::getLastQueryDebug()
+```
+
+Returns `array('query' => ..., 'parameter' => ...)`: the last query with its `?` placeholders, and the values bound to them.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$db->setWhere('category = ?', 2)->select('cms_news')->execute();
+
+print_r($db->getLastQueryDebug());
+```
+
+```php title="Output"
+Array
+(
+    [query] => Select * From "cms_news" Where  category = ?  And "cms_news".valid = 1
+    [parameter] => Array
+        (
+            [0] => 2
+        )
+
+)
+```

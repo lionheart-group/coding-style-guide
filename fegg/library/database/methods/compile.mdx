@@ -1,11 +1,28 @@
 ---
-sidebar_position: 29
+sidebar_position: 33
 ---
 
-# DB_pdo::compile
+# Pdo::compile
 
-Compile built query (not execute)
+> Compile built query (not execute)
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::compile()
+```
+
+Builds the query without running it or forgetting it. Read it with [getQuery](./getquery.mdx) and [getParam](./getparam.mdx), or with the values filled in with [getLastQuery](./getlastquery.mdx).
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$db->setWhere('category = ?', 2)->setOrder('created desc')->setLimit(10, 20)->select('cms_news')->compile();
+
+echo $db->getQuery();
+// -> Select * From "cms_news" Where category = ? And "cms_news".valid = 1 Order By created desc Limit 20, 10
+print_r($db->getParam());
+// -> Array ( [0] => 2 )
+```

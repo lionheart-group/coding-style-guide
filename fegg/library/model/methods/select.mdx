@@ -12,11 +12,13 @@ sidebar_position: 11
 public self Model::select( string $select )
 ```
 
+Sets the columns of the next SELECT (default `*`). The text is written into the SQL as it is: never put user input in it. Like every chain method, it is reset after the query.
+
 ## Arguments
 
-| Name    | Data type | Default | Remarks       |
-| ------- | --------- | ------- | ------------- |
-| $select | string    |         | Select fields |
+| Name    | Data type | Default | Remarks                                     |
+| ------- | --------- | ------- | ------------------------------------------- |
+| $select | string    |         | Columns or expressions, separated by commas |
 
 ## Example
 
@@ -27,6 +29,9 @@ $model = new Model(false, array(
     'visible' => 'visible',
 ));
 
-// Get `news_id` and `title` columns
+// Get the `news_id` and `title` columns
 $records = $model->select('news_id, title')->find();
+
+// Expressions work too
+$records = $model->select('category, count(*) AS n')->group('category')->all();
 ```

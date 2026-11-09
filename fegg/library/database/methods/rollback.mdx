@@ -1,0 +1,30 @@
+---
+sidebar_position: 51
+---
+
+# Pdo::rollBack
+
+> Roll back the open transaction
+
+## Description
+
+```php
+public void Pdo::rollBack()
+```
+
+Discards every write since [beginTransaction](./begintransaction.mdx). Any instance can roll it back. Throws `LogicException` when no transaction is open.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$db->beginTransaction();
+try {
+    $db->setValues(array('title' => 'A'))->insert('cms_news')->execute();
+    $db->commit();
+} catch (\Throwable $e) {
+    $db->rollBack();
+    throw $e;
+}
+```

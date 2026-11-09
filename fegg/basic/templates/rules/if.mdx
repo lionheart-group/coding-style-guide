@@ -1,25 +1,30 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # If
 
-> if, else, else if
+> if, else if, else
 
 ## Description
 
-```php
-{{ if }}
-{{ else if }}
+```html
+{{ if condition }}
+{{ else if condition }}
 {{ else }}
 {{ end }}
 ```
 
-It converted if section from `{{ if }}` to `{{ end }}`. You can use PHP comparison operators and methods in `{{ if }}` section, for example **&&, ||, is_array**, and so on.
+Outputs a part of the template only when a condition is true. The condition is a PHP expression: comparison and logical operators (`===`, `>`, `&&`, `||`, `!` …) and PHP functions (`is_array`, `count` …) work, with template variables written as usual (`$page.foo`).
+
+- `{{ if $var }}` with a single variable checks `isset($var) && $var`: it is false when the variable is not set.
+- In any other expression, a variable that is not set reads as `null` without a warning, so `{{ if $page.count > 0 }}` is safe when `count` is missing.
+- `{{ elseif }}` (without a space) is accepted as well as `{{ else if }}`.
+- `{{ end }}` closes the block. `{{ else }}` or `{{ else if }}` outside an `if`, a missing `{{ end }}` or an extra one is an error reported with its line (see [Lint and errors](../lint.mdx)).
 
 ## Example
 
-```php title="Template"
+```html title="Template"
 {{ if $page.foo === 'bar' }}
     foo is bar
 {{ else if $page.foo === 'baz' }}
@@ -28,3 +33,23 @@ It converted if section from `{{ if }}` to `{{ end }}`. You can use PHP comparis
     foo is neither bar nor baz
 {{ end }}
 ```
+
+### Checking whether a value is set
+
+```html title="Template"
+{{ if $page.image_id }}
+<img src="{{ $page.image_id|getImageUrl }}" alt="">
+{{ end }}
+
+{{ if !isset($page.data) || count($page.data) === 0 }}
+<p>No news yet.</p>
+{{ end }}
+```
+
+### Using a function
+
+```html title="Template"
+{{ if isNew($post.post_date) }}<span class="c-label">NEW</span>{{ end }}
+```
+
+`isNew()` is defined by the skeleton in `htdocs/_fegg/site/functions/modifier.php`. Functions defined there can be called in any expression.

@@ -1,11 +1,28 @@
 ---
-sidebar_position: 26
+sidebar_position: 30
 ---
 
-# DB_pdo::setInitQueryFlag
+# Pdo::setInitQueryFlag
 
-Enable reset query flag
+> Enable reset query flag
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::setInitQueryFlag()
+```
+
+Turns the reset after [execute](./execute.mdx) back on (the default), after [unsetInitQueryFlag](./unsetinitqueryflag.mdx).
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Count and fetch with the same conditions
+$db->unsetInitQueryFlag()->setWhere('category = ?', 2);
+$count = $db->count('cms_news')->execute()->one();
+
+$db->setInitQueryFlag()->setLimit(10);
+$rows = $db->select('cms_news')->execute()->all();
+```

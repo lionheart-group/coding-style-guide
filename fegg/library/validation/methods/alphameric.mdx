@@ -1,10 +1,10 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Validation::alphameric
 
-> Check alphanumeric or not
+> Check half-width alphanumeric characters
 
 ## Description
 
@@ -12,33 +12,28 @@ sidebar_position: 2
 public boolean Validation::alphameric( string $name, mixed $value, [ mixed $code = '' ] )
 ```
 
+Valid when the value contains only `0-9`, `a-z` and `A-Z`.
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
 ## Arguments
 
-| Name   | Data type | Default | Remarks                     |
-| ------ | --------- | ------- | --------------------------- |
-| $name  | string    |         | Item label                  |
-| $value | mixed     |         | Check field value           |
-| $code  | mixed     | ""      | Error code or Error message |
+| Name   | Data type | Default | Remarks                                                                                                      |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name  | string    |         | Field name (key of the error message)                                                                        |
+| $value | mixed     |         | Value to check                                                                                               |
+| $code  | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
 
 ## Example
 
 ```php title="Controller"
-$validation = $this->getClass('Validation');
+use Fegg\Validation;
 
-// If $value is not alphanumeric
-$successName = 'Success Field';
-$successVar  = 'abc123';
-$validation->alphameric('success', $successVar, array('@alphameric', $successName));
+$validation = new Validation();
 
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); // -> null
+$validation->alphameric('success', 'abc123', array('@alphameric', 'Code')); // -> true
+$validation->alphameric('failed', 'abc-123', array('@alphameric', 'Code')); // -> false
 
-// If $value is not alphanumeric
-$failedName = 'Failed Field';
-$failedVar  = 'abc!';
-$validation->alphameric('failed', $failedVar, array('@alphameric', $failedName));
-
-var_dump($validation->isError()); // -> true
 var_dump($validation->getErrorMessage());
-// -> "failed" => "<strong>Failed Field</strong> は半角英数で入力してください"
+// -> array('failed' => '<strong>Code</strong> は半角英数で入力してください')
 ```

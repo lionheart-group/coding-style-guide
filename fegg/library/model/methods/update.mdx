@@ -1,5 +1,5 @@
 ---
-sidebar_position: 32
+sidebar_position: 47
 ---
 
 # Model::update
@@ -9,30 +9,33 @@ sidebar_position: 32
 ## Description
 
 ```php
-public void Model::update( string $item, array $data, mixed $id )
+public int Model::update( string $item, array $data, mixed $id )
 ```
+
+Updates the row whose primary key is `$id` and returns the number of updated rows. For new code, use [updateRow](./updaterow.mdx): `update()` writes `''` for every column listed in `$item` that is missing from `$data`, and cannot store NULL. `modified` is set automatically and [bind](./addbindparam.mdx) types are applied.
 
 ## Arguments
 
-| Name  | Data type | Default | Remarks                    |
-| ----- | --------- | ------- | -------------------------- |
-| $item | string    |         | Updating columns           |
-| $data | array     |         | Updating datas             |
-| $id   | mixed     |         | Updating target Primary ID |
+| Name  | Data type | Default | Remarks                         |
+| ----- | --------- | ------- | ------------------------------- |
+| $item | string    |         | Columns, separated by commas    |
+| $data | array     |         | Values                          |
+| $id   | mixed     |         | Target primary ID               |
 
 ## Example
 
 ```php title="Controller"
-$model = new Model(false, array(
+$model = new Model(true, array(
     'table'   => 'cms_news',
     'id'      => 'news_id',
     'visible' => 'visible',
 ));
 
-$item = 'title, body';
+$item = 'title, content';
 $data = array(
-    'title' => 'Sample title',
-    'body' => 'Sample body',
+    'title'   => 'Sample title',
+    'content' => 'Sample content',
 );
-$model->update($item, $data, 1);
+$updated = $model->update($item, $data, 1);
+// -> 1
 ```

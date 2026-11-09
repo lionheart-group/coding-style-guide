@@ -6,26 +6,68 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # Introduction
 
-> Providing necessary functions for using database
+> Run SQL on the database connection
+
+`Fegg\Database\Pdo` builds and runs SQL on top of PHP's PDO. [Fegg\Model](../model/index.mdx) uses it for every query.
 
 :::note
 
-Usually you don't need to use this `DB_pdo` class. Try to use `Model` class instead.
+Usually you don't need this class: use [Fegg\Model](../model/index.mdx), which also checks names, applies the visible flag and pages results. Use `Pdo` for raw SQL the model cannot express.
 
-[About Model class is here.](../model/index.mdx)
+The Fegg 4 class name `DB_pdo` (and `$this->getClass('DB_pdo')`) still works through a compatibility layer, but every use is reported as `Fegg deprecated: ...` in the PHP error log, and it will be removed in Fegg 6.
 
 :::
 
 ## How to use
 
-You can load `DB_pdo` class through `Application::getClass` method.
+```php title="Controller"
+use Fegg\Database\Pdo;
+
+$db = new Pdo();
+
+// Raw SQL with ? placeholders
+$rows = $db->setQuery(
+    'SELECT category, count(*) AS n FROM cms_news WHERE valid = 1 GROUP BY category HAVING n > ?',
+    array(1)
+)->execute()->all();
+
+// Or build the query
+$rows = $db->setWhere('category = ?', 2)->setOrder('post_date DESC')->select('cms_news')->execute()->all();
+```
+
+A query is built with the `set*` methods and a build method ([select](./methods/select.mdx), [count](./methods/count.mdx), [insert](./methods/insert.mdx), [update](./methods/update.mdx), [delete](./methods/delete.mdx) ...), or written with [setQuery](./methods/setquery.mdx). [execute](./methods/execute.mdx) runs it, then [all](./methods/all.mdx), [one](./methods/one.mdx), [getAffectedRow](./methods/getaffectedrow.mdx) or [getLastIndexId](./methods/getlastindexid.mdx) read the result. After `execute()` the built query is forgotten, so each query starts clean.
+
+### Automatic queries
+
+Queries built with the build methods get the automatic parts of `database_regular_use_query.php` (see [Configuration](./configuration.mdx)): `valid = 1` on SELECT and count, `created` / `modified` / `valid` on INSERT and `modified` on UPDATE. Queries written with `setQuery()` get nothing added.
+
+## Values and placeholders
+
+- Values are always bound to `?` placeholders. Integers and booleans are bound as integers, `null` as NULL, everything else as strings (so `count(*) > ?` works on SQLite).
+- In [setWhere](./methods/setwhere.mdx), [setHaving](./methods/sethaving.mdx) and [setOn](./methods/seton.mdx), an array bound to one placeholder expands it: `id = ?` and `id IN (?)` become `id IN (?, ?, ...)`, `<>` / `!=` / `NOT IN` become `NOT IN`, `LIKE ?` becomes `(... LIKE ? OR ... LIKE ?)` and `NOT LIKE ?` becomes `(... NOT LIKE ? AND ...)`. An empty array matches no row (`=`, `IN`, `LIKE`) or every row (`<>`, `NOT IN`, `NOT LIKE`). An array on any other operator throws `InvalidArgumentException`.
+- A `?` inside a quoted string literal (`'?'`) is not a placeholder.
+- Table, column and ORDER BY text given to the `set*` methods is written into the SQL as it is: never put user input in it.
+
+## Errors
+
+A failed connection or query throws `Fegg\Database\QueryException` (a `RuntimeException`). Its message ends with the SQL with its values filled in, for example `no such column: nope (SQL: SELECT nope FROM cms_news WHERE title = 'it''s')`. `getSql()` returns the SQL with its `?` placeholders and `getParameters()` the values. Uncaught, it becomes an HTTP 500 and is written to the PHP error log. Fegg 4 printed the error (to developer IPs only) and called `exit` instead.
 
 ```php title="Controller"
-$database = $this->getClass('DB_pdo');
+use Fegg\Database\QueryException;
 
-// Select query
-$result = $database->select('table_name')->execute()->all();
+try {
+    $db->setQuery($sql, $params)->execute();
+} catch (QueryException $e) {
+    // e.g. a duplicate key
+    error_log($e->getMessage());
+}
 ```
+
+## Connections and transactions
+
+- Connections are opened once per DSN and user name and shared by every `Pdo` instance and every model.
+- SELECT and PRAGMA queries run on a slave, other queries on the master (see [Configuration](./configuration.mdx)). [masterServer](./methods/masterserver.mdx) and [slaveServer](./methods/slaveserver.mdx) choose the server for the next query.
+- [beginTransaction](./methods/begintransaction.mdx) opens a transaction on the master. Until [commit](./methods/commit.mdx) or [rollBack](./methods/rollback.mdx), every query of every instance and every model runs inside it. [Model::transaction](../model/methods/transaction.mdx) does this for you.
 
 ## Methods
 

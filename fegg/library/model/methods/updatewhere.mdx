@@ -1,5 +1,5 @@
 ---
-sidebar_position: 31
+sidebar_position: 48
 ---
 
 # Model::updateWhere
@@ -9,31 +9,35 @@ sidebar_position: 31
 ## Description
 
 ```php
-public void Model::updateWhere( string $item, array $data, string $where, array $wh_data )
+public int Model::updateWhere( string $item, array $data, string $where, mixed $wh_data )
 ```
+
+Updates every row matching `$where` and returns the number of updated rows. For new code, use [updateRowsWhere](./updaterowswhere.mdx): `updateWhere()` writes `''` for every column listed in `$item` that is missing from `$data`, and cannot store NULL.
+
+`$wh_data` is one value, or an array with one value per placeholder. The condition is required: an empty `$where` throws `InvalidArgumentException` (Fegg 4 updated every row). Pass `'1 = 1'` to really update every row.
 
 ## Arguments
 
-| Name     | Data type | Default | Remarks                  |
-| -------- | --------- | ------- | ------------------------ |
-| $item    | string    |         | Updating columns         |
-| $data    | array     |         | Updating datas           |
-| $where   | string    |         | Updating condition query |
-| $wh_data | array     |         | Updating condition data  |
+| Name     | Data type | Default | Remarks                                      |
+| -------- | --------- | ------- | -------------------------------------------- |
+| $item    | string    |         | Columns, separated by commas                 |
+| $data    | array     |         | Values                                       |
+| $where   | string    |         | Condition with `?` placeholders              |
+| $wh_data | mixed     |         | Values for the placeholders                  |
 
 ## Example
 
 ```php title="Controller"
-$model = new Model(false, array(
+$model = new Model(true, array(
     'table'   => 'cms_news',
     'id'      => 'news_id',
     'visible' => 'visible',
 ));
 
-$item = 'title, body';
+$item = 'title, content';
 $data = array(
-    'title' => 'Sample title',
-    'body' => 'Sample body',
+    'title'   => 'Sample title',
+    'content' => 'Sample content',
 );
-$model->updateWhere($item, $data, 'id = ?', [1]);
+$updated = $model->updateWhere($item, $data, 'category = ? AND news_id > ?', array(2, 10));
 ```

@@ -1,0 +1,23 @@
+---
+sidebar_position: 7
+---
+
+# Mail::clearReplyTo
+
+> Remove all Reply-To addresses
+
+## Description
+
+```php
+public self Mail::clearReplyTo()
+```
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Mail;
+
+$mail = new Mail();
+$mail->setReplyTo('foo@example.com');
+$mail->clearReplyTo();
+```

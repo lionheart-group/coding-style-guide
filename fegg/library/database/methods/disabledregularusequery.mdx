@@ -1,11 +1,25 @@
 ---
-sidebar_position: 23
+sidebar_position: 26
 ---
 
-# DB_pdo::disabledRegularUseQuery
+# Pdo::disabledRegularUseQuery
 
-Disable automatic append query flag
+> Disable automatic append query flag
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::disabledRegularUseQuery()
+```
+
+Skips every automatic query (for every table and for the table, see [Configuration](../configuration.mdx)) for every later query of this instance. To skip them for one query only, use [unsetRegularUseQuery](./unsetregularusequery.mdx) and [unsetRegularUseQueryForTable](./unsetregularusequeryfortable.mdx).
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+$db->disabledRegularUseQuery();
+
+// Select * From "cms_news"  (also the rows with valid = 0)
+$rows = $db->select('cms_news')->execute()->all();
+```

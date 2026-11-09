@@ -1,0 +1,39 @@
+---
+sidebar_position: 4
+---
+
+# Turnstile::auth
+
+> Verify a Turnstile token
+
+## Description
+
+```php
+public array Turnstile::auth( string $response )
+```
+
+Sends the token to `https://challenges.cloudflare.com/turnstile/v0/siteverify` and returns an array:
+
+| Key     | Data type | Remarks                                    |
+| ------- | --------- | ------------------------------------------ |
+| success | boolean   | `true` when the API returned success       |
+| errors  | array     | Error messages for the API error codes     |
+
+## Arguments
+
+| Name      | Data type | Default | Remarks                                              |
+| --------- | --------- | ------- | ---------------------------------------------------- |
+| $response | string    |         | Token posted by the widget (`cf-turnstile-response`)  |
+
+## Example
+
+```php title="Controller"
+use Fegg\Captcha\Turnstile;
+
+$turnstile = new Turnstile('your-turnstile-secret');
+$result = $turnstile->auth($this->in('cf-turnstile-response'));
+
+if (!$result['success']) {
+    $errorMessage = implode(',', $result['errors']);
+}
+```

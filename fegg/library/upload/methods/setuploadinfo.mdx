@@ -1,11 +1,40 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 # Upload::setUploadInfo
 
-Set upload option once
+> Set the upload options at once
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public boolean Upload::setUploadInfo( array $data )
+```
+
+Calls [Upload::setUploadDir](./setuploaddir.mdx), [Upload::setMaxFileSize](./setmaxfilesize.mdx) and [Upload::setFileType](./setfiletype.mdx) for the keys present in `$data`. Returns `false` when one of them fails.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                    |
+| ----- | --------- | ------- | -------------------------- |
+| $data | array     |         | Options (see below)        |
+
+| Key         | Data type | Remarks                     |
+| ----------- | --------- | --------------------------- |
+| upDir       | string    | Upload directory            |
+| maxFileSize | numeric   | Maximum file size (MB)      |
+| fileType    | array     | Allowed extensions          |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+$upload->setUploadInfo(array(
+    'upDir'       => $this->config['upload_dir']['path'] . '/entry',
+    'maxFileSize' => 5,
+    'fileType'    => array('jpg', 'png', 'pdf'),
+));
+```

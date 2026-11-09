@@ -1,11 +1,42 @@
 ---
-sidebar_position: 13
+sidebar_position: 14
 ---
 
-# DB_pdo::pragma
+# Pdo::pragma
 
-Set pragma query
+> Set pragma query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::pragma( string $table, string $mode )
+```
+
+Builds an SQLite `PRAGMA` on `$table`. Read the rows with [all](./all.mdx) after [execute](./execute.mdx). SQLite only.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks             |
+| ------ | --------- | ------- | ------------------- |
+| $table | string    |         | Table name          |
+| $mode  | string    |         | Pragma mode (below) |
+
+### Pragma mode
+
+| Mode         | Query                                                 |
+| ------------ | ----------------------------------------------------- |
+| `table`      | `PRAGMA table_info("table")` (also any unknown mode)  |
+| `index_list` | `PRAGMA index_list("table")`                          |
+| `index`      | `PRAGMA index_info("table")`                          |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Columns of cms_news: cid, name, type, notnull, dflt_value, pk
+$columns = $db->pragma('cms_news', 'table')->execute()->all();
+
+// Indexes of cms_news: seq, name, unique, origin, partial
+$indexes = $db->pragma('cms_news', 'index_list')->execute()->all();
+```

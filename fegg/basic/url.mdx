@@ -6,81 +6,142 @@ sidebar_position: 1
 
 ## URL and Controller class
 
-Fegg FW also adopted the segment-based-approach. Here is how the URL and Controller class relationship work.
+Fegg maps URL segments to a controller class, a method and its arguments:
 
 ```
-http://example.com/class/function/param1/param2...
+https://example.com/class/method/param1/param2/
 ```
 
-1. Class of Controller
-2. Method of Controller class
-3. Arguments for Method
+1. Controller class (`site/controller/Class.php`, first letter in upper case)
+2. Method of the controller class
+3. Arguments for the method
 
-You can have a more flexible URL by setting up your URL structure in [Routing](#routing) file.
+When the method segment is empty, `index()` is called. When no segment names a controller, the `Index` controller of that directory is used.
+
+Sub directories of `site/controller/` are part of the URL and of the namespace:
+
+| URL                     | File                                       | Called                                   |
+| :---------------------- | :----------------------------------------- | :--------------------------------------- |
+| `/`                     | `site/controller/Index.php`                | `Site\Controller\Index::index()`         |
+| `/news/`                | `site/controller/News.php`                 | `Site\Controller\News::index()`          |
+| `/news/detail/12/`      | `site/controller/News.php`                 | `Site\Controller\News::detail('12')`     |
+| `/cms/news/edit/3/`     | `site/controller/Cms/News.php`             | `Site\Controller\Cms\News::edit('3')`    |
+| `/cms/media/`           | `core/controller/Cms/Media.php` (no site class) | `Fegg\Controller\Cms\Media::index()` |
+
+- The site (`Site\Controller\...`) is searched first, then the core (`Fegg\Controller\...`). A site class with the same name replaces the core's CMS screen (see [Controller](./controller.mdx#extending-a-core-controller)).
+- Segments are walked from the left; the first one that names a controller file wins over a directory with the same name.
+- Controller and directory names must be valid PHP class names (letters, digits, `_`). For URLs like `/about-us/`, use a [route](#routing).
+- Abstract classes (the base `Controller` classes) are never called from a URL.
+- If no controller or no method matches, the `NotFound` controller renders the 404 page.
+
+Arguments are always strings.
 
 ## Example
 
 ```bash title="URL"
-http://example.com/post/edit/1
+https://example.com/post/edit/1/
 ```
 
-```php title="Running method"
+```php title="htdocs/_fegg/site/controller/Post.php"
 <?php
-// code/application/Post.php
+namespace Site\Controller;
 
-class Post extends Application
+defined('FEGG_CORE_DIR') || exit;
+
+class Post extends Controller
 {
-
-    // ...
-
-    public function edit( $id )
+    public function edit($id)
     {
         echo $id; // Result: 1
     }
-
-    // ...
-
 }
 ```
 
+## Trailing slash
+
+URLs without an extension are normalised to end with `/`. A `GET` or `HEAD` request to `/news/detail/1` is redirected (301) to `/news/detail/1/`, keeping the query string. Other methods (`POST`, ...) are handled in place without a redirect. URLs with an extension (`/news/post_1.html`) are not changed.
+
+Write links in templates with the trailing slash to avoid the extra redirect.
+
 ## Routing
 
-You can set your URL structure without URL and Controller class relation by configuring your route file.
-
-You may set your `$route` in array in **code/config/route.php**.
+To use URLs that do not follow the class/method structure, add routes to **`htdocs/_fegg/site/config/route.php`**:
 
 ```php
 $route['from'] = 'to';
 ```
 
-As described above, the Key of array is a segment of URL, whereas the Value of array is the value after remapping.
+The key is the URL (without the leading `/`) and the value is the `class/method/arguments` path it is mapped to.
 
-:::note
-
-Routes will run in order when they are defined. Higher routes will always take precedence over lower ones.
-
-:::
+- Routes without wildcards are checked first. Then the routes are tried in the order they are written, and the first match wins. Put specific routes above general ones.
+- A route without an extension matches the URL with or without a trailing slash (`'contact/'` matches `/contact` and `/contact/`).
+- When no route matches, the URL itself is used as the path.
 
 ### Wildcards
 
-There are 2 types of available wildcards (`:any`, `:num`) you may use before mapping key.
+| Wildcard | Matches |
+| :------- | :------ |
+| `:num`   | Digits only (`[0-9]+`) |
+| `:any`   | One segment: any characters except `/` |
 
-`:any` is **any types of words**. `:num` is **limited only numbers**.
+Refer to the matched values with `$1`, `$2`, ... in the value.
 
 ### Example
 
-```php title="code/config/route.php"
+```php title="htdocs/_fegg/site/config/route.php"
 <?php
+defined('FEGG_CORE_DIR') || exit;
 
-$route['foo'] = 'bar';
-// http://example.com/foo -> code/application/Bar.php
-
-$route['item/:any'] = 'product/item_lookup/$1';
-// http://example.com/item/foobar -> code/application/Product.php -> Product::item_lookup( 'foobar' )
-
-$route['archive/edit/:num'] = 'post/edit/$1';
-// http://example.com/archive/edit/1 -> code/application/Post.php -> Post::edit( 1 )
+// Handle index.html (in the skeleton by default)
+$route[':any/index.html'] = '$1/index';
+// https://example.com/news/index.html -> Site\Controller\News::index()
 
 $route['news/post_:num.html'] = 'news/detail/$1';
-// http://example.com/news/post_1.html -> code/application/News.php -> News::detail( 1 )
+// https://example.com/news/post_1.html -> Site\Controller\News::detail('1')
+
+$route['item/:any/'] = 'product/item_lookup/$1';
+// https://example.com/item/foobar/ -> Site\Controller\Product::item_lookup('foobar')
+
+$route['contact/']             = 'contact/index';
+$route['contact/confirm.html'] = 'contact/confirm';
+// https://example.com/contact/confirm.html -> Site\Controller\Contact::confirm()
+```
+
+## Static pages
+
+Pages that have no data of their own do not need a controller. Route them to the skeleton's `Site\Controller\Page`, which renders the template named in the route:
+
+```php title="htdocs/_fegg/site/config/route.php"
+$route['about/']          = 'page/render/about';      // site/template/about.tpl
+$route['guide/:any.html'] = 'page/render/guide/$1';   // site/template/guide/*.tpl
+```
+
+`Page::render()` joins its arguments into the template path. If the template does not exist, it redirects to the top page.
+
+### Route-only controllers
+
+`Page` implements the marker interface `Fegg\Http\RouteOnly`. A controller that implements it is **only called through a route in `route.php`**. The default `/class/method/arguments` mapping skips it, so `/page/render/about/` typed in the browser is a 404. This way a visitor cannot choose which template `Page` renders; only the routes you write can.
+
+Use `RouteOnly` for your own controllers whose arguments must not come straight from the URL:
+
+```php title="htdocs/_fegg/site/controller/Landing.php"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Http\RouteOnly;
+
+class Landing extends Controller implements RouteOnly
+{
+    public function show($campaign)
+    {
+        $this->page['campaign'] = $campaign;
+        $this->displayPage('landing/' . $campaign);
+    }
+}
+```
+
+```php title="htdocs/_fegg/site/config/route.php"
+$route['campaign/spring/'] = 'landing/show/spring';
 ```

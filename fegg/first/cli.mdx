@@ -1,0 +1,137 @@
+---
+sidebar_position: 3
+---
+
+# fegg-cli
+
+`fegg-cli` is the command line entry point in the project root. Run it from there:
+
+```bash
+./fegg-cli <command> [arguments]
+```
+
+Like `htdocs/index.php`, the file itself only defines the paths (`FEGG_HTML_DIR`, `FEGG_CORE_DIR`, `FEGG_SITE_DIR`). The commands are in `htdocs/_fegg/core/bin/`. Commands exit with code `1` when they find a problem, so they can be used in CI.
+
+| Command                                         | What it does |
+| :---------------------------------------------- | :----------- |
+| `migration`                                     | Create or change the SQLite tables from the YAML schema files |
+| `migration:db2schema <file>`                    | Write the structure of the current database to a YAML file |
+| `db:schema [table] [--json]`                    | List tables and columns from the YAML schema files |
+| `template:lint [file ...]`                      | Check templates without running them |
+| `core:status`                                   | Show the core version and core files changed in this project |
+| `core:update [vX.Y.Z] [--dry-run] [--force]`    | Update the core from the skeleton repository |
+| `doctor [URL]`                                  | Check that `_fegg/` cannot be read from the web |
+
+Running a command group without a sub command prints its help: `./fegg-cli core`, `./fegg-cli db`, `./fegg-cli template`, `./fegg-cli migration:help`, `./fegg-cli doctor:help`.
+
+## migration
+
+```bash
+./fegg-cli migration
+```
+
+Compares the table definitions in the YAML files with the SQLite database and applies the difference (adds tables, columns and indexes).
+
+- The core's files (`core/config/database/`: `cms_user`, `cms_file`, `cms_image`) are read first, then the project's (`site/config/database/`). A project file with the same name replaces the core's file.
+- Prints `Fegg-cli migration diff : Not changed` when the database already matches, `Fegg-cli migration diff : Finished migration` after applying changes.
+- `fegg-cli core:update` runs it automatically after updating the core.
+
+:::danger
+
+The YAML files are the single source of truth. A table that exists in the database but in no YAML file is **dropped**, and a column that is not in the YAML is **removed with its data**. Run it against a copy first when you are not sure that every table is defined.
+
+:::
+
+To create a YAML file from an existing database (for example when you start writing schema files for an old project):
+
+```bash
+./fegg-cli migration:db2schema htdocs/_fegg/site/config/database/dump.yaml
+```
+
+All tables are written to the one file. Split it into one file per table if you keep it.
+
+## db:schema
+
+```bash
+./fegg-cli db:schema             # every table
+./fegg-cli db:schema cms_news    # one table
+./fegg-cli db:schema --json      # as JSON
+```
+
+Lists the tables, columns (type, primary key, autoincrement, not null, default) and indexes defined in `core/config/database/` and `site/config/database/`. It reads the YAML files, not the database, so it works without a database. It also warns when a table is missing one of the columns every table needs (`valid`, `created`, `modified`).
+
+```text title="Output"
+cms_news  (htdocs/_fegg/site/config/database/cms_news.yaml)
+  news_id              INTEGER    primary key, autoincrement, not null
+  visible              BOOLEAN
+  category             INTEGER
+  title                TEXT
+  ...
+  valid                BOOLEAN
+  post_date            DATETIME
+  created              DATETIME
+  modified             DATETIME
+  index NEWS_ID unique (news_id)
+```
+
+## template:lint
+
+```bash
+./fegg-cli template:lint                                         # every template in site/template and core/template
+./fegg-cli template:lint htdocs/_fegg/site/template/news/detail.tpl
+```
+
+Checks templates without running them and reports each problem with the `.tpl` file and line: unknown tags, unclosed blocks or extra `{{ end }}`, missing `include` / `transclude` targets, undefined modifiers, and output in URL attributes, `<script>` or event attributes that is not escaped for that context.
+
+```text title="Output (example)"
+htdocs/_fegg/site/template/news/detail.tpl:12: unknown modifier "nosuch" (define it in site/functions/*.php)
+htdocs/_fegg/site/template/news/detail.tpl:20: {{ $page.data.url }} starts a URL: write {{ $value|feggUrl }} so javascript: URLs are refused
+NG: 2 problem(s) in 1 template(s)
+```
+
+Prints `OK: <n> template(s)` when there is nothing to fix. Run it after every template change.
+
+## core:status
+
+```bash
+./fegg-cli core:status
+```
+
+Prints the core version and compares the core files with `core/manifest.json`. `No changes to core files.` means the core is untouched and can be updated. Otherwise it lists the changed files; move those changes to overrides in `site/` (see [Directory structure](./cont.mdx#overriding-the-core)).
+
+## core:update
+
+```bash
+./fegg-cli core:update --dry-run    # show the difference only
+./fegg-cli core:update              # update to the latest release tag
+./fegg-cli core:update v5.1.0       # update to a given version
+```
+
+Replaces the core with a release of the skeleton repository. See [Updating the core](./update.mdx) for details.
+
+| Option      | Remarks |
+| :---------- | :------ |
+| `vX.Y.Z`    | Version to install. The latest tag when omitted |
+| `--dry-run` | Show what would change without changing anything |
+| `--force`   | Overwrite core files that were changed in the project |
+
+`core:manifest` also exists, but it is for skeleton maintainers only (it rebuilds `core/manifest.json`).
+
+## doctor
+
+```bash
+./fegg-cli doctor                        # check the .htaccess files on disk
+./fegg-cli doctor https://example.com    # also request the live site
+```
+
+Without a URL, it checks that `htdocs/_fegg/.htaccess` denies access and that `htdocs/.htaccess` has the rule for `_fegg/`. With a URL, it also requests files under `_fegg/` and the SQLite database (when it is under the document root) on the live site and reports any that can be read.
+
+Prints `OK: https://example.com does not expose _fegg/`, or `NG` with the list of problems (exit code `1`). You can run it from your local machine against the production URL, which is the easiest check after an FTP upload.
+
+## install:class
+
+```bash
+./fegg-cli install:class <owner>/<repository>
+```
+
+Clones a Fegg library repository (from GitHub, or a full `https://` / `git:` URL) and copies its `src/` directory into `htdocs/_fegg/site/lib/`. This is the Fegg 4 library mechanism: classes in `site/lib/` are only loaded through `getClass()`, which is deprecated in Fegg 5. For new code, put namespaced classes in `site/src/` instead.

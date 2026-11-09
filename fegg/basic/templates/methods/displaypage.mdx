@@ -1,42 +1,67 @@
 ---
-sidebar_position: 4
+sidebar_position: 1
 ---
 
 # Application::displayPage
 
-> Display compiled template with automatically variables and taking measures for Clickjacking
+> Display a page with the standard template variables and clickjacking protection
 
 ## Description
 
 ```php
-public string Application::fetchPage( string $template )
+public void Application::displayPage( string $template )
 ```
 
-`displayPage` method is equipped with the X-Frame-Options HTTP response header set to Deny so that no other contents from the other sites are embedded into your website.
+Renders the template with [Application::fetchPage](./fetchpage.mdx) (so `$page`, `$site`, `$in` … are available), sends the `X-Frame-Options: DENY` header so that other sites cannot embed the page in a frame, outputs the page and ends the request (`exit`). Code after `displayPage()` does not run.
+
+This is the method to use for every page. When the site-wide Basic authentication is enabled (`basic_auth_scope = 1`), it is checked here.
 
 ## Arguments
 
-| Name      | Data type | Default | Remarks            |
-| --------- | --------- | ------- | ------------------ |
-| $template | string    |         | Template file name |
+| Name      | Data type | Default | Remarks |
+| --------- | --------- | ------- | ------- |
+| $template | string    |         | Template name relative to the template root, without `.tpl` (`news/detail`) |
 
 ## Example
 
-```php title="code/application/Foo.php"
+```php title="htdocs/_fegg/site/controller/News.php"
 <?php
+namespace Site\Controller;
 
-class Foo extends Application
+defined('FEGG_CORE_DIR') || exit;
+
+class News extends Controller
 {
-    function bar(){
-        $this->displayPage( 'foo/bar' );
+    public function detail($id = '')
+    {
+        $this->page['title'] = 'Hello';
+        $this->displayPage('news/detail');
     }
 }
 ```
 
-Displays the [Application::fetchPage](./fetchpage.mdx) result after taking precautionary measures from Clickjacking attack.
+```html title="htdocs/_fegg/site/template/news/detail.tpl"
+<h1>{{ $page.title }}</h1>
+```
 
-:::note
+```html title="Output"
+<h1>Hello</h1>
+```
 
-It is recommended to use `displayPage` method in compiling your template file for the security of your web users/visitors.
+## Errors
+
+When the template does not exist, `Fegg\Template\TemplateException` is thrown. Uncaught, it becomes an HTTP 500 that is written to the PHP error log; nothing of the half-rendered page is sent. Catch it when a missing template is expected:
+
+```php
+try {
+    $this->displayPage('campaign/current');
+} catch (\Fegg\Template\TemplateException $e) {
+    $this->displayPage('not_found');
+}
+```
+
+:::warning
+
+Never build the template name from user input without checking it. A controller that chooses a template from its URL arguments should only be reachable through `site/config/route.php` (implement `Fegg\Http\RouteOnly`, like the skeleton's `Site\Controller\Page`).
 
 :::

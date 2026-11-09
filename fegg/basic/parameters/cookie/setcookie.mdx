@@ -9,38 +9,38 @@ sidebar_position: 1
 ## Description
 
 ```php
-public void Application::setCookie( string $name, string $value, [ string $expire = "" ], [ string $path = "/" ] )
+public void Application::setCookie( string $name, string $value, int $expire = '', string $path = '/; SameSite=Strict' )
 ```
 
-Set COOKIE data.
+Set COOKIE data. The cookie is always sent with the **`Secure`** and **`HttpOnly`** flags: browsers only send it back over HTTPS (and `localhost`), and JavaScript cannot read it.
 
 ## Arguments
 
-| Name    | Data type | Default | Remarks          |
-| :------ | :-------- | :------ | :--------------- |
-| $name   | string    |         | Cookie param key |
-| $value  | string    |         | Value            |
-| $expire | string    | ""      | Expired time     |
-| $path   | string    |         | Enabled path     |
+| Name    | Data type | Default                | Remarks |
+| :------ | :-------- | :--------------------- | :------ |
+| $name   | string    |                        | Cookie name |
+| $value  | string    |                        | Value |
+| $expire | int       | ''                     | Lifetime in **seconds from now**. When omitted (or `0`), 1 week (604800 seconds) |
+| $path   | string    | '/; SameSite=Strict'   | Path where the cookie is valid. The default also adds `SameSite=Strict` |
 
 ## Example
 
-If you omit third argument, expired time will be **after 1 week** (604800 seconds).
+If you omit the third argument, the cookie expires **after 1 week**.
 
 ```php title="Controller"
 $this->setCookie('foo', 'bar');
 ```
 
-You can set a expired time at 3rd argument.
+Set the lifetime in seconds with the third argument.
 
 ```php title="Controller"
-// This Cookie's expired time is after 60 seconds.
+// This cookie expires after 60 seconds.
 $this->setCookie('foo', 'bar', 60);
 ```
 
-You can set a Enabled path at 4th argument.
+Set the path with the fourth argument. Append `; SameSite=Strict` (or `Lax`) yourself if you still want the `SameSite` attribute.
 
 ```php title="Controller"
-// This Cookie enable under the "/test/" path.
-$this->setCookie('foo', 'bar', null, '/test/');
+// This cookie is only valid under "/test/".
+$this->setCookie('foo', 'bar', 0, '/test/; SameSite=Strict');
 ```

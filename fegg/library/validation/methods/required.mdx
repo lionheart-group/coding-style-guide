@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Validation::required
@@ -12,33 +12,27 @@ sidebar_position: 1
 public boolean Validation::required( string $name, mixed $value, [ mixed $code = '' ] )
 ```
 
+A string is valid when it is not empty after trimming (`'0'` is valid). For an array, only the first element is checked: it must not be `''` or `null`.
+
 ## Arguments
 
-| Name   | Data type | Default | Remarks                     |
-| ------ | --------- | ------- | --------------------------- |
-| $name  | string    |         | Item label                  |
-| $value | mixed     |         | Check field value           |
-| $code  | mixed     | ""      | Error code or Error message |
+| Name   | Data type | Default | Remarks                                                                                                      |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name  | string    |         | Field name (key of the error message)                                                                        |
+| $value | mixed     |         | Value to check                                                                                               |
+| $code  | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
 
 ## Example
 
 ```php title="Controller"
-$validation = $this->getClass('Validation');
+use Fegg\Validation;
 
-// If $value is not empty
-$successName = 'Success Field';
-$successVar  = 'foo';
-$validation->required('success', $successVar, array('@required', $successName));
+$validation = new Validation();
 
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); // -> null
-
-// If $value is empty
-$failedName = 'Failed Field';
-$failedVar  = null;
-$validation->required('failed', $failedVar, array('@required', $failedName));
+$validation->required('name', 'John', array('@required', 'Name')); // -> true
+$validation->required('mail', '', array('@required', 'Email'));    // -> false
 
 var_dump($validation->isError()); // -> true
 var_dump($validation->getErrorMessage());
-// -> "failed" => "<strong>Failed Field</strong> は半角英数で入力してください"
+// -> array('mail' => '<strong>Email</strong> をご入力ください')
 ```

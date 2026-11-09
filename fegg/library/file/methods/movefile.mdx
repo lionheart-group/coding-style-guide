@@ -4,8 +4,28 @@ sidebar_position: 5
 
 # File::moveFile
 
-Move specified file to specified location
+> Move (rename) a file
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public void File::moveFile( string $from, string $to )
+```
+
+Moves `$from` to `$to` with `rename()`. Nothing happens when `$from` does not exist.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks          |
+| ----- | --------- | ------- | ---------------- |
+| $from | string    |         | Source file      |
+| $to   | string    |         | Destination file |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\File;
+
+$file = new File();
+$file->moveFile('path/to/foo.txt', 'path/to/bar.txt');
+```

@@ -1,11 +1,26 @@
 ---
-sidebar_position: 36
+sidebar_position: 40
 ---
 
-# DB_pdo::getLastQuery
+# Pdo::getLastQuery
 
-Get the last executed query for debugging
+> Get the last executed query for debugging
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public string Pdo::getLastQuery()
+```
+
+Returns the last query run with [execute](./execute.mdx) (or built with [compile](./compile.mdx)), with the values filled in and quoted. It is for logs and debugging only: never run the result. To get the SQL and the values separately, use [getQuery](./getquery.mdx) and [getParam](./getparam.mdx).
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$db->setWhere('title = ?', "it's")->select('cms_news')->execute();
+
+echo $db->getLastQuery();
+// -> Select * From "cms_news" Where title = 'it''s' And "cms_news".valid = 1
+```

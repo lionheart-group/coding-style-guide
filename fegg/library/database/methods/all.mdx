@@ -1,11 +1,33 @@
 ---
-sidebar_position: 30
+sidebar_position: 34
 ---
 
-# DB_pdo::all
+# Pdo::all
 
-Get all the result of executed select query
+> Get all the result of executed select query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public array Pdo::all( [ string $index = '' ] )
+```
+
+Returns the rows of the last SELECT or PRAGMA run with [execute](./execute.mdx), as associative arrays. With `$index`, the rows are keyed by that column.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                         |
+| ------ | --------- | ------- | ------------------------------- |
+| $index | string    | ''      | Column to use as the array key  |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$rows = $db->setItem('news_id, title')->select('cms_news')->execute()->all();
+// -> array(0 => array('news_id' => 1, 'title' => 'A'), 1 => array('news_id' => 2, 'title' => 'B'), ...)
+
+$rows = $db->setItem('news_id, title')->select('cms_news')->execute()->all('news_id');
+// -> array(1 => array('news_id' => 1, 'title' => 'A'), 2 => array('news_id' => 2, 'title' => 'B'), ...)
+```

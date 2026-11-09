@@ -9,14 +9,16 @@ sidebar_position: 6
 ## Description
 
 ```php
-public self Model::setVisible( string $visible )
+public self Model::setVisible( string|null $visible )
 ```
+
+When the model was created with `$is_admin = false`, reads only return rows whose visible column is 1. `null` or `''` removes the flag. Throws `InvalidArgumentException` when `$visible` is not a plain name.
 
 ## Arguments
 
-| Name     | Data type | Default | Remarks           |
-| -------- | --------- | ------- | ----------------- |
-| $visible | string    |         | Visible flag name |
+| Name     | Data type   | Default | Remarks                  |
+| -------- | ----------- | ------- | ------------------------ |
+| $visible | string/null |         | Public flag column name  |
 
 ## Example
 
@@ -24,7 +26,7 @@ public self Model::setVisible( string $visible )
 $model = new Model();
 $model->setVisible('visible');
 
-// Same with the following
+// Same as the following
 $model = new Model(false, array(
     'visible' => 'visible',
 ));

@@ -4,26 +4,31 @@ sidebar_position: 4
 
 # Trim::resizeForce
 
-Resize the image forcely
+> Resize the image to the specified size ignoring ratio
 
 ## Description
 
 ```php
-public void Trim::resizeForce( number $w, number $h )
+public void Trim::resizeForce( int $w, int $h )
 ```
+
+The image is stretched to exactly `$w` x `$h` (Like `object-fit: fill`). `0` means the original width or height.
 
 ## Arguments
 
-| Name | Data type | Default | Remarks                |
-| ---- | --------- | ------- | ---------------------- |
-| $w   | number    |         | Converted image width  |
-| $h   | number    |         | Converted image height |
+| Name | Data type | Default | Remarks                                 |
+| ---- | --------- | ------- | --------------------------------------- |
+| $w   | int       |         | Output width / `0`: original width      |
+| $h   | int       |         | Output height / `0`: original height    |
 
 ## Example
 
 ```php title="Controller"
-$trim = $this->getClass('Tool/RSS', 'https://example.com/feed');
+use Fegg\Tool\Trim;
+
+$trim = new Trim();
 $trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
 
 $trim->resizeForce(300, 300);
+$trim->create();
 ```

@@ -1,10 +1,10 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Validation::email
 
-> Check valid E-mail string
+> Check email address format
 
 ## Description
 
@@ -12,33 +12,28 @@ sidebar_position: 5
 public boolean Validation::email( string $name, mixed $value, [ mixed $code = '' ] )
 ```
 
+Valid when the value looks like an email address (`local@domain.tld`, the top level domain having 2 letters or more).
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
 ## Arguments
 
-| Name   | Data type | Default | Remarks                     |
-| ------ | --------- | ------- | --------------------------- |
-| $name  | string    |         | Item label                  |
-| $value | mixed     |         | Check field value           |
-| $code  | mixed     | ""      | Error code or Error message |
+| Name   | Data type | Default | Remarks                                                                                                      |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name  | string    |         | Field name (key of the error message)                                                                        |
+| $value | mixed     |         | Value to check                                                                                               |
+| $code  | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
 
 ## Example
 
 ```php title="Controller"
-$validation = $this->getClass('Validation');
+use Fegg\Validation;
 
-// If $value is E-mail string
-$successName = 'Success Field';
-$successVar  = 'email@example.com';
-$validation->email('success', $successVar, array('@email', $successName));
+$validation = new Validation();
 
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); // -> null
+$validation->email('success', 'foo@example.com', array('@email', 'Email')); // -> true
+$validation->email('failed', 'foo@example', array('@email', 'Email')); // -> false
 
-// If $value is not E-mail string
-$failedName = 'Failed Field';
-$failedVar  = 'Something not email text';
-$validation->email('failed', $failedVar, array('@email', $failedName));
-
-var_dump($validation->isError()); // -> true
 var_dump($validation->getErrorMessage());
-// -> "failed" => "<strong>Failed Field</strong> は登録できない形式です"
+// -> array('failed' => '<strong>Email</strong> は登録できない形式です')
 ```

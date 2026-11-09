@@ -6,22 +6,24 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # About Parameters
 
-Fegg has a helper methods for POST, GET, SESSION, and COOKIE.
+`Fegg\Application`, the class every controller extends, has helper methods for POST, GET, SESSION and COOKIE. Call them with `$this->...` in a controller.
 
 ## POST/GET
 
-Get request data that automatically converted single/double quote and character code.
+Get request data. Values are returned as sent: validate them, and let the template escape them on output.
 
 <CategoryDocCardList label="POST/GET" />
 
 ## SESSION
 
-Set and read Session parameters. This automatically call `session_start`, so you don't need to call it.
+Set and read SESSION data. The session is started automatically, so you don't need to call `session_start()`.
+
+The session cookie is `HttpOnly`. It is also `Secure` (sent over HTTPS only), except on development hosts whose name contains `localhost`, `127.0.0.1` or `develop.lionheart.co.jp`.
 
 <CategoryDocCardList label="SESSION" />
 
 ## COOKIE
 
-Set and read COOKIE parameters.
+Set and read COOKIE data.
 
 <CategoryDocCardList label="COOKIE" />

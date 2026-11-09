@@ -6,19 +6,46 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # Introduction
 
-Providing some functions for sending email
+> Providing some functions for sending email
+
+`Fegg\Tool\Mail` is a wrapper of the bundled [PHPMailer](https://github.com/PHPMailer/PHPMailer). Emails are sent as plain text, in UTF-8 with base64 encoding, through sendmail (the `sendmail_path` of php.ini is used when PHPMailer's default sendmail path does not exist).
 
 ## How to use
 
-You can load `Mail` class through `Application::getClass` method.
+Import `Fegg\Tool\Mail` and create it with `new`. A failed send throws `PHPMailer\PHPMailer\Exception`, so wrap the sending in `try` / `catch`.
 
 ```php title="Controller"
-$mail = $this->getClass('Tool/Mail');
-$mail->subject('Mail subject');
-$mail->body('Mail body');
+<?php
+namespace Site\Controller;
 
-$mail->send('mail@example.com', 'John Doe', 'from@example.com');
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Tool\Mail;
+use PHPMailer\PHPMailer\Exception;
+
+class Contact extends Controller
+{
+    public function post()
+    {
+        $body = $this->fetchPage('/contact/mail/to_admin');
+
+        try {
+            $mail = new Mail('Mail subject', $body);
+            $mail->send('admin@example.com', 'Sender name', 'from@example.com');
+        } catch (Exception $e) {
+            // Failed to send: $e->getMessage()
+        }
+    }
+}
 ```
+
+The contact form of the skeleton (`htdocs/_fegg/site/controller/Contact.php`) is a complete example, including [Mail::setDebugFlag](./methods/setdebugflag.mdx) to write the emails to a log file instead of sending them.
+
+:::note
+
+The PHPMailer instance is available as `$mail->_mailer` when you need a setting this wrapper does not cover (for example sending through SMTP).
+
+:::
 
 ## Methods
 

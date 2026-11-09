@@ -1,5 +1,5 @@
 ---
-sidebar_position: 27
+sidebar_position: 35
 ---
 
 # Model::id
@@ -9,8 +9,10 @@ sidebar_position: 27
 ## Description
 
 ```php
-public array Model::id( mixed $id )
+public array|null Model::id( mixed $id )
 ```
+
+Returns the row whose primary key (see [setPrimary](./setprimary.mdx)) is `$id`, or `null` when there is none. A public model (`$is_admin = false`) also returns `null` for a row that is not visible, and deleted rows (`valid = 0`) are never returned. Conditions chained before it with [where](./where.mdx) also apply.
 
 ## Arguments
 
@@ -27,5 +29,8 @@ $model = new Model(false, array(
     'visible' => 'visible',
 ));
 
-$records = $model->id(1);
+$record = $model->id($this->in('id'));
+if ($record === null) {
+    // 404
+}
 ```

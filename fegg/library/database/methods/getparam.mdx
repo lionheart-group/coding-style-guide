@@ -1,0 +1,26 @@
+---
+sidebar_position: 43
+---
+
+# Pdo::getParam
+
+> Get the values of the built query
+
+## Description
+
+```php
+public array Pdo::getParam()
+```
+
+Returns the values bound to the `?` placeholders of the last query built by [compile](./compile.mdx) or [execute](./execute.mdx), in order.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$db->setWhere('category = ? AND news_id IN (?)', 2, array(5, 6))->select('cms_news')->compile();
+
+print_r($db->getParam());
+// -> Array ( [0] => 2 [1] => 5 [2] => 6 )
+```

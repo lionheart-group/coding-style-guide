@@ -4,8 +4,34 @@ sidebar_position: 2
 
 # File::copyDirectory
 
-Copy specified directory to specified location
+> Copy the contents of a directory to another directory
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public void File::copyDirectory( string $fromDirectory, string $toDirectory, [ boolean $recursiveCallFlag = false ] )
+```
+
+Copies the files under `$fromDirectory` to `$toDirectory`. The destination directory must already exist. When `$recursiveCallFlag` is `true`, subdirectories are created in the destination and copied as well.
+
+## Arguments
+
+| Name               | Data type | Default | Remarks                                       |
+| ------------------ | --------- | ------- | --------------------------------------------- |
+| $fromDirectory     | string    |         | Source directory                              |
+| $toDirectory       | string    |         | Destination directory (must exist)            |
+| $recursiveCallFlag | boolean   | false   | `true`: also copy subdirectories recursively  |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\File;
+
+$file = new File();
+
+// Only the files directly under path/to/foo
+$file->copyDirectory('path/to/foo', 'path/to/bar');
+
+// Including subdirectories
+$file->copyDirectory('path/to/foo', 'path/to/bar', true);
+```

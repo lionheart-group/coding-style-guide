@@ -1,36 +1,42 @@
 ---
-sidebar_position: 7
+sidebar_position: 9
 ---
 
 # Options
 
 > Make option tags
 
-```php
-{{ options source=$array selected=$selected }}
+## Description
+
+```html
+{{ options source=$list selected=$currentValue }}
 ```
 
-Make `<option>` from `$array`.
+Prints one `<option>` for each element of `source`: the array key is the `value` attribute and the array value is the label. Both are HTML-escaped.
+
+The option whose key equals `selected` (compared as strings) gets the `selected` attribute. `selected` is optional. Nothing is printed when `source` is empty.
+
+Write the arguments without spaces inside them (`source=$page.categories`, not an expression). For a multiple select, use [checked/selected](./checked_selected.mdx) in a `foreach` instead.
 
 ## Example
 
-```php title="Template"
-/*
-$values = array(
-    'foo' => 'bar',
-    'baz' => 'qux'
+```php title="Controller"
+$this->page['categories'] = array(
+    '1' => 'News',
+    '2' => 'Events & Seminars',
 );
-$selected = 'foo';
-*/
+```
 
-<select name="select">
-    {{ options source=$values selected=$selected }}
+```html title="Template"
+<select name="category">
+    <option value="">All</option>
+    {{ options source=$page.categories selected=$in.category }}
 </select>
 ```
 
-```html title="Output"
-<select name="select">
-    <option value="foo" selected="selected">bar</option>
-    <option value="baz">qux</option>
+```html title="Output (request ?category=2)"
+<select name="category">
+    <option value="">All</option>
+    <option value='1'>News</option><option value='2' selected>Events &amp; Seminars</option>
 </select>
 ```

@@ -1,0 +1,59 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Verifying Google reCAPTCHA / Cloudflare Turnstile responses
+
+Two classes verify the token posted by a CAPTCHA widget with the service's API:
+
+- `Fegg\Captcha\ReCAPTCHA`: [Google reCAPTCHA v3](https://developers.google.com/recaptcha/docs/v3) (score based)
+- `Fegg\Captcha\Turnstile`: [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/)
+
+Both send the request with `file_get_contents()`, so `allow_url_fopen` must be enabled.
+
+## How to use
+
+Import the class and create it with `new`, passing the secret key. Then pass the posted token to `auth()`.
+
+```php title="Controller"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Captcha\ReCAPTCHA;
+use Fegg\Captcha\Turnstile;
+use Fegg\Validation;
+
+class Entry extends Controller
+{
+    public function confirm()
+    {
+        $validation = new Validation();
+
+        // reCAPTCHA
+        $recaptcha = new ReCAPTCHA('your-recaptcha-secret', 0.5);
+        $result = $recaptcha->auth($this->in('g-recaptcha-response'));
+        if (!$result['success']) {
+            $validation->setError('g-recaptcha-response', implode(',', $result['errors']));
+        }
+
+        // Cloudflare Turnstile
+        $turnstile = new Turnstile('your-turnstile-secret');
+        $result = $turnstile->auth($this->in('cf-turnstile-response'));
+        if (!$result['success']) {
+            $validation->setError('cf-turnstile-response', implode(',', $result['errors']));
+        }
+    }
+}
+```
+
+The contact form of the skeleton supports both. Enable one in `htdocs/_fegg/site/config/contact/contact_config.php` (`$_enable_recaptcha` / `$_enable_turnstile`, with the site key and the secret key). The widgets are output by `site/template/template/antispam.tpl`, and `site/controller/Contact.php` verifies them.
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

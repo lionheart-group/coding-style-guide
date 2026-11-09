@@ -12,33 +12,41 @@ sidebar_position: 9
 public self Model::addBindParam( string $column, string $type )
 ```
 
+The value of the column is cast to the type before it is written by [insertRow](./insertrow.mdx), [insertRows](./insertrows.mdx), [updateRow](./updaterow.mdx), [updateRowsWhere](./updaterowswhere.mdx), [insert](./insert.mdx), [update](./update.mdx) and [updateWhere](./updatewhere.mdx). `null` values are not cast. Reads are not affected.
+
+Throws `InvalidArgumentException` for an unknown type.
+
 ## Arguments
 
-| Name    | Data type | Default | Remarks     |
-| ------- | --------- | ------- | ----------- |
-| $column | string    |         | Bind Column |
-| $type   | string    |         | Bind Type   |
+| Name    | Data type | Default | Remarks                          |
+| ------- | --------- | ------- | -------------------------------- |
+| $column | string    |         | Column name                      |
+| $type   | string    |         | Bind type (case-insensitive)     |
 
-### Prepared Type
+### Types
 
-- `FLOAT`
-- `INTEGER`
-- `DATE`
-- `DATETIME`
+| Type       | Cast                                                                                    |
+| ---------- | --------------------------------------------------------------------------------------- |
+| `INTEGER`  | `(int)`                                                                                 |
+| `FLOAT`    | `(float)`                                                                               |
+| `DATE`     | `Y-m-d`. A number is read as a Unix timestamp, anything else with `strtotime()`         |
+| `DATETIME` | `Y-m-d H:i:s`. A number is read as a Unix timestamp, anything else with `strtotime()`   |
+
+A `DATE` / `DATETIME` string that `strtotime()` cannot read is stored as `1970-01-01`; validate dates before writing them.
 
 ## Example
 
 ```php title="Controller"
 $model = new Model();
-$model->addBindParam('news_id', 'INTEGER');
+$model->addBindParam('category', 'INTEGER');
 $model->addBindParam('image_id', 'INTEGER');
 $model->addBindParam('file_id', 'INTEGER');
 $model->addBindParam('post_date', 'DATETIME');
 
-// Same with the following
+// Same as the following
 $model = new Model();
 $model->setBindParam(array(
-    'news_id'   => 'INTEGER',
+    'category'  => 'INTEGER',
     'image_id'  => 'INTEGER',
     'file_id'   => 'INTEGER',
     'post_date' => 'DATETIME',

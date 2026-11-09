@@ -1,10 +1,10 @@
 ---
-sidebar_position: 15
+sidebar_position: 16
 ---
 
 # Validation::minlength
 
-> Check character more than minimum length
+> Check minimum character length
 
 ## Description
 
@@ -12,36 +12,29 @@ sidebar_position: 15
 public boolean Validation::minlength( string $name, mixed $value, numeric $length, [ mixed $code = '' ] )
 ```
 
+Valid when the number of characters (`mb_strlen()` in UTF-8) is `$length` or more. The `@minlength` message takes the label and the length as parameters.
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
 ## Arguments
 
-| Name    | Data type | Default | Remarks                     |
-| ------- | --------- | ------- | --------------------------- |
-| $name   | string    |         | Item label                  |
-| $value  | mixed     |         | Check field value           |
-| $length | numeric   |         | Specific length value       |
-| $code   | mixed     | ""      | Error code or Error message |
+| Name    | Data type | Default | Remarks                                                                                                      |
+| ------- | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name   | string    |         | Field name (key of the error message)                                                                        |
+| $value  | mixed     |         | Value to check                                                                                               |
+| $length | numeric   |         | Minimum number of characters                                                                                 |
+| $code   | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
 
 ## Example
 
 ```php title="Controller"
-$validation = $this->getClass('Validation');
+use Fegg\Validation;
 
-// If $value is more than specific length
-$successName = 'Success Field';
-$successVar  = 'foo';
-$length      = 1;
-$validation->minlength('success', $successVar, $length, array('@minlength', $successName, $length));
+$validation = new Validation();
 
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); // -> null
+$validation->minlength('success', 'secret_123', 8, array('@minlength', 'Password', 8)); // -> true
+$validation->minlength('failed', 'abc', 8, array('@minlength', 'Password', 8)); // -> false
 
-// If $value is less than equal specific length
-$failedName = 'Failed Field';
-$failedVar  = 'failed';
-$length     = 10;
-$validation->minlength('failed', $failedVar, $length, array('@minlength', $failedName, $length));
-
-var_dump($validation->isError()); // -> true
 var_dump($validation->getErrorMessage());
-// -> "failed" => "<strong>Failed Field</strong> は <strong>10</strong> 文字以上で入力してください"
+// -> array('failed' => '<strong>Password</strong> は <strong>8</strong> 文字以上で入力してください')
 ```

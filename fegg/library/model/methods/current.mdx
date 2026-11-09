@@ -1,5 +1,5 @@
 ---
-sidebar_position: 13
+sidebar_position: 29
 ---
 
 # Model::current
@@ -9,14 +9,16 @@ sidebar_position: 13
 ## Description
 
 ```php
-public self Model::current( [ number $current = 1 ] )
+public self Model::current( [ int $current = 1 ] )
 ```
+
+Sets the page that [find](./find.mdx) returns. A value that is not a number, under 1 or over the last page gives page 1, so the request parameter can be passed as it is.
 
 ## Arguments
 
 | Name     | Data type | Default | Remarks             |
 | -------- | --------- | ------- | ------------------- |
-| $current | number    | 1       | Current page number |
+| $current | int       | 1       | Current page number |
 
 ## Example
 
@@ -27,6 +29,9 @@ $model = new Model(false, array(
     'visible' => 'visible',
 ));
 
-// Get 2nd page's 5 records
+// Page 2 of 5 rows (rows 6 to 10)
 $records = $model->listMax(5)->current(2)->find();
+
+// Page from the URL (?p=3)
+$records = $model->listMax(5)->current($this->in('p'))->find();
 ```

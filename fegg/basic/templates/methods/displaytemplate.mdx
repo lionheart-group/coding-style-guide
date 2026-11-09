@@ -1,10 +1,10 @@
 ---
-sidebar_position: 1
+sidebar_position: 3
 ---
 
 # Application::displayTemplate
 
-> Display compiled template
+> Output a template with only the variables you pass
 
 ## Description
 
@@ -12,48 +12,50 @@ sidebar_position: 1
 public void Application::displayTemplate( string $template, [ array $assignedValue = array() ] )
 ```
 
-Read template file -> compile -> display output.
+Finds the template (`site/template/` first, then `core/template/`), compiles it when the cache is missing or out of date, and outputs it. Only the variables in `$assignedValue` are available: `$page`, `$site`, `$in` … are **not** set. Use [Application::displayPage](./displaypage.mdx) for pages.
+
+The template engine itself uses this method for `{{ include }}` and `{{ transclude }}`. Inside a template, a name not starting with `/` is relative to the directory of the current template; from a controller, names are relative to the template root.
 
 ## Arguments
 
-| Name           | Data type | Default | Remarks                |
-| -------------- | --------- | ------- | ---------------------- |
-| $template      | string    |         | Template file name     |
-| $assignedValue | array     | array() | Arguments for template |
+| Name           | Data type | Default | Remarks |
+| -------------- | --------- | ------- | ------- |
+| $template      | string    |         | Template name without `.tpl` (`foo/bar`) |
+| $assignedValue | array     | array() | Variables for the template: the key `title` becomes `$title` |
 
 ## Example
 
-This reads the **bar.tpl** template file in **code/template/foo/bar.tpl**, compile it and display the compiled output.
-
-```php title="code/application/Foo.php"
+```php title="htdocs/_fegg/site/controller/Foo.php"
 <?php
+namespace Site\Controller;
 
-class Foo extends Application
+defined('FEGG_CORE_DIR') || exit;
+
+class Foo extends Controller
 {
-    function bar(){
-        $this->displayTemplate( 'foo/bar' );
+    public function bar()
+    {
+        $this->displayTemplate('foo/bar', array(
+            'title' => 'Hello',
+            'items' => array('a', 'b'),
+        ));
     }
 }
 ```
 
-:::note
-
-You should not include the “.tpl” extension in the parameter.
-
-:::
-
-```html title="code/template/foo/bar.tpl"
-<p>Variable : {{ $page.baz }}</p>
-<p>If else : {{ if true }}True{{ end }}</p>
-<p>Loop  : {{ foreach $array as $k => $v }}{{ end foreach }}</p>
-<p>Template rule  : {{ follow Fegg template rules }}</p>
+```html title="htdocs/_fegg/site/template/foo/bar.tpl"
+<h1>{{ $title }}</h1>
+{{ foreach $items as $item }}<p>{{ $item }}</p>{{ end foreach }}
+{{ if $page.baz }}not shown: $page is not set{{ end }}
 ```
 
 ```html title="Output"
-Variable :
-If else : True
-Loop  :
-Template rule  : {{ follow Fegg template rules }}
+<h1>Hello</h1>
+<p>a</p><p>b</p>
 ```
 
-Notice here the codes inside the `{{}}` in first 3 lines of paragraph in template file. In Fegg, these are the examples and valid syntax of application code following the [Template rules](../index.mdx#template-rules), otherwise it will return as display or parse an error.
+:::note
+
+Do not include the `.tpl` extension in the name. A missing template throws `Fegg\Template\TemplateException` (see [Lint and errors](../lint.mdx)).
+
+:::

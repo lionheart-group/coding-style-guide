@@ -1,5 +1,5 @@
 ---
-sidebar_position: 36
+sidebar_position: 51
 ---
 
 # Model::erase
@@ -9,8 +9,10 @@ sidebar_position: 36
 ## Description
 
 ```php
-public void Model::erase( mixed $id )
+public int Model::erase( mixed $id )
 ```
+
+Removes the row whose primary key is `$id` from the table (`DELETE`) and returns the number of deleted rows. For a soft delete, use [delete](./delete.mdx).
 
 ## Arguments
 
@@ -21,11 +23,12 @@ public void Model::erase( mixed $id )
 ## Example
 
 ```php title="Controller"
-$model = new Model(false, array(
+$model = new Model(true, array(
     'table'   => 'cms_news',
     'id'      => 'news_id',
     'visible' => 'visible',
 ));
 
-$model->erase(1);
+$erased = $model->erase(1);
+// -> 1
 ```

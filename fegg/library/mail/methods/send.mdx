@@ -1,43 +1,51 @@
 ---
-sidebar_position: 7
+sidebar_position: 9
 ---
 
 # Mail::send
 
-Send email
-
-:::note
-
-If there is added attachment file, this method will call [Mail::sendWithFile](./sendwithfile.mdx) automatically
-
-:::
-
-:::note
-
-If debug flag is enabled, this method will call [Mail::log](./log.mdx) automatically
-
-:::
+> Send email
 
 ## Description
 
 ```php
-public self Mail::send( string $to, [ string $from_name = null, string $from_ad = null ] )
+public boolean Mail::send( mixed $to, [ string $from_name = null, string $from_ad = null ] )
 ```
+
+Sends the email with its attachments and returns `true` on success. A failed send (including an invalid address) throws `PHPMailer\PHPMailer\Exception`.
+
+When the debug flag is enabled with [Mail::setDebugFlag](./setdebugflag.mdx), the email is not sent: the whole message is written to the log file with [Mail::log](./log.mdx) instead.
+
+:::note
+
+`$from_ad` is required in practice: without a valid sender address the send throws.
+
+Recipients are added on every call. Calling `send()` twice on the same object sends the second email to the first recipient as well. Create a new `Mail` for each recipient, or pass all the recipients of one email as an array.
+
+:::
 
 ## Arguments
 
-| Name       | Data type | Default | Remarks            |
-| ---------- | --------- | ------- | ------------------ |
-| $to        | string    |         | Send email address |
-| $from_name | string    | null    | Sender name        |
-| $from_ad   | string    | null    | Sender address     |
+| Name       | Data type | Default | Remarks                                         |
+| ---------- | --------- | ------- | ----------------------------------------------- |
+| $to        | mixed     |         | Recipient address, or an array of addresses     |
+| $from_name | string    | null    | Sender name                                     |
+| $from_ad   | string    | null    | Sender address (also used as the envelope sender) |
 
 ## Example
 
 ```php title="Controller"
-$mail = $this->getClass('Tool/Mail');
-$mail->subject('Mail subject');
-$mail->body('Mail body');
+use Fegg\Tool\Mail;
+use PHPMailer\PHPMailer\Exception;
 
-$mail->send('mail@example.com', 'John Doe', 'from@example.com');
+try {
+    $mail = new Mail('Mail subject', 'Mail body');
+    $mail->send('mail@example.com', 'John Doe', 'from@example.com');
+
+    // Several recipients
+    $mail = new Mail('Mail subject', 'Mail body');
+    $mail->send(array('foo@example.com', 'bar@example.com'), 'John Doe', 'from@example.com');
+} catch (Exception $e) {
+    // Failed to send: $e->getMessage()
+}
 ```

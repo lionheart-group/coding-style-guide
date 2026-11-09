@@ -1,11 +1,47 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 ---
 
-# DB_pdo::createTable
+# Pdo::createTable
 
-Set create table query
+> Set create table query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::createTable( string $table, array $field )
+```
+
+Builds a `Create Table`. Tables are normally defined in `site/config/database/*.yaml` and created with `./fegg-cli migration`.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                             |
+| ------ | --------- | ------- | ----------------------------------- |
+| $table | string    |         | Table name                          |
+| $field | array     |         | List of column definitions (below)  |
+
+### Column definition
+
+Every key must be present.
+
+| Key          | Data type | Remarks                                          |
+| ------------ | --------- | ------------------------------------------------ |
+| `name`       | string    | Column name                                      |
+| `type`       | string    | Column type                                      |
+| `notnull`    | boolean   | Add NOT NULL                                     |
+| `dflt_value` | mixed     | Default value (`null`, `''` or `0`: no default)  |
+| `pk`         | boolean   | Add PRIMARY KEY                                  |
+| `ai`         | boolean   | Add AUTOINCREMENT                                |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Create Table "sample" (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, title TEXT DEFAULT 'none')
+$db->createTable('sample', array(
+    array('name' => 'id',    'type' => 'INTEGER', 'notnull' => true,  'dflt_value' => null,   'pk' => true,  'ai' => true),
+    array('name' => 'title', 'type' => 'TEXT',    'notnull' => false, 'dflt_value' => 'none', 'pk' => false, 'ai' => false),
+))->execute();
+```

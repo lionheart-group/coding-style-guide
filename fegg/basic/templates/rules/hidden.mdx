@@ -1,29 +1,39 @@
 ---
-sidebar_position: 8
+sidebar_position: 10
 ---
 
 # Hidden
 
-> Display hidden tag
+> Output hidden inputs
 
-```php
+## Description
+
+```html
 {{ hidden }}
 ```
 
-Display `<input type="hidden">` from values assigned `Application::setHidden`.
+Prints an `<input type="hidden">` for every value set with `$this->setHidden()` in the controller. Names and values are HTML-escaped. Array values become one input per element (`tags[0]`, `tags[1]` …).
 
-Also see [Application::setHidden](../helpers/sethidden.mdx).
+Put it inside the `<form>`. It is typically used to carry an ID or a one-time ticket from the input screen to the confirmation and save steps.
+
+See also [Application::setHidden](../helpers/sethidden.mdx).
 
 ## Example
 
 ```php title="Controller"
-$this->setHidden('foo', 'bar');
+$this->setHidden('internal_id', 12);
 ```
 
-```php title="Template"
-{{ hidden }}
+```html title="Template"
+<form method="post" action="{{ base }}/contact/confirm/">
+    {{ hidden }}
+    <button type="submit">Send</button>
+</form>
 ```
 
 ```html title="Output"
-<input type="hidden" name="foo" value="bar">
+<form method="post" action="/contact/confirm/">
+    <input type="hidden" name="internal_id" value="12">
+    <button type="submit">Send</button>
+</form>
 ```

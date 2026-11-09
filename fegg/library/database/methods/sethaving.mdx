@@ -1,11 +1,36 @@
 ---
-sidebar_position: 20
+sidebar_position: 23
 ---
 
-# DB_pdo::setHaving
+# Pdo::setHaving
 
-Set having condition
+> Set having condition
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::setHaving( string $query, [ mixed ...$parameters ] )
+```
+
+Adds to the HAVING clause, used with [setGroup](./setgroup.mdx). Parameters work as in [setWhere](./setwhere.mdx): one per placeholder, and an array expands its placeholder.
+
+## Arguments
+
+| Name           | Data type | Default | Remarks                                    |
+| -------------- | --------- | ------- | ------------------------------------------ |
+| $query         | string    |         | Condition with `?` placeholders            |
+| ...$parameters | mixed     |         | One value (or array of values) per placeholder |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Select category, count(*) AS n From "cms_news" Where "cms_news".valid = 1 Group By category Having count(*) > ?
+$rows = $db->setItem('category, count(*) AS n')
+    ->setGroup('category')
+    ->setHaving('count(*) > ?', 3)
+    ->select('cms_news')
+    ->execute()
+    ->all();
+```

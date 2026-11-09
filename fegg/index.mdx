@@ -4,6 +4,36 @@ sidebar_position: 1
 
 # Fegg Coding Guide
 
+:::info
+
+This is the guide for **Fegg 5**. If your project still uses Fegg 4 (`fegg/` and `code/` directories), switch to **Fegg 4.x** in the version dropdown in the navbar.
+
+:::
+
 ## About Fegg
 
-[Fegg](https://github.com/genies-inc/Fegg) is a custom PHP Framework that created by only 3 files.
+Fegg is a small PHP framework, originally created by [Genies, Inc.](https://github.com/genies-inc/Fegg) and extended by LionHeart with a CMS foundation (login, media and image management, post types).
+
+LionHeart projects start from the skeleton repository [lionheart-group/lh-fegg-skelton](https://github.com/lionheart-group/lh-fegg-skelton). It contains Fegg, the CMS, sample pages (top page, news, contact form) and the frontend build setup.
+
+## What is new in Fegg 5
+
+- **PHP 7.4 to 8.5** are supported.
+- **Core and site are separated.**
+  - `htdocs/_fegg/core/` is the **core**: the framework and the CMS foundation shared by every project. Do not edit it. `fegg-cli core:update` replaces it as a whole, the same way you update WordPress itself.
+  - `htdocs/_fegg/site/` is the **site**: your project's controllers, templates and settings. Updates never touch it.
+  - To change something the core provides (a CMS template, a CMS screen, a setting), override it from `site/`.
+- **Namespaces and autoloading.** Controllers are `Site\Controller\...` classes and framework classes are `Fegg\...` (`Fegg\Model`, `Fegg\Validation`, `Fegg\Tool\Mail`, ...). Create classes with `new`; `getClass()` is no longer needed.
+- **Errors fail loudly.** Database errors throw `Fegg\Database\QueryException` and missing templates throw `Fegg\Template\TemplateException`. Uncaught, both become a logged HTTP 500 instead of a message printed into the page.
+- **Command line tools.** `fegg-cli` checks templates (`template:lint`), lists the database schema (`db:schema`), updates the core (`core:update`) and checks that `_fegg/` cannot be read from the web (`doctor`).
+
+Fegg 4 code (`MyApplication`, `getClass()`, controllers without a namespace, `Model`, `DB_pdo`, `LH_FW`) still runs through a compatibility layer. Every use is logged as `Fegg deprecated: ...` in the PHP error log, and the layer will be removed in Fegg 6.
+
+## Where to start
+
+- [Directory structure](./first/cont.mdx): what lives in `core/` and `site/`
+- [Settings](./first/config.mdx): `site/config/settings.php` and the database connection
+- [fegg-cli](./first/cli.mdx): command line tools
+- [Updating the core](./first/update.mdx)
+- [Migrating a Fegg 3 / 4 project](./first/migration.mdx)
+- [URL](./basic/url.mdx) and [Controller](./basic/controller.mdx): how a request reaches your code

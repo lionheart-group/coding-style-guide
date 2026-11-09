@@ -1,11 +1,30 @@
 ---
-sidebar_position: 12
+sidebar_position: 13
 ---
 
-# DB_pdo::dropIndex
+# Pdo::dropIndex
 
-Set create drop index query
+> Set create drop index query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::dropIndex( string $index )
+```
+
+Builds `Drop Index "index"`.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks    |
+| ------ | --------- | ------- | ---------- |
+| $index | string    |         | Index name |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Drop Index "sample_title"
+$db->dropIndex('sample_title')->execute();
+```

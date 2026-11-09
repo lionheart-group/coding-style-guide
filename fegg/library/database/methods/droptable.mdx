@@ -1,11 +1,30 @@
 ---
-sidebar_position: 11
+sidebar_position: 12
 ---
 
-# DB_pdo::dropTable
+# Pdo::dropTable
 
-Set create drop table query
+> Set create drop table query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::dropTable( string $table )
+```
+
+Builds `Drop Table "table"`.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks    |
+| ------ | --------- | ------- | ---------- |
+| $table | string    |         | Table name |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Drop Table "sample_old"
+$db->dropTable('sample_old')->execute();
+```

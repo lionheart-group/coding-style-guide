@@ -4,13 +4,18 @@ sidebar_position: 2
 
 # Configuration
 
-You can change error message on **code/config/validation_error_message.php**.
+## Error messages
 
-```php title="validation_error_message.php"
+The error messages are defined in `htdocs/_fegg/core/config/validation_error_message.php`.
+
+To change them, do not edit the core: copy the file to `htdocs/_fegg/site/config/validation_error_message.php` and edit the copy. The file in `site/config/` is used instead of the core's one (the whole file is replaced, so keep every key you use).
+
+```php title="htdocs/_fegg/core/config/validation_error_message.php"
 <?php
+defined('FEGG_CORE_DIR') || exit;
+
 /**
- * エラーメッセージ定義
- * Definition of Error message to Validation Class.
+ * Error messages for the Validation class.
  *
  * @see Validation.php
  */
@@ -24,9 +29,9 @@ $validation_error_message['@email'] = '<strong>%s</strong> は登録できない
 $validation_error_message['@hankaku'] = '<strong>%s</strong> は半角で入力してください';
 // @item should be KATAKANA.
 $validation_error_message['@katakana'] = '<strong>%s</strong> はカタカナで入力してください';
-// @item should be length less than @maxlength.
+// @item must be at most N characters long.
 $validation_error_message['@maxlength'] = '<strong>%s</strong> は <strong>%s</strong> 文字以内で入力してください';
-// @item should be length greater than @maxlength.
+// @item must be at least N characters long.
 $validation_error_message['@minlength'] = '<strong>%s</strong> は <strong>%s</strong> 文字以上で入力してください';
 // @item should be Numeric.
 $validation_error_message['@numeric'] = '<strong>%s</strong> は 半角数字で入力してください';
@@ -41,13 +46,37 @@ $validation_error_message['@password_mixed_letters'] = '<strong>%s</strong> は�
 // @item is required.
 $validation_error_message['@required'] = '<strong>%s</strong> をご入力ください';
 // @item is not Tel format.
-$validation_error_message['@tel'] = '<stron>%s</strong> は登録できない形式です';
+$validation_error_message['@tel'] = '<strong>%s</strong> は登録できない形式です';
 // @item is not Time format.
-$validation_error_message['@time'] = '<stron>%s</strong> の時間では登録できません';
-// @item is not URL format.
-$validation_error_message['@url'] = '<stron>%s</strong> は登録できない形式です';
-// @item is not Time format.
-$validation_error_message['@userid'] = '<stron>%s</strong> は登録できない形式です';
+$validation_error_message['@time'] = '<strong>%s</strong> の時間では登録できません';
 // @item is not Zipcode format.
-$validation_error_message['@zipcode'] = '<stron>%s</strong> は登録できない形式です';
+$validation_error_message['@zipcode'] = '<strong>%s</strong> は登録できない形式です';
 ```
+
+There are no codes for [url](./methods/url.mdx), [userid](./methods/userid.mdx), [length](./methods/length.mdx) and [maxbyte](./methods/maxbyte.mdx). Pass the message itself, or add your own codes to the copy in `site/config/`.
+
+## The `$code` argument
+
+The `$code` argument of the check methods, [Validation::setError](./methods/seterror.mdx) and [Validation::upload](./methods/upload.mdx) can be:
+
+| `$code` | Error message |
+| --- | --- |
+| `'@required'` | The message of the code as it is |
+| `array('@required', 'Name')` | The message of the first element, with each `%s` replaced by the following elements in order (`vsprintf()`). An element that is itself a code (e.g. `'@foo'`) is replaced by its message |
+| `'Please enter your name'` | A string that is not a code is used as the message |
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+$validation->maxlength('name', $this->in('name'), 50, array('@maxlength', 'お名前', 50));
+// -> '<strong>お名前</strong> は <strong>50</strong> 文字以内で入力してください'
+
+$validation->required('agree', $this->in('agree'), '<strong>利用規約</strong> に同意してください');
+// -> '<strong>利用規約</strong> に同意してください'
+```
+
+## Other languages
+
+When a language code is passed to the constructor (`new Validation('en')`), the messages are read from `config/en/validation_error_message.php` (searched in `site/config/` first, then `core/config/`). The core has no language files: create the file in `site/config/en/`.

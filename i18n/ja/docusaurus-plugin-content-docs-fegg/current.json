@@ -3,10 +3,6 @@
     "message": "Fegg 5.x",
     "description": "The label for version current"
   },
-  "sidebar.fegg.category.Install": {
-    "message": "インストール",
-    "description": "The label for category 'Install' in sidebar 'fegg'"
-  },
   "sidebar.fegg.category.Basic function": {
     "message": "基本関数",
     "description": "The label for category 'Basic function' in sidebar 'fegg'"
@@ -120,6 +116,34 @@
     "description": "The label for category 'Trim' in sidebar 'fegg'"
   },
   "sidebar.fegg.category.fegg-library-trim-methods": {
+    "message": "関数",
+    "description": "The label for category 'Methods' in sidebar 'fegg'"
+  },
+  "sidebar.fegg.category.Getting started": {
+    "message": "はじめに",
+    "description": "The label for category 'Getting started' in sidebar 'fegg'"
+  },
+  "sidebar.fegg.category.Date": {
+    "message": "日付",
+    "description": "The label for category 'Date' in sidebar 'fegg'"
+  },
+  "sidebar.fegg.category.fegg-library-date-methods": {
+    "message": "関数",
+    "description": "The label for category 'Methods' in sidebar 'fegg'"
+  },
+  "sidebar.fegg.category.OEmbed": {
+    "message": "OEmbed",
+    "description": "The label for category 'OEmbed' in sidebar 'fegg'"
+  },
+  "sidebar.fegg.category.fegg-library-oembed-methods": {
+    "message": "関数",
+    "description": "The label for category 'Methods' in sidebar 'fegg'"
+  },
+  "sidebar.fegg.category.Captcha": {
+    "message": "CAPTCHA",
+    "description": "The label for category 'Captcha' in sidebar 'fegg'"
+  },
+  "sidebar.fegg.category.fegg-library-captcha-methods": {
     "message": "関数",
     "description": "The label for category 'Methods' in sidebar 'fegg'"
   }

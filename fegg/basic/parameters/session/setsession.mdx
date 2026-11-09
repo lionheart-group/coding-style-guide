@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Application::setSession
 
-> Set SESSION data (and call session_start)
+> Set SESSION data (and start the session)
 
 ## Description
 
@@ -12,17 +12,18 @@ sidebar_position: 1
 public void Application::setSession( string $name, mixed $value )
 ```
 
-Set SESSION data and automatically call `session_start` method.
+Set SESSION data. Starts the session if it has not been started, so you never call `session_start()` yourself.
 
 ## Arguments
 
-| Name    | Data type | Default | Remarks           |
-| :------ | :-------- | :------ | :---------------- |
-| $name   | string    |         | Session param key |
-| $method | mixed     |         | Value             |
+| Name   | Data type | Default | Remarks     |
+| :----- | :-------- | :------ | :---------- |
+| $name  | string    |         | Session key |
+| $value | mixed     |         | Value       |
 
 ## Example
 
 ```php title="Controller"
 $this->setSession('foo', 'bar');
+$this->setSession('cart', array('item_id' => 3, 'quantity' => 1));
 ```

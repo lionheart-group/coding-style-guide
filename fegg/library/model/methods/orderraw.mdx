@@ -1,0 +1,35 @@
+---
+sidebar_position: 25
+---
+
+# Model::orderRaw
+
+> Order by an SQL expression
+
+## Description
+
+```php
+public self Model::orderRaw( string $expression )
+```
+
+Adds an ORDER BY expression as it is. Use it for what [order](./order.mdx) does not accept: `CASE`, functions, several keys in one string. The expression is written into the SQL unchanged: never put user input in it.
+
+## Arguments
+
+| Name        | Data type | Default | Remarks                    |
+| ----------- | --------- | ------- | -------------------------- |
+| $expression | string    |         | ORDER BY expression        |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Category 1 first, then the newest
+// ... Order By CASE WHEN category = 1 THEN 0 ELSE 1 END, post_date DESC
+$records = $model->orderRaw('CASE WHEN category = 1 THEN 0 ELSE 1 END, post_date DESC')->find();
+```

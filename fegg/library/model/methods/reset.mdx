@@ -1,5 +1,5 @@
 ---
-sidebar_position: 43
+sidebar_position: 60
 ---
 
 # Model::reset
@@ -12,22 +12,21 @@ sidebar_position: 43
 public self Model::reset()
 ```
 
+Forgets the conditions set with the chain methods: where, having, order, join, group, select, listMax, current and limit. The model does this by itself after every query, failed ones included, so call it only to drop a chain you built but did not run. The table, primary key, visible flag, bind types and the pager are kept.
+
 ## Example
 
 ```php title="Controller"
 $model = new Model(true, array(
-    'table'   => 'cms_news',
+    'table' => 'cms_news',
+    'id'    => 'news_id',
 ));
 
-$model->where('news = ?', [1]);
-$model->listMax(5);
-$model->current(2);
+$model->where('category = ?', 1)->order('post_date', 'desc');
 
-// SELECT * FROM cms_news WHERE news = 1 LIMIT 5, 5
-$model->find();
-
+// Changed our mind: start again
 $model->reset();
 
-// SELECT * FROM cms_news
-$model->find();
+// Select * From "cms_news" Where 1 = 1 And "cms_news".valid = 1
+$records = $model->all();
 ```

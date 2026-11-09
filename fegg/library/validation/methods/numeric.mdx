@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Validation::numeric
@@ -12,56 +12,36 @@ sidebar_position: 3
 public boolean Validation::numeric( string $name, mixed $value, [ mixed $code = '', boolean $decimalPointFlag = false, boolean $minusFlag = false ] )
 ```
 
+Valid when the value contains only the digits `0-9`. `$decimalPointFlag` also allows a decimal part (`12.5`) and `$minusFlag` a leading `-`. Use the error codes `@numeric_decimalpoint` and `@numeric_minus` for the messages of those cases.
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
 ## Arguments
 
-| Name              | Data type | Default | Remarks                     |
-| ----------------- | --------- | ------- | --------------------------- |
-| $name             | string    |         | Item label                  |
-| $value            | mixed     |         | Check field value           |
-| $code             | mixed     | ""      | Error code or Error message |
-| $decimalPointFlag | boolean   | false   | Allow including "."         |
-| $minusFlag        | boolean   | false   | Allow including "-"         |
+| Name              | Data type | Default | Remarks                                                                                                      |
+| ----------------- | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name             | string    |         | Field name (key of the error message)                                                                        |
+| $value            | mixed     |         | Value to check                                                                                               |
+| $code             | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
+| $decimalPointFlag | boolean   | false   | `true`: allow a decimal part                                                                                 |
+| $minusFlag        | boolean   | false   | `true`: allow a leading `-`                                                                                  |
 
 ## Example
 
 ```php title="Controller"
-$validation = $this->getClass('Validation');
+use Fegg\Validation;
 
-// If $value is numeric
-$successName = 'Success Field';
-$successVar  = '123';
-$validation->numeric('success', $successVar, array('@numeric', $successName));
+$validation = new Validation();
 
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); // -> null
+$validation->numeric('success', '123', array('@numeric', 'Quantity')); // -> true
+$validation->numeric('failed', '12.5', array('@numeric', 'Quantity')); // -> false
 
-// If $value is not numeric
-$failedName = 'Failed Field';
-$failedVar  = 'abc123';
-$validation->numeric('failed', $failedVar, array('@numeric', $failedName));
-
-var_dump($validation->isError()); // -> true
 var_dump($validation->getErrorMessage());
-// -> "failed" => "<strong>Failed Field</strong> は 半角数字で入力してください"
-```
+// -> array('failed' => '<strong>Quantity</strong> は 半角数字で入力してください')
 
-### Optional Flag
+// Decimals
+$validation->numeric('price', '12.5', array('@numeric_decimalpoint', 'Price'), true); // -> true
 
-```php title="Controller"
-// If $value is negative numeric
-$failedName = 'Failed Field';
-$failedVar  = '-10';
-$validation->numeric('failed', $failedVar, array('@numeric', $failedName));
-
-var_dump($validation->isError()); // -> true
-var_dump($validation->getErrorMessage());
-// -> "failed" => "<strong>Failed Field</strong> は 半角数字で入力してください"
-
-// If $value is negative numeric with activate $minusFlag
-$successName = 'success Field';
-$successVar  = '-10';
-$validation->numeric('success', $successVar, array('@numeric_minus', $successName), false, true);
-
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); -> null
+// Negative numbers
+$validation->numeric('offset', '-10', array('@numeric_minus', 'Offset'), false, true); // -> true
 ```

@@ -9,42 +9,42 @@ sidebar_position: 3
 ## Description
 
 ```php
-public void Application::unsetSession( [ string $name = "" ] )
+public void Application::unsetSession( string $name = '' )
 ```
 
-Unset SESSION data. If you omit argument, `unsetSession` remove all SESSION data.
+Remove one key from the SESSION data. If you omit the argument, `unsetSession` removes all SESSION data and destroys the session.
 
 ## Arguments
 
-| Name  | Data type | Default | Remarks           |
-| :---- | :-------- | :------ | :---------------- |
-| $name | string    |         | Session param key |
+| Name  | Data type | Default | Remarks                                          |
+| :---- | :-------- | :------ | :----------------------------------------------- |
+| $name | string    | ''      | Session key. Destroys the whole session when omitted |
 
 ## Example
 
-```php title="Controller - First.php"
+```php title="Controller - First request"
 $this->setSession('foo', 'bar');
 ```
 
-```php title="Controller - Second.php"
-$this->getSession('foo'); // -> bar
+```php title="Controller - Second request"
+echo $this->getSession('foo'); // -> bar
 ```
 
-```php title="Controller - Third.php"
+```php title="Controller - Third request"
 $this->unsetSession('foo');
 echo $this->getSession('foo'); // -> ''
 ```
 
-### Remove all session datas
+### Remove all session data
 
-If you omit argument, `unsetSession` remove all SESSION data.
+If you omit the argument, `unsetSession` removes all SESSION data and destroys the session.
 
-```php title="Controller - First.php"
+```php title="Controller - First request"
 $this->setSession('foo', 'bar');
 $this->setSession('baz', 'qux');
 ```
 
-```php title="Controller - Second.php"
+```php title="Controller - Second request"
 $this->unsetSession();
 echo $this->getSession('foo'); // -> ''
 echo $this->getSession('baz'); // -> ''

@@ -1,11 +1,31 @@
 ---
-sidebar_position: 10
+sidebar_position: 11
 ---
 
 # Upload::isError
 
-Check uploaded file has error
+> Check whether any upload error occurred
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public boolean Upload::isError()
+```
+
+Returns `true` once an error has occurred in any [Upload::upload](./upload.mdx) call on this object. Before that it returns `null` (falsy).
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+$upload->setUploadDir($this->config['upload_dir']['path']);
+
+$upload->upload('image1', uniqid('i_'), 'Image 1');
+$upload->upload('image2', uniqid('i_'), 'Image 2');
+
+if ($upload->isError()) {
+    // At least one of the files failed
+}
+```

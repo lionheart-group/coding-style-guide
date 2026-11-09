@@ -4,29 +4,32 @@ sidebar_position: 2
 
 # Application::setHidden
 
-> Set hidden data
+> Set values for hidden inputs
 
 ## Description
 
 ```php
-public void Application::setHidden( mixed $name, [ string $value = "" ] )
+public void Application::setHidden( mixed $name, [ mixed $value = "" ] )
+public void Application::unsetHidden( string $name )
 ```
 
-Set input field hidden to your template from controller. In template, write `{{ hidden }}`, this will display `<input type="hidden">` with your assigned name and value.
+`setHidden()` stores a value that the `{{ hidden }}` tag prints as `<input type="hidden">`. `unsetHidden()` removes one again.
 
-See also [Hidden](#).
+Names and values are HTML-escaped (a value that is already escaped is not escaped twice). An array value is printed as one input per element, with names such as `tags[0]` and `tags[1]`.
+
+See also [Hidden](../rules/hidden.mdx).
 
 ## Arguments
 
-| Name | Data type | Default | Remarks |
-| --- | --- | --- | --- |
-| $id | string / array |  | hidden name. If in array, syntax must be `array($name => $value)` |
-| $value | string | "" | hidden value |
+| Name   | Data type      | Default | Remarks |
+| ------ | -------------- | ------- | ------- |
+| $name  | string / array |         | Hidden name, or an array `name => value` to set several at once |
+| $value | string / array | ""      | Hidden value (ignored when `$name` is an array) |
 
 ## Example
 
 ```php title="Controller"
-$this->setHidden( 'foo', 'bar' );
+$this->setHidden('internal_id', $internalId);
 ```
 
 ```html title="Template"
@@ -34,19 +37,16 @@ $this->setHidden( 'foo', 'bar' );
 ```
 
 ```html title="Output"
-<input type="hidden" name="foo" value="bar">
+<input type="hidden" name="internal_id" value="12">
 ```
 
-### Assigning Multiple Parameters
-
-You can assign multiple parameters.
+### Assigning multiple values
 
 ```php title="Controller"
-$params = array(
-    'foo' => 'bar',
-    'baz' => 'qux',
-);
-$this->setHidden($params);
+$this->setHidden(array(
+    'foo'  => 'bar',
+    'tags' => array('a', 'b'),
+));
 ```
 
 ```html title="Template"
@@ -54,6 +54,11 @@ $this->setHidden($params);
 ```
 
 ```html title="Output"
-<input type="hidden" name="foo" value="bar">
-<input type="hidden" name="baz" value="qux">
+<input type="hidden" name="foo" value="bar"><input type="hidden" name="tags[0]" value="a"><input type="hidden" name="tags[1]" value="b">
+```
+
+### Removing a value
+
+```php title="Controller"
+$this->unsetHidden('internal_id');
 ```

@@ -4,7 +4,7 @@ sidebar_position: 7
 
 # Trim::view
 
-Display converted image
+> Output the saved image to the browser
 
 ## Description
 
@@ -12,12 +12,17 @@ Display converted image
 public void Trim::view()
 ```
 
+Sends the `Content-type` header and outputs the file at the output path. Call [Trim::create](./create.mdx) first: nothing is output when the file does not exist.
+
 ## Example
 
 ```php title="Controller"
-$trim = $this->getClass('Tool/RSS', 'https://example.com/feed');
+use Fegg\Tool\Trim;
+
+$trim = new Trim();
 $trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
 
 $trim->resizeTrim(300, 300, 'm');
+$trim->create();
 $trim->view();
 ```

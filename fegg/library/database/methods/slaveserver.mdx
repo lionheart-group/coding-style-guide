@@ -1,11 +1,24 @@
 ---
-sidebar_position: 40
+sidebar_position: 46
 ---
 
-# DB_pdo::slaveServer
+# Pdo::slaveServer
 
-Connect to slave server
+> Connect to slave server
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::slaveServer()
+```
+
+Connects to one of the slave databases, picked at random (see [Configuration](../configuration.mdx)), and runs the next query on it. SELECT and PRAGMA queries already use a slave; this sends another query there. Throws `Fegg\Database\QueryException` when the connection fails.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Same as without slaveServer(): a SELECT already uses a slave
+$rows = $db->slaveServer()->select('cms_news')->execute()->all();
+```

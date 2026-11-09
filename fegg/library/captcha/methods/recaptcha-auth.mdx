@@ -1,0 +1,39 @@
+---
+sidebar_position: 2
+---
+
+# ReCAPTCHA::auth
+
+> Verify a reCAPTCHA token
+
+## Description
+
+```php
+public array ReCAPTCHA::auth( string $response )
+```
+
+Sends the token to `https://www.google.com/recaptcha/api/siteverify` and returns an array:
+
+| Key     | Data type | Remarks                                                                  |
+| ------- | --------- | ------------------------------------------------------------------------ |
+| success | boolean   | `true` when the API returned success, the score is not below the threshold and there is no error |
+| errors  | array     | Error messages (English for the API error codes; a Japanese message when the score is below the threshold) |
+
+## Arguments
+
+| Name      | Data type | Default | Remarks                                              |
+| --------- | --------- | ------- | ---------------------------------------------------- |
+| $response | string    |         | Token posted by the widget (`g-recaptcha-response`)   |
+
+## Example
+
+```php title="Controller"
+use Fegg\Captcha\ReCAPTCHA;
+
+$recaptcha = new ReCAPTCHA('your-recaptcha-secret', 0.5);
+$result = $recaptcha->auth($this->in('g-recaptcha-response'));
+
+if (!$result['success']) {
+    $errorMessage = implode(',', $result['errors']);
+}
+```

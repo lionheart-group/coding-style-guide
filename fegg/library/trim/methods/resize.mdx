@@ -4,26 +4,32 @@ sidebar_position: 2
 
 # Trim::resize
 
-Set target image and output file path
+> Resize the image to fit in the specified size with keeping ratio
 
 ## Description
 
 ```php
-public void Trim::resize( number $w, number $h )
+public void Trim::resize( int $w, int $h )
 ```
+
+The image is scaled down to fit in `$w` x `$h`, keeping its aspect ratio. The output may be smaller than `$w` x `$h` in one direction. Images smaller than the specified size are not enlarged. `0` means the original width or height.
 
 ## Arguments
 
-| Name | Data type | Default | Remarks                |
-| ---- | --------- | ------- | ---------------------- |
-| $w   | number    |         | Converted image width  |
-| $h   | number    |         | Converted image height |
+| Name | Data type | Default | Remarks                                        |
+| ---- | --------- | ------- | ---------------------------------------------- |
+| $w   | int       |         | Maximum width / `0`: original width            |
+| $h   | int       |         | Maximum height / `0`: original height          |
 
 ## Example
 
 ```php title="Controller"
-$trim = $this->getClass('Tool/RSS', 'https://example.com/feed');
+use Fegg\Tool\Trim;
+
+$trim = new Trim();
 $trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
 
-$trim->resize(300, 300);
+// Width 300px at most, any height
+$trim->resize(300, 0);
+$trim->create();
 ```

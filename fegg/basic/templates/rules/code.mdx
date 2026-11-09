@@ -1,47 +1,46 @@
 ---
-sidebar_position: 9
+sidebar_position: 11
 ---
 
 # Code
 
-> call, code
+> Run a PHP statement
 
-```php
-{{ code some_php_scripts(); }}
+## Description
+
+```html
+{{ code statement }}
 ```
 
-Run writed PHP scripts, like `eval` method.
+Runs PHP statements in the template. Nothing is output unless the statement itself prints something.
 
-```php
-{{ call '/controller/method/params' }}
-```
+- Template variables are written as usual (`$page.data`, `$categories`). A variable assigned in `{{ code }}` can be used by the following tags.
+- Several statements can be separated with `;`. The code cannot contain `{` or `}`, so blocks such as `if (...) { }` are not possible: use `{{ if }}` and `{{ foreach }}` instead.
+- Unlike `{{ if }}` and `{{ assign }}`, the code is not null-safe: on PHP 8, reading a variable that is not set raises a warning, which Fegg's error handler turns into an exception (HTTP 500).
 
-Call another Controller methods.
+Keep logic in the controller. `{{ code }}` is for small things such as calling a helper function; for a value, prefer [`{{ assign }}`](./assign.mdx).
 
 ## Example
 
-### code
-
-```php title="Template"
-{{ code phpinfo(); }}
-// Run phpinfo();
+```html title="Template"
+{{ code $categories = feggCategories('news') }}
+<select name="category">
+    {{ foreach $categories as $key => $label }}
+    <option value="{{ $key }}"{{ selected key=$key value=$in.category }}>{{ $label }}</option>
+    {{ end foreach }}
+</select>
 ```
 
-```php title="Template"
-{{ code $array = array('foo', 'bar'); var_dump( array_reverse($array) ); }}
-// Run $array = array('foo', 'bar'); var_dump( array_reverse($array) );
+`feggCategories()` returns the list `news` of `site/config/category_info.php`.
+
+```html title="Template"
+<a href="{{ $site.prefix }}?p={{ $page.pager.next_page }}&{{ code echoSearchQuery() }}">Next</a>
 ```
 
-```html title="Output"
-array(2) { [0]=> string(3) "bar" [1]=> string(3) "foo" }
-```
+`echoSearchQuery()` prints the current request parameters (without `p`) as a query string.
 
-### call
+:::warning
 
-```php title="Template"
-{{ call '/controller/method/params' }}
-// Call Controller::method('params');
+Templates are code: `{{ code }}` runs any PHP. Only developers may edit templates. See [Security](../security.mdx).
 
-{{ call '/Person/get/id/1' }}
-// Call Person::get('id', '1');
-```
+:::

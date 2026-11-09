@@ -8,32 +8,80 @@ import { CategoryDocCardList, SiblingDocCardList } from '@site/src/components/Ca
 
 ## About Template
 
-Fegg is equipped with its own template engine where you can separate application code (PHP Code) and display (HTML/CSS). Fegg uses the `{{}}` tag for your application code in the template file. It runs a method that compile templates from Controller class.
+Fegg has its own template engine that keeps the application code (PHP) apart from the display (HTML/CSS). A template (`.tpl`) is HTML with `{{ ... }}` tags. Fegg compiles it to PHP, caches the result and runs it when a controller displays the page.
 
-Template files are save under the **code/template/** directory with name format of `template_name.tpl`.
+```html title="htdocs/_fegg/site/template/news/detail.tpl"
+{{ transclude '/template/siteframe' }}
+
+{{ section contents }}
+<h1>{{ $page.data.title }}</h1>
+<p>{{ $page.data.post_date|feggDate:'Y/m/d' }}</p>
+{{ end section contents }}
+```
+
+## Where templates live
+
+| Directory | Owner |
+| --- | --- |
+| `htdocs/_fegg/site/template/` | The project. Put your templates here. |
+| `htdocs/_fegg/core/template/` | The core (CMS screens). Never edit it: it is replaced by `fegg-cli core:update`. |
+
+Templates are looked up in `site/template/` first, then in `core/template/`. To change a core template, copy it to the same path under `site/template/` and edit the copy: the project file wins.
+
+Template names never include the `.tpl` extension. A controller renders `site/template/news/detail.tpl` with:
+
+```php title="htdocs/_fegg/site/controller/News.php"
+$this->displayPage('news/detail');
+```
+
+When the site is multi-language (`default_language` and `support_language` are set in the settings), the language code is put in front of the name: `news/detail` is read from `site/template/<language code>/news/detail.tpl`.
+
+### Paths in `include` and `transclude`
+
+- A path starting with `/` is relative to the template root (`site/template/`, then `core/template/`). It works the same in a template at any depth. **Prefer it.**
+- Any other path is relative to the directory of the template that contains the tag (`./parts/card`, `../template/siteframe`).
+
+```html
+{{ transclude '/template/siteframe' }}      site/template/template/siteframe.tpl
+{{ transclude '/cms/frame/siteframe' }}     core/template/cms/frame/siteframe.tpl (CMS screens)
+{{ include head '/include/head/about' }}    site/template/include/head/about.tpl
+{{ include './parts/card' }}                parts/card.tpl next to this template
+```
+
+## Cache
+
+Compiled templates are cached in `htdocs/_fegg/site/data/cache/template/`, which must be writable by the web server. A cache file is rebuilt automatically when the template, one of its `transclude` parents or the template compiler changes (any change of modification time or size), so you never need to clear it by hand.
+
+## Checking templates
+
+After writing or editing a template, run:
+
+```bash
+./fegg-cli template:lint
+```
+
+It compiles every template without running it and reports unknown tags, unclosed blocks, missing `include` / `transclude` targets, undefined modifiers and unsafe outputs, with the `.tpl` line. See [Lint and errors](./lint.mdx).
 
 ## Display methods
 
-Display methods call the template file from Controller class.
-
-Below are the display methods in Fegg but it is recommended to use only the `displayPage` method to avoid Clickjacking attacks.
+Display methods render a template from a controller. Use `displayPage` for pages: it sets the variables templates expect and protects against clickjacking.
 
 <CategoryDocCardList label="Display methods" />
 
 ## Template helper methods
 
-Template helper methods are used for passing special variable to the template.
+Template helper methods pass special values (site information, hidden inputs, HTTP headers) from the controller.
 
 <CategoryDocCardList label="Helper methods" />
 
 ## Template rules
 
-There are several operating notation for template file.
+The tags you can write in a template.
 
 <CategoryDocCardList label="Rules" />
 
-## Modifiers
+## Modifiers, security and lint
 
-You can modify the returned values of your variable in your application code in template using modifiers.
+Modifiers transform a value before it is output. The security page explains which escaping each place in the HTML needs, and the lint page lists every check of `fegg-cli template:lint` and how template errors are reported.
 
-<SiblingDocCardList ids={["modifiers"]} />
+<SiblingDocCardList ids={["modifiers", "security", "lint"]} />

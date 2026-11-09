@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Mail::body
 
-Set mail body
+> Set mail body
 
 ## Description
 
@@ -14,13 +14,18 @@ public self Mail::body( string $body )
 
 ## Arguments
 
-| Name  | Data type | Default | Remarks    |
-| ----- | --------- | ------- | ---------- |
-| $body | string    | null    | Email body |
+| Name  | Data type | Default | Remarks                 |
+| ----- | --------- | ------- | ----------------------- |
+| $body | string    |         | Email body (plain text) |
 
 ## Example
 
 ```php title="Controller"
-$mail = $this->getClass('Tool/Mail');
+use Fegg\Tool\Mail;
+
+$mail = new Mail();
 $mail->body('Mail body');
+
+// Use a template for the body
+$mail->body($this->fetchPage('/contact/mail/to_admin'));
 ```

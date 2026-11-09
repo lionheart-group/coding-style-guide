@@ -1,0 +1,29 @@
+---
+sidebar_position: 39
+---
+
+# Model::exists
+
+> Check whether a row matches
+
+## Description
+
+```php
+public bool Model::exists()
+```
+
+Returns `true` when at least one row matches.
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+if ($model->where('title = ?', $title)->exists()) {
+    // a news with this title already exists
+}
+```

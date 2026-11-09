@@ -4,8 +4,30 @@ sidebar_position: 9
 
 # File::removeFile
 
-Delete specified file
+> Remove files
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public void File::removeFile( string $file )
+```
+
+Deletes the files matching `$file`. The path is passed to `glob()`, so wildcards such as `*` can be used. Directories are not removed.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                                |
+| ----- | --------- | ------- | -------------------------------------- |
+| $file | string    |         | File path or `glob()` pattern          |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\File;
+
+$file = new File();
+$file->removeFile('path/to/foo.txt');
+
+// Remove all the log files
+$file->removeFile('path/to/log/*.log');
+```

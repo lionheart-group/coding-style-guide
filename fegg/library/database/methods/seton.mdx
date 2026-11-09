@@ -1,11 +1,38 @@
 ---
-sidebar_position: 22
+sidebar_position: 25
 ---
 
-# DB_pdo::setOn
+# Pdo::setOn
 
-Set on query for joined table
+> Set on query for joined table
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::setOn( string $query, [ mixed ...$parameters ] )
+```
+
+Adds the ON condition of the last [setJoin](./setjoin.mdx). The first call after `setJoin()` writes `ON`; another call appends its text after a space. Parameters work as in [setWhere](./setwhere.mdx).
+
+Throws `LogicException` when no join was set before.
+
+## Arguments
+
+| Name           | Data type | Default | Remarks                                    |
+| -------------- | --------- | ------- | ------------------------------------------ |
+| $query         | string    |         | Condition with `?` placeholders            |
+| ...$parameters | mixed     |         | One value (or array of values) per placeholder |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// ... LEFT JOIN "cms_file" ON cms_file.file_id = cms_news.file_id AND cms_file.type = ? ...
+$rows = $db->setJoin('cms_file', 'LEFT')
+    ->setOn('cms_file.file_id = cms_news.file_id')
+    ->setOn('AND cms_file.type = ?', 'pdf')
+    ->select('cms_news')
+    ->execute()
+    ->all();
+```

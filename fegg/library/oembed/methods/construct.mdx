@@ -1,0 +1,42 @@
+---
+sidebar_position: 1
+title: OEmbed::__construct
+---
+
+# OEmbed::\_\_construct
+
+> Get the oEmbed data of a URL
+
+## Description
+
+```php
+public OEmbed::__construct( string $url, [ array $config = array() ] )
+```
+
+Finds the service whose `schemes` match `$url`, requests its oEmbed endpoint and reads the embedded HTML. The result is available through the [properties](../index.mdx#properties).
+
+Throws an `Exception` when no service matches `$url`, the service has no endpoint, the request fails, or the response has no `iframe`, `img` or `a` element.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                                         |
+| ------- | --------- | ------- | ----------------------------------------------- |
+| $url    | string    |         | URL of the page to embed                        |
+| $config | array     | array() | Options sent to the endpoint (see below)        |
+
+| Key       | Data type | Default | Remarks                       |
+| --------- | --------- | ------- | ----------------------------- |
+| maxwidth  | int       | null    | Maximum width of the embed    |
+| maxheight | int       | null    | Maximum height of the embed   |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\OEmbed;
+
+$oembed = new OEmbed('https://youtu.be/xxxxxxxxxxx', array('maxwidth' => 640));
+
+echo $oembed->type;          // -> "video"
+echo $oembed->media;         // -> "https://www.youtube.com/embed/xxxxxxxxxxx?feature=oembed"
+echo $oembed->data['title']; // -> Video title
+```

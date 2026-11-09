@@ -1,0 +1,24 @@
+---
+sidebar_position: 47
+---
+
+# Pdo::close
+
+> Disconnect from the database
+
+## Description
+
+```php
+public void Pdo::close()
+```
+
+Drops the connection this instance used from the shared connections, so the next query (of any instance) opens a new one. The connection of an open transaction is kept. PHP closes connections at the end of the request, so this is rarely needed.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$rows = $db->select('cms_news')->execute()->all();
+$db->close();
+```

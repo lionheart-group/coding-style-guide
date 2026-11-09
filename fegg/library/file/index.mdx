@@ -6,17 +6,37 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # Introduction
 
-Providing some functions for managing files/directories
+> Providing some functions for managing files/directories
 
 ## How to use
 
-You can load `File` class through `Application::getClass` method.
+Import `Fegg\Tool\File` and create it with `new`.
 
 ```php title="Controller"
-$file = $this->getClass('Tool/File');
+<?php
+namespace Site\Controller;
 
-$file->copyAll('path/to/foo', 'path/to/bar');
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Tool\File;
+
+class Export extends Controller
+{
+    public function index()
+    {
+        $file = new File();
+
+        $file->createDirectory(FEGG_SITE_DIR . '/data/export');
+        $file->writeFile(FEGG_SITE_DIR . '/data/export/list.csv', "id,title\n", 'w');
+    }
+}
 ```
+
+:::note
+
+Most methods do nothing (no error, no return value) when the source file or directory does not exist. Check the result yourself, e.g. with `file_exists()`, when it matters.
+
+:::
 
 ## Methods
 

@@ -6,17 +6,44 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # Introduction
 
-Providing some functions for uploading/validating files
+> Providing some functions for uploading/validating files
 
 ## How to use
 
-You can load `Upload` class through `Application::getClass` method.
+Import `Fegg\Tool\Upload` and create it with `new`. Set the upload directory, then call [Upload::upload](./methods/upload.mdx) with the `name` of the `input[type="file"]`.
 
 ```php title="Controller"
-$upload = $this->getClass('Tool/Upload');
+<?php
+namespace Site\Controller;
 
-$upload->upload('file');
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Tool\Upload;
+
+class Entry extends Controller
+{
+    public function post()
+    {
+        $this->loadConfig('upload_dir');
+
+        $upload = new Upload();
+        $upload->setUploadDir($this->config['upload_dir']['path'] . '/entry');
+        $upload->setMaxFileSize(5);
+        $upload->setFileType(array('jpg', 'jpeg', 'png', 'pdf'));
+
+        if ($upload->upload('file', uniqid('f_'), 'Attachment')) {
+            $data = $upload->getUploadedData('file');
+            // $data['name'], $data['org_name'], $data['type'], $data['size'] ...
+        } else {
+            $errors = $upload->getErrorMessage('file');
+        }
+    }
+}
 ```
+
+`$this->loadConfig('upload_dir')` reads `site/config/upload_dir.php` (`path` and `url` of `htdocs/up_dir`) into `$this->config['upload_dir']`. The CMS screens (`Fegg\Controller\Cms\Image`, `Media`, `Multi`) use this class in the same way.
+
+Error messages are defined in `file_error_message.php`, see [Configuration](./configuration.mdx).
 
 ## Methods
 

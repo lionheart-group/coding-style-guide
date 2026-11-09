@@ -4,27 +4,35 @@ sidebar_position: 2
 
 # Application::useTicket
 
-> Use ticket once and destroy ticket session
+> Check a one-time ticket and use it up
 
 ## Description
 
 ```php
-public void Application::useTicket( string $name )
+public bool Application::useTicket( string $name )
 ```
 
-Use ticket once and destroy ticket session. `useTicket` will return boolean and will return TRUE only if the value in the hidden input is same with the ticket session in the server. See [Application::setTicket](./setticket.mdx).
+Check the ticket issued by [Application::setTicket](./setticket.mdx). Returns `true` only when the POST parameter `ticket_{$name}` has the same value as the ticket in the session. The ticket is then removed from the session, so a second submit of the same form returns `false`.
+
+The ticket is read from **POST** only.
 
 ## Arguments
 
-| Name  | Data type | Default | Remarks          |
-| :---- | :-------- | :------ | :--------------- |
-| $name | string    |         | Ticket param key |
+| Name  | Data type | Default | Remarks     |
+| :---- | :-------- | :------ | :---------- |
+| $name | string    |         | Ticket name |
 
 ## Example
 
 ```php title="Controller"
-if($this->useTicket('foo'))
+public function result()
 {
-    //code
+    if (!$this->useTicket('contact')) {
+        // Reloaded, submitted twice, or not posted from the form
+        $this->redirect('/contact/');
+    }
+
+    // send the mail ...
+    $this->displayPage('contact/result');
 }
 ```

@@ -1,0 +1,58 @@
+---
+sidebar_position: 17
+---
+
+# Model::whereLike
+
+> Search a column for a term
+
+## Description
+
+```php
+public self Model::whereLike( string $column, string $term, [ string $mode = 'contains', string $andOr = 'AND' ] )
+```
+
+Adds `column LIKE ? ESCAPE '!'`. `%` and `_` in `$term` match literally, so user input can be passed as it is. Throws `InvalidArgumentException` when `$column` is not a plain name or `$mode` is unknown.
+
+## Arguments
+
+| Name    | Data type | Default    | Remarks                                              |
+| ------- | --------- | ---------- | ---------------------------------------------------- |
+| $column | string    |            | Column name                                          |
+| $term   | string    |            | Text to search for                                   |
+| $mode   | string    | 'contains' | Where the term must be (below)                       |
+| $andOr  | string    | 'AND'      | How it joins the previous condition: `AND` or `OR`   |
+
+### Modes
+
+| Mode       | Pattern    |
+| ---------- | ---------- |
+| `contains` | `%term%`   |
+| `prefix`   | `term%`    |
+| `suffix`   | `%term`    |
+| `exact`    | `term`     |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// ... Where title LIKE '%50!%%' ESCAPE '!' AND ...  (titles containing "50%")
+$records = $model->whereLike('title', '50%')->find();
+
+// Titles starting with "News"
+$records = $model->whereLike('title', 'News', 'prefix')->find();
+
+// Search title or content
+$keyword = $this->in('keyword');
+$records = $model
+    ->whereOpen()
+    ->whereLike('title', $keyword)
+    ->whereLike('content', $keyword, 'contains', 'OR')
+    ->whereClose()
+    ->find();
+```

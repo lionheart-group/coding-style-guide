@@ -4,8 +4,34 @@ sidebar_position: 4
 
 # File::createDirectory
 
-Create directory to specified location
+> Create a directory
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public void File::createDirectory( string $directory, [ string $permission = '0777' ] )
+```
+
+Creates `$directory` when it does not exist yet. Parent directories are not created, so the parent must exist.
+
+:::note
+
+The created directory always gets the permission `0777`. The `$permission` argument is currently ignored.
+
+:::
+
+## Arguments
+
+| Name        | Data type | Default | Remarks                                  |
+| ----------- | --------- | ------- | ---------------------------------------- |
+| $directory  | string    |         | Directory to create                      |
+| $permission | string    | '0777'  | Permission (currently ignored, see note) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\File;
+
+$file = new File();
+$file->createDirectory('path/to/new_directory');
+```

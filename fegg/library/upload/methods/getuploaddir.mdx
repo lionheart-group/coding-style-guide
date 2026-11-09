@@ -1,11 +1,26 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Upload::getUploadDir
 
-Get upload directory
+> Get the upload directory
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public string Upload::getUploadDir()
+```
+
+Returns the directory set by [Upload::setUploadDir](./setuploaddir.mdx), or an empty string when none is set.
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+$upload->setUploadDir('path/to/up_dir');
+
+echo $upload->getUploadDir(); // -> "path/to/up_dir"
+```

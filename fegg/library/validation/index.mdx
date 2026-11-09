@@ -10,19 +10,49 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 ## How to use
 
-You can load `Validation` class through `Application::getClass` method.
+Import `Fegg\Validation` and create it with `new`. Call a check method for each field, then read the result with [Validation::getErrorMessage](./methods/geterrormessage.mdx).
 
 ```php title="Controller"
-$validation = $this->getClass('Validation');
+<?php
+namespace Site\Controller;
 
-// Check Required
-$name = 'Field Label';
-$id   = 'field_name';
-$validation->required($id, $this->in($id), array('@required', $name));
+defined('FEGG_CORE_DIR') || exit;
 
-// Get Error
-$errorMessage = $validation->getErrorMessage();
+use Fegg\Validation;
+
+class Contact extends Controller
+{
+    public function confirm()
+    {
+        $validation = new Validation();
+
+        $id   = 'name';
+        $name = 'お名前';
+        $validation->required($id, $this->in($id), array('@required', $name));
+        $validation->maxlength($id, $this->in($id), 50, array('@maxlength', $name, 50));
+
+        $id   = 'mail';
+        $name = 'メールアドレス';
+        $validation->required($id, $this->in($id), array('@required', $name));
+        $validation->email($id, $this->in($id), array('@email', $name));
+
+        $errorMessage = $validation->getErrorMessage();
+        if (!$errorMessage) {
+            $this->displayPage('contact/confirm');
+        } else {
+            $this->page['error'] = $errorMessage;
+            $this->displayPage('contact/input');
+        }
+    }
+}
 ```
+
+## How checks work
+
+- Every check method takes the field name `$name` first. It is the key of the error message returned by [Validation::getErrorMessage](./methods/geterrormessage.mdx).
+- Only the first error of each field is kept: once a field has an error, the next checks of the same field are skipped and return `false`. Write the checks in order of priority (e.g. `required` before `email`).
+- Except [Validation::required](./methods/required.mdx) and [Validation::upload](./methods/upload.mdx), the checks do not check an empty value (they return `true`). Use `required` for required fields.
+- `$code` decides the error message, see [Configuration](./configuration.mdx).
 
 ## Methods
 

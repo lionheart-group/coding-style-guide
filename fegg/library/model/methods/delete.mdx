@@ -1,5 +1,5 @@
 ---
-sidebar_position: 34
+sidebar_position: 49
 ---
 
 # Model::delete
@@ -9,8 +9,10 @@ sidebar_position: 34
 ## Description
 
 ```php
-public void Model::delete( mixed $id )
+public int Model::delete( mixed $id )
 ```
+
+Soft-deletes the row whose primary key is `$id`: sets `valid = 0` (and `modified`), so reads no longer return it. Returns the number of updated rows. To remove the row from the table, use [erase](./erase.mdx).
 
 ## Arguments
 
@@ -21,11 +23,12 @@ public void Model::delete( mixed $id )
 ## Example
 
 ```php title="Controller"
-$model = new Model(false, array(
+$model = new Model(true, array(
     'table'   => 'cms_news',
     'id'      => 'news_id',
     'visible' => 'visible',
 ));
 
-$model->delete(1);
+$deleted = $model->delete(1);
+// -> 1
 ```

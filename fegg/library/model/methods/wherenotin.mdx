@@ -1,0 +1,37 @@
+---
+sidebar_position: 16
+---
+
+# Model::whereNotIn
+
+> Exclude a list of values
+
+## Description
+
+```php
+public self Model::whereNotIn( string $column, array $values, [ string $andOr = 'AND' ] )
+```
+
+Adds `column NOT IN (?, ?, ...)`. An empty array excludes nothing (`1 = 1`). Throws `InvalidArgumentException` when `$column` is not a plain name.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                                              |
+| ------- | --------- | ------- | ---------------------------------------------------- |
+| $column | string    |         | Column name (`news_id` or `cms_news.news_id`)        |
+| $values | array     |         | Values to exclude                                    |
+| $andOr  | string    | 'AND'   | How it joins the previous condition: `AND` or `OR`   |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Other news than the current one
+// ... Where news_id NOT IN (5) AND ...
+$records = $model->whereNotIn('news_id', array(5))->order('post_date', 'desc')->limit(3)->all();
+```

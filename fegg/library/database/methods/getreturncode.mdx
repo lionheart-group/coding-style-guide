@@ -1,11 +1,25 @@
 ---
-sidebar_position: 38
+sidebar_position: 44
 ---
 
-# DB_pdo::getReturnCode
+# Pdo::getReturnCode
 
-Get return code of the last executed query
+> Get return code of the last executed query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public int|null Pdo::getReturnCode()
+```
+
+Returns the number of affected rows of the last query that was not a SELECT or PRAGMA (`null` before the first one). Prefer [getAffectedRow](./getaffectedrow.mdx). A failed query throws `Fegg\Database\QueryException`, so there is no error code to check.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$db->setValues(array('title' => 'Sample'))->insert('cms_news')->execute();
+$code = $db->getReturnCode();
+// -> 1
+```

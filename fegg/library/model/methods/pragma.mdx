@@ -1,5 +1,5 @@
 ---
-sidebar_position: 42
+sidebar_position: 59
 ---
 
 # Model::pragma
@@ -9,8 +9,10 @@ sidebar_position: 42
 ## Description
 
 ```php
-public void Model::pragma( string $mode )
+public array Model::pragma( string $mode )
 ```
+
+Runs an SQLite `PRAGMA` on the model's table and returns its rows. SQLite only.
 
 ## Arguments
 
@@ -20,17 +22,33 @@ public void Model::pragma( string $mode )
 
 ### Pragma mode
 
-- `table`
-- `index`
-- `index_list`
+| Mode         | Query                                                 |
+| ------------ | ----------------------------------------------------- |
+| `table`      | `PRAGMA table_info("table")` (also any unknown mode)  |
+| `index_list` | `PRAGMA index_list("table")`                          |
+| `index`      | `PRAGMA index_info("table")`                          |
 
 ## Example
 
 ```php title="Controller"
 $model = new Model(true, array(
-    'table'   => 'cms_news',
+    'table' => 'cms_news',
 ));
 
-// PRAGMA table_info(cms_news)
-$model->pragma('table');
+// PRAGMA table_info("cms_news")
+$columns = $model->pragma('table');
+
+print_r($columns[0]);
+```
+
+```php title="Output"
+Array
+(
+    [cid] => 0
+    [name] => news_id
+    [type] => INTEGER
+    [notnull] => 1
+    [dflt_value] =>
+    [pk] => 1
+)
 ```

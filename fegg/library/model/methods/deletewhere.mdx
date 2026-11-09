@@ -1,5 +1,5 @@
 ---
-sidebar_position: 33
+sidebar_position: 50
 ---
 
 # Model::deleteWhere
@@ -9,24 +9,31 @@ sidebar_position: 33
 ## Description
 
 ```php
-public void Model::deleteWhere( string $where, array $wh_data )
+public int Model::deleteWhere( string $where, mixed $data )
 ```
+
+Soft-deletes every row matching `$where` (sets `valid = 0`) and returns the number of updated rows. `$data` is one value, or an array with one value per placeholder.
+
+The condition is required: an empty `$where` throws `InvalidArgumentException` (Fegg 4 deleted every row). Pass `'1 = 1'` to really delete every row.
 
 ## Arguments
 
-| Name     | Data type | Default | Remarks                  |
-| -------- | --------- | ------- | ------------------------ |
-| $where   | string    |         | Deleting condition query |
-| $wh_data | array     |         | Deleting condition data  |
+| Name   | Data type | Default | Remarks                          |
+| ------ | --------- | ------- | -------------------------------- |
+| $where | string    |         | Condition with `?` placeholders  |
+| $data  | mixed     |         | Values for the placeholders      |
 
 ## Example
 
 ```php title="Controller"
-$model = new Model(false, array(
+$model = new Model(true, array(
     'table'   => 'cms_news',
     'id'      => 'news_id',
     'visible' => 'visible',
 ));
 
-$model->deleteWhere($item, $data, 'id = ?', [1]);
+$deleted = $model->deleteWhere('category = ?', 1);
+
+// Every row
+$deleted = $model->deleteWhere('1 = 1', array());
 ```

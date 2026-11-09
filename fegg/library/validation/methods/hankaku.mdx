@@ -1,10 +1,10 @@
 ---
-sidebar_position: 16
+sidebar_position: 17
 ---
 
 # Validation::hankaku
 
-> Check half-width character for Multi byte string language
+> Check half-width characters
 
 ## Description
 
@@ -12,33 +12,28 @@ sidebar_position: 16
 public boolean Validation::hankaku( string $name, mixed $value, [ mixed $code = '' ] )
 ```
 
+Valid when the value contains no multi-byte character (the byte length equals the character length).
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
 ## Arguments
 
-| Name   | Data type | Default | Remarks                     |
-| ------ | --------- | ------- | --------------------------- |
-| $name  | string    |         | Item label                  |
-| $value | mixed     |         | Check field value           |
-| $code  | mixed     | ""      | Error code or Error message |
+| Name   | Data type | Default | Remarks                                                                                                      |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name  | string    |         | Field name (key of the error message)                                                                        |
+| $value | mixed     |         | Value to check                                                                                               |
+| $code  | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
 
 ## Example
 
 ```php title="Controller"
-$validation = $this->getClass('Validation');
+use Fegg\Validation;
 
-// If $value has only half-width character
-$successName = 'Success Field';
-$successVar  = 'foo';
-$validation->hankaku('success', $successVar, array('@hankaku', $successName));
+$validation = new Validation();
 
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); // -> null
+$validation->hankaku('success', 'abc-123', array('@hankaku', 'Code')); // -> true
+$validation->hankaku('failed', 'ａｂｃ', array('@hankaku', 'Code')); // -> false
 
-// If $value has not only half-width character
-$failedName = 'Failed Field';
-$failedVar  = 'テスト';
-$validation->required('failed', $failedVar, array('@required', $failedName));
-
-var_dump($validation->isError()); // -> true
 var_dump($validation->getErrorMessage());
-// -> "failed" => "<strong>Failed Field</strong> は半角で入力してください"
+// -> array('failed' => '<strong>Code</strong> は半角で入力してください')
 ```

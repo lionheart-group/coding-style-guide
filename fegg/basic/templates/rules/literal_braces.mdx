@@ -1,0 +1,40 @@
+---
+sidebar_position: 14
+---
+
+# Literal braces
+
+> Output `{{` and `}}` as text
+
+## Description
+
+```html
+{-{ ... }-}
+{--{ ... }--}
+```
+
+Fegg treats every `{{ ... }}` as a tag. To output literal double braces, for example a Vue or Handlebars template inside the page, or copy that contains them, write `{-{` for `{{` and `}-}` for `}}`. The text between them is not compiled.
+
+`{-{` also removes the spaces directly before it, and `}-}` the spaces directly after it (`a {-{ x }-} b` outputs `a{{ x }}b`). `{--{` and `}--}` work the same but remove all whitespace there, newlines included.
+
+Single braces (`{`, `}`) in HTML, CSS and JavaScript need nothing special.
+
+## Example
+
+```html title="Template"
+<div id="app">
+    <p>{-{ message }-}</p>
+</div>
+<script>
+    Vue.createApp({ data() { return { message: 'Hello' }; } }).mount('#app');
+</script>
+```
+
+```html title="Output"
+<div id="app">
+    <p>{{ message }}</p>
+</div>
+<script>
+    Vue.createApp({ data() { return { message: 'Hello' }; } }).mount('#app');
+</script>
+```

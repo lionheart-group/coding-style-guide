@@ -4,27 +4,29 @@ sidebar_position: 5
 
 # Mail::removeHeader
 
-Remove custom header
+> Remove custom header
 
 ## Description
 
 ```php
-public self Mail::removeHeader( [ $key = null ] )
+public self Mail::removeHeader( [ string $key = null ] )
 ```
 
 ## Arguments
 
-| Name | Data type | Default | Remarks |
-| --- | --- | --- | --- |
-| $key | string |  | Header key / if omit $key, remove all email header |
+| Name | Data type | Default | Remarks                                              |
+| ---- | --------- | ------- | ---------------------------------------------------- |
+| $key | string    | null    | Header name / if omitted, all custom headers are removed |
 
 ## Example
 
 ```php title="Controller"
-$mail = $this->getClass('Tool/Mail');
-$mail->pushHeader('foo', 'bar');
-$mail->removeHeader('foo');
+use Fegg\Tool\Mail;
 
-// Remove all email header
+$mail = new Mail();
+$mail->pushHeader('X-Foo', 'bar');
+$mail->removeHeader('X-Foo');
+
+// Remove all custom headers
 $mail->removeHeader();
 ```

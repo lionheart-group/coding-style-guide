@@ -9,28 +9,34 @@ sidebar_position: 3
 ## Description
 
 ```php
-public void Application::unsetCookie( [ string $name = "" ] )
+public void Application::unsetCookie( string $name )
 ```
 
-Unset COOKIE data.
+Overwrite the cookie with an empty value (path `/`). From the next request on, `getCookie($name)` returns `''`.
+
+:::note
+
+In Fegg 5.0.0 the cookie is overwritten with an empty value rather than expired, so the browser keeps an empty cookie with that name. Treat an empty value as "no cookie".
+
+:::
 
 ## Arguments
 
-| Name  | Data type | Default | Remarks          |
-| :---- | :-------- | :------ | :--------------- |
-| $name | string    |         | Cookie param key |
+| Name  | Data type | Default | Remarks     |
+| :---- | :-------- | :------ | :---------- |
+| $name | string    |         | Cookie name |
 
 ## Example
 
-```php title="Controller - First.php"
+```php title="Controller - First request"
 $this->setCookie('foo', 'bar');
 ```
 
-```php title="Controller - Second.php"
-$this->getCookie('foo'); // -> bar
+```php title="Controller - Second request"
+echo $this->getCookie('foo'); // -> bar
+$this->unsetCookie('foo');
 ```
 
-```php title="Controller - Third.php"
-$this->unsetCookie('foo');
-echo $this->getSession('foo'); // -> ''
+```php title="Controller - Third request"
+echo $this->getCookie('foo'); // -> ''
 ```

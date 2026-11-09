@@ -1,5 +1,5 @@
 ---
-sidebar_position: 30
+sidebar_position: 46
 ---
 
 # Model::insert
@@ -9,31 +9,36 @@ sidebar_position: 30
 ## Description
 
 ```php
-public mixed Model::insert( string $item, array $data )
+public string Model::insert( string $item, array $data )
 ```
+
+Inserts one row and returns the new ID as a string. For new code, use [insertRow](./insertrow.mdx): `insert()` writes `''` for every column listed in `$item` that is missing from `$data`, and cannot store NULL.
+
+`$data` is an associative array (values matched to `$item` by name) or a list (values in the order of `$item`). `created`, `modified` and `valid` are filled automatically and [bind](./addbindparam.mdx) types are applied.
 
 ## Arguments
 
-| Name  | Data type | Default | Remarks           |
-| ----- | --------- | ------- | ----------------- |
-| $item | string    |         | Inserting columns |
-| $data | array     |         | Inserting datas   |
+| Name  | Data type | Default | Remarks                         |
+| ----- | --------- | ------- | ------------------------------- |
+| $item | string    |         | Columns, separated by commas    |
+| $data | array     |         | Values                          |
 
 ## Example
 
 ```php title="Controller"
-$model = new Model(false, array(
+$model = new Model(true, array(
     'table'   => 'cms_news',
     'id'      => 'news_id',
     'visible' => 'visible',
 ));
 
-$item = 'title, body';
+$item = 'title, content';
 $data = array(
-    'title' => 'Sample title',
-    'body' => 'Sample body',
+    'title'   => 'Sample title',
+    'content' => 'Sample content',
 );
 
-// Return data is inserted ID
+// Returns the new ID
 $insertedId = $model->insert($item, $data);
+// -> '24'
 ```

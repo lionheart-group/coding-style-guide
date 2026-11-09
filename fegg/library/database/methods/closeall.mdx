@@ -1,0 +1,23 @@
+---
+sidebar_position: 48
+---
+
+# Pdo::closeAll
+
+> Drop every shared connection
+
+## Description
+
+```php
+public static void Pdo::closeAll()
+```
+
+Drops every shared connection. An open transaction is rolled back. The next query opens a new connection. Useful in long-running commands and tests.
+
+## Example
+
+```php title="Controller"
+use Fegg\Database\Pdo;
+
+Pdo::closeAll();
+```

@@ -1,0 +1,28 @@
+---
+sidebar_position: 3
+title: Turnstile::__construct
+---
+
+# Turnstile::\_\_construct
+
+> Set the Turnstile secret key
+
+## Description
+
+```php
+public Turnstile::__construct( string $secret )
+```
+
+## Arguments
+
+| Name    | Data type | Default | Remarks              |
+| ------- | --------- | ------- | -------------------- |
+| $secret | string    |         | Turnstile secret key |
+
+## Example
+
+```php title="Controller"
+use Fegg\Captcha\Turnstile;
+
+$turnstile = new Turnstile('your-turnstile-secret');
+```

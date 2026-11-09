@@ -1,10 +1,10 @@
 ---
-sidebar_position: 13
+sidebar_position: 14
 ---
 
 # Validation::length
 
-> Check character length
+> Check exact character length
 
 ## Description
 
@@ -12,36 +12,35 @@ sidebar_position: 13
 public boolean Validation::length( string $name, mixed $value, numeric $length, [ mixed $code = '' ] )
 ```
 
+Valid when the number of characters (`mb_strlen()` in UTF-8) is exactly `$length`.
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
 ## Arguments
 
-| Name    | Data type | Default | Remarks                     |
-| ------- | --------- | ------- | --------------------------- |
-| $name   | string    |         | Item label                  |
-| $value  | mixed     |         | Check field value           |
-| $length | numeric   |         | Specific length value       |
-| $code   | mixed     | ""      | Error code or Error message |
+| Name    | Data type | Default | Remarks                                                                                                      |
+| ------- | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name   | string    |         | Field name (key of the error message)                                                                        |
+| $value  | mixed     |         | Value to check                                                                                               |
+| $length | numeric   |         | Number of characters                                                                                         |
+| $code   | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
 
 ## Example
 
 ```php title="Controller"
-$validation = $this->getClass('Validation');
+use Fegg\Validation;
 
-// If $value is equal with specific length
-$successName = 'Success Field';
-$successVar  = 'foo';
-$length      = 3;
-$validation->length('success', $successVar, $length, array('@length', $successName, $length));
+$validation = new Validation();
 
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); // -> null
+$validation->length('success', '1234', 4, '<strong>PIN</strong> は4桁で入力してください'); // -> true
+$validation->length('failed', '12345', 4, '<strong>PIN</strong> は4桁で入力してください'); // -> false
 
-// If $value is not equal with specific length
-$failedName = 'Failed Field';
-$failedVar  = 'failed';
-$length     = 3;
-$validation->length('failed', $failedVarm, $length, array('@length', $failedName, $length));
-
-var_dump($validation->isError()); // -> true
 var_dump($validation->getErrorMessage());
-// -> "failed" => ''
+// -> array('failed' => '<strong>PIN</strong> は4桁で入力してください')
 ```
+
+:::note
+
+The default `validation_error_message.php` has no `@length` code. Pass the error message itself, or add the code to your `site/config/validation_error_message.php`.
+
+:::

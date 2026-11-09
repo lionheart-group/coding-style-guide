@@ -1,11 +1,31 @@
 ---
-sidebar_position: 16
+sidebar_position: 19
 ---
 
-# DB_pdo::setLimit
+# Pdo::setLimit
 
-Set limit value
+> Set limit value
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::setLimit( int $limit, [ int $offset = 0 ] )
+```
+
+Adds `Limit offset, limit` to a SELECT.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                 |
+| ------- | --------- | ------- | ----------------------- |
+| $limit  | int       |         | Maximum number of rows  |
+| $offset | int       | 0       | Number of rows to skip  |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// ... Order By post_date DESC Limit 20, 10  (rows 21 to 30)
+$rows = $db->setOrder('post_date DESC')->setLimit(10, 20)->select('cms_news')->execute()->all();
+```

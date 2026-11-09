@@ -1,11 +1,30 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Upload::setMaxFileSize
 
-Set upload file size limitation
+> Set the maximum file size (MB)
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public boolean Upload::setMaxFileSize( numeric $size )
+```
+
+Returns `false` when `$size` is not numeric. The default is `2` (MB). The limits of php.ini (`upload_max_filesize`, `post_max_size`) still apply.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                |
+| ----- | --------- | ------- | ---------------------- |
+| $size | numeric   |         | Maximum file size (MB) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+$upload->setMaxFileSize(32);
+```

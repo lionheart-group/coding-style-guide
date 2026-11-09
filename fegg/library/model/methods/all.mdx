@@ -1,0 +1,31 @@
+---
+sidebar_position: 33
+---
+
+# Model::all
+
+> Get every matching row
+
+## Description
+
+```php
+public array Model::all()
+```
+
+Returns every matching row (an array of associative arrays; an empty array when nothing matches), without paging. [limit](./limit.mdx) caps the number of rows. To show a list page by page, use [find](./find.mdx).
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Every news of category 2
+$records = $model->where('category = ?', 2)->order('post_date', 'desc')->all();
+
+// The 5 newest
+$records = $model->order('post_date', 'desc')->limit(5)->all();
+```

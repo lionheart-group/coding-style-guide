@@ -1,13 +1,30 @@
 ---
-sidebar_position: 45
+sidebar_position: 62
 ---
 
 # Model::unsetRegularUseQuery
 
-> Disable automatic append query for a current query flag
+> Skip the automatic queries for the next query
 
 ## Description
 
 ```php
 public self Model::unsetRegularUseQuery()
+```
+
+For the next query only, skips the queries added for every table (`regular_use` in `database_regular_use_query.php`, see [Configuration](../../database/configuration.mdx)): the `valid = 1` condition of reads, `created` / `modified` / `valid` on insert and `modified` on update. [disabledRegularUseQuery](./disabledregularusequery.mdx) skips them for good.
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table' => 'cms_news',
+    'id'    => 'news_id',
+));
+
+// Include the rows deleted with delete() (valid = 0)
+$records = $model->unsetRegularUseQuery()->all();
+
+// Count a view without changing "modified" (the table has a view_count column)
+$model->unsetRegularUseQuery()->increment('view_count', 1);
 ```

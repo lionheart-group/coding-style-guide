@@ -9,37 +9,38 @@ sidebar_position: 2
 ## Description
 
 ```php
-public void Application::getSession( [ string $name = "" ] )
+public mixed Application::getSession( string $name = '' )
 ```
 
-Get SESSION data. If you omit argument, `getSession` return all SESSION data.
+Get SESSION data. Starts the session if it has not been started. If the key does not exist, returns `''`. If you omit the argument, returns all SESSION data as an array.
 
 ## Arguments
 
-| Name  | Data type | Default | Remarks           |
-| :---- | :-------- | :------ | :---------------- |
-| $name | string    |         | Session param key |
+| Name  | Data type | Default | Remarks                                     |
+| :---- | :-------- | :------ | :------------------------------------------ |
+| $name | string    | ''      | Session key. All SESSION data when omitted  |
 
 ## Example
 
-```php title="Controller - First.php"
+```php title="Controller - First request"
 $this->setSession('foo', 'bar');
 ```
 
-```php title="Controller - Second.php"
-$this->getSession('foo'); // -> bar
+```php title="Controller - Second request"
+echo $this->getSession('foo'); // -> bar
+echo $this->getSession('none'); // -> '' (empty string)
 ```
 
-### Get all session datas
+### Get all session data
 
-If you omit argument, `getSession` return all SESSION data.
+If you omit the argument, `getSession` returns all SESSION data.
 
-```php title="Controller - First.php"
+```php title="Controller - First request"
 $this->setSession('foo', 'bar');
 $this->setSession('baz', 'qux');
 ```
 
-```php title="Controller - Second.php"
+```php title="Controller - Second request"
 var_dump( $this->getSession() );
 ```
 

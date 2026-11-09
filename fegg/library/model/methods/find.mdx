@@ -1,22 +1,36 @@
 ---
-sidebar_position: 23
+sidebar_position: 31
 ---
 
 # Model::find
 
-> Get rows designated count
+> Get one page of rows
 
 ## Description
 
 ```php
-public array Model::find( [ string $options = [] ] )
+public array Model::find( [ array $options = [] ] )
 ```
+
+Returns one page of matching rows (an array of associative arrays; an empty array when nothing matches). The page size is set with [listMax](./listmax.mdx) (default 10) and the page with [current](./current.mdx). `find()` counts the matching rows first, so [getPager](./getpager.mdx) can return the page links afterwards.
+
+To get every row without paging, use [all](./all.mdx). `find()` throws `LogicException` when [limit](./limit.mdx) was set.
 
 ## Arguments
 
-| Name     | Data type | Default | Remarks               |
-| -------- | --------- | ------- | --------------------- |
-| $options | array     | []      | Overwrite the options |
+| Name     | Data type | Default | Remarks                                          |
+| -------- | --------- | ------- | ------------------------------------------------ |
+| $options | array     | []      | Overrides `select`, `list_max` and `current`     |
+
+### Options
+
+| Key        | Remarks                         |
+| ---------- | ------------------------------- |
+| `select`   | Same as [select](./select.mdx)  |
+| `list_max` | Same as [listMax](./listmax.mdx) |
+| `current`  | Same as [current](./current.mdx) |
+
+Any other key throws an `Exception`.
 
 ## Example
 
@@ -27,5 +41,14 @@ $model = new Model(false, array(
     'visible' => 'visible',
 ));
 
-$records = $model->find();
+$this->page['data'] = $model
+    ->where('category = ?', 2)
+    ->order('post_date', 'desc')
+    ->listMax(20)
+    ->current($this->in('p'))
+    ->find();
+$this->page['pager'] = $model->getPager();
+
+// Same as listMax(20)->current($this->in('p'))
+$records = $model->find(array('list_max' => 20, 'current' => $this->in('p')));
 ```

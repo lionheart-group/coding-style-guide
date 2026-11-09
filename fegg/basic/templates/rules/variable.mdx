@@ -4,50 +4,66 @@ sidebar_position: 1
 
 # Variable
 
-> The use of variables in the template
+> Output variables
 
 ## Description
 
-```php
+```html
 {{ $var }}
+{{ $var.key.sub }}
+{{ $var|modifier }}
 ```
 
-When display variables, you should write `{{ $var }}`. And when display array variables, you should separate period "." (ex: `{{ $var.key }}`).
+`{{ $var }}` outputs a variable. Array elements are separated with a period: `$var.key.sub` is `$var['key']['sub']`. Numeric keys and keys that are PHP keywords work too (`$rows.0.name`, `$item.new`, `$site.default`). Square brackets take an expression as the key: `$page.data[$id]`, `$map[$key].name`.
 
-If you want to give variable from Controller to template, you can assignment array value to `$this->page`, and then can display `{{ $page.foo }}` in Temaplte.
+Values from the controller are set in `$this->page` and read as `$page` in the template. The other variables available in a page are listed in [Application::fetchPage](../methods/fetchpage.mdx#template-variables).
 
-After compile, any variables display automatically through htmlSpecialChars method. If you want display raw variables, can display it use `noescape` modifire. Detail is see [modifire](../index.mdx#modifiers).
+The output is escaped with `htmlspecialchars` (`ENT_QUOTES`), which is right for HTML text and quoted attribute values. Other places (URLs, JavaScript) need a modifier: see [Security](../security.mdx). To output trusted HTML as it is, use the `noescape` modifier (see [Modifiers](../modifiers.mdx)).
+
+Nothing is output (and no error is raised) when the variable is not set or is an array. This check is made on the variable itself, before any modifier runs.
+
+Inside a tag, `$a.b` is always array access. To concatenate strings in an expression (`if`, `assign` …), write the PHP operator with spaces: `$a . $b`.
 
 ## Example
 
 ```php title="Controller"
-$this->page['foo'] = 'bar';
-$this->displayPage( 'template' );
+$this->page['title'] = 'Hello';
+$this->page['rows'] = array(
+    array('name' => 'first'),
+);
+$this->displayPage('template');
 ```
 
-```php title="Template"
-{{ $page.foo }}
+```html title="Template"
+{{ $page.title }}
+{{ $page.rows.0.name }}
+{{ $page.missing }}
 ```
 
 ```html title="Output"
-bar
+Hello
+first
+
 ```
 
-### If you use `noescape` modifire.
+### Escaping and `noescape`
 
 ```php title="Controller"
 $this->page['foo'] = '<p>bar</p>';
-$this->displayPage( 'template' );
 ```
 
-```php title="Template"
+```html title="Template"
 {{ $page.foo }}
-
 {{ $page.foo|noescape }}
 ```
 
 ```html title="Output"
 &lt;p&gt;bar&lt;/p&gt;
-
 <p>bar</p>
 ```
+
+:::warning
+
+Use `noescape` only for HTML you trust (CMS rich text written by administrators, messages from your own config). Never use it on request parameters (`$in`) or other user input.
+
+:::

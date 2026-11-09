@@ -1,0 +1,38 @@
+---
+sidebar_position: 7
+---
+
+# Date::getSocialTime
+
+> Get the elapsed time like social media ("10分前")
+
+## Description
+
+```php
+public string Date::getSocialTime( string $date, [ string $timezone = '' ] )
+```
+
+Returns the time between `$date` and now in Japanese: `N日前`, `N時間前`, `N分前` or `N秒前` (the largest unit that is 1 or more). Returns an empty string when `$date` is now.
+
+:::note
+
+When `$timezone` is given, it is set as the default time zone of PHP (`date_default_timezone_set()`) for the rest of the request.
+
+:::
+
+## Arguments
+
+| Name      | Data type | Default | Remarks                               |
+| --------- | --------- | ------- | ------------------------------------- |
+| $date     | string    |         | Date and time                         |
+| $timezone | string    | ''      | Time zone of `$date`, e.g. `Asia/Tokyo` |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Date;
+
+$date = new Date();
+
+echo $date->getSocialTime(date('Y-m-d H:i:s', time() - 600)); // -> "10分前"
+```

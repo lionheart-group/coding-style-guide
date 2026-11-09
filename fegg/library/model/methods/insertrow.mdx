@@ -1,0 +1,44 @@
+---
+sidebar_position: 41
+---
+
+# Model::insertRow
+
+> Insert a row from an associative array
+
+## Description
+
+```php
+public int|string Model::insertRow( array $row )
+```
+
+Inserts one row from `column => value` pairs and returns the new ID (an `int` for integer keys).
+
+- Only the given columns are written; `null` is stored as NULL.
+- `created`, `modified` and `valid` are filled automatically. Give them only to override them.
+- [bind](./addbindparam.mdx) types are applied.
+- Throws `InvalidArgumentException` for an empty array, a column name that is not a plain name, or a value that is an array or an object. A failed insert (for example a duplicate key) throws `Fegg\Database\QueryException`.
+
+## Arguments
+
+| Name | Data type | Default | Remarks                       |
+| ---- | --------- | ------- | ----------------------------- |
+| $row | array     |         | Values (`column => value`)    |
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$id = $model->insertRow(array(
+    'title'     => $this->in('title'),
+    'category'  => 2,
+    'post_date' => '2026-01-15 10:00:00',
+    'image_id'  => null,
+));
+// -> 24
+```

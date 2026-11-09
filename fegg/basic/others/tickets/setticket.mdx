@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Application::setTicket
 
-> Set ticket data and start ticket session
+> Issue a one-time ticket for a form
 
 ## Description
 
@@ -12,33 +12,46 @@ sidebar_position: 1
 public void Application::setTicket( string $name )
 ```
 
-Set ticket data and start ticket session
+Issue a one-time ticket (a random string) for a form. The ticket is stored in the session as `ticket_{$name}`, and the same value is registered as a hidden field named `ticket_{$name}`. Output it in the form with the `{{ hidden }}` template tag.
+
+When the form is submitted, check it with [Application::useTicket](./useticket.mdx). This prevents the same form from being processed twice (reload, double submit) and rejects posts that did not come from your form page.
 
 ## Arguments
 
-| Name  | Data type | Default | Remarks          |
-| :---- | :-------- | :------ | :--------------- |
-| $name | string    |         | Ticket param key |
+| Name  | Data type | Default | Remarks     |
+| :---- | :-------- | :------ | :---------- |
+| $name | string    |         | Ticket name |
 
 ## Example
 
 ```php title="Controller"
-$this->setTicket('foo');
+public function confirm()
+{
+    $this->setTicket('contact');
+    $this->displayPage('contact/confirm');
+}
+```
 
-$foo = $this->getSession('ticket_foo');
-echo $foo;
+```php title="Controller"
+echo $this->getSession('ticket_contact');
 ```
 
 ```html title="Output"
 670f2f1232f30d4d716c1bc9c8a58388
 ```
 
-Once the `setTicket` method is called, it will return a hashed random string and will start a new session with your given parameter as key prefixed with ticket\_, the returned string will be its value. This will also automatically use the `setHidden` method that you can set on form for security evaluation.
-
-```php title="Template"
-{{ hidden }}
+```html title="Template: contact/confirm.tpl"
+<form method="post" action="{{ base }}/contact/result.html">
+    {{ hidden }}
+    <button type="submit">Send</button>
+</form>
 ```
 
 ```html title="Output"
-<input type='hidden' name='ticket_foo' value='670f2f1232f30d4d716c1bc9c8a58388' />
+<form method="post" action="/contact/result.html">
+    <input type="hidden" name="ticket_contact" value="670f2f1232f30d4d716c1bc9c8a58388">
+    <button type="submit">Send</button>
+</form>
 ```
+
+`{{ hidden }}` outputs every value registered with `setHidden()`, so other hidden values appear there too.

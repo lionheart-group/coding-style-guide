@@ -1,0 +1,92 @@
+---
+sidebar_position: 6
+---
+
+# Security
+
+> Escaping by context, and templates as code
+
+## Escaping by context
+
+`{{ $x }}` escapes the value with `htmlspecialchars` (`ENT_QUOTES`). That is right for HTML text and for **quoted** attribute values, but not enough in URLs and JavaScript. Use the modifier that matches the place:
+
+| Where the value goes | Write |
+| --- | --- |
+| HTML text, quoted attribute values | `{{ $x }}` |
+| `<textarea>` | `{{ $x }}` (the browser shows the original text) |
+| `href` / `src` / `action` / `formaction` taking a URL from data | `href="{{ $x\|feggUrl }}"` |
+| Inside `<script>` | `var x = {{ $x\|feggJs\|noescape }};` (no quotes around it) |
+| Event attributes (`onclick` …) | `onclick="go({{ $x\|feggJs }})"` (no quotes around it, keep the escaping) |
+| Trusted HTML (CMS rich text, messages from your config) | `{{ $x\|noescape }}` |
+
+Always quote attribute values (`class="{{ $x }}"`, not `class={{ $x }}`).
+
+### URLs: `feggUrl`
+
+HTML escaping does not stop a `javascript:` URL. `feggUrl` returns `#` for any URL whose scheme is not `http`, `https`, `mailto` or `tel` (also when the scheme is disguised with spaces or control characters). Relative URLs are kept.
+
+```html title="Template"
+<a href="{{ $page.data.link|feggUrl }}">{{ $page.data.link_label }}</a>
+```
+
+URLs built by the CMS modifiers (`getImageUrl`, `getImageUrlFromDB`, `getFileUrl`, `getFileRawUrl`) and values from `$site` (your configuration) do not need it.
+
+### JavaScript: `feggJs`
+
+`feggJs` turns any value (string, number, array, object, null) into a JavaScript literal and encodes `<`, `>`, `&`, `'` and `"`, so the value can neither end the string nor close the `<script>` element. It writes the quotes itself: do not add your own.
+
+```html title="Inside a script element: add noescape"
+<script>
+    var title = {{ $page.title|feggJs|noescape }};
+</script>
+```
+
+```html title="In an event attribute: keep the escaping"
+<button type="button" onclick="showItem({{ $item.id|feggJs }})">Show</button>
+```
+
+In an attribute, the browser decodes the HTML escaping before it runs the JavaScript, so the normal `{{ }}` escaping must stay: never add `noescape` there.
+
+:::warning
+
+An array variable is never output, even with modifiers (see [Variable](./rules/variable.mdx)): `var items = {{ $page.items|feggJs|noescape }};` becomes `var items = ;`. To pass structured data, wrap it in an object in the controller:
+
+```php title="Controller"
+$this->page['map'] = (object) array('items' => $items, 'zoom' => 3);
+```
+
+```html title="Template"
+<script>
+    var map = {{ $page.map|feggJs|noescape }};   // {"items":[...],"zoom":3}
+</script>
+```
+
+:::
+
+### `noescape`
+
+`noescape` outputs the value as it is. Use it only for HTML you trust: CMS rich text written by administrators, validation messages from your config, or the result of `feggJs` inside `<script>`. Never use it on `$in` (request parameters) or anything a visitor can type.
+
+## Templates are code
+
+`{{ code }}`, conditions, `{{ assign }}` and modifiers run arbitrary PHP. Treat templates like PHP files:
+
+- Only developers may edit templates. Never let site users upload or edit `.tpl` files.
+- Never build a template name, an `include` path or a modifier name from user input.
+- A controller that picks the template from its URL arguments must only be reachable through `site/config/route.php`. Implement `Fegg\Http\RouteOnly`, as the skeleton's `Site\Controller\Page` does:
+
+```php title="htdocs/_fegg/site/config/route.php"
+$route['about/'] = 'page/render/about';   // site/template/about.tpl
+```
+
+`/page/render/...` typed in the browser is then a 404.
+
+## What lint checks
+
+`./fegg-cli template:lint` reports outputs that lack the right modifier:
+
+- an output in `<script>` without `feggJs` and `noescape` (scripts with a non-JavaScript `type`, such as `text/template`, are skipped);
+- an output in an `on...` attribute without `feggJs`, or with `noescape`;
+- an output at the start of an `href`, `src`, `action` or `formaction` value without `feggUrl` (or a CMS URL modifier).
+
+Outputs of `$site` values are exempt from these checks. See [Lint and errors](./lint.mdx).

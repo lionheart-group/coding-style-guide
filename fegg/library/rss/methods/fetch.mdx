@@ -4,20 +4,24 @@ sidebar_position: 2
 
 # RSS::fetch
 
-Start loading RSS feed
+> Fetch the next entry of RSS feed
 
 ## Description
 
 ```php
-public self RSS::fetch()
+public mixed RSS::fetch()
 ```
+
+Returns the next entry as an array (see [Entry data](../index.mdx#entry-data)), or `false` when there are no more entries.
 
 ## Example
 
 ```php title="Controller"
-$rss = $this->getClass('Tool/RSS', 'https://example.com/feed');
+use Fegg\Tool\RSS;
+
+$rss = new RSS('https://example.com/feed');
 
 while ($post = $rss->fetch()) {
-    // Use $post
+    // $post['title'], $post['link'], $post['datetime'] ...
 }
 ```

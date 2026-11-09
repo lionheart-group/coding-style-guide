@@ -1,10 +1,10 @@
 ---
-sidebar_position: 8
+sidebar_position: 9
 ---
 
 # Validation::url
 
-> Check valid url character
+> Check URL format
 
 ## Description
 
@@ -12,33 +12,34 @@ sidebar_position: 8
 public boolean Validation::url( string $name, mixed $value, [ mixed $code = '' ] )
 ```
 
+Valid when the value starts with `http://`, `https://` or `ftp://` and contains only the characters allowed in a URL.
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
 ## Arguments
 
-| Name   | Data type | Default | Remarks                     |
-| ------ | --------- | ------- | --------------------------- |
-| $name  | string    |         | Item label                  |
-| $value | mixed     |         | Check field value           |
-| $code  | mixed     | ""      | Error code or Error message |
+| Name   | Data type | Default | Remarks                                                                                                      |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name  | string    |         | Field name (key of the error message)                                                                        |
+| $value | mixed     |         | Value to check                                                                                               |
+| $code  | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
 
 ## Example
 
 ```php title="Controller"
-$validation = $this->getClass('Validation');
+use Fegg\Validation;
 
-// If $value is URL string
-$successName = 'Success Field';
-$successVar  = 'http://example.com';
-$validation->url('success', $successVar, array('@url', $successName));
+$validation = new Validation();
 
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); // -> null
+$validation->url('success', 'https://example.com/', '<strong>URL</strong> の形式が正しくありません'); // -> true
+$validation->url('failed', 'javascript:alert(1)', '<strong>URL</strong> の形式が正しくありません'); // -> false
 
-// If $value is not URL string
-$failedName = 'Failed Field';
-$failedVar  = 'normal text';
-$validation->url('failed', $failedVar, array('@url', $failedName));
-
-var_dump($validation->isError()); // -> true
 var_dump($validation->getErrorMessage());
-// -> "failed" => "<strong>Failed Field</strong> は登録できない形式です"
+// -> array('failed' => '<strong>URL</strong> の形式が正しくありません')
 ```
+
+:::note
+
+The default `validation_error_message.php` has no `@url` code. Pass the error message itself, or add the code to your `site/config/validation_error_message.php`.
+
+:::

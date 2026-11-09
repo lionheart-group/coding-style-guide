@@ -12,29 +12,29 @@ sidebar_position: 8
 public self Model::setBindParam( array $bind )
 ```
 
+Replaces every bind type set before. See [addBindParam](./addbindparam.mdx) for the types and what they do.
+
 ## Arguments
 
-| Name  | Data type | Default | Remarks              |
-| ----- | --------- | ------- | -------------------- |
-| $bind | array     |         | Bind Parameter types |
-
-- Please see [addBindParam](./addbindparam.mdx) about allowed bind type
+| Name  | Data type | Default | Remarks                         |
+| ----- | --------- | ------- | ------------------------------- |
+| $bind | array     |         | Bind types (`column => type`)   |
 
 ## Example
 
 ```php title="Controller"
 $model = new Model();
 $model->setBindParam(array(
-    'news_id'   => 'INTEGER',
+    'category'  => 'INTEGER',
     'image_id'  => 'INTEGER',
     'file_id'   => 'INTEGER',
     'post_date' => 'DATETIME',
 ));
 
-// Same with the following
+// Same as the following
 $model = new Model(false, array(
-    'bind'    => array(
-        'news_id'   => 'INTEGER',
+    'bind' => array(
+        'category'  => 'INTEGER',
         'image_id'  => 'INTEGER',
         'file_id'   => 'INTEGER',
         'post_date' => 'DATETIME',

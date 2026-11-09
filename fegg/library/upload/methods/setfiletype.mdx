@@ -1,11 +1,30 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Upload::setFileType
 
-Set upload file type limitation
+> Set the allowed file types (extensions)
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public boolean Upload::setFileType( array $type )
+```
+
+Replaces the list of allowed extensions. The extensions are compared in lower case. Returns `false` when `$type` is not an array. The default is `array('jpg', 'jpeg', 'png', 'gif')`.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                                  |
+| ----- | --------- | ------- | ---------------------------------------- |
+| $type | array     |         | Allowed extensions, without the leading dot |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+$upload->setFileType(array('pdf', 'docx', 'xlsx'));
+```

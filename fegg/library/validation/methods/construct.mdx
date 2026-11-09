@@ -1,0 +1,33 @@
+---
+sidebar_position: 1
+title: Validation::__construct
+---
+
+# Validation::\_\_construct
+
+> Create the validator and load the error messages
+
+## Description
+
+```php
+public Validation::__construct( [ string $languageCode = '' ] )
+```
+
+Loads the error messages from `validation_error_message.php` (see [Configuration](../configuration.mdx)). The file in `site/config/` is used when it exists, otherwise the core's one.
+
+## Arguments
+
+| Name          | Data type | Default | Remarks                                                                                                    |
+| ------------- | --------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| $languageCode | string    | ''      | Language code / if set, `config/{languageCode}/validation_error_message.php` is used (the file must exist) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+// English error messages from config/en/validation_error_message.php
+$validationEn = new Validation('en');
+```

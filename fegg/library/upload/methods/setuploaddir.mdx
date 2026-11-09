@@ -1,11 +1,30 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Upload::setUploadDir
 
-Set upload directory
+> Set the upload directory
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public boolean Upload::setUploadDir( string $dir )
+```
+
+The directory is created (recursively) when it does not exist. Returns `true` when the directory is writable, otherwise `false` and the directory is not set.
+
+## Arguments
+
+| Name | Data type | Default | Remarks          |
+| ---- | --------- | ------- | ---------------- |
+| $dir | string    |         | Upload directory |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+$upload->setUploadDir($this->config['upload_dir']['path']);
+```

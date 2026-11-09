@@ -1,0 +1,43 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Providing some functions for calculating dates
+
+## How to use
+
+Import `Fegg\Tool\Date` and create it with `new`.
+
+```php title="Controller"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Tool\Date;
+
+class Event extends Controller
+{
+    public function index()
+    {
+        $date = new Date();
+
+        $this->page['deadline'] = $date->addDay(date('Y-m-d H:i:s'), 7, 'Y/m/d');
+        $this->page['last_day'] = $date->getTheLastday(date('Y-m-d'));
+
+        $this->displayPage('event');
+    }
+}
+```
+
+## Date formats
+
+The `$dateTime` arguments accept `YYYY-MM-DD HH:MM:SS` and its shorter forms, with or without the separators (`2024`, `2024/04`, `2024-04-01`, `20240401`, `2024/4/1 9:30`), see [Date::makeupDateFormat](./methods/makeupdateformat.mdx). Other formats are parsed with `strtotime()`. [Date::addDay](./methods/addday.mdx), [Date::addMinute](./methods/addminute.mdx), [Date::addMonth](./methods/addmonth.mdx), [Date::getTheLastday](./methods/getthelastday.mdx) and [Date::getDiff](./methods/getdiff.mdx) (in days) throw `InvalidArgumentException` when the value cannot be parsed.
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

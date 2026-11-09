@@ -12,23 +12,24 @@ sidebar_position: 10
 public array Model::getBindParam()
 ```
 
+The types are returned in upper case.
+
 ## Example
 
 ```php title="Controller"
 $model = new Model(false, array(
-    'bind'    => array(
-        'news_id'   => 'INTEGER',
+    'bind' => array(
+        'category'  => 'integer',
         'post_date' => 'DATETIME',
     ),
 ));
 
-$bindParam = $model->getBindParam();
-var_dump($bindParam);
+var_dump($model->getBindParam());
 ```
 
 ```php title="Output"
 array(2) {
-    ["post_id"]=> string(7) "INTEGER"
-    ["post_date"]=> string(8) "DATETIME"
+  ["category"]=> string(7) "INTEGER"
+  ["post_date"]=> string(8) "DATETIME"
 }
 ```

@@ -1,11 +1,32 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
-# DB_pdo::insert
+# Pdo::insert
 
-Set insert query
+> Set insert query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::insert( string $table )
+```
+
+Builds an INSERT on `$table` from the values set with [setValues](./setvalues.mdx) (or [setItem](./setitem.mdx)). `created`, `modified` and `valid` are added unless given (see [Configuration](../configuration.mdx)). Run it with [execute](./execute.mdx) and read the new ID with [getLastIndexId](./getlastindexid.mdx).
+
+## Arguments
+
+| Name   | Data type | Default | Remarks           |
+| ------ | --------- | ------- | ----------------- |
+| $table | string    |         | Target table name |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Insert Into "cms_news" ("title", "category", modified, created, valid) Values (?, ?, ?, ?, ?)
+$db->setValues(array('title' => 'Sample', 'category' => 2))->insert('cms_news')->execute();
+$id = $db->getLastIndexId();
+// -> '24'
+```

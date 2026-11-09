@@ -8,232 +8,285 @@ sidebar_position: 2
 
 ### What is a Controller?
 
-Controllers are the basis of the application, as it determines how requests are being handled in HTTP. A Controller is a class file that is named associated with a URI.
-
-URL and Controller are closely related. (see [URL](./url.mdx))
+A controller is the class that handles a request. Fegg picks the controller class and its method from the URL (see [URL](./url.mdx)).
 
 ```
-http://exaple.com/foo/bar
+https://example.com/foo/bar/
 ```
 
-In the example above, the framework will try to find a `bar` function in the controller named **Foo.php** and load it.
+For this URL, Fegg loads **`htdocs/_fegg/site/controller/Foo.php`** and calls its `bar()` method:
 
-If the URL accessed from the given example, it would load in **code/application/Foo.php** given that this file exists.
-
-```php title="code/application/Foo.php"
+```php title="htdocs/_fegg/site/controller/Foo.php"
 <?php
+namespace Site\Controller;
 
-class Foo extends Application
+defined('FEGG_CORE_DIR') || exit;
+
+class Foo extends Controller
 {
-    function bar(){
-        //process here...
+    public function bar()
+    {
+        // process here...
     }
 }
 ```
 
-### Class
+### File, namespace and class
 
-You should have the same name class and file name, and extends `Application` class.
+Every controller file follows the same rules:
 
-```php title="code/application/Controller.php"
+- The file is in `htdocs/_fegg/site/controller/`, and the file name is the class name (`Foo.php` declares `class Foo`).
+- The namespace is `Site\Controller`. **Sub directories are namespaces**: `site/controller/Cms/News.php` declares `namespace Site\Controller\Cms;` and `class News`.
+- The first line after the namespace is `defined('FEGG_CORE_DIR') || exit;`. It is required in every PHP file under `htdocs/_fegg/`: it stops the file from running when someone requests it directly by URL.
+- The class extends `Controller`, the project's base class.
+
+```php title="htdocs/_fegg/site/controller/Cms/News.php"
 <?php
+namespace Site\Controller\Cms;
 
-class Controller extends Application
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Cms\Helper;
+use Fegg\Model;
+use Site\Controller\Controller; // the base class is in the parent namespace
+
+class News extends Controller
 {
-
+    // ...
 }
 ```
+
+### Base classes
+
+```
+Fegg\Application                        core/src/Application.php
+└ Fegg\Controller\Controller (abstract)  core/controller/Controller.php
+  └ Site\Controller\Controller (abstract) site/controller/Controller.php
+    └ Site\Controller\Index, News, Cms\News, ...
+```
+
+- `Fegg\Application` provides the methods you call with `$this->...`: [request parameters](./parameters/index.mdx), templates (`displayPage()`, ...), `redirect()`, `loadConfig()`, ...
+- `Fegg\Controller\Controller` (core) loads `site/config/category_info.php` and `site/config/site_info.php` in its `__init()`, and declares the properties `$_model` and `$_lh` used by the CMS.
+- `Site\Controller\Controller` (site) is yours. Put what every page of the site needs here (shared assigns, authentication, ...). It replaces `MyApplication` of Fegg 4.
+
+```php title="htdocs/_fegg/site/controller/Controller.php"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+abstract class Controller extends \Fegg\Controller\Controller
+{
+    public function __init()
+    {
+        parent::__init();
+
+        // Shared by every page of the site
+        $this->page['year'] = date('Y');
+    }
+}
+```
+
+Abstract classes are never called from a URL.
 
 ### Constructor
 
-You sould call parent(`Application`) class constructor.
+A constructor is optional. If you write one, call the parent constructor: it loads the settings, sets up error handling and the language.
 
-```php title="code/application/Controller.php"
-<?php
-
-class Controller extends Application
+```php
+public function __construct()
 {
-    /**
-     * Constructor
-     */
-    function __construct()
-    {
-        parent::__construct();
-    }
+    parent::__construct();
 }
 ```
 
 ### Initialize
 
-Fegg have a Initialize method apart from constructor.
+`__init()` is called after the constructor, before the method of the URL. Because the instance already exists, you can use the `Application` methods through `$this` (for example `$this->in()`), which you should not do in the constructor.
 
-It is `__init()` method that called after the constructor.
+**Always call `parent::__init()` first.** Otherwise `site_info.php` and `category_info.php` are not loaded.
 
-```php title="code/application/Controller.php"
-<?php
-
-class Controller extends Application
+```php
+public function __init()
 {
-    /**
-     * Initialize
-     */
-    function __init()
-    {
-        // inityalize process
-    }
+    parent::__init();
+
+    $this->_lh = new Helper();
+    $this->_model = new Model(false, array(
+        'table'   => 'cms_news',
+        'id'      => 'news_id',
+        'visible' => 'visible',
+    ));
 }
 ```
 
-The difference between \_\_init and constructor is that \_\_init is run after make self instance, so **it can use Application method by** `$this`.
-
 :::note
 
-You can omit a initialize.
+You can omit `__init()` when the controller does not need it. The parent `__init()` is then called automatically.
 
 :::
 
 ### Method
 
-Run a second segment name method in URL.
+The second segment of the URL is the method name.
 
-```php title="code/application/Controller.php"
-<?php
-
-class Controller extends Application
+```php
+// Called by https://example.com/foo/bar/
+public function bar()
 {
-    // Run this function by http://example.com/controller/foo
-    function foo()
-    {
-        // any process
-    }
+    // any process
 }
 ```
 
-If second segment is empty and you don’t edit basic settings, run the `index()` method.
+If the second segment is empty, `index()` is called.
 
-```php title="code/application/Controller.php"
-<?php
-
-class Controller extends Application
+```php
+// Called by https://example.com/foo/ or https://example.com/foo/index/
+public function index()
 {
-    // Run this function by http://example.com/controller/index
-    //   or http://example.com/controller/
-    function index()
-    {
-        // any process
-    }
+    // any process
 }
 ```
 
-:::note
+Every **public** method can be called from a URL. Make helper methods `private` or `protected` so that they cannot.
 
-See [Initial settings](../first/config.mdx) about initial method name.
-
-:::
-
-If you want to make a secret method, you should add **underbar(\_)** head of method name.
-
-```php title="code/application/Controller.php"
-// http://example.com/controller/_secret
-//   -> This URL don't call _secret() method
-
-<?php
-
-class Controller extends Application
+```php
+// https://example.com/foo/_common/ does NOT run this method
+private function _common()
 {
-    // This method is secret from URL dispatcher
-    function _secret()
-    {
-        // any process
-    }
+    // shared process
 }
 ```
+
+If the method does not exist, the 404 page is shown.
 
 ### Arguments
 
-Third segment later are passed to a method.
+The segments after the method are passed to the method as strings.
 
-```php title="code/application/Controller.php"
-<?php
-
-class Controller extends Application
+```php
+// $param1 is "bar" and $param2 is "baz"
+//   for https://example.com/foo/show/bar/baz/
+public function show($param1 = '', $param2 = '')
 {
-    // $param will be assigned "bar"
-    //   by http://example.com/controller/foo/bar
-    function foo( $param )
+    echo $param1; // bar
+    echo $param2; // baz
+}
+```
+
+Give the arguments a default value: a visitor can always open the URL with fewer segments, and a missing required argument is an error (HTTP 500).
+
+## Using other classes
+
+Classes are autoloaded. Import them with `use`, or write the full name with a leading `\`, and create them with `new`:
+
+```php
+use Fegg\Cms\Helper;
+use Fegg\Model;
+use Fegg\Validation;
+
+$this->_lh   = new Helper('news');
+$validation  = new Validation();
+$upload      = new \Fegg\Tool\Upload();
+$cart        = new \Site\Shop\Cart();   // htdocs/_fegg/site/src/Shop/Cart.php
+```
+
+Inside a namespace, **prefix PHP's own classes and constants with `\`**. Without it, PHP looks for the class in the current namespace (`Site\Controller\Exception`) and fails.
+
+```php
+throw new \Exception('Something went wrong');
+$date = new \DateTime('now');
+$statement->bindValue(1, $id, \PDO::PARAM_INT);
+```
+
+Catch Fegg's exceptions by their full name, for example `\Fegg\Database\QueryException` or `\Fegg\Template\TemplateException`.
+
+:::note
+
+`$this->getClass()` still works for Fegg 4 code, but it is deprecated (each call writes `Fegg deprecated: ...` to the PHP error log) and will be removed in Fegg 6.
+
+:::
+
+## Extending a core controller
+
+The CMS screens provided by the core (`/cms/login/`, `/cms/media/`, `/cms/image/`, ...) are in `htdocs/_fegg/core/controller/Cms/`. Do not edit them. To change one, put a class with the same name in `site/controller/Cms/` that extends the core class, and write only the methods you change. The site class is found first, so it replaces the core one for its URL.
+
+```php title="htdocs/_fegg/site/controller/Cms/Media.php"
+<?php
+namespace Site\Controller\Cms;
+
+defined('FEGG_CORE_DIR') || exit;
+
+// Changes only the /cms/media/ list
+class Media extends \Fegg\Controller\Cms\Media
+{
+    public function index($message = null)
     {
-        echo $param; // bar
+        // project-specific processing
+        parent::index($message);
     }
 }
 ```
 
-Third segment later are all passed.
-
-```php title="code/application/Controller.php"
-<?php
-
-class Controller extends Application
-{
-    // $param1 will be "bar" and $param2 will be "baz"
-    //   by http://example.com/controller/foo/bar/baz
-    function foo( $param1, $param2 )
-    {
-        echo $param1; // bar
-        echo $param2; // baz
-    }
-}
-```
+Keep the parent method's signature (the same arguments with the same defaults).
 
 ## Template of Controller class
 
-```php title="code/application/Index.php"
+```php title="htdocs/_fegg/site/controller/Index.php"
 <?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Cms\Helper;
+use Fegg\Model;
+
 /**
  * Index Class
- * // This file name should be Index.php
+ * This file name should be Index.php
  */
-class Index extends Application
+class Index extends Controller
 {
     /**
-     * Constructor
+     * Initialize
+     * Runs after the constructor, so Application methods such as $this->in() can be used.
+     * Optional. Always call parent::__init() first.
      */
-    function __construct() {
-        parent::__construct();
+    public function __init()
+    {
+        parent::__init();
+
+        $this->_lh = new Helper();
+        $this->_model = new Model(false, array(
+            'table'   => 'cms_news',
+            'id'      => 'news_id',
+            'visible' => 'visible',
+        ));
     }
 
     /**
-     * Initialize progress
-     * This method run after making self instance.
-     * So, it can use Application class method, for example "$this->in()".
-     * It is the difference between __init and construct.
-     * If this method is nothing, initializing progress is omitted.
+     * Shared process
+     * Private, so it cannot be called from a URL.
      */
-    function __init()
+    private function _common()
     {
     }
 
     /**
-     * Common progress
-     * If you add the underbar(_) head of method name, it be internal method.
-     * So, it can't called by URL dispatcher.
+     * Default page
+     * Called when the URL has no method segment.
      */
-    function _common()
+    public function index()
     {
-    }
-
-    /**
-     * Default page display method
-     * If you input only class name URL, run this method.
-     * It is not necessary, but recommend be that default page display method name is index.
-     */
-    function index()
-    {
-        // Common progress
         $this->_common();
 
-        // Display compiled template
+        $this->page['news'] = $this->_model
+            ->order('post_date', 'desc')
+            ->limit(5)
+            ->all();
+
+        // Display the compiled template site/template/index.tpl
         $this->displayPage('index');
     }
 }
-/* End Of File: Index.php */
 ```

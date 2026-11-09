@@ -1,13 +1,29 @@
 ---
-sidebar_position: 47
+sidebar_position: 64
 ---
 
 # Model::disabledRegularUseQuery
 
-> Disable automatic append query flag
+> Skip the automatic queries for good
 
 ## Description
 
 ```php
 public self Model::disabledRegularUseQuery()
+```
+
+Skips every automatic query (for every table and for this table, see [Configuration](../../database/configuration.mdx)) for every later query of this model instance: reads also return rows with `valid = 0`, and inserts and updates no longer fill `created`, `modified` and `valid`. To skip them for one query only, use [unsetRegularUseQuery](./unsetregularusequery.mdx).
+
+## Example
+
+```php title="Controller"
+// A table without valid / created / modified columns
+$model = new Model(true, array(
+    'table' => 'sample_log',
+    'id'    => 'log_id',
+));
+$model->disabledRegularUseQuery();
+
+$records = $model->all();
+$model->insertRow(array('message' => 'Hello'));
 ```

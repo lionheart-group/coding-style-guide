@@ -1,10 +1,10 @@
 ---
-sidebar_position: 17
+sidebar_position: 18
 ---
 
 # Validation::katakana
 
-> Check Katakana chracter for Japanese language
+> Check Katakana characters for Japanese language
 
 ## Description
 
@@ -12,55 +12,32 @@ sidebar_position: 17
 public boolean Validation::katakana( string $name, mixed $value, [ mixed $code = '', boolean $zenkakuFlag = false ] )
 ```
 
+By default the value must contain only **half-width** Katakana and half-width symbols (`｡` to `ﾟ`), spaces, `(`, `)` and `.`. With `$zenkakuFlag` it must contain only **full-width** Katakana (`ァ`-`ヶ`), `ー` and full-width spaces.
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
 ## Arguments
 
-| Name         | Data type | Default | Remarks                                |
-| ------------ | --------- | ------- | -------------------------------------- |
-| $name        | string    |         | Item label                             |
-| $value       | mixed     |         | Check field value                      |
-| $code        | mixed     | ""      | Error code or Error message            |
-| $zenkakuFlag | boolean   | false   | Required full-width Katakana only flag |
+| Name         | Data type | Default | Remarks                                                                                                      |
+| ------------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name        | string    |         | Field name (key of the error message)                                                                        |
+| $value       | mixed     |         | Value to check                                                                                               |
+| $code        | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
+| $zenkakuFlag | boolean   | false   | `true`: full-width Katakana only / `false`: half-width Katakana only                                         |
 
 ## Example
 
 ```php title="Controller"
-$validation = $this->getClass('Validation');
+use Fegg\Validation;
 
-// If $value has only Japanese Katakana
-$successName = 'Success Field';
-$successVar  = 'テスト';
-$validation->katakana('success', $successVar, array('@katakana', $successName));
+$validation = new Validation();
 
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); // -> null
+$validation->katakana('success', 'ﾃｽﾄ', array('@katakana', 'Kana')); // -> true
+$validation->katakana('failed', 'テスト', array('@katakana', 'Kana')); // -> false
 
-// If $value has not only Japanese Katakana
-$failedName = 'Failed Field';
-$failedVar  = 'てすと';
-$validation->katakana('failed', $failedVar, array('@katakana', $failedName));
-
-var_dump($validation->isError()); // -> true
 var_dump($validation->getErrorMessage());
-// -> "failed" => "<strong>Failed Field</strong> はカタカナで入力してください"
-```
+// -> array('failed' => '<strong>Kana</strong> はカタカナで入力してください')
 
-### Optional Flag
-
-```php title="Controller"
-// If $value has half-width Katakana with disabled $zenkakuFlag
-$successName = 'Success Field';
-$successVar  = 'ﾃｽﾄ';
-$validation->katakana('success', $successVar, array('@katakana', $successName));
-
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); // -> null
-
-// If $value has half-width Katakana with enabled $zenkakuFlag
-$failedName = 'Failed Field';
-$failedVar  = 'ﾃｽﾄ';
-$validation->katakana('failed', $failedVar, array('@katakana', $failedName), true);
-
-var_dump($validation->isError()); // -> true
-var_dump($validation->getErrorMessage());
-// -> "failed" => "<strong>Failed Field</strong> はカタカナで入力してください"
+// Full-width Katakana
+$validation->katakana('furi', 'テスト', array('@katakana', 'Furigana'), true); // -> true
 ```

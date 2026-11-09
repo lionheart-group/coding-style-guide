@@ -1,11 +1,31 @@
 ---
-sidebar_position: 33
+sidebar_position: 37
 ---
 
-# DB_pdo::simpleArray
+# Pdo::simpleArray
 
-Get the specific column's key and value array of executed select query
+> Get the specific column's key and value array of executed select query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public array Pdo::simpleArray( string $keyName, string $valueName )
+```
+
+Returns `key => value` pairs built from two columns of every row of the last SELECT, for example for `<select>` options.
+
+## Arguments
+
+| Name       | Data type | Default | Remarks                    |
+| ---------- | --------- | ------- | -------------------------- |
+| $keyName   | string    |         | Column to use as the key   |
+| $valueName | string    |         | Column to use as the value |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$titles = $db->setItem('news_id, title')->select('cms_news')->execute()->simpleArray('news_id', 'title');
+// -> array(1 => 'A', 2 => 'B', 3 => 'C')
+```

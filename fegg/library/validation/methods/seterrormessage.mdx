@@ -1,36 +1,35 @@
 ---
-sidebar_position: 19
+sidebar_position: 21
 ---
 
 # Validation::setErrorMessage
 
-> Set Error message
+> Set an error message
 
 ## Description
 
 ```php
-public boolean Validation::setErrorMessage( string $name, string $message )
+public void Validation::setErrorMessage( string $name, string $message )
 ```
+
+Marks `$name` as an error with `$message` as it is. Error codes are not resolved, and an existing error of `$name` is replaced.
 
 ## Arguments
 
-| Name     | Data type | Default | Remarks       |
-| -------- | --------- | ------- | ------------- |
-| $name    | string    |         | Item label    |
-| $message | string    |         | Error message |
+| Name     | Data type | Default | Remarks                               |
+| -------- | --------- | ------- | ------------------------------------- |
+| $name    | string    |         | Field name (key of the error message) |
+| $message | string    |         | Error message                         |
 
 ## Example
 
 ```php title="Controller"
-$validation = $this->getClass('Validation');
+use Fegg\Validation;
 
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); // -> null
+$validation = new Validation();
 
-// Set error message
-$validation->setErrorMessage('failed', 'Something Error');
+$validation->setErrorMessage('mail', 'This email address is already registered');
 
-var_dump($validation->isError()); // -> true
 var_dump($validation->getErrorMessage());
-// -> "failed" => "Something Error"
+// -> array('mail' => 'This email address is already registered')
 ```

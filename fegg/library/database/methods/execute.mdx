@@ -1,11 +1,28 @@
 ---
-sidebar_position: 28
+sidebar_position: 32
 ---
 
-# DB_pdo::execute
+# Pdo::execute
 
-Execute built query
+> Execute built query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::execute()
+```
+
+Builds the query (when a build method such as [select](./select.mdx) was called) or takes the one set with [setQuery](./setquery.mdx), and runs it. SELECT and PRAGMA queries run on a slave and their rows are read with [all](./all.mdx) or [one](./one.mdx); other queries run on the master. Inside a transaction every query runs on the transaction's connection. Afterwards the query being built is forgotten (see [unsetInitQueryFlag](./unsetinitqueryflag.mdx)).
+
+Throws `Fegg\Database\QueryException` when the connection or the query fails. Its message ends with the SQL with the values filled in.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$rows = $db->setWhere('category = ?', 2)->select('cms_news')->execute()->all();
+
+$db->setValues(array('title' => 'Sample'))->insert('cms_news')->execute();
+$id = $db->getLastIndexId();
+```

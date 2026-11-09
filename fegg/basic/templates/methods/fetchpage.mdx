@@ -1,10 +1,10 @@
 ---
-sidebar_position: 3
+sidebar_position: 2
 ---
 
 # Application::fetchPage
 
-> Return compiled template with declared controller and template variables into a string
+> Return a page rendered with the standard template variables as a string
 
 ## Description
 
@@ -12,62 +12,64 @@ sidebar_position: 3
 public string Application::fetchPage( string $template )
 ```
 
-Returns the [Application::displayTemplate](./displaytemplate.mdx) result into string after including the assigned variables in controller class that can be use in template file.
+Collects the standard template variables (below), renders the template with [Application::fetchTemplate](./fetchtemplate.mdx) and returns the result instead of outputting it. [Application::displayPage](./displaypage.mdx) uses it.
+
+Use it when you need the page as a string (to post-process it, or to output it without the `X-Frame-Options: DENY` header of `displayPage`).
 
 ## Arguments
 
-| Name      | Data type | Default | Remarks            |
-| --------- | --------- | ------- | ------------------ |
-| $template | string    |         | Template file name |
+| Name      | Data type | Default | Remarks |
+| --------- | --------- | ------- | ------- |
+| $template | string    |         | Template name relative to the template root, without `.tpl` |
 
-## Appended arguments when compiling
+## Template variables
 
-- **className**
-  - Class name when running
-- **config**
-  - Basic configuration
-- **languageCode**
-  - Language code
-- **site**
-  - Site parameters, assigned from [Template helper (Application::setSiteinfo)](#)
-- **page**
-  - Assigned from Controller class
-- **in**
-  - Requested parameters ($\_POST / $\_GET)
-- **hiddenForTemplate**
-  - Input hidden parameters, assigned from [Template helper (Application::setHidden)](#)
-- **session**
-  - Session data
-- **cookie**
-  - Cookie data
+| Variable | Content |
+| --- | --- |
+| `$page` | `$this->page` of the controller: the page data |
+| `$site` | Site information: `site/config/site_info.php` (loaded by the base controller) plus values set with [setSiteinfo](../helpers/setsiteinfo.mdx) |
+| `$in` | Request parameters, `$_GET` and `$_POST` (`$this->in()`). Not escaped: always output them with the default escaping |
+| `$config` | Loaded config files (`$this->config`) |
+| `$session` | Session data. `fetchPage` starts the session and stores `session_id` and `session_name` in it |
+| `$cookie` | Cookie data |
+| `$className` | Controller class name without namespace (`News`) |
+| `$languageCode` | Current language code |
+| `$define` | User-defined PHP constants |
+| `$hiddenForTemplate` | Values set with [setHidden](../helpers/sethidden.mdx), printed by the `{{ hidden }}` tag |
 
 ## Example
 
-```php title="code/application/Foo.php"
-// URI: http://example.com/foo/bar/?get=param
-
+```php title="htdocs/_fegg/site/controller/Foo.php"
 <?php
+namespace Site\Controller;
 
-class Foo extends Application
+defined('FEGG_CORE_DIR') || exit;
+
+class Foo extends Controller
 {
-    function bar(){
-      $this->page['baz'] = 'qux';
-      $content = $this->fetchPage( 'foo/bar' );
-      echo $content;
+    // URL: https://example.com/foo/bar/?get=param
+    public function bar()
+    {
+        $this->page['baz'] = 'qux';
+        echo $this->fetchPage('foo/bar');
     }
 }
 ```
 
-```html title="code/template/foo/bar.tpl"
-Baz params : {{ $page.baz }}
-$_GET[get] params : {{ $in.get }}
-Controller name : {{ $classsName }}
+```html title="htdocs/_fegg/site/template/foo/bar.tpl"
+Baz param : {{ $page.baz }}
+$_GET[get] param : {{ $in.get }}
+Controller name : {{ $className }}
 ```
 
 ```html title="Output"
-Baz params : qux
-$_GET[get] params : param
-Controller name : foo
+Baz param : qux
+$_GET[get] param : param
+Controller name : Foo
 ```
 
-After assigning arguments for template, run the [Application::fetchTemplate](./fetchtemplate.mdx) method.
+:::note
+
+The site-wide Basic authentication (`basic_auth_scope = 1`) is checked by `displayPage()`, not by `fetchPage()` called on its own.
+
+:::

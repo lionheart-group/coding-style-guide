@@ -4,7 +4,7 @@ sidebar_position: 6
 
 # Trim::create
 
-Save the image to specified location
+> Save the image to the output path
 
 ## Description
 
@@ -12,10 +12,14 @@ Save the image to specified location
 public void Trim::create()
 ```
 
+Saves the resized image to the output path given to [Trim::setImage](./setimage.mdx). Missing directories are created. JPEG images are saved with quality 90.
+
 ## Example
 
 ```php title="Controller"
-$trim = $this->getClass('Tool/RSS', 'https://example.com/feed');
+use Fegg\Tool\Trim;
+
+$trim = new Trim();
 $trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
 
 $trim->resizeTrim(300, 300, 'm');

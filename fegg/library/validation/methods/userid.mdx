@@ -1,44 +1,45 @@
 ---
-sidebar_position: 10
+sidebar_position: 11
 ---
 
-# Validation::userId
+# Validation::userid
 
-> Check allowed character for UserID (- \_ . 0-9)
+> Check user ID format
 
 ## Description
 
 ```php
-public boolean Validation::userId( string $name, mixed $value, [ mixed $code = '' ] )
+public boolean Validation::userid( string $name, mixed $value, [ mixed $code = '' ] )
 ```
+
+Valid when the value contains only `0-9`, `a-z`, `A-Z`, `-`, `_` and `.`.
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
 
 ## Arguments
 
-| Name   | Data type | Default | Remarks                     |
-| ------ | --------- | ------- | --------------------------- |
-| $name  | string    |         | Item label                  |
-| $value | mixed     |         | Check field value           |
-| $code  | mixed     | ""      | Error code or Error message |
+| Name   | Data type | Default | Remarks                                                                                                      |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name  | string    |         | Field name (key of the error message)                                                                        |
+| $value | mixed     |         | Value to check                                                                                               |
+| $code  | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
 
 ## Example
 
 ```php title="Controller"
-$validation = $this->getClass('Validation');
+use Fegg\Validation;
 
-// If $value is UserID string
-$successName = 'Success Field';
-$successVar  = 'user_id123456';
-$validation->userId('success', $successVar, array('@userid', $successName));
+$validation = new Validation();
 
-var_dump($validation->isError()); // -> false
-var_dump($validation->getErrorMessage()); // -> null
+$validation->userid('success', 'john.doe_01', '<strong>User ID</strong> は登録できない形式です'); // -> true
+$validation->userid('failed', 'john doe', '<strong>User ID</strong> は登録できない形式です'); // -> false
 
-// If $value is not UserID string
-$failedName = 'Failed Field';
-$failedVar  = 'not*user_id/123456';
-$validation->userId('failed', $failedVar, array('@userid', $failedName));
-
-var_dump($validation->isError()); // -> true
 var_dump($validation->getErrorMessage());
-// -> "failed" => "<strong>Failed Field</strong> は登録できない形式です"
+// -> array('failed' => '<strong>User ID</strong> は登録できない形式です')
 ```
+
+:::note
+
+The default `validation_error_message.php` has no `@userid` code. Pass the error message itself, or add the code to your `site/config/validation_error_message.php`.
+
+:::

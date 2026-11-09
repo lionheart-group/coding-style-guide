@@ -1,11 +1,31 @@
 ---
-sidebar_position: 10
+sidebar_position: 11
 ---
 
-# DB_pdo::alterRenameTo
+# Pdo::alterRenameTo
 
-Set create alter rename to query
+> Set create alter rename to query
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public self Pdo::alterRenameTo( string $table, string $rename )
+```
+
+Builds `Alter Table "table" RENAME TO "rename"`.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks         |
+| ------- | --------- | ------- | --------------- |
+| $table  | string    |         | Table name      |
+| $rename | string    |         | New table name  |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Alter Table "sample" RENAME TO "sample_old"
+$db->alterRenameTo('sample', 'sample_old')->execute();
+```

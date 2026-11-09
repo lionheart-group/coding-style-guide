@@ -10,36 +10,58 @@ title: Model::__construct
 ## Description
 
 ```php
-public self Model::__construct( [ boolean $is_admin = false, array $options = [] ] )
+public Model::__construct( [ boolean $is_admin = false, array $options = [] ] )
 ```
+
+Throws `InvalidArgumentException` when `table`, `id` or `visible` is not a plain name, or when a `bind` type is unknown.
 
 ## Arguments
 
-| Name | Data type | Default | Remarks |
-| --- | --- | --- | --- |
-| $is_admin | boolean | false | Flag for displaying record that disabled visibility flag (For Admin page) |
-| $options | array | [] | Model options |
+| Name      | Data type | Default | Remarks                                                                                             |
+| --------- | --------- | ------- | --------------------------------------------------------------------------------------------------- |
+| $is_admin | boolean   | false   | `false`: reads only return rows whose `visible` column is 1 (public pages). `true`: every row (CMS) |
+| $options  | array     | []      | Model options (below)                                                                               |
+
+### Options
+
+| Key       | Data type | Remarks                                                                                           |
+| --------- | --------- | ------------------------------------------------------------------------------------------------- |
+| `table`   | string    | Table name. Same as [setTableName](./settablename.mdx)                                            |
+| `id`      | string    | Primary key column. Same as [setPrimary](./setprimary.mdx)                                        |
+| `visible` | string    | Public flag column (optional). Same as [setVisible](./setvisible.mdx)                             |
+| `bind`    | array     | Column types cast on write (`column => type`). Same as [setBindParam](./setbindparam.mdx)         |
+
+`table`, `id` and `visible` must be plain names: letters, digits and `_`, optionally `table.column`. Other keys are ignored.
 
 ## Example
 
 ```php title="Controller"
-// For client page (Don't display hidden record)
+use Fegg\Model;
+
+// For public pages (rows whose visible column is 0 are not returned)
 $model = new Model(false, array(
-    // Operate to `cms_news` table
+    // Operate on the `cms_news` table
     'table'   => 'cms_news',
 
-    // Primary ID is `id`
+    // Primary key is `news_id`
     'id'      => 'news_id',
 
-    // Visibility flag is `visible`
+    // Public flag is `visible`
     'visible' => 'visible',
 
-    // Bind columns data type
+    // Cast these columns on insert and update
     'bind'    => array(
-        'news_id'   => 'INTEGER',
+        'category'  => 'INTEGER',
         'image_id'  => 'INTEGER',
         'file_id'   => 'INTEGER',
         'post_date' => 'DATETIME',
     ),
+));
+
+// For CMS pages (every row, visible or not)
+$admin = new Model(true, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
 ));
 ```

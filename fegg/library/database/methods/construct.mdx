@@ -1,0 +1,31 @@
+---
+sidebar_position: 1
+title: Pdo::__construct
+---
+
+# Pdo::\_\_construct
+
+> Pdo class constructor
+
+## Description
+
+```php
+public Pdo::__construct( [ string $env = '' ] )
+```
+
+Loads `database_config.php` and `database_regular_use_query.php` (see [Configuration](../configuration.mdx)). Nothing is connected until the first query; connections are shared by every instance.
+
+## Arguments
+
+| Name | Data type | Default | Remarks                                                                                              |
+| ---- | --------- | ------- | ---------------------------------------------------------------------------------------------------- |
+| $env | string    | ''      | Config sub directory: `'name'` reads `name/database_config.php` and `name/database_regular_use_query.php` |
+
+## Example
+
+```php title="Controller"
+use Fegg\Database\Pdo;
+
+$db = new Pdo();
+$rows = $db->setQuery('SELECT * FROM cms_news WHERE valid = 1 AND category = ?', array(2))->execute()->all();
+```

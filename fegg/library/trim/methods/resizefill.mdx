@@ -4,26 +4,31 @@ sidebar_position: 3
 
 # Trim::resizeFill
 
-Resize the image with keeping ratio and filling white/black color (Like `object-fit: contain`)
+> Resize the image with keeping ratio and filling the empty area (Like `object-fit: contain`)
 
 ## Description
 
 ```php
-public void Trim::resizeFill( number $w, number $h )
+public void Trim::resizeFill( int $w, int $h )
 ```
+
+The output is exactly `$w` x `$h`. The image is scaled down to fit in it, keeping its aspect ratio, and placed in the center. The empty area is white for JPEG output and transparent for PNG output from a PNG source. Images smaller than the specified size are not enlarged. `0` means the original width or height.
 
 ## Arguments
 
-| Name | Data type | Default | Remarks                |
-| ---- | --------- | ------- | ---------------------- |
-| $w   | number    |         | Converted image width  |
-| $h   | number    |         | Converted image height |
+| Name | Data type | Default | Remarks                                 |
+| ---- | --------- | ------- | --------------------------------------- |
+| $w   | int       |         | Output width / `0`: original width      |
+| $h   | int       |         | Output height / `0`: original height    |
 
 ## Example
 
 ```php title="Controller"
-$trim = $this->getClass('Tool/RSS', 'https://example.com/feed');
-$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+use Fegg\Tool\Trim;
+
+$trim = new Trim();
+$trim->setImage('path/to/image.png', 'path/to/converted.png');
 
 $trim->resizeFill(300, 300);
+$trim->create();
 ```

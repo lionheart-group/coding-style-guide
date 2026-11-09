@@ -1,0 +1,37 @@
+---
+sidebar_position: 36
+---
+
+# Model::value
+
+> Get one value
+
+## Description
+
+```php
+public mixed Model::value( string $column )
+```
+
+Returns the first column of the first matching row, or `null` when nothing matches. `$column` may be an expression such as `'max(post_date)'`; it is written into the SQL as it is, so never put user input in it.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                        |
+| ------- | --------- | ------- | ------------------------------ |
+| $column | string    |         | Column name or SQL expression  |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$title = $model->where('news_id = ?', 5)->value('title');
+// -> 'News 5', or null
+
+$latest = $model->where('category = ?', 2)->value('max(post_date)');
+// -> '2026-01-23 10:00:00'
+```

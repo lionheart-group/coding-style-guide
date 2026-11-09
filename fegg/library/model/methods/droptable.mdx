@@ -1,5 +1,5 @@
 ---
-sidebar_position: 38
+sidebar_position: 55
 ---
 
 # Model::dropTable
@@ -12,13 +12,15 @@ sidebar_position: 38
 public void Model::dropTable()
 ```
 
+Drops the model's table. Throws `Fegg\Database\QueryException` when the query fails.
+
 ## Example
 
 ```php title="Controller"
 $model = new Model(true, array(
-    'table'   => 'cms_news',
+    'table' => 'sample',
 ));
 
-// DROP TABLE cms_news
+// Drop Table "sample"
 $model->dropTable();
 ```

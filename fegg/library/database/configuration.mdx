@@ -6,78 +6,79 @@ sidebar_position: 2
 
 ### Database connect setting
 
-You can change connect configuration on **code/config/database_config.php**.
+The connection is set in **htdocs/\_fegg/site/config/database_config.php**. SQLite is the default. The `FEGG_DB_PATH` environment variable overrides the SQLite file (the test suite uses it).
 
-```php title="database_config.php"
+```php title="site/config/database_config.php"
 <?php
+defined('FEGG_CORE_DIR') || exit;
+
 /**
- * データベース接続先設定
- * Database connect information
- * @see Database.php
+ * Database connection settings
  */
-// 本番環境
+
+// SQLite file path. FEGG_DB_PATH environment variable overrides it (used by the test suite)
+$_sqlite_path = getenv('FEGG_DB_PATH') ? getenv('FEGG_DB_PATH') : FEGG_SITE_DIR.'/data/db/db.db';
+
 // Production environment
 if (false) {
 
-    // Database(Master)設定（１台を想定）
-    // Database for Master
+    // Master database (a single server)
     $database_config['master'] = array(
-        'dsn' => 'sqlite:'.FEGG_CODE_DIR.'/data/db/db.db',
+        'dsn' => 'sqlite:'.$_sqlite_path,
         'username' => '',
         'password' => ''
     );
 
-    // Database(Slave)設定（複数台を想定）
-    // Database for Slave
+    // Slave databases (multiple servers allowed)
     $database_config['slave'][] = array(
-        'dsn' => 'sqlite:'.FEGG_CODE_DIR.'/data/db/db.db',
+        'dsn' => 'sqlite:'.$_sqlite_path,
         'username' => '',
         'password' => ''
     );
 
-// 開発環境
-// Development Environment
+// Development environment
 } else {
 
-    // Database(Master)設定（１台を想定）
-    // Database for Master
+    // Master database (a single server)
     $database_config['master'] = array(
-        'dsn' => 'sqlite:'.FEGG_CODE_DIR.'/data/db/db.db',
+        'dsn' => 'sqlite:'.$_sqlite_path,
         'username' => '',
         'password' => ''
     );
 
-    // Database(Slave)設定（複数台を想定）
-    // Database for Slave
+    // Slave databases (multiple servers allowed)
     $database_config['slave'][] = array(
-        'dsn' => 'sqlite:'.FEGG_CODE_DIR.'/data/db/db.db',
+        'dsn' => 'sqlite:'.$_sqlite_path,
         'username' => '',
         'password' => ''
     );
 
 }
-/* End of file database_config.php */
 ```
+
+- `master` is used for INSERT, UPDATE, DELETE, schema changes and transactions. SELECT and PRAGMA queries use one of the `slave` entries, picked at random. With a single database, set both to the same DSN.
+- `dsn`, `username` and `password` are passed to PHP's `PDO`. For MySQL use a DSN such as `mysql:host=localhost;dbname=example;charset=utf8mb4`; Fegg then sets `sql_mode='ANSI_QUOTES'` (Fegg quotes names with `"`) and buffered queries.
+- A connection that fails throws `Fegg\Database\QueryException` instead of printing the error and exiting.
+- `new \Fegg\Database\Pdo('name')` reads `name/database_config.php` and `name/database_regular_use_query.php` instead, for a second database.
 
 ### Automatic append query configuration
 
-You can arrange automatic append query configuration on **code/config/database_regular_use_query.php**.
+The queries added automatically to queries built by `Fegg\Model` and the build methods of `Fegg\Database\Pdo` are set in **htdocs/\_fegg/core/config/database_regular_use_query.php**. Do not edit the core: to change them, copy the file to `htdocs/_fegg/site/config/database_regular_use_query.php` (config files are looked up in `site/config` first, then `core/config`).
 
-```php title="database_regular_use_query.php"
+`CURRENT_TABLE` is replaced with the table name, and `now()` with the current date and time. An item that the query already sets (for example `valid` given to `insertRow()`) is not added again.
+
+```php title="core/config/database_regular_use_query.php"
 <?php
+defined('FEGG_CORE_DIR') || exit;
+
 /**
- * 自動的付加クエリー
- * Automatic append query
- * @see Database.php
+ * Automatically appended queries
  *
- * DBクラスのselect, insert, update, deleteメソッド実行時に自動的付加するクエリー
- * （必要に応じて拡張していく予定）
- *
- * Automaticaly append query that "select", "insert", "update", "delete" method in DB Class.
+ * Queries appended automatically when the "select", "insert", "update" and "delete" methods of the DB class run
+ * (to be extended as needed).
  */
 $database_regular_use_query = array(
-    // テーブルに関わらず付加されるクエリー
-    // Appended query regardless of table
+    // Queries appended regardless of the table
     'regular_use' => array(
         'select' => array(
             'where' => 'CURRENT_TABLE.valid = 1',
@@ -97,8 +98,7 @@ $database_regular_use_query = array(
     ),
 
     /*
-    // テーブルに応じて付加されるクエリー
-    // Appended query depending on table
+    // Queries appended per table
     'table' => array(
         'table_name' => array(
             'select' => array(
@@ -116,5 +116,6 @@ $database_regular_use_query = array(
     ),
     */
 );
-/* End of file database_regular_use_query.php */
 ```
+
+This is why every table used with `Fegg\Model` needs `valid`, `created` and `modified` columns. To skip these queries, see `unsetRegularUseQuery()`, `unsetRegularUseQueryForTable()` and `disabledRegularUseQuery()` ([Model](../model/methods/unsetregularusequery.mdx), [Pdo](./methods/unsetregularusequery.mdx)).

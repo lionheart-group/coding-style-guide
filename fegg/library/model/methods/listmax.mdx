@@ -1,5 +1,5 @@
 ---
-sidebar_position: 12
+sidebar_position: 28
 ---
 
 # Model::listMax
@@ -9,14 +9,16 @@ sidebar_position: 12
 ## Description
 
 ```php
-public self Model::listMax( number $listMax )
+public self Model::listMax( [ int $listMax = 10 ] )
 ```
+
+Sets the number of rows per page of [find](./find.mdx). Without it, `find()` returns 10 rows. A value under 1 is treated as 1. Only `find()` uses it: use [limit](./limit.mdx) with [all](./all.mdx) instead of a large `listMax()` to get every row.
 
 ## Arguments
 
-| Name     | Data type | Default | Remarks      |
-| -------- | --------- | ------- | ------------ |
-| $listMax | number    |         | Limit number |
+| Name     | Data type | Default | Remarks        |
+| -------- | --------- | ------- | -------------- |
+| $listMax | int       | 10      | Rows per page  |
 
 ## Example
 
@@ -27,6 +29,6 @@ $model = new Model(false, array(
     'visible' => 'visible',
 ));
 
-// Get max 5 records
+// First page, 5 rows
 $records = $model->listMax(5)->find();
 ```

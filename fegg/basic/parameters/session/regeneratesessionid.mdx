@@ -1,0 +1,33 @@
+---
+sidebar_position: 4
+---
+
+# Application::regenerateSessionId
+
+> Give the session a new ID
+
+## Description
+
+```php
+public void Application::regenerateSessionId()
+```
+
+Replace the current session ID with a new one and delete the old session file (`session_regenerate_id(true)`). The SESSION data is kept. Starts the session if it has not been started.
+
+Call it whenever the user's privileges change, typically right after a successful login, so that a session ID obtained before the login cannot be used afterwards (session fixation).
+
+## Arguments
+
+None.
+
+## Example
+
+```php title="Controller"
+// _findUser() is your own private method that checks the login ID and password
+$user = $this->_findUser($this->in('login_id', 'post'), $this->in('password', 'post'));
+if ($user) {
+    $this->regenerateSessionId();
+    $this->setSession('user_id', $user['user_id']);
+    $this->redirect('/mypage/');
+}
+```

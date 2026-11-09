@@ -1,11 +1,25 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # Upload::getMaxFileSize
 
-Get upload file size limitation
+> Get the maximum file size (MB)
 
-import Underconstruction from '@site/src/components/Underconstruction';
+## Description
 
-<Underconstruction></Underconstruction>
+```php
+public numeric Upload::getMaxFileSize()
+```
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+echo $upload->getMaxFileSize(); // -> 2
+
+$upload->setMaxFileSize(32);
+echo $upload->getMaxFileSize(); // -> 32
+```
