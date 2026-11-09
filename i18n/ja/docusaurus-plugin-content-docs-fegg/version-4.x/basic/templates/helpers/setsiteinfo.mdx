@@ -1,0 +1,36 @@
+---
+sidebar_position: 1
+---
+
+# Application::setSiteinfo
+
+> ウェブサイト情報の設定（例：タイトル、説明、キーワード）
+
+## 説明
+
+```php
+public void Application::setSiteinfo( string $id, string $value )
+```
+
+ウェブサイト情報（例：タイトル、説明、キーワード）を設定します。割り当てられた値は、テンプレートで使用できる`$site`変数に格納されます。
+
+## 引数
+
+| 名前   | データ型 | デフォルト | 備考 |
+| ------ | :------- | :--------- | :--- |
+| $id    | string   |            | キー |
+| $value | string   |            | 値   |
+
+## 例
+
+```php title="コントローラー"
+$this->setSiteinfo( 'title', 'サイトタイトル' );
+```
+
+```html title="テンプレート"
+<title>{{ $site.title }}</title>
+```
+
+```html title="出力"
+<title>サイトタイトル</title>
+```

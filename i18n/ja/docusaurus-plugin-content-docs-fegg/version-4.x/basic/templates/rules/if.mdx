@@ -1,0 +1,30 @@
+---
+sidebar_position: 2
+---
+
+# If
+
+> if、else、else if
+
+## 説明
+
+```php
+{{ if }}
+{{ else if }}
+{{ else }}
+{{ end }}
+```
+
+`{{ if }}`から`{{ end }}`までのif文を変換します。`{{ if }}`セクションでは、**&&、||、is_array**などのPHP比較演算子やメソッドを使用できます。
+
+## 例
+
+```php title="テンプレート"
+{{ if $page.foo === 'bar' }}
+    fooはbarです
+{{ else if $page.foo === 'baz' }}
+    fooはbazです
+{{ else }}
+    fooはbarでもbazでもありません
+{{ end }}
+```

@@ -1,0 +1,22 @@
+---
+sidebar_position: 6
+---
+
+# Trim::create
+
+指定された場所に画像を保存
+
+## 説明
+
+```php
+public void Trim::create()
+```
+
+## 例
+
+```php title="Controller"
+$trim = $this->getClass('Tool/Trim');
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+$trim->resize(800, 600);
+$trim->create();
+```

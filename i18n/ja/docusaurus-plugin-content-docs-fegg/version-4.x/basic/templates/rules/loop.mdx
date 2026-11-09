@@ -1,0 +1,66 @@
+---
+sidebar_position: 3
+---
+
+# ループ
+
+> loop、foreach
+
+## 説明
+
+```php
+{{ loop $foo = $bar to $baz }}
+{{ end }}
+```
+
+`{{ loop }}`は、割り当てられた変数によって`{{ end }}`まで繰り返し実行されます。これは`for( $foo=$bar; $bar<=$baz; $foo++ )`と同じです。
+
+```php
+{{ foreach $array as $key => $val }}
+{{ end foreach }}
+```
+
+`{{ foreach }}`は、割り当てられた配列変数によって`{{ end foreach }}`まで繰り返し実行されます。`{{ foreach }}`内で`$foreachIndex`からループカウントを取得できます。
+
+## 例
+
+### loop
+
+```php title="テンプレート"
+// $bar = 1, $baz = 5
+
+<ul>
+    {{ loop $foo = $bar to $baz }}
+    <li>{{ $foo }}</li>
+    {{ end }}
+</ul>
+```
+
+```html title="出力"
+<ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+</ul>
+```
+
+### foreach
+
+```php title="テンプレート"
+// $array = array( 'foo' => 'bar', 'baz' => 'qux' );
+
+<ul>
+    {{ foreach $array as $key => $val }}
+    <li>{{ $foreachIndex }} : {{ $key }} => {{ $val }}</li>
+    {{ end foreach }}
+</ul>
+```
+
+```html title="出力"
+<ul>
+    <li>0 : foo => bar</li>
+    <li>1 : bar => qux</li>
+</ul>
+```

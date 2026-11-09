@@ -1,0 +1,44 @@
+---
+sidebar_position: 9
+---
+
+# Validation::zipcode
+
+> Check valid zip code character (for JP only)
+
+## Description
+
+```php
+public boolean Validation::zipcode( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                     |
+| ------ | --------- | ------- | --------------------------- |
+| $name  | string    |         | Item label                  |
+| $value | mixed     |         | Check field value           |
+| $code  | mixed     | ""      | Error code or Error message |
+
+## Example
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// If $value is Zip code string
+$successName = 'Success Field';
+$successVar  = '100-0001';
+$validation->zipcode('success', $successVar, array('@zipcode', $successName));
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// If $value is not Zip code string
+$failedName = 'Failed Field';
+$failedVar  = '000-000-0000';
+$validation->zipcode('failed', $failedVar, array('@zipcode', $failedName));
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "<strong>Failed Field</strong> は登録できない形式です"
+```

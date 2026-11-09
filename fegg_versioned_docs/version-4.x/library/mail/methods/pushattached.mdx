@@ -1,0 +1,27 @@
+---
+sidebar_position: 6
+---
+
+# Mail::pushAttached
+
+Add attachment file
+
+## Description
+
+```php
+public self Mail::pushAttached( string $filePath, [ string $fileName = null ] )
+```
+
+## Arguments
+
+| Name      | Data type | Default | Remarks                      |
+| --------- | --------- | ------- | ---------------------------- |
+| $filePath | string    |         | Attachment file path         |
+| $fileName | string    | null    | Specified file name on email |
+
+## Example
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->pushAttached('path/to/file.jpg');
+```

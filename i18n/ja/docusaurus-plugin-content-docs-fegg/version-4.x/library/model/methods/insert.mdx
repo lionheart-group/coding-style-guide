@@ -1,0 +1,26 @@
+---
+sidebar_position: 39
+---
+
+# Model::insert
+
+> レコード挿入を実行
+
+## 説明
+
+```php
+public void Model::insert( array $data )
+```
+
+## 引数
+
+| 名前  | データ型 | デフォルト | 備考       |
+| ----- | -------- | ---------- | ---------- |
+| $data | array    |            | 挿入データ |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$model->insert(['title' => 'News Title', 'content' => 'News Content']);
+```

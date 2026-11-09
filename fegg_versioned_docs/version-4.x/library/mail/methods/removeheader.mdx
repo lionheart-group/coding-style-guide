@@ -1,0 +1,30 @@
+---
+sidebar_position: 5
+---
+
+# Mail::removeHeader
+
+Remove custom header
+
+## Description
+
+```php
+public self Mail::removeHeader( [ $key = null ] )
+```
+
+## Arguments
+
+| Name | Data type | Default | Remarks |
+| --- | --- | --- | --- |
+| $key | string |  | Header key / if omit $key, remove all email header |
+
+## Example
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->pushHeader('foo', 'bar');
+$mail->removeHeader('foo');
+
+// Remove all email header
+$mail->removeHeader();
+```

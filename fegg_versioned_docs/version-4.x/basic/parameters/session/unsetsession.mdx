@@ -1,0 +1,51 @@
+---
+sidebar_position: 3
+---
+
+# Application::unsetSession
+
+> Unset SESSION data
+
+## Description
+
+```php
+public void Application::unsetSession( [ string $name = "" ] )
+```
+
+Unset SESSION data. If you omit argument, `unsetSession` remove all SESSION data.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks           |
+| :---- | :-------- | :------ | :---------------- |
+| $name | string    |         | Session param key |
+
+## Example
+
+```php title="Controller - First.php"
+$this->setSession('foo', 'bar');
+```
+
+```php title="Controller - Second.php"
+$this->getSession('foo'); // -> bar
+```
+
+```php title="Controller - Third.php"
+$this->unsetSession('foo');
+echo $this->getSession('foo'); // -> ''
+```
+
+### Remove all session datas
+
+If you omit argument, `unsetSession` remove all SESSION data.
+
+```php title="Controller - First.php"
+$this->setSession('foo', 'bar');
+$this->setSession('baz', 'qux');
+```
+
+```php title="Controller - Second.php"
+$this->unsetSession();
+echo $this->getSession('foo'); // -> ''
+echo $this->getSession('baz'); // -> ''
+```

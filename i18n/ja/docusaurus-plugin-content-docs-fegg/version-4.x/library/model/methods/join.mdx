@@ -1,0 +1,28 @@
+---
+sidebar_position: 22
+---
+
+# Model::join
+
+> Join パラメータを設定
+
+## 説明
+
+```php
+public self Model::join( string $table, string $on, [ string $type = 'LEFT' ] )
+```
+
+## 引数
+
+| 名前   | データ型 | デフォルト | 備考           |
+| ------ | -------- | ---------- | -------------- |
+| $table | string   |            | 結合テーブル名 |
+| $on    | string   |            | 結合条件       |
+| $type  | string   | 'LEFT'     | 結合タイプ     |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$model->join('categories', 'cms_news.category_id = categories.id', 'LEFT');
+```

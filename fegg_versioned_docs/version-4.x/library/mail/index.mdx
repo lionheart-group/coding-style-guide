@@ -1,0 +1,25 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+Providing some functions for sending email
+
+## How to use
+
+You can load `Mail` class through `Application::getClass` method.
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->subject('Mail subject');
+$mail->body('Mail body');
+
+$mail->send('mail@example.com', 'John Doe', 'from@example.com');
+```
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

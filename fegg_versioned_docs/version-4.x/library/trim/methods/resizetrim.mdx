@@ -1,0 +1,52 @@
+---
+sidebar_position: 5
+---
+
+# Trim::resizeTrim
+
+Resize the image with keeping ratio and tirmming overwrapped (Like `object-fit: cover`)
+
+## Description
+
+```php
+public void Trim::resizeTrim( number $w, number $h, string $cp )
+```
+
+## Arguments
+
+| Name | Data type | Default | Remarks                |
+| ---- | --------- | ------- | ---------------------- |
+| $w   | number    |         | Converted image width  |
+| $h   | number    |         | Converted image height |
+| $cp  | string    |         | Crop position          |
+
+### Crop position
+
+<table style={{textAlign: 'center'}}>
+    <tbody>
+        <tr>
+            <td>lt</td>
+            <td>t</td>
+            <td>rt</td>
+        </tr>
+        <tr>
+            <td>l</td>
+            <td>m</td>
+            <td>r</td>
+        </tr>
+        <tr>
+            <td>lb</td>
+            <td>b</td>
+            <td>rb</td>
+        </tr>
+    </tbody>
+</table>
+
+## Example
+
+```php title="Controller"
+$trim = $this->getClass('Tool/RSS', 'https://example.com/feed');
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+
+$trim->resizeTrim(300, 300, 'm');
+```

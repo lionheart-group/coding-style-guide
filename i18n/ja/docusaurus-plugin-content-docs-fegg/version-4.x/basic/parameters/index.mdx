@@ -1,0 +1,27 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# パラメータについて
+
+FeggにはPOST、GET、SESSION、COOKIEのためのヘルパーメソッドがあります。
+
+## POST/GET
+
+シングル/ダブルクォートと文字コードが自動的に変換されたリクエストデータを取得します。
+
+<CategoryDocCardList label="POST/GET" />
+
+## SESSION
+
+セッションパラメータの設定と読み込み。これは自動的に`session_start`を呼び出すため、手動で呼び出す必要はありません。
+
+<CategoryDocCardList label="SESSION" />
+
+## COOKIE
+
+COOKIEパラメータの設定と読み込み。
+
+<CategoryDocCardList label="COOKIE" />

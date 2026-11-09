@@ -1,0 +1,31 @@
+---
+sidebar_position: 8
+---
+
+# Model::setBindParam
+
+> バインドパラメータタイプを設定
+
+## 説明
+
+```php
+public self Model::setBindParam( array $bind_param )
+```
+
+## 引数
+
+| 名前        | データ型 | デフォルト | 備考                   |
+| ----------- | -------- | ---------- | ---------------------- |
+| $bind_param | array    |            | バインドパラメータ配列 |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->setBindParam(['name' => 's', 'age' => 'i']);
+```

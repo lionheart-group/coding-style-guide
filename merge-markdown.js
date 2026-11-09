@@ -13,15 +13,29 @@ function readMarkdownFiles(dir) {
   });
 }
 
+/**
+ * @param {string} baseUrl
+ * @param {{dir: string, url: string, category?: string, inFull?: boolean}[]} sources
+ *   dir:      a directory of docs
+ *   url:      the URL path its pages are served at (relative to baseUrl)
+ *   category: write the whole directory as one category with this name; without it,
+ *             every sub directory is a category of its own (the "docs" layout)
+ *   inFull:   include it in llms-full.txt and the index (default true)
+ * @param {string} outputFile
+ * @param {string} outputCategoryFilenameTemplate
+ */
 function mergeMarkdownFiles(
   baseUrl,
-  docsDir,
+  sources,
   outputFile,
   outputCategoryFilenameTemplate
 ) {
   let rootMarkdownContent =
     "# Coding Style Guide\n\nLionHeart Group Coding Style Guide";
   let fullMarkdownContent = "";
+  // The source being read (set in the loop below)
+  let sourceDir = "";
+  let urlBase = "";
 
   function traverseDirectory(currentDir, currentContent = "", index = 0) {
     const files = readMarkdownFiles(currentDir);
@@ -68,12 +82,14 @@ function mergeMarkdownFiles(
         try {
           const content = fs.readFileSync(filePath, "utf-8");
           const parsed = matter(content);
-          const targetUrl =
-            baseUrl +
-            filePath
+          const targetUrl = (
+            urlBase +
+            path
+              .relative(sourceDir, filePath)
               .replace(/\\/g, "/")
               .replace(/\.mdx?$/, "")
-              .replace(/\/index$/, "");
+              .replace(/(^|\/)index$/, "")
+          ).replace(/\/$/, "");
 
           currentContent += `--- ${targetUrl} ---\n\n${parsed.content}\n\n`; // Add separator
 
@@ -104,34 +120,51 @@ function mergeMarkdownFiles(
   }
 
   try {
-    const categories = readMarkdownFiles(docsDir);
+    function writeCategory(category, title, dir, inFull) {
+      rootMarkdownContent += `\n\n## ${title}\n\n`;
 
-    for (const category of categories) {
-      const filePath = path.join(docsDir, category);
-      const stats = fs.statSync(filePath);
-
-      if (stats.isDirectory()) {
-        rootMarkdownContent += `\n\n## ${category.charAt(0).toUpperCase() + category.slice(1)}\n\n`;
-
-        let categoryMarkdownContent = "";
-        const content = traverseDirectory(filePath, "");
-        categoryMarkdownContent += content;
+      const content = traverseDirectory(dir, "");
+      if (inFull) {
         fullMarkdownContent += content;
+      }
 
-        const categoryOutputFile = outputCategoryFilenameTemplate.replace(
-          "{category}",
-          category
+      const categoryOutputFile = outputCategoryFilenameTemplate.replace(
+        "{category}",
+        category
+      );
+      fs.writeFileSync(categoryOutputFile, content.trimEnd(), "utf-8");
+      console.log(
+        `Merged markdown files for category '${category}' into ${categoryOutputFile}`
+      );
+    }
+
+    for (const source of sources) {
+      sourceDir = source.dir;
+      urlBase = baseUrl + source.url;
+      const inFull = source.inFull !== false;
+
+      if (source.category) {
+        writeCategory(
+          source.category,
+          source.title || source.category,
+          source.dir,
+          inFull
         );
-        fs.writeFileSync(
-          categoryOutputFile,
-          categoryMarkdownContent.trimEnd(),
-          "utf-8"
-        );
-        console.log(
-          `Merged markdown files for category '${category}' into ${categoryOutputFile}`
-        );
-      } else {
-        console.warn(`Skipping non-directory item: ${filePath}`);
+        continue;
+      }
+
+      for (const category of readMarkdownFiles(source.dir)) {
+        const filePath = path.join(source.dir, category);
+        if (fs.statSync(filePath).isDirectory()) {
+          writeCategory(
+            category,
+            category.charAt(0).toUpperCase() + category.slice(1),
+            filePath,
+            inFull
+          );
+        } else {
+          console.warn(`Skipping non-directory item: ${filePath}`);
+        }
       }
     }
 
@@ -153,15 +186,26 @@ function mergeMarkdownFiles(
   }
 }
 
-// Example usage:
 const baseUrl = "https://lionheart-group.github.io/coding-style-guide/";
-const docsDirectory = "./docs"; // Replace with your 'docs' directory
 const outputFilename = "./static/llms.txt";
 const outputCategoryFilenameTemplate = "./static/llms-{category}.txt";
 
 mergeMarkdownFiles(
   baseUrl,
-  docsDirectory,
+  [
+    // Every sub directory of docs/ is a category (llms-html.txt, llms-wordpress.txt ...)
+    { dir: "./docs", url: "docs/" },
+    // Fegg is a versioned docs instance (see docusaurus.config.ts): the current version is
+    // llms-fegg.txt, older ones are kept out of llms-full.txt
+    { dir: "./fegg", url: "docs/fegg/", category: "fegg", title: "Fegg" },
+    {
+      dir: "./fegg_versioned_docs/version-4.x",
+      url: "docs/fegg/4.x/",
+      category: "fegg-4.x",
+      title: "Fegg 4.x",
+      inFull: false
+    }
+  ],
   outputFilename,
   outputCategoryFilenameTemplate
 );

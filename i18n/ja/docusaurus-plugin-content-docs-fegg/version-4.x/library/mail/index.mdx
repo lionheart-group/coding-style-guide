@@ -1,0 +1,25 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# はじめに
+
+メール送信のための各種関数を提供します
+
+## 使用方法
+
+`Application::getClass`メソッドを通じて`Mail`クラスを読み込むことができます。
+
+```php title="Controller"
+$mail = $this->getClass('Tool/Mail');
+$mail->subject('メールの件名');
+$mail->body('メールの本文');
+
+$mail->send('mail@example.com', 'John Doe', 'from@example.com');
+```
+
+## 関数
+
+<CategoryDocCardList label="関数" />

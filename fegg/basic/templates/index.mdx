@@ -1,0 +1,39 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList, SiblingDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# About Template
+
+## About Template
+
+Fegg is equipped with its own template engine where you can separate application code (PHP Code) and display (HTML/CSS). Fegg uses the `{{}}` tag for your application code in the template file. It runs a method that compile templates from Controller class.
+
+Template files are save under the **code/template/** directory with name format of `template_name.tpl`.
+
+## Display methods
+
+Display methods call the template file from Controller class.
+
+Below are the display methods in Fegg but it is recommended to use only the `displayPage` method to avoid Clickjacking attacks.
+
+<CategoryDocCardList label="Display methods" />
+
+## Template helper methods
+
+Template helper methods are used for passing special variable to the template.
+
+<CategoryDocCardList label="Helper methods" />
+
+## Template rules
+
+There are several operating notation for template file.
+
+<CategoryDocCardList label="Rules" />
+
+## Modifiers
+
+You can modify the returned values of your variable in your application code in template using modifiers.
+
+<SiblingDocCardList ids={["modifiers"]} />

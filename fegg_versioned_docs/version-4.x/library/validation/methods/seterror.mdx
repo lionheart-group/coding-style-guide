@@ -1,0 +1,36 @@
+---
+sidebar_position: 18
+---
+
+# Validation::setError
+
+> Set Error status
+
+## Description
+
+```php
+public boolean Validation::setError( string $name, [ mixed $code = '' ] )
+```
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                     |
+| ----- | --------- | ------- | --------------------------- |
+| $name | string    |         | Item label                  |
+| $code | mixed     | ""      | Error code or Error message |
+
+## Example
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+var_dump($validation->isError()); // -> false
+var_dump($validation->getErrorMessage()); // -> null
+
+// Set error status
+$validation->setError('failed', 'Something Error');
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> "failed" => "Something Error"
+```

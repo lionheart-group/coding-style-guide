@@ -49,10 +49,10 @@ const config: Config = {
           label: "WordPress"
         },
         {
-          type: "doc",
-          docId: "fegg/index",
-          position: "left",
-          label: "Fegg"
+          // "Fegg 5.x" / "Fegg 4.x": links to the Fegg docs and switches their version
+          type: "docsVersionDropdown",
+          docsPluginId: "fegg",
+          position: "left"
         },
         {
           to: "updated",
@@ -146,6 +146,29 @@ const config: Config = {
   ],
   plugins: [
     "docusaurus-plugin-sass",
+    [
+      // Fegg has its own docs instance so that only Fegg is versioned (4.x / 5.x)
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "fegg",
+        path: "fegg",
+        routeBasePath: "docs/fegg",
+        sidebarPath: require.resolve("./sidebarsFegg.js"),
+        editUrl:
+          "https://github.com/lionheart-group/coding-style-guide/edit/master/",
+        lastVersion: "current",
+        versions: {
+          current: {
+            label: "Fegg 5.x"
+          },
+          "4.x": {
+            label: "Fegg 4.x",
+            path: "4.x",
+            banner: "unmaintained"
+          }
+        }
+      }
+    ],
     [
       require.resolve("docusaurus-lunr-search"),
       {

@@ -1,0 +1,33 @@
+---
+sidebar_position: 3
+---
+
+# RSS::fetchAll
+
+RSSフィードのすべてのレコードまたは指定された数のレコードを取得
+
+## 説明
+
+```php
+public self RSS::fetchAll( [ number $max = 0 ] )
+```
+
+## 引数
+
+| 名前 | データ型 | デフォルト | 備考 |
+| --- | --- | --- | --- |
+| $max | number | 0 | 最大レコード数 / `0`の場合はすべてのレコードを取得 |
+
+## 例
+
+```php title="Controller"
+$rss = $this->getClass('Tool/RSS', 'https://example.com/feed');
+$posts = $rss->fetchAll(5);
+
+foreach ($posts as $post) {
+    // $postを使用
+    echo $post['title'] . "\n";
+    echo $post['description'] . "\n";
+    echo $post['link'] . "\n";
+}
+```

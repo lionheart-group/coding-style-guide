@@ -1,0 +1,23 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+Providing some functions for uploading/validating files
+
+## How to use
+
+You can load `Upload` class through `Application::getClass` method.
+
+```php title="Controller"
+$upload = $this->getClass('Tool/Upload');
+
+$upload->upload('file');
+```
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

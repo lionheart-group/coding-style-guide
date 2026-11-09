@@ -1,0 +1,27 @@
+---
+sidebar_position: 30
+---
+
+# Model::update
+
+> レコード更新を実行
+
+## 説明
+
+```php
+public void Model::update( array $data, mixed $id )
+```
+
+## 引数
+
+| 名前  | データ型 | デフォルト | 備考       |
+| ----- | -------- | ---------- | ---------- |
+| $data | array    |            | 更新データ |
+| $id   | mixed    |            | レコードID |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$model->update(['title' => 'Updated Title'], 1);
+```

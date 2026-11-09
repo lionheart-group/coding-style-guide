@@ -1,0 +1,23 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+Providing some functions for managing files/directories
+
+## How to use
+
+You can load `File` class through `Application::getClass` method.
+
+```php title="Controller"
+$file = $this->getClass('Tool/File');
+
+$file->copyAll('path/to/foo', 'path/to/bar');
+```
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

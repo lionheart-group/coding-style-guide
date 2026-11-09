@@ -1,0 +1,26 @@
+---
+sidebar_position: 2
+---
+
+# Model::setTableName
+
+> テーブル名を設定
+
+## 説明
+
+```php
+public self Model::setTableName( string $table_name )
+```
+
+## 引数
+
+| 名前        | データ型 | デフォルト | 備考       |
+| ----------- | -------- | ---------- | ---------- |
+| $table_name | string   |            | テーブル名 |
+
+## 例
+
+```php title="Controller"
+$model = new Model();
+$model->setTableName('cms_news');
+```

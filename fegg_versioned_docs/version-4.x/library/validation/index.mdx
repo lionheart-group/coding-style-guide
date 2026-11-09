@@ -1,0 +1,29 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Providing some functions for validation
+
+## How to use
+
+You can load `Validation` class through `Application::getClass` method.
+
+```php title="Controller"
+$validation = $this->getClass('Validation');
+
+// Check Required
+$name = 'Field Label';
+$id   = 'field_name';
+$validation->required($id, $this->in($id), array('@required', $name));
+
+// Get Error
+$errorMessage = $validation->getErrorMessage();
+```
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

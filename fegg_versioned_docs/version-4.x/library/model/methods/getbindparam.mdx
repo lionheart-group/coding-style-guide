@@ -1,0 +1,34 @@
+---
+sidebar_position: 10
+---
+
+# Model::getBindParam
+
+> Get Bind Parameter types
+
+## Description
+
+```php
+public array Model::getBindParam()
+```
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'bind'    => array(
+        'news_id'   => 'INTEGER',
+        'post_date' => 'DATETIME',
+    ),
+));
+
+$bindParam = $model->getBindParam();
+var_dump($bindParam);
+```
+
+```php title="Output"
+array(2) {
+    ["post_id"]=> string(7) "INTEGER"
+    ["post_date"]=> string(8) "DATETIME"
+}
+```

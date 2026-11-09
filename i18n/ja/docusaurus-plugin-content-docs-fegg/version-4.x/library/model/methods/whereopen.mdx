@@ -1,0 +1,26 @@
+---
+sidebar_position: 15
+---
+
+# Model::whereOpen
+
+> Where クエリに開括弧を追加
+
+## 説明
+
+```php
+public self Model::whereOpen( [ string $andOr = 'AND' ] )
+```
+
+## 引数
+
+| 名前   | データ型 | デフォルト | 備考       |
+| ------ | -------- | ---------- | ---------- |
+| $andOr | string   | 'AND'      | 論理演算子 |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$model->whereOpen('AND');
+```

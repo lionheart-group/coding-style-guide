@@ -1,0 +1,29 @@
+---
+sidebar_position: 2
+---
+
+# 初期設定
+
+## 基本設定
+
+**fegg/settings.php** で基本設定を変更できます。
+
+あなたの環境に合わせて `$settings` のパラメータを変更してください。
+
+## その他の設定
+
+### 初期クラス名とメソッド名の変更
+
+デフォルトでは、初期クラス名とメソッド名はそれぞれ'Index'ファイル名とその'index'メソッドに設定されています。初期クラス名とメソッド名を変更したい場合は、以下のように **htdocs/index.php** でパラメータを設定してください。
+
+```php title="htdocs/index.php"
+<?php
+
+// 設定されていない場合のデフォルトのクラス名とメソッド名
+if (!$fileName) {
+    $fileName = 'Index';
+}
+if (!$methodName) {
+    $methodName = 'index';
+}
+```

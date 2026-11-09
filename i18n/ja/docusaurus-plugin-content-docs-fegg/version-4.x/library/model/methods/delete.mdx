@@ -1,0 +1,26 @@
+---
+sidebar_position: 32
+---
+
+# Model::delete
+
+> レコード論理削除を実行
+
+## 説明
+
+```php
+public void Model::delete( mixed $id )
+```
+
+## 引数
+
+| 名前 | データ型 | デフォルト | 備考       |
+| ---- | -------- | ---------- | ---------- |
+| $id  | mixed    |            | レコードID |
+
+## 例
+
+```php title="Controller"
+$model = new Model(false, array('table' => 'cms_news'));
+$model->delete(1);
+```

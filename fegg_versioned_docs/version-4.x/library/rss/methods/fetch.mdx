@@ -1,0 +1,23 @@
+---
+sidebar_position: 2
+---
+
+# RSS::fetch
+
+Start loading RSS feed
+
+## Description
+
+```php
+public self RSS::fetch()
+```
+
+## Example
+
+```php title="Controller"
+$rss = $this->getClass('Tool/RSS', 'https://example.com/feed');
+
+while ($post = $rss->fetch()) {
+    // Use $post
+}
+```

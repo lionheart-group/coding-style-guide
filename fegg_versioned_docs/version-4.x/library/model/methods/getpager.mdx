@@ -1,0 +1,40 @@
+---
+sidebar_position: 24
+---
+
+# Model::getPager
+
+> Get variables for making pager
+
+## Description
+
+```php
+public array Model::getPager()
+```
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$records = $model->listMax(5)->current(2)->find();
+$pager = $model->getPager();
+
+var_dump($pager);
+```
+
+```php title="Output"
+array(2) {
+    ["current_page"]=> int(2)
+    ["page_min"]=> int(1)
+    ["page_max"]=> int(6)
+    ["previous_page"]=> int(1)
+    ["next_page"]=> int(3)
+    ["last_page"]=> int(10)
+    ["number_of_records"]=> int(50)
+}
+```
