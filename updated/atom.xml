@@ -2,11 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lionheart-group.github.io/coding-style-guide/updated</id>
     <title>Coding Style Guide Blog</title>
-    <updated>2026-06-08T00:00:00.000Z</updated>
+    <updated>2026-11-10T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lionheart-group.github.io/coding-style-guide/updated"/>
     <subtitle>Coding Style Guide Blog</subtitle>
     <icon>https://lionheart-group.github.io/coding-style-guide/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[v0.5.0]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.0</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.0"/>
+        <updated>2026-11-10T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- The Fegg docs are now versioned. Fegg 4.x stays the default; switch versions with the version menu in the navigation bar]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li class="">The <a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg">Fegg</a> docs are now versioned. Fegg 4.x stays the default; switch versions with the version menu in the navigation bar</li>
+<li class="">Added the Fegg 5.x docs as the version in development (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next">/docs/fegg/next/</a>, English only for now): directory layout and the separated core, base controllers for public pages and the CMS, security (env.php, test server settings, security headers), MySQL, logging and the command line</li>
+</ul>]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v0.4.4]]></title>
         <id>https://lionheart-group.github.io/coding-style-guide/updated/2026/06/08/v0.4.4</id>
@@ -239,16 +250,6 @@
         <summary type="html"><![CDATA[- Prepared JavaScript library list]]></summary>
         <content type="html"><![CDATA[<ul>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/javascript">Prepared JavaScript library list</a></li>
-</ul>]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[v0.0.4]]></title>
-        <id>https://lionheart-group.github.io/coding-style-guide/updated/2022/06/30/v0.0.4</id>
-        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2022/06/30/v0.0.4"/>
-        <updated>2022-06-30T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[- Added Node.js(Volta) installing instruction]]></summary>
-        <content type="html"><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/env/node">Added Node.js(Volta) installing instruction</a></li>
 </ul>]]></content>
     </entry>
 </feed>

@@ -4,10 +4,21 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/ja/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Mon, 08 Jun 2026 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 10 Nov 2026 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>ja</language>
+        <item>
+            <title><![CDATA[v0.5.0]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/11/10/v0.5.0</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/11/10/v0.5.0</guid>
+            <pubDate>Tue, 10 Nov 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Fegg のドキュメントを版ごとに分けました。既定は Fegg 4.x のままです。ナビゲーションバーのメニューで版を切り替えられます]]></description>
+            <content:encoded><![CDATA[<ul>
+<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/fegg">Fegg</a> のドキュメントを版ごとに分けました。既定は Fegg 4.x のままです。ナビゲーションバーのメニューで版を切り替えられます</li>
+<li class="">開発中の Fegg 5.x のドキュメントを追加しました（<a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/fegg/next">/docs/fegg/next/</a>、今は英語のみ）。ディレクトリ構成とコアの分離、公開ページと CMS の基底コントローラ、セキュリティ（env.php、テスト環境の設定、セキュリティヘッダ）、MySQL、ログ、コマンドラインについて説明しています</li>
+</ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v0.4.4]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/06/08/v0.4.4</link>
@@ -250,16 +261,6 @@
             <description><![CDATA[- JavaScriptのライブラリリストを作成しました]]></description>
             <content:encoded><![CDATA[<ul>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript">JavaScriptのライブラリリストを作成しました</a></li>
-</ul>]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[v0.0.4]]></title>
-            <link>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/06/30/v0.0.4</link>
-            <guid>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/06/30/v0.0.4</guid>
-            <pubDate>Thu, 30 Jun 2022 00:00:00 GMT</pubDate>
-            <description><![CDATA[- Node.js(Volta)のインストール方法の説明を追加しました]]></description>
-            <content:encoded><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/env/node">Node.js(Volta)のインストール方法の説明を追加しました</a></li>
 </ul>]]></content:encoded>
         </item>
     </channel>

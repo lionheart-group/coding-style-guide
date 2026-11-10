@@ -106,7 +106,7 @@ $route['news/post_:num.html'] = 'news/detail/$1';
 
 Controllers are the basis of the application, as it determines how requests are being handled in HTTP. A Controller is a class file that is named associated with a URI.
 
-URL and Controller are closely related. (see [URL](/docs/fegg/basic/url))
+URL and Controller are closely related. (see [URL](./url.mdx))
 
 ```
 http://exaple.com/foo/bar
@@ -223,7 +223,7 @@ class Controller extends Application
 
 :::note
 
-See [Initial settings](/docs/fegg/first/config) about initial method name.
+See [Initial settings](../first/config.mdx) about initial method name.
 
 :::
 
@@ -350,7 +350,7 @@ Fegg has other methods that you may use in your application code and display.
 
 ## Ticket
 
-Ticket is useful in securing your own form processing. Setting ticket will return a hashed random string using md5 function and is going to be a part of your session. This ticket can also be applied as [Hidden](/docs/fegg/basic/templates/rules/hidden) input on the form. That means this ticket exists both on the server and client side and we can match them once the form is submitted and validate if they are the same.
+Ticket is useful in securing your own form processing. Setting ticket will return a hashed random string using md5 function and is going to be a part of your session. This ticket can also be applied as [Hidden](../templates/rules/hidden.mdx) input on the form. That means this ticket exists both on the server and client side and we can match them once the form is submitted and validate if they are the same.
 
 <CategoryDocCardList label="Ticket" />
 
@@ -457,7 +457,7 @@ Once the `setTicket` method is called, it will return a hashed random string and
 public void Application::useTicket( string $name )
 ```
 
-Use ticket once and destroy ticket session. `useTicket` will return boolean and will return TRUE only if the value in the hidden input is same with the ticket session in the server. See [Application::setTicket](/docs/fegg/basic/others/tickets/setticket).
+Use ticket once and destroy ticket session. `useTicket` will return boolean and will return TRUE only if the value in the hidden input is same with the ticket session in the server. See [Application::setTicket](./setticket.mdx).
 
 ## Arguments
 
@@ -832,8 +832,7 @@ echo $this->getSession('baz'); // -> ''
 --- https://lionheart-group.github.io/coding-style-guide/docs/fegg/basic/templates ---
 
 
-import DocCardList from '@theme/DocCardList';
-import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+import { CategoryDocCardList, SiblingDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # About Template
 
@@ -867,15 +866,7 @@ There are several operating notation for template file.
 
 You can modify the returned values of your variable in your application code in template using modifiers.
 
-<DocCardList items={[
-  {
-    "type": "link",
-    "href": "/docs/fegg/basic/templates/modifiers",
-    "label": "Modifiers",
-    "docId": "fegg/basic/templates/modifiers",
-    "unlisted": false
-  }
-]} />
+<SiblingDocCardList ids={["modifiers"]} />
 
 
 --- https://lionheart-group.github.io/coding-style-guide/docs/fegg/basic/templates/modifiers ---
@@ -1105,7 +1096,7 @@ Loop  :
 Template rule  : {{ follow Fegg template rules }}
 ```
 
-Notice here the codes inside the `{{}}` in first 3 lines of paragraph in template file. In Fegg, these are the examples and valid syntax of application code following the [Template rules](/docs/fegg/basic/templates#template-rules), otherwise it will return as display or parse an error.
+Notice here the codes inside the `{{}}` in first 3 lines of paragraph in template file. In Fegg, these are the examples and valid syntax of application code following the [Template rules](../index.mdx#template-rules), otherwise it will return as display or parse an error.
 
 
 --- https://lionheart-group.github.io/coding-style-guide/docs/fegg/basic/templates/methods/fetchtemplate ---
@@ -1121,7 +1112,7 @@ Notice here the codes inside the `{{}}` in first 3 lines of paragraph in templat
 public string Application::fetchTemplate( string $template, [ array $assignedValue = array() ] )
 ```
 
-Returns the [Application::displayTemplate](/docs/fegg/basic/templates/methods/displaytemplate) into string without displaying the output.
+Returns the [Application::displayTemplate](./displaytemplate.mdx) into string without displaying the output.
 
 ## Arguments
 
@@ -1136,7 +1127,7 @@ Returns the [Application::displayTemplate](/docs/fegg/basic/templates/methods/di
 $content = $this->fetchTemplate( 'foo/bar' );
 ```
 
-This assigned the [Application::displayTemplate](/docs/fegg/basic/templates/methods/displaytemplate) to $content variable from compiled template.
+This assigned the [Application::displayTemplate](./displaytemplate.mdx) to $content variable from compiled template.
 
 :::note
 
@@ -1158,7 +1149,7 @@ You should not include the “.tpl” extension in the parameter.
 public string Application::fetchPage( string $template )
 ```
 
-Returns the [Application::displayTemplate](/docs/fegg/basic/templates/methods/displaytemplate) result into string after including the assigned variables in controller class that can be use in template file.
+Returns the [Application::displayTemplate](./displaytemplate.mdx) result into string after including the assigned variables in controller class that can be use in template file.
 
 ## Arguments
 
@@ -1216,7 +1207,7 @@ $_GET[get] params : param
 Controller name : foo
 ```
 
-After assigning arguments for template, run the [Application::fetchTemplate](/docs/fegg/basic/templates/methods/fetchtemplate) method.
+After assigning arguments for template, run the [Application::fetchTemplate](./fetchtemplate.mdx) method.
 
 
 --- https://lionheart-group.github.io/coding-style-guide/docs/fegg/basic/templates/methods/displaypage ---
@@ -1253,7 +1244,7 @@ class Foo extends Application
 }
 ```
 
-Displays the [Application::fetchPage](/docs/fegg/basic/templates/methods/fetchpage) result after taking precautionary measures from Clickjacking attack.
+Displays the [Application::fetchPage](./fetchpage.mdx) result after taking precautionary measures from Clickjacking attack.
 
 :::note
 
@@ -1279,7 +1270,7 @@ When display variables, you should write `{{ $var }}`. And when display array va
 
 If you want to give variable from Controller to template, you can assignment array value to `$this->page`, and then can display `{{ $page.foo }}` in Temaplte.
 
-After compile, any variables display automatically through htmlSpecialChars method. If you want display raw variables, can display it use `noescape` modifire. Detail is see [modifire](/docs/fegg/basic/templates#modifiers).
+After compile, any variables display automatically through htmlSpecialChars method. If you want display raw variables, can display it use `noescape` modifire. Detail is see [modifire](../index.mdx#modifiers).
 
 ## Example
 
@@ -1752,7 +1743,7 @@ $selected = 'foo';
 
 Display `<input type="hidden">` from values assigned `Application::setHidden`.
 
-Also see [Application::setHidden](/docs/fegg/basic/templates/helpers/sethidden).
+Also see [Application::setHidden](../helpers/sethidden.mdx).
 
 ## Example
 
@@ -1893,21 +1884,21 @@ Fegg's goal is lightweight and less typing, so Core class has the only minimum r
 
 ## Extension Libraries
 
-- [Validation](/docs/fegg/library/validation)
+- [Validation](./validation/index.mdx)
   - Providing some functions for validation
-- [Database](/docs/fegg/library/database)
+- [Database](./database/index.mdx)
   - Providing necessary functions for using database
-- [Model](/docs/fegg/library/model)
+- [Model](./model/index.mdx)
   - Extended Database Library for LH project
-- [File](/docs/fegg/library/file)
+- [File](./file/index.mdx)
   - Providing some functions for managing files/directories
-- [Upload](/docs/fegg/library/upload)
+- [Upload](./upload/index.mdx)
   - Providing some functions for uploading/validating files
-- [Mail](/docs/fegg/library/mail)
+- [Mail](./mail/index.mdx)
   - Providing some functions for sending email
-- [RSS](/docs/fegg/library/rss)
+- [RSS](./rss/index.mdx)
   - Providing some functions for analyzing RSS document
-- [Trim](/docs/fegg/library/trim)
+- [Trim](./trim/index.mdx)
   - Providing some functions for processing image (especially image crop)
 
 ## External Libraries
@@ -1932,7 +1923,7 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 Usually you don't need to use this `DB_pdo` class. Try to use `Model` class instead.
 
-[About Model class is here.](/docs/fegg/library/model)
+[About Model class is here.](../model/index.mdx)
 
 :::
 
@@ -2106,7 +2097,7 @@ public self DB_pdo::select( string $table )
 
 Set select count query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2118,7 +2109,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set insert query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2130,7 +2121,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set update query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2142,7 +2133,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set delete query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2154,7 +2145,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set truncate query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2166,7 +2157,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set create table query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2178,7 +2169,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set create index query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2190,7 +2181,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set create alter add column query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2202,7 +2193,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set create alter rename to query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2214,7 +2205,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set create drop table query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2226,7 +2217,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set create drop index query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2238,7 +2229,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set pragma query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2250,7 +2241,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set group query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2262,7 +2253,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set query item values
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2274,7 +2265,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set limit value
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2286,7 +2277,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set order value
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2298,7 +2289,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set query string directly
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2310,7 +2301,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set where condition
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2322,7 +2313,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set having condition
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2334,7 +2325,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set join table
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2346,7 +2337,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set on query for joined table
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2358,7 +2349,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Disable automatic append query flag
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2370,7 +2361,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Disable automatic append query for a current query flag
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2382,7 +2373,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Disable automatic append query of the table for a current query flag
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2394,7 +2385,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Enable reset query flag
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2406,7 +2397,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Disable reset query flag
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2418,7 +2409,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Execute built query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2430,7 +2421,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Compile built query (not execute)
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2442,7 +2433,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get all the result of executed select query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2454,7 +2445,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Shift the result of executed select query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2466,7 +2457,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get the specific column's list of executed select query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2478,7 +2469,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get the specific column's key and value array of executed select query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2490,7 +2481,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get affected row number of executed update query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2502,7 +2493,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get the last inserted id of executed insert query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2514,7 +2505,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get the last executed query for debugging
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2526,7 +2517,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get the last executed query and parameter separately for debugging
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2538,7 +2529,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get return code of the last executed query
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2550,7 +2541,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Connect to master server
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2562,7 +2553,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Connect to slave server
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2598,7 +2589,7 @@ $file->copyAll('path/to/foo', 'path/to/bar');
 
 Copy all the files to another directory
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2610,7 +2601,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Copy specified directory to specified location
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2622,7 +2613,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Copy specified file to specified location
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2634,7 +2625,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Create directory to specified location
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2646,7 +2637,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Move specified file to specified location
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2658,7 +2649,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Read specified file
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2670,7 +2661,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Delete specified directory and files in that directory
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2682,7 +2673,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Delete specified file that elapsed specified time
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2694,7 +2685,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Delete specified file
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2706,7 +2697,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Update modified date of files that inside of specified directory
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2718,7 +2709,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Put the file to the specified location
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -2943,13 +2934,13 @@ Send email
 
 :::note
 
-If there is added attachment file, this method will call [Mail::sendWithFile](/docs/fegg/library/mail/methods/sendwithfile) automatically
+If there is added attachment file, this method will call [Mail::sendWithFile](./sendwithfile.mdx) automatically
 
 :::
 
 :::note
 
-If debug flag is enabled, this method will call [Mail::log](/docs/fegg/library/mail/methods/log) automatically
+If debug flag is enabled, this method will call [Mail::log](./log.mdx) automatically
 
 :::
 
@@ -2987,13 +2978,13 @@ Send email with attachment file
 
 :::note
 
-If there is no any attachment file, this method will call [Mail::send](/docs/fegg/library/mail/methods/send) automatically
+If there is no any attachment file, this method will call [Mail::send](./send.mdx) automatically
 
 :::
 
 :::note
 
-If debug flag is enabled, this method will call [Mail::log](/docs/fegg/library/mail/methods/log) automatically
+If debug flag is enabled, this method will call [Mail::log](./log.mdx) automatically
 
 :::
 
@@ -3063,7 +3054,7 @@ Set input character set
 
 :::note
 
-If the email body text is garbling, try to use this method or [Mail::setSendCharset](/docs/fegg/library/mail/methods/setsendcharset)
+If the email body text is garbling, try to use this method or [Mail::setSendCharset](./setsendcharset.mdx)
 
 :::
 
@@ -3096,7 +3087,7 @@ Set email character set
 
 :::note
 
-If the email body text is garbling, try to use this method or [Mail::setInputCharset](/docs/fegg/library/mail/methods/setinputcharset)
+If the email body text is garbling, try to use this method or [Mail::setInputCharset](./setinputcharset.mdx)
 
 :::
 
@@ -3155,7 +3146,7 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # Introduction
 
-import Badge from '../../../../src/components/Badge';
+import Badge from '@site/src/components/Badge';
 
 > Extended Database Library for LH project
 
@@ -3413,7 +3404,7 @@ public self Model::setBindParam( array $bind )
 | ----- | --------- | ------- | -------------------- |
 | $bind | array     |         | Bind Parameter types |
 
-- Please see [addBindParam](/docs/fegg/library/model/methods/addbindparam) about allowed bind type
+- Please see [addBindParam](./addbindparam.mdx) about allowed bind type
 
 ## Example
 
@@ -5189,7 +5180,7 @@ $upload->upload('file');
 
 Set upload directory
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -5201,7 +5192,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get upload directory
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -5213,7 +5204,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set upload file size limitation
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -5225,7 +5216,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get upload file size limitation
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -5237,7 +5228,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set upload file type limitation
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -5249,7 +5240,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get upload file type limitation
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -5261,7 +5252,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Set upload option once
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -5273,7 +5264,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Validate uploaded file and move to upload directory
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -5285,7 +5276,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get uploaded file information
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -5297,7 +5288,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Check uploaded file has error
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
@@ -5309,7 +5300,7 @@ import Underconstruction from '../../../../../src/components/Underconstruction';
 
 Get uploaded file error
 
-import Underconstruction from '../../../../../src/components/Underconstruction';
+import Underconstruction from '@site/src/components/Underconstruction';
 
 <Underconstruction></Underconstruction>
 
