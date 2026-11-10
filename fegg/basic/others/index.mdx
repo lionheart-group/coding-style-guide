@@ -22,4 +22,6 @@ A ticket protects form processing. `setTicket()` creates a random string, stores
 
 ## Redirect
 
+`redirect()` ends the response by throwing `Fegg\Http\Halt`, like `displayPage()`. Never write `exit` in a controller; use `$this->halt()` (see [Ending a response](../controller.mdx#ending-a-response)).
+
 <CategoryDocCardList label="Redirect" />

@@ -9,7 +9,7 @@ sidebar_position: 2
 ## Description
 
 ```php
-public array ReCAPTCHA::auth( string $response )
+public array ReCAPTCHA::auth( string $response, [ float $threshold = null ] )
 ```
 
 Sends the token to `https://www.google.com/recaptcha/api/siteverify` and returns an array:
@@ -19,18 +19,21 @@ Sends the token to `https://www.google.com/recaptcha/api/siteverify` and returns
 | success | boolean   | `true` when the API returned success, the score is not below the threshold and there is no error |
 | errors  | array     | Error messages (English for the API error codes; a Japanese message when the score is below the threshold) |
 
+When the service cannot be reached or does not answer with HTTP 200 JSON, `success` is `false` and `errors` has one message asking the visitor to try again later. A warning is written to the application log.
+
 ## Arguments
 
 | Name      | Data type | Default | Remarks                                              |
 | --------- | --------- | ------- | ---------------------------------------------------- |
 | $response | string    |         | Token posted by the widget (`g-recaptcha-response`)   |
+| $threshold | float    | null    | Minimum score for this call. `null`: the threshold given to the constructor |
 
 ## Example
 
 ```php title="Controller"
 use Fegg\Captcha\ReCAPTCHA;
 
-$recaptcha = new ReCAPTCHA('your-recaptcha-secret', 0.5);
+$recaptcha = new ReCAPTCHA(feggEnv('FEGG_RECAPTCHA_SECRET', ''), 0.5);
 $result = $recaptcha->auth($this->in('g-recaptcha-response'));
 
 if (!$result['success']) {

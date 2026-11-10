@@ -147,7 +147,7 @@ $n   = $model->erase($id);                           // removes the row
 
 ## Errors
 
-A failed query or connection throws `Fegg\Database\QueryException`. Its message ends with the SQL and its parameters (`(SQL: Select ... Where no_such_column = 'x')`); `getSql()` and `getParameters()` return them separately. Uncaught, it becomes an HTTP 500 and is written to the PHP error log. Fegg 4 printed the error and called `exit` instead.
+A failed query or connection throws `Fegg\Database\QueryException`. Its message ends with the SQL and its parameters (`(SQL: Select ... Where no_such_column = 'x')`); `getSql()` and `getParameters()` return them separately. Uncaught, it becomes an HTTP 500 and is written to the PHP error log and the [application log](../../basic/logging.mdx). Fegg 4 printed the error and called `exit` instead.
 
 Catch it only when the page can do something useful, for example with a duplicate key:
 

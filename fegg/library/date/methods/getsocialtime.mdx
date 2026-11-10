@@ -16,7 +16,7 @@ Returns the time between `$date` and now in Japanese: `N日前`, `N時間前`, `
 
 :::note
 
-When `$timezone` is given, it is set as the default time zone of PHP (`date_default_timezone_set()`) for the rest of the request.
+`$timezone` is the time zone `$date` is written in, for this call only. The time zone of the application (`$settings['timezone']`) is not changed. When it is omitted, the application's time zone is used.
 
 :::
 

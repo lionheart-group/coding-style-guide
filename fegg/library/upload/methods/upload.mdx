@@ -12,7 +12,13 @@ sidebar_position: 9
 public boolean Upload::upload( string $name, string $up_name, [ string $label = 'ファイル', boolean $required = true ] )
 ```
 
-Checks the file posted as `$_FILES[$name]` (upload errors, size, extension) and moves it to `{upload directory}/{$up_name}.{extension}`. The extension is the lower-cased extension of the original file name.
+Checks the file posted as `$_FILES[$name]` and moves it to `{upload directory}/{$up_name}.{extension}` with mode `0644`. The extension is the lower-cased extension of the original file name.
+
+The checks, in order:
+
+1. Upload errors and the size (`@empty`, `@size`, `@failed`).
+2. The extension must be in [setFileType](./setfiletype.mdx), and must not be a script extension (`@type`).
+3. The content must match the extension (`@content`): images (`jpg`, `jpeg`, `png`, `gif`, `webp`) must be readable by `getimagesize()`, and for known types (images, `pdf`, Office files, `zip`, `txt`, `csv`) the MIME type reported by `finfo` must fit the extension. A PHP file renamed to `.jpg`, or a text file named `.pdf`, is refused. Other extensions are checked by the extension only.
 
 Returns `true` on success. On failure it returns `false` and the error messages are available with [Upload::getErrorMessage](./geterrormessage.mdx). When `$required` is `false` and no file was selected, it returns `true` without saving anything.
 

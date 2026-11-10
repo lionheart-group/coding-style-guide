@@ -1,0 +1,97 @@
+---
+sidebar_position: 6
+---
+
+# Security
+
+> What Fegg does for you, and what to set per project
+
+Most protections are on by default. This page lists them and the settings that change them.
+
+## Secrets and environments
+
+Passwords, API keys and anything else that differs per server are **not committed**. Put them in `htdocs/_fegg/site/config/env.php` (in `.gitignore`; copy `env.php.dist`) or in environment variables, and read them with `feggEnv('NAME', $default)`. See [Settings](../first/config.mdx#environments-and-secrets).
+
+```php title="htdocs/_fegg/site/config/env.php"
+<?php
+defined('FEGG_CORE_DIR') || exit;
+
+return array(
+    'FEGG_ENV'              => 'production',
+    'FEGG_DB_PASSWORD'      => '...',
+    'FEGG_RECAPTCHA_SECRET' => '...',
+    'FEGG_SMTP_PASSWORD'    => '...',
+);
+```
+
+- A site without `env.php` runs as **production**: no error details on screen, for anyone.
+- Error details are shown only in [developer mode](../first/config.mdx#developer-mode): a `developer_ip` address **and** `FEGG_ENV` other than `production`. `developer_ip` alone is not a security boundary: behind a proxy or load balancer every request may come from the same address.
+
+## Security headers
+
+Every response (pages, redirects, 404, error pages, the CMS) gets these headers. The bootstrap sends them before the controller runs.
+
+| Header | Default | Setting in `site/config/settings.php` |
+| :----- | :------ | :------------------------------------ |
+| `X-Content-Type-Options` | `nosniff` | `$settings['security_headers']` |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | `$settings['security_headers']` |
+| `X-Frame-Options` | `SAMEORIGIN` (the CMS image and file pickers are iframes) | `$settings['security_headers']`; `$this->allowFraming()` for one response |
+| `Strict-Transport-Security` | not sent | `$settings['hsts']` (sent on HTTPS responses only) |
+| `Content-Security-Policy` | not sent | `$settings['csp']`; `$settings['csp_report_only'] = true` sends it as `Content-Security-Policy-Report-Only` |
+
+```php title="htdocs/_fegg/site/config/settings.php"
+// Change or remove a default ('' removes it), or add another header
+$settings['security_headers'] = array(
+    'Referrer-Policy'    => 'same-origin',
+    'Permissions-Policy' => 'camera=(), microphone=()',
+);
+
+// Only once the whole site redirects to HTTPS (and every subdomain, with includeSubDomains)
+$settings['hsts'] = 'max-age=31536000';
+
+// Try a policy in report-only mode first
+$settings['csp'] = "default-src 'self'; img-src 'self' data:; script-src 'self' https://www.google.com https://www.gstatic.com";
+$settings['csp_report_only'] = true;
+```
+
+- Turn HSTS on only when every page is served over HTTPS: browsers then refuse HTTP for that domain for `max-age` seconds.
+- A CSP must list inline scripts and every external service the site uses (analytics, reCAPTCHA, Turnstile, YouTube ...). Watch the browser console in report-only mode before you enforce it.
+- A page that other sites may show in a frame (an embeddable widget) calls `$this->allowFraming()` before `displayPage()`. It removes `X-Frame-Options` for that response only.
+
+## Sessions and cookies
+
+- A session starts only when something is written to it (`setSession()`, `setTicket()`, the CMS). Reading does not create one, so ordinary public pages send no `Set-Cookie`.
+- The session cookie is `HttpOnly`, `SameSite=Lax`, and `Secure` when the request is HTTPS (also behind a proxy that sends `X-Forwarded-Proto: https`).
+- `session.use_strict_mode` is on: a session ID the server did not issue is replaced.
+- Call [regenerateSessionId()](./parameters/session/regeneratesessionid.mdx) after a login. [unsetSession()](./parameters/session/unsetsession.mdx) without a name ends the session and deletes its cookie.
+- [setCookie()](./parameters/cookie/setcookie.mdx) sets `HttpOnly` cookies, `SameSite=Strict` by default, `Secure` over HTTPS. [unsetCookie()](./parameters/cookie/unsetcookie.mdx) deletes one.
+
+## Forms
+
+- **Output escaping**: `{{ $x }}` escapes HTML. In URLs and JavaScript use `feggUrl` and `feggJs`; `./fegg-cli template:lint` reports outputs without them. See [Template security](./templates/security.mdx).
+- **Double submission**: public forms use [tickets](./others/tickets/setticket.mdx) (`setTicket()` / `useTicket()`).
+- **CSRF in the CMS**: every POST to a CMS screen must carry the session's token, or it gets a 403. Data changes only on POST (`requirePost()`), so deletes are small POST forms, not links. See [Controller](./controller.mdx#forms-and-the-csrf-token).
+- **Database**: values always go through `?` placeholders. Table, column and order names are checked by `Fegg\Model` and must never come from user input.
+- **Spam**: the contact form supports reCAPTCHA and Turnstile. When the service cannot be reached the check fails, it is never skipped (see [Captcha](../library/captcha/index.mdx)).
+
+## CMS login
+
+- After **5 failed logins** for one login ID from one address, or **20** from one address, logins from that address are refused for **15 minutes**. The failures are kept in the core table `cms_login_attempt`: run `fegg-cli migration` after updating the core. Without the table the login works unthrottled and a warning is logged.
+- `/cms/login/auth` is POST only. Deleted users (`valid = 0`) cannot log in. Old password hashes are upgraded at login.
+- Logout is a POST with the CSRF token (see [Controller](./controller.mdx#login-and-logout)).
+- Users are created and their passwords changed with [`fegg-cli user:create` / `user:password`](../first/cli.mdx#cms-users), which never take the password on the command line. `/cms/register/` needs a CMS login and developer mode.
+- Basic authentication compares the user and password with `hash_equals()`.
+
+## Uploads
+
+- The extension must be allowed, and script extensions (`php`, `phtml`, `phar`, `cgi` ...) are always refused.
+- The content must match the extension (`getimagesize()` for images, `finfo` for known types): a script renamed to `.jpg` is refused.
+- Directories are created `0755`, files `0644`. Files are saved under generated names.
+- The upload directory below the document root gets an `.htaccess` that stops scripts from running. `fegg-cli doctor` reports a missing `htdocs/up_dir/.htaccess`. On nginx, deny scripts under the upload URL yourself.
+- Stored files are sent with `nosniff` and an escaped `Content-Disposition`; HTML, SVG and XML are always attachments.
+
+See [Upload](../library/upload/index.mdx).
+
+## Protecting `_fegg/`
+
+`htdocs/_fegg/` is inside the document root in the standard layout. It is protected by `.htaccess` files, and every PHP file starts with `defined('FEGG_CORE_DIR') || exit;`. Check a live site with `./fegg-cli doctor https://example.com` after every FTP upload: it also warns about outdated `.htaccess` rules. See [Directory structure](../first/cont.mdx) and [fegg-cli](../first/cli.mdx#doctor).

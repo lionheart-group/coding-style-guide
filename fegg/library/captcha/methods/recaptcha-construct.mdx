@@ -17,7 +17,7 @@ public ReCAPTCHA::__construct( string $secret, [ float $threshold = 0.5 ] )
 
 | Name       | Data type | Default | Remarks                                                                 |
 | ---------- | --------- | ------- | ----------------------------------------------------------------------- |
-| $secret    | string    |         | reCAPTCHA secret key                                                    |
+| $secret    | string    |         | reCAPTCHA secret key. Read it from `site/config/env.php` with `feggEnv('FEGG_RECAPTCHA_SECRET')` |
 | $threshold | float     | 0.5     | Minimum score (0.0 to 1.0) / a lower score fails [ReCAPTCHA::auth](./recaptcha-auth.mdx) |
 
 ## Example
@@ -25,5 +25,5 @@ public ReCAPTCHA::__construct( string $secret, [ float $threshold = 0.5 ] )
 ```php title="Controller"
 use Fegg\Captcha\ReCAPTCHA;
 
-$recaptcha = new ReCAPTCHA('your-recaptcha-secret', 0.5);
+$recaptcha = new ReCAPTCHA(feggEnv('FEGG_RECAPTCHA_SECRET', ''), 0.5);
 ```

@@ -6,7 +6,7 @@ sidebar_position: 2
 
 ### Database connect setting
 
-The connection is set in **htdocs/\_fegg/site/config/database_config.php**. SQLite is the default. The `FEGG_DB_PATH` environment variable overrides the SQLite file (the test suite uses it).
+The connection is set in **htdocs/\_fegg/site/config/database_config.php**. The skeleton's file reads the values from `feggEnv()` (an environment variable, then `site/config/env.php`, see [Settings](../../first/config.mdx#environments-and-secrets)), so the file itself is committed and the same on every server. Without any value it uses the SQLite file `site/data/db/db.db`.
 
 ```php title="site/config/database_config.php"
 <?php
@@ -14,52 +14,80 @@ defined('FEGG_CORE_DIR') || exit;
 
 /**
  * Database connection settings
+ *
+ *   FEGG_DB_DSN       PDO DSN. Default: the SQLite file below
+ *   FEGG_DB_USER      user name (MySQL)
+ *   FEGG_DB_PASSWORD  password (MySQL)
+ *   FEGG_DB_SLAVE_DSN read-only replica (optional; default: the master)
+ *   FEGG_DB_PATH      SQLite file path. As an environment variable it wins over FEGG_DB_DSN
+ *                     in env.php (the test suite uses it)
  */
 
-// SQLite file path. FEGG_DB_PATH environment variable overrides it (used by the test suite)
-$_sqlite_path = getenv('FEGG_DB_PATH') ? getenv('FEGG_DB_PATH') : FEGG_SITE_DIR.'/data/db/db.db';
-
-// Production environment
-if (false) {
-
-    // Master database (a single server)
-    $database_config['master'] = array(
-        'dsn' => 'sqlite:'.$_sqlite_path,
-        'username' => '',
-        'password' => ''
-    );
-
-    // Slave databases (multiple servers allowed)
-    $database_config['slave'][] = array(
-        'dsn' => 'sqlite:'.$_sqlite_path,
-        'username' => '',
-        'password' => ''
-    );
-
-// Development environment
+$_sqlite_only = getenv('FEGG_DB_PATH') !== false && getenv('FEGG_DB_DSN') === false;
+if ($_sqlite_only) {
+    $_dsn = 'sqlite:'.getenv('FEGG_DB_PATH');
 } else {
-
-    // Master database (a single server)
-    $database_config['master'] = array(
-        'dsn' => 'sqlite:'.$_sqlite_path,
-        'username' => '',
-        'password' => ''
-    );
-
-    // Slave databases (multiple servers allowed)
-    $database_config['slave'][] = array(
-        'dsn' => 'sqlite:'.$_sqlite_path,
-        'username' => '',
-        'password' => ''
-    );
-
+    $_dsn = feggEnv('FEGG_DB_DSN', 'sqlite:'.feggEnv('FEGG_DB_PATH', FEGG_SITE_DIR.'/data/db/db.db'));
 }
+
+// Master database (a single server)
+$database_config['master'] = array(
+    'dsn'      => $_dsn,
+    'username' => feggEnv('FEGG_DB_USER', ''),
+    'password' => feggEnv('FEGG_DB_PASSWORD', ''),
+);
+
+// Slave databases (multiple servers allowed)
+$database_config['slave'] = array(
+    array(
+        'dsn'      => $_sqlite_only ? $_dsn : feggEnv('FEGG_DB_SLAVE_DSN', $_dsn),
+        'username' => $database_config['master']['username'],
+        'password' => $database_config['master']['password'],
+    ),
+);
 ```
 
-- `master` is used for INSERT, UPDATE, DELETE, schema changes and transactions. SELECT and PRAGMA queries use one of the `slave` entries, picked at random. With a single database, set both to the same DSN.
-- `dsn`, `username` and `password` are passed to PHP's `PDO`. For MySQL use a DSN such as `mysql:host=localhost;dbname=example;charset=utf8mb4`; Fegg then sets `sql_mode='ANSI_QUOTES'` (Fegg quotes names with `"`) and buffered queries.
+- `master` is used for INSERT, UPDATE, DELETE, schema changes and transactions. SELECT and PRAGMA queries use one of the `slave` entries, picked at random. With a single database, both use the same DSN.
+- `dsn`, `username` and `password` are passed to PHP's `PDO`.
 - A connection that fails throws `Fegg\Database\QueryException` instead of printing the error and exiting.
 - `new \Fegg\Database\Pdo('name')` reads `name/database_config.php` and `name/database_regular_use_query.php` instead, for a second database.
+- Projects created before this file used `feggEnv()` may keep their own `database_config.php`. Move the passwords out of committed files into `env.php` when convenient.
+
+### MySQL
+
+SQLite is the default. For MySQL (5.7 / 8.x) or MariaDB, set the connection in `site/config/env.php` (or as environment variables):
+
+```php title="site/config/env.php"
+'FEGG_DB_DSN'      => 'mysql:host=127.0.0.1;port=3306;dbname=example;charset=utf8mb4',
+'FEGG_DB_USER'     => 'example',
+'FEGG_DB_PASSWORD' => '...',
+```
+
+- Always add **`charset=utf8mb4`** to the DSN, or emoji and other 4-byte characters are lost.
+- The connection runs with `sql_mode = ANSI_QUOTES`: Fegg quotes names with `"`, so in raw SQL write string literals with **single quotes** (`WHERE title = 'foo'`, not `"foo"`, which is a column name). Queries are buffered.
+- `./fegg-cli migration`, `migration:db2schema` and `/cms/migrate/` work on MySQL as on SQLite. Tables are created as InnoDB with `utf8mb4_unicode_ci`, and changed tables are altered in place (`ADD` / `MODIFY` / `DROP COLUMN`).
+
+The YAML types are mapped like this (a size written in the YAML, such as `VARCHAR(100)`, is used as written):
+
+| YAML type  | MySQL type     |
+| :--------- | :------------- |
+| `INTEGER`  | `INT`          |
+| `CHAR`     | `VARCHAR(255)` |
+| `TEXT`     | `MEDIUMTEXT`   |
+| `BOOLEAN`  | `TINYINT(1)`   |
+| `DATETIME` | `DATETIME`     |
+| `BLOB`     | `LONGBLOB`     |
+| `REAL`     | `DOUBLE`       |
+
+The YAML type is kept in the column comment (`fegg:CHAR`), so `migration:db2schema` writes the same YAML back. Indexes on `TEXT` columns use the first 191 characters.
+
+:::danger
+
+As on SQLite, `fegg-cli migration` **drops every table that is not in a YAML file**, and removes columns that are not in the YAML. Give the site a database of its own (never one shared with another application), and check the pending changes on `/cms/migrate/` when in doubt: it lists them before the "Run migration" button applies them.
+
+:::
+
+The skeleton's MySQL tests run with `composer test:mysql` against the server set in `FEGG_TEST_MYSQL_DSN`, `FEGG_TEST_MYSQL_USER` and `FEGG_TEST_MYSQL_PASSWORD`. Each test creates and drops its own database.
 
 ### Automatic append query configuration
 

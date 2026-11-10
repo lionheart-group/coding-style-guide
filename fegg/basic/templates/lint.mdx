@@ -78,7 +78,7 @@ Stack trace:
 ...
 ```
 
-Visitors from a developer IP (`developer_ip` in the settings) also see the error, the `Template:` line and the stack trace in the browser.
+In [developer mode](../../first/config.mdx#developer-mode) (a `developer_ip` address on a server whose `FEGG_ENV` is not `production`) the browser also shows the error, the `Template:` line and the stack trace. Everyone else gets the error page (see [Logging and errors](../logging.mdx)).
 
 ## Pitfalls
 

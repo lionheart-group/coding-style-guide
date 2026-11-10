@@ -19,6 +19,8 @@ Sends the token to `https://challenges.cloudflare.com/turnstile/v0/siteverify` a
 | success | boolean   | `true` when the API returned success       |
 | errors  | array     | Error messages for the API error codes     |
 
+When the service cannot be reached or does not answer with HTTP 200 JSON, `success` is `false` and `errors` has one message asking the visitor to try again later. A warning is written to the application log.
+
 ## Arguments
 
 | Name      | Data type | Default | Remarks                                              |
@@ -30,7 +32,7 @@ Sends the token to `https://challenges.cloudflare.com/turnstile/v0/siteverify` a
 ```php title="Controller"
 use Fegg\Captcha\Turnstile;
 
-$turnstile = new Turnstile('your-turnstile-secret');
+$turnstile = new Turnstile(feggEnv('FEGG_TURNSTILE_SECRET', ''));
 $result = $turnstile->auth($this->in('cf-turnstile-response'));
 
 if (!$result['success']) {

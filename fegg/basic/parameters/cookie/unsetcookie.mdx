@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Application::unsetCookie
 
-> Unset COOKIE data
+> Delete a cookie
 
 ## Description
 
@@ -12,13 +12,9 @@ sidebar_position: 3
 public void Application::unsetCookie( string $name )
 ```
 
-Overwrite the cookie with an empty value (path `/`). From the next request on, `getCookie($name)` returns `''`.
+Delete the cookie: it is sent again with an expiry date in the past (path `/`), so the browser drops it. It is also removed from `getCookie()` for the rest of the current request. From the next request on, the browser no longer sends it.
 
-:::note
-
-In Fegg 5.0.0 the cookie is overwritten with an empty value rather than expired, so the browser keeps an empty cookie with that name. Treat an empty value as "no cookie".
-
-:::
+Only cookies with the path `/` are deleted. Fegg 4 set an empty cookie for seven days instead.
 
 ## Arguments
 

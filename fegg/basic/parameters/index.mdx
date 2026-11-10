@@ -16,14 +16,16 @@ Get request data. Values are returned as sent: validate them, and let the templa
 
 ## SESSION
 
-Set and read SESSION data. The session is started automatically, so you don't need to call `session_start()`.
+Set and read SESSION data. Never call `session_start()` yourself: Fegg starts the session **only when something is written to it** (`setSession()`, `setTicket()`, the CMS). Reading with `getSession()` or `{{ $session }}` on a request without a session cookie returns nothing and starts nothing, so ordinary public pages send no `Set-Cookie` and can be cached.
 
-The session cookie is `HttpOnly`. It is also `Secure` (sent over HTTPS only), except on development hosts whose name contains `localhost`, `127.0.0.1` or `develop.lionheart.co.jp`.
+- The session cookie is `HttpOnly` and `SameSite=Lax`. It is `Secure` when the request is HTTPS (also behind a proxy that sends `X-Forwarded-Proto: https`).
+- `session.use_strict_mode` is on: a session ID the server did not issue is replaced by a new one.
+- The session is written when the response ends: after `displayPage()`, `redirect()`, `$this->halt()` or the end of the method (see [Ending a response](../controller.mdx#ending-a-response)).
 
 <CategoryDocCardList label="SESSION" />
 
 ## COOKIE
 
-Set and read COOKIE data.
+Set and read COOKIE data. Cookies set with `setCookie()` are `HttpOnly`, `SameSite=Strict` by default and `Secure` over HTTPS.
 
 <CategoryDocCardList label="COOKIE" />

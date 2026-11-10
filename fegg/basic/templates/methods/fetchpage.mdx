@@ -14,7 +14,7 @@ public string Application::fetchPage( string $template )
 
 Collects the standard template variables (below), renders the template with [Application::fetchTemplate](./fetchtemplate.mdx) and returns the result instead of outputting it. [Application::displayPage](./displaypage.mdx) uses it.
 
-Use it when you need the page as a string (to post-process it, or to output it without the `X-Frame-Options: DENY` header of `displayPage`).
+Use it when you need the page as a string: to post-process it, or as the body of a mail. Unlike `displayPage()`, it does not end the response. The security headers do not depend on which method you use (see [Security](../../security.mdx#security-headers)).
 
 ## Arguments
 
@@ -30,7 +30,7 @@ Use it when you need the page as a string (to post-process it, or to output it w
 | `$site` | Site information: `site/config/site_info.php` (loaded by the base controller) plus values set with [setSiteinfo](../helpers/setsiteinfo.mdx) |
 | `$in` | Request parameters, `$_GET` and `$_POST` (`$this->in()`). Not escaped: always output them with the default escaping |
 | `$config` | Loaded config files (`$this->config`) |
-| `$session` | Session data. `fetchPage` starts the session and stores `session_id` and `session_name` in it |
+| `$session` | Session data, plus `session_id` and `session_name` while a session is active. Reading it does not start a session: without a session cookie it is empty |
 | `$cookie` | Cookie data |
 | `$className` | Controller class name without namespace (`News`) |
 | `$languageCode` | Current language code |

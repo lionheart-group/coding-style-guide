@@ -19,6 +19,8 @@ Adds a condition with `?` placeholders. Values are always bound, never written i
 - A `?` inside a quoted string literal (`'?'`) is not a placeholder.
 - An empty `$query` (`''`) adds nothing, which is handy for optional search conditions.
 
+A query with its own `OR` outside brackets is put in brackets when it is joined to other conditions: `where('category = ?', 1)->where('title = ? OR summary = ?', array($q, $q))` is `category = 1 AND (title = ? OR summary = ?)`. Fegg 4 wrote `category = 1 AND title = ? OR summary = ?`, which matched rows of every category. [having](./having.mdx) works the same way.
+
 The conditions the model adds by itself (the visible flag and `valid = 1`) are joined with `AND` after yours. When your conditions have an `OR` outside brackets, the model puts them in brackets first (`Where (a = ? OR b = ?) AND ...`), so hidden and deleted rows never match. To group conditions inside your own, use [whereOpen](./whereopen.mdx) and [whereClose](./whereclose.mdx).
 
 For common cases there are helpers that also check the column name: [whereIn](./wherein.mdx), [whereNotIn](./wherenotin.mdx), [whereLike](./wherelike.mdx), [whereNull](./wherenull.mdx), [whereNotNull](./wherenotnull.mdx) and [whereBetween](./wherebetween.mdx).

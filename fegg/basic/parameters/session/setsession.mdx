@@ -12,7 +12,9 @@ sidebar_position: 1
 public void Application::setSession( string $name, mixed $value )
 ```
 
-Set SESSION data. Starts the session if it has not been started, so you never call `session_start()` yourself.
+Set SESSION data. Starts the session if it has not been started, so you never call `session_start()` yourself. Writing is what starts a session: a page that never calls `setSession()` (or `setTicket()`) sends no session cookie.
+
+The session cookie is `HttpOnly`, `SameSite=Lax`, and `Secure` over HTTPS. The data is saved when the response ends (`displayPage()`, `redirect()`, `$this->halt()`, or the end of the method).
 
 ## Arguments
 

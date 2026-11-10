@@ -50,7 +50,7 @@ Queries built with the build methods get the automatic parts of `database_regula
 
 ## Errors
 
-A failed connection or query throws `Fegg\Database\QueryException` (a `RuntimeException`). Its message ends with the SQL with its values filled in, for example `no such column: nope (SQL: SELECT nope FROM cms_news WHERE title = 'it''s')`. `getSql()` returns the SQL with its `?` placeholders and `getParameters()` the values. Uncaught, it becomes an HTTP 500 and is written to the PHP error log. Fegg 4 printed the error (to developer IPs only) and called `exit` instead.
+A failed connection or query throws `Fegg\Database\QueryException` (a `RuntimeException`). Its message ends with the SQL with its values filled in, for example `no such column: nope (SQL: SELECT nope FROM cms_news WHERE title = 'it''s')`. `getSql()` returns the SQL with its `?` placeholders and `getParameters()` the values. Uncaught, it becomes an HTTP 500 and is written to the PHP error log and the [application log](../../basic/logging.mdx). Fegg 4 printed the error (to developer IPs only) and called `exit` instead.
 
 ```php title="Controller"
 use Fegg\Database\QueryException;

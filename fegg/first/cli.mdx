@@ -14,15 +14,18 @@ Like `htdocs/index.php`, the file itself only defines the paths (`FEGG_HTML_DIR`
 
 | Command                                         | What it does |
 | :---------------------------------------------- | :----------- |
-| `migration`                                     | Create or change the SQLite tables from the YAML schema files |
+| `migration`                                     | Create or change the tables (SQLite or MySQL) from the YAML schema files |
 | `migration:db2schema <file>`                    | Write the structure of the current database to a YAML file |
 | `db:schema [table] [--json]`                    | List tables and columns from the YAML schema files |
 | `template:lint [file ...]`                      | Check templates without running them |
+| `user:create LOGIN [NAME]`                      | Add a CMS user |
+| `user:password LOGIN`                           | Set a new password for a CMS user |
+| `user:list`                                     | List the CMS users |
 | `core:status`                                   | Show the core version and core files changed in this project |
 | `core:update [vX.Y.Z] [--dry-run] [--force]`    | Update the core from the skeleton repository |
 | `doctor [URL]`                                  | Check that `_fegg/` cannot be read from the web |
 
-Running a command group without a sub command prints its help: `./fegg-cli core`, `./fegg-cli db`, `./fegg-cli template`, `./fegg-cli migration:help`, `./fegg-cli doctor:help`.
+Running a command group without a sub command prints its help: `./fegg-cli core`, `./fegg-cli db`, `./fegg-cli template`, `./fegg-cli user`, `./fegg-cli migration:help`, `./fegg-cli doctor:help`.
 
 ## migration
 
@@ -30,11 +33,13 @@ Running a command group without a sub command prints its help: `./fegg-cli core`
 ./fegg-cli migration
 ```
 
-Compares the table definitions in the YAML files with the SQLite database and applies the difference (adds tables, columns and indexes).
+Compares the table definitions in the YAML files with the database (SQLite, or MySQL / MariaDB) and applies the difference (adds tables, columns and indexes).
 
-- The core's files (`core/config/database/`: `cms_user`, `cms_file`, `cms_image`) are read first, then the project's (`site/config/database/`). A project file with the same name replaces the core's file.
+- The core's files (`core/config/database/`: `cms_user`, `cms_file`, `cms_image`, `cms_login_attempt`) are read first, then the project's (`site/config/database/`). A project file with the same name replaces the core's file.
 - Prints `Fegg-cli migration diff : Not changed` when the database already matches, `Fegg-cli migration diff : Finished migration` after applying changes.
 - `fegg-cli core:update` runs it automatically after updating the core.
+- On MySQL the YAML types are mapped to MySQL types and changed tables are altered in place. See [Database configuration](../library/database/configuration.mdx#mysql).
+- `/cms/migrate/` in the CMS shows the same pending changes and applies them with its "Run migration" button (POST), for servers where you cannot run `fegg-cli`.
 
 :::danger
 
@@ -91,6 +96,30 @@ NG: 2 problem(s) in 1 template(s)
 
 Prints `OK: <n> template(s)` when there is nothing to fix. Run it after every template change.
 
+## CMS users
+
+```bash
+./fegg-cli user:create admin "Site administrator"   # LOGIN [NAME]; NAME defaults to LOGIN
+./fegg-cli user:password admin                      # set a new password
+./fegg-cli user:list                                # user_id, login and name of every CMS user
+```
+
+Manage the CMS users (table `cms_user`). `user:create` and `user:password` ask for the password twice without showing it. It must have at least 8 characters, and it is stored with `password_hash()`.
+
+The password is never an argument (it would stay in the shell history). To pass it from a script, or where there is no terminal, give it on standard input with `--password-stdin`:
+
+```bash
+printf '%s\n' "$CMS_PASSWORD" | ./fegg-cli user:create admin --password-stdin
+```
+
+`user:create` refuses a login that already exists; use `user:password` for it.
+
+:::note
+
+Fegg 4 created users with the URL `/cms/login/create/<name>/<login>/<password>`. It is gone in Fegg 5. `/cms/register/` still exists in the CMS, but it now needs a CMS login as well as [developer mode](./config.mdx#developer-mode) (a `developer_ip` address on a server that is not production), so on a production server use `fegg-cli`.
+
+:::
+
 ## core:status
 
 ```bash
@@ -124,9 +153,17 @@ Replaces the core with a release of the skeleton repository. See [Updating the c
 ./fegg-cli doctor https://example.com    # also request the live site
 ```
 
-Without a URL, it checks that `htdocs/_fegg/.htaccess` denies access and that `htdocs/.htaccess` has the rule for `_fegg/`. With a URL, it also requests files under `_fegg/` and the SQLite database (when it is under the document root) on the live site and reports any that can be read.
+Without a URL, it checks the files on disk:
+
+- `htdocs/_fegg/.htaccess` denies access,
+- `htdocs/.htaccess` has the rule for `_fegg/`,
+- the upload directory `htdocs/up_dir/` has its `.htaccess` that stops uploaded scripts from running (see [Security](../basic/security.mdx#uploads)).
+
+With a URL, it also requests files under `_fegg/` and the SQLite database (when it is under the document root) on the live site and reports any that can be read.
 
 Prints `OK: https://example.com does not expose _fegg/`, or `NG` with the list of problems (exit code `1`). You can run it from your local machine against the production URL, which is the easiest check after an FTP upload.
+
+It also prints `Warning:` lines, without failing, for outdated rules in `htdocs/.htaccess`: a `<IfModule mod_php5.c>` block (ignored by PHP 7 and 8), and Apache 2.2 `Order` / `Deny from` lines (an HTTP 500 on Apache 2.4 without `mod_access_compat`; use `Require all denied`). Compare the file with `core/dist/htaccess.dist`.
 
 ## install:class
 
@@ -135,3 +172,16 @@ Prints `OK: https://example.com does not expose _fegg/`, or `NG` with the list o
 ```
 
 Clones a Fegg library repository (from GitHub, or a full `https://` / `git:` URL) and copies its `src/` directory into `htdocs/_fegg/site/lib/`. This is the Fegg 4 library mechanism: classes in `site/lib/` are only loaded through `getClass()`, which is deprecated in Fegg 5. For new code, put namespaced classes in `site/src/` instead.
+
+## Developer commands in the skeleton
+
+The skeleton repository also has Composer scripts for the test suite and code checks. Composer is only used for development; the application never loads `vendor/`.
+
+| Command                    | What it does |
+| :------------------------- | :----------- |
+| `composer test`            | PHPUnit: unit and HTTP integration tests (PHP 7.4 to 8.5). `test:unit` and `test:integration` run one suite |
+| `composer test:mysql`      | The MySQL tests, against the server given in `FEGG_TEST_MYSQL_DSN`, `FEGG_TEST_MYSQL_USER` and `FEGG_TEST_MYSQL_PASSWORD` (skipped without them) |
+| `composer analyse`         | PHPStan (level 5, with a baseline) |
+| `composer cs:check`        | PSR-12 check of `core/src` and the tests (`composer cs:fix` applies the fixes) |
+
+The integration tests run with `FEGG_ENV=development` and a throwaway SQLite database, so they never touch `site/data/db/db.db`.

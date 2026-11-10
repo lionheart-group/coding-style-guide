@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Application::displayPage
 
-> Display a page with the standard template variables and clickjacking protection
+> Display a page with the standard template variables and end the response
 
 ## Description
 
@@ -12,7 +12,9 @@ sidebar_position: 1
 public void Application::displayPage( string $template )
 ```
 
-Renders the template with [Application::fetchPage](./fetchpage.mdx) (so `$page`, `$site`, `$in` … are available), sends the `X-Frame-Options: DENY` header so that other sites cannot embed the page in a frame, outputs the page and ends the request (`exit`). Code after `displayPage()` does not run.
+Renders the template with [Application::fetchPage](./fetchpage.mdx) (so `$page`, `$site`, `$in` … are available), outputs the page and ends the response by throwing `Fegg\Http\Halt` (not `exit`; see [Ending a response](../../controller.mdx#ending-a-response)). Code after `displayPage()` does not run. A `catch (\Throwable $e)` around it must rethrow `Fegg\Http\Halt`.
+
+The security headers (`X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `Referrer-Policy` ...) are sent for every response before the controller runs, not by `displayPage()` (see [Security](../../security.mdx#security-headers)). To let other sites show one page in a frame, call `$this->allowFraming()` before `displayPage()`.
 
 This is the method to use for every page. When the site-wide Basic authentication is enabled (`basic_auth_scope = 1`), it is checked here.
 

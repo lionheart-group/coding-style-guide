@@ -183,6 +183,36 @@ public function show($param1 = '', $param2 = '')
 
 Give the arguments a default value: a visitor can always open the URL with fewer segments, and a missing required argument is an error (HTTP 500).
 
+### Ending a response
+
+[displayPage()](./templates/methods/displaypage.mdx), [redirect()](./others/redirect/redirect.mdx), `requirePost()`, Basic authentication and the CMS login check end the response by throwing `Fegg\Http\Halt`. The dispatcher catches it, writes the session and sends the output. Code after them does not run, as before, but Fegg 5 never calls `exit`.
+
+To stop a controller yourself, call `$this->halt()` instead of `exit`. It prints its argument, if any, and ends the response the same way:
+
+```php
+public function ping()
+{
+    header('Content-Type: text/plain; charset=utf-8');
+    $this->halt('pong');   // not: echo 'pong'; exit;
+}
+```
+
+With `halt()` the dispatcher finishes the request itself (it writes the session and sends the buffered output), and the code stays testable. `exit` still stops the script, but skips all of that.
+
+`Halt` extends `\Error`, not `\Exception`, so `catch (\Exception $e)` does not stop a redirect. A **`catch (\Throwable $e)`** around `displayPage()` or `redirect()` would catch it: rethrow it first.
+
+```php
+try {
+    $this->_import($file);
+    $this->redirect('/cms/import/done/');
+} catch (\Fegg\Http\Halt $halt) {
+    throw $halt;   // the redirect: let it through
+} catch (\Throwable $e) {
+    \Fegg\Log::error('Import failed', array('exception' => $e));
+    $this->displayPage('cms/import/error');
+}
+```
+
 ## Using other classes
 
 Classes are autoloaded. Import them with `use`, or write the full name with a leading `\`, and create them with `new`:
@@ -290,6 +320,15 @@ class Event extends Controller
 
 - JavaScript can read the token from `<meta name="csrf-token">` and send it as the `cms_csrf` POST field.
 - The token is the same for the whole session (several tabs work) and changes when you log in.
+
+### Login and logout
+
+The login screens are core controllers (`Fegg\Controller\Cms\Login`, `Logout`):
+
+- `/cms/login/auth` accepts POST only. Deleted users (`valid = 0`) cannot log in, and old password hashes are upgraded at login.
+- **Login throttling**: after 5 failed logins for one login ID from one address, or 20 from one address, logins from that address are refused for 15 minutes. The failures are stored in the core table `cms_login_attempt`: run `fegg-cli migration` after updating. Without the table the login still works, unthrottled, and a warning is logged.
+- **Logout is a POST** with the CSRF token, so another site cannot log a user out. `/cms/logout/` opened as a link shows a logout button; links with the class `js-cms-logout` post directly (`htdocs/cms/js/base.js`). If you copied the CMS frame templates to `site/template/cms/`, add that class to the logout link.
+- CMS users are created with [`fegg-cli user:create`](../first/cli.mdx#cms-users). `/cms/register/` needs a CMS login and [developer mode](../first/config.mdx#developer-mode).
 
 ## Template of Controller class
 

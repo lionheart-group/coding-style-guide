@@ -39,7 +39,7 @@ htdocs/                   # document root
             controller/   # Site\Controller\  Controller (project base class), Index, News, Cms\News ...
             template/     # site templates (.tpl), CMS templates for post types
             functions/    # project template modifiers (loaded automatically)
-            config/       # settings.php, route.php, database_config.php, site_info.php, cms_menu.php ...
+            config/       # settings.php, env.php (per server, not committed), route.php, database_config.php, site_info.php, cms_menu.php ...
                 database/ # YAML table definitions for the project's tables
             data/         # db/, log/, cache/, core-backup/ (not tracked by git)
 ```
@@ -102,7 +102,7 @@ require FEGG_CORE_DIR . '/bootstrap/web.php';
 In the standard layout `_fegg/` is inside the document root. It is protected by several layers, so that one missing layer is caught by the next:
 
 1. `htdocs/_fegg/.htaccess` denies all requests.
-2. `htdocs/.htaccess` returns 403 for `/_fegg/` and denies `.db`, `.sqlite`, `.yaml`, `.tpl`, `.log`, `.md`, `.json` and `.dist` files.
+2. `htdocs/.htaccess` returns 403 for `/_fegg/`, dotfiles and hidden directories (`.git/`; `.well-known/` stays reachable), and denies `.db`, `.sqlite`, `.yaml`, `.tpl`, `.log`, `.md`, `.json` and `.dist` files.
 3. Every PHP file under `_fegg/` and every compiled template starts with `defined('FEGG_CORE_DIR') || exit;`.
 4. `fegg-cli doctor https://example.com` checks over HTTP that nothing under `_fegg/` and no database file can be read (see [fegg-cli](./cli.mdx#doctor)). The CMS dashboard also warns about problems it can detect from the files, such as a missing `.htaccess`.
 5. If the server allows it, put the SQLite database outside the document root (see [Settings](./config.mdx#database)).
@@ -111,6 +111,8 @@ On nginx, where `.htaccess` is not used, add equivalent rules:
 
 ```nginx
 location ~ (^|/)_fegg(/|$) { deny all; }
+location ~ /\.(?!well-known/) { deny all; }
+location ~* ^/up_dir/.*\.(php\d?|phtml|phar|pht|cgi|pl|py|sh)$ { deny all; }
 location ~* \.(tpl|db|sqlite|ya?ml|log|md|json|dist)$ { deny all; }
 ```
 

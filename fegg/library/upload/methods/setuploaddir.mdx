@@ -12,7 +12,9 @@ sidebar_position: 2
 public boolean Upload::setUploadDir( string $dir )
 ```
 
-The directory is created (recursively) when it does not exist. Returns `true` when the directory is writable, otherwise `false` and the directory is not set.
+The directory is created (recursively, mode `0755`) when it does not exist. Returns `true` when the directory is writable, otherwise `false` and the directory is not set.
+
+When the directory is below the document root and has no `.htaccess`, one is written that stops scripts from running there (see [Introduction](../index.mdx#protecting-the-upload-directory)). An existing `.htaccess` is left alone.
 
 ## Arguments
 

@@ -38,7 +38,7 @@ Then:
 2. Recreate the entry files. If the project changed the paths in `index.php`, set the three constants (`FEGG_HTML_DIR`, `FEGG_CORE_DIR`, `FEGG_SITE_DIR`) to match (see [Directory structure](./cont.mdx#entry-files-and-layout)).
 3. Add the `FilesMatch` block and the `RewriteRule (^|/)_fegg(/|$) - [F,L]` line from `htaccess.dist` to `htdocs/.htaccess`.
 4. Move the project files with `git mv` (keeps the history).
-5. Carry over the changed values of the old `fegg/settings.php` (`developer_ip`, `run_mode`, `maintenance_page_url`, Basic authentication, languages) to `site/config/settings.php`.
+5. Carry over the changed values of the old `fegg/settings.php` (`developer_ip`, `run_mode`, `maintenance_page_url`, Basic authentication, languages) to `site/config/settings.php`. Copy `site/config/env.php.dist` to `site/config/env.php` on each development or staging server and set `'FEGG_ENV' => 'development'`: without it the site runs as production and shows no error details (see [Settings](./config.mdx#environments-and-secrets)).
 6. Create `site/config/cms_menu.php` with one block per post type that was in the old CMS menu.
 7. Replace the removed constants until `grep -rn "FEGG_DIR\|FEGG_CODE_DIR" htdocs/_fegg/site` finds nothing:
 
@@ -86,24 +86,31 @@ namespace Site\Controller\Cms;
 
 defined('FEGG_CORE_DIR') || exit;
 
-use Fegg\Cms\Helper;
 use Fegg\Model;
-use Site\Controller\Controller;
 
-class News extends Controller
+class News extends Controller              // Site\Controller\Cms\Controller: the CMS base
 {
+    protected $_cmsSection = 'news';       // replaces new Helper('news') and the isAuth() check
+
     public function __init()
     {
         parent::__init();
-        $this->_lh = new Helper('news');
         $this->_model = new Model(true, array('table' => 'cms_news', 'id' => 'news_id'));
+    }
+
+    public function delete($id)
+    {
+        $this->requirePost();              // deletes are POST forms with the CSRF token
+        // ...
     }
 }
 ```
 
+CMS screens extend `Site\Controller\Cms\Controller` (copy `site/controller/Cms/Controller.php` from the skeleton), not `Site\Controller\Controller`: it checks the login and the CSRF token of every POST. Delete links in copied CMS list templates become POST forms (see [Controller](../basic/controller.mdx#cms-screens)).
+
 | v3 / v4                                    | Fegg 5                                              |
 | :----------------------------------------- | :-------------------------------------------------- |
-| `MyApplication`                            | `Site\Controller\Controller`                        |
+| `MyApplication`                            | `Site\Controller\Controller` (public pages), `Site\Controller\Cms\Controller` (CMS screens) |
 | `Application` / `CommandApplication`       | `Fegg\Application` / `Fegg\CommandApplication`      |
 | `Model`, `ModelWhere`, `ModelOrder`, ...   | `Fegg\Model`, `Fegg\Model\Where`, `Fegg\Model\Order`, ... |
 | `DB_pdo`                                   | `Fegg\Database\Pdo`                                 |
@@ -133,6 +140,15 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 - `{{ options }}` escapes labels and values, and `{{ hidden }}` escapes values.
 - **`OR` in conditions** is put in brackets before the model adds the visible flag and `valid = 1`. In Fegg 4, `where('a = ?', 1)->where('b = ?', 2, 'OR')` also returned unpublished and deleted rows matching `b`; such lists can get shorter.
 - **Arrays reach modifiers**: `{{ $tags|feggImplode:', ' }}` now prints the joined tags (it printed nothing).
+- **`where()` fragments with `OR`** are bracketed: `where('category = ?', 1)->where('a = ? OR b = ?', ...)` is `category = 1 AND (a = ? OR b = ?)`. Fegg 4 matched rows of every category.
+- **No more `exit`**: `displayPage()`, `redirect()`, `requirePost()` and the CMS login check throw `Fegg\Http\Halt`. A `catch (\Throwable $e)` around them must rethrow it (see [Controller](../basic/controller.mdx#ending-a-response)). Replace your own `exit` in controllers with `$this->halt()`.
+- **Environment**: error details need a `developer_ip` address **and** `FEGG_ENV` other than `production` (`site/config/env.php`). `FEGG_TEST_ENVIRONMENT` no longer looks at the host name.
+- **Sessions and cookies**: a session starts only when something is written to it. `setCookie()` takes SameSite as its own argument, and `unsetCookie()` really deletes the cookie (see [Parameters](../basic/parameters/index.mdx)).
+- **Security headers** (`X-Frame-Options: SAMEORIGIN`, `nosniff`, `Referrer-Policy`) are sent with every response. A page meant to be framed by another site calls `$this->allowFraming()` (see [Security](../basic/security.mdx)).
+- **CMS login**: logout is a POST. Copied CMS frame templates in `site/template/cms/` add the class `js-cms-logout` to the logout link. Run `fegg-cli migration` for the login throttling table `cms_login_attempt`. `/cms/login/create/...` is gone: use `fegg-cli user:create` (see [fegg-cli](./cli.mdx#cms-users)).
+- **Uploads** check the content against the extension; add the `@content` message to a copied `site/config/file_error_message.php` (see [Upload](../library/upload/configuration.mdx)).
+- **`htdocs/.htaccess`**: remove the `<IfModule mod_php5.c>` block and the Apache 2.2 `Order` / `Deny from all` lines (500 on Apache 2.4), and add the dotfile rules of `core/dist/htaccess.dist`. `fegg-cli doctor` warns about the old lines.
+- **Captcha keys and the database DSN** move to `env.php`: the skeleton's `database_config.php` and `contact/contact_config.php` read them with `feggEnv()`. Copied old files keep working; move the keys out of committed files when convenient.
 - **Route-only controllers**: controllers that implement `Fegg\Http\RouteOnly` (such as the skeleton's `Site\Controller\Page`) are only reached through `site/config/route.php`. Add a route such as `$route['about/'] = 'page/render/about';` for each static page that was reached as `/page/render/...` (see [URL](../basic/url.mdx#static-pages)).
 
 ### Additional work for v3 projects
@@ -145,7 +161,7 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 
 - [ ] `./fegg-cli template:lint` prints OK
 - [ ] `php -l` reports no syntax errors for the PHP files under `htdocs/_fegg` (excluding `vendor/` and `data/`)
-- [ ] `./fegg-cli migration` against a copy of the production database prints `Not changed` (no table definition is missing)
+- [ ] `./fegg-cli migration` against a copy of the production database only adds new core tables such as `cms_login_attempt` (no project table definition is missing)
 - [ ] `./fegg-cli core:status` prints `No changes to core files.`
 - [ ] Public pages, the contact form (through to sending), CMS login, create / edit / delete for each post type, and media and image uploads work
 - [ ] Every post type appears in the CMS side menu and on the dashboard

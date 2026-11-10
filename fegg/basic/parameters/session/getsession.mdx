@@ -12,7 +12,9 @@ sidebar_position: 2
 public mixed Application::getSession( string $name = '' )
 ```
 
-Get SESSION data. Starts the session if it has not been started. If the key does not exist, returns `''`. If you omit the argument, returns all SESSION data as an array.
+Get SESSION data. If the key does not exist, returns `''`. If you omit the argument, returns all SESSION data as an array.
+
+`getSession()` does not create a session: when the request has no session cookie (and nothing was written to the session yet), it returns `''` (or `array()` without an argument) and no cookie is sent. An existing session is opened to read it.
 
 ## Arguments
 

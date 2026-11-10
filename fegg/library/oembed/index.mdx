@@ -8,7 +8,7 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 > Getting the embed URL of a YouTube video etc. through oEmbed
 
-`Fegg\Tool\OEmbed` asks the oEmbed endpoint of the service matching a URL (e.g. a YouTube video page) and extracts the URL to embed. It needs the PHP cURL extension.
+`Fegg\Tool\OEmbed` asks the oEmbed endpoint of the service matching a URL (e.g. a YouTube video page) and extracts the URL to embed. The request is sent with `Fegg\Http\Client` (cURL when it is installed, otherwise PHP's http stream wrapper; 10 second timeout). A transport failure or an answer other than HTTP 200 throws an `Exception`.
 
 ## How to use
 

@@ -13,7 +13,9 @@ Two classes verify the token posted by a CAPTCHA widget with the service's API:
 - `Fegg\Captcha\ReCAPTCHA`: [Google reCAPTCHA v3](https://developers.google.com/recaptcha/docs/v3) (score based)
 - `Fegg\Captcha\Turnstile`: [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/)
 
-Both send the request with `file_get_contents()`, so `allow_url_fopen` must be enabled.
+Both send the token with `Fegg\Http\Client` (cURL when it is installed, otherwise PHP's http stream wrapper; 5 second timeout, 3 seconds to connect).
+
+**When the service cannot be reached** (timeout, outage, an answer that is not HTTP 200 JSON), `auth()` fails: `success` is `false` and `errors` has a message asking the visitor to try again later (`確認サービスに接続できませんでした。…`). A warning is written to the [application log](../../basic/logging.mdx). A form protected by a captcha is never accepted unchecked.
 
 ## How to use
 
@@ -35,15 +37,15 @@ class Entry extends Controller
     {
         $validation = new Validation();
 
-        // reCAPTCHA
-        $recaptcha = new ReCAPTCHA('your-recaptcha-secret', 0.5);
+        // reCAPTCHA (the secret comes from site/config/env.php)
+        $recaptcha = new ReCAPTCHA(feggEnv('FEGG_RECAPTCHA_SECRET', ''), 0.5);
         $result = $recaptcha->auth($this->in('g-recaptcha-response'));
         if (!$result['success']) {
             $validation->setError('g-recaptcha-response', implode(',', $result['errors']));
         }
 
         // Cloudflare Turnstile
-        $turnstile = new Turnstile('your-turnstile-secret');
+        $turnstile = new Turnstile(feggEnv('FEGG_TURNSTILE_SECRET', ''));
         $result = $turnstile->auth($this->in('cf-turnstile-response'));
         if (!$result['success']) {
             $validation->setError('cf-turnstile-response', implode(',', $result['errors']));
@@ -52,7 +54,31 @@ class Entry extends Controller
 }
 ```
 
-The contact form of the skeleton supports both. Enable one in `htdocs/_fegg/site/config/contact/contact_config.php` (`$_enable_recaptcha` / `$_enable_turnstile`, with the site key and the secret key). The widgets are output by `site/template/template/antispam.tpl`, and `site/controller/Contact.php` verifies them.
+## Keys
+
+The keys differ per server, and the secret keys must not be committed. Put them in `site/config/env.php` (or environment variables) and read them with `feggEnv()`:
+
+```php title="htdocs/_fegg/site/config/env.php"
+'FEGG_RECAPTCHA_SITE_KEY' => '...',
+'FEGG_RECAPTCHA_SECRET'   => '...',
+'FEGG_TURNSTILE_SITE_KEY' => '...',
+'FEGG_TURNSTILE_SECRET'   => '...',
+```
+
+Use different keys (or the providers' test keys) for development and production.
+
+## Contact form
+
+The contact form of the skeleton supports both. Enable one in `htdocs/_fegg/site/config/contact/contact_config.php` with `$_enable_recaptcha` or `$_enable_turnstile`; the file reads the keys from `feggEnv()`:
+
+```php title="htdocs/_fegg/site/config/contact/contact_config.php"
+$_enable_recaptcha = true;
+$_recaptcha_key    = feggEnv('FEGG_RECAPTCHA_SITE_KEY', '');
+$_recaptcha_secret = feggEnv('FEGG_RECAPTCHA_SECRET', '');
+$_recaptcha_score_threshold = 0.5;
+```
+
+The widgets are output by `site/template/template/antispam.tpl`, and `site/controller/Contact.php` verifies them. Projects whose old `contact_config.php` has the keys written in it keep working; move them to `env.php` when convenient.
 
 ## Methods
 
