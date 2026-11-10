@@ -49,7 +49,7 @@ Per-server values and secrets (the environment, database passwords, API keys) do
 | `csp_report_only`      | `false`                         | `true`: send the policy as `Content-Security-Policy-Report-Only` (reports only, blocks nothing) |
 | `default_language`     | not set                         | Language code used when none is detected, e.g. `'ja'`. Only for multilingual sites |
 | `support_language`     | not set                         | Supported language codes, e.g. `array('ja', 'en')`. Only for multilingual sites |
-| `basic_auth_scope`     | `0`                             | `0`: no Basic authentication. `1`: every page rendered by Fegg. `2`: only where the controller calls `$this->basicAuth()` |
+| `basic_auth_scope`     | `0`                             | `0`: no Basic authentication. `1`: every request handled by Fegg, checked before the controller runs. `2`: only where the controller calls `$this->basicAuth()` |
 | `basic_auth_user`      | `''`                            | Basic authentication user |
 | `basic_auth_password`  | `''`                            | Basic authentication password (compared with `hash_equals()`) |
 | `basic_auth_message`   | not set                         | Realm shown in the browser's login dialog |
@@ -155,7 +155,7 @@ Both files come with the skeleton. The project root (the directory of `fegg-cli`
 
 - **Why the path:** the host name of a request is chosen by the client. Matching it would let a request to production with `Host: x.develop.lionheart.co.jp` switch production to the test settings (test captcha keys that always pass, the test administrator). The path is set by the server, and `fegg-cli` sees the same path as the web.
 - **Check it:** the first line of `fegg-cli migration` in the deploy log names the environment and its file, e.g. `Environment: staging (site/config/env/staging.php, /var/www/vhosts/*/p[0-9]*) / DB: sqlite:...`.
-- **First CMS user:** `fegg-cli migration` creates `FEGG_CMS_INITIAL_LOGIN` when no row with that login exists, deleted rows included. It never changes an existing user, so it is safe on every deploy: a password changed in the CMS stays, and a deleted user does not come back. Commit the hash (`./fegg-cli user:hash`), not the password, and change the password after the first login.
+- **First CMS user:** `fegg-cli migration` creates `FEGG_CMS_INITIAL_LOGIN` only while `cms_user` has no users at all. It never changes an existing user, so it is safe on every deploy: a password changed in the CMS stays, and once any user exists, a deleted initial user does not come back. Commit the hash (`./fegg-cli user:hash`), not the password, and change the password after the first login.
 - **Captcha:** the Turnstile test keys need no host name registration. reCAPTCHA v3 has no test keys: use a key registered for `develop.lionheart.co.jp`. `'FEGG_RECAPTCHA_SCORE_THRESHOLD' => '1.0'` shows the rejection.
 
 :::warning

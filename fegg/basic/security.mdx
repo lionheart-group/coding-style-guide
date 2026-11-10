@@ -70,18 +70,19 @@ $settings['csp_report_only'] = true;
 ## Forms
 
 - **Output escaping**: `{{ $x }}` escapes HTML. In URLs and JavaScript use `feggUrl` and `feggJs`; `./fegg-cli template:lint` reports outputs without them. See [Template security](./templates/security.mdx).
-- **Double submission**: public forms use [tickets](./others/tickets/setticket.mdx) (`setTicket()` / `useTicket()`).
-- **CSRF in the CMS**: every POST to a CMS screen must carry the session's token, or it gets a 403. Data changes only on POST (`requirePost()`), so deletes are small POST forms, not links. See [Controller](./controller.mdx#forms-and-the-csrf-token).
+- **Double submission**: public forms use [tickets](./others/tickets/setticket.mdx) (`setTicket()` / `useTicket()`). The skeleton's contact form revokes the ticket when a confirmation fails, and sends the auto-reply to exactly one address.
+- **CSRF in the CMS**: every POST to a CMS screen must carry the session's token, or it gets a 403. **Every action that changes data must call `$this->requirePost()` first**: the token is only checked on POST, so an action without it can be triggered by a link on another site. A GET then gets a 405, and deletes are small POST forms, not links. See [Controller](./controller.mdx#cms-screens).
+- **Actions**: only a controller's own public methods can be called from a URL, never the framework's (`setSession()`, `mail()` ...). See [Controller](./controller.mdx#which-methods-are-actions).
 - **Database**: values always go through `?` placeholders. Table, column and order names are checked by `Fegg\Model` and must never come from user input.
 - **Spam**: the contact form supports reCAPTCHA and Turnstile. When the service cannot be reached the check fails, it is never skipped (see [Captcha](../library/captcha/index.mdx)).
 
 ## CMS login
 
 - After **5 failed logins** for one login ID from one address, or **20** from one address, logins from that address are refused for **15 minutes**. The failures are kept in the core table `cms_login_attempt`: run `fegg-cli migration` after updating the core. Without the table the login works unthrottled and a warning is logged.
-- `/cms/login/auth` is POST only. Deleted users (`valid = 0`) cannot log in. Old password hashes are upgraded at login.
+- `/cms/login/auth` is POST only. Deleted users (`valid = 0`) cannot log in, and deleting a user ends their sessions. Old password hashes are upgraded at login. An unknown login ID takes as long to check as a wrong password.
 - Logout is a POST with the CSRF token (see [Controller](./controller.mdx#login-and-logout)).
 - Users are created and their passwords changed with [`fegg-cli user:create` / `user:password`](../first/cli.mdx#cms-users), which never take the password on the command line. `/cms/register/` needs a CMS login and developer mode.
-- Basic authentication compares the user and password with `hash_equals()`.
+- Basic authentication compares the user and password with `hash_equals()`. With `basic_auth_scope = 1` it is checked before the controller's `__init()` and action, so redirects, downloads and direct output are protected too.
 
 ## Uploads
 

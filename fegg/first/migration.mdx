@@ -98,6 +98,12 @@ class News extends Controller              // Site\Controller\Cms\Controller: th
         $this->_model = new Model(true, array('table' => 'cms_news', 'id' => 'news_id'));
     }
 
+    public function update()
+    {
+        $this->requirePost();              // required: every action that changes data
+        // ...
+    }
+
     public function delete($id)
     {
         $this->requirePost();              // deletes are POST forms with the CSRF token
@@ -107,6 +113,12 @@ class News extends Controller              // Site\Controller\Cms\Controller: th
 ```
 
 CMS screens extend `Site\Controller\Cms\Controller` (copy `site/controller/Cms/Controller.php` from the skeleton), not `Site\Controller\Controller`: it checks the login and the CSRF token of every POST. Delete links in copied CMS list templates become POST forms (see [Controller](../basic/controller.mdx#cms-screens)).
+
+:::danger Required: `requirePost()` in every action that changes data
+
+Fegg 4 had no such check, so copied CMS controllers do not have it. Add `$this->requirePost()` as the first line of every action that saves, deletes, sorts or otherwise writes (`update`, `create`, `delete` ...). The CSRF token is only checked on POST: an action without `requirePost()` still runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET answers 405. Check every action with `grep -n "public function" htdocs/_fegg/site/controller/Cms/*.php`.
+
+:::
 
 | v3 / v4                                    | Fegg 5                                              |
 | :----------------------------------------- | :-------------------------------------------------- |
@@ -141,6 +153,10 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 - **`OR` in conditions** is put in brackets before the model adds the visible flag and `valid = 1`. In Fegg 4, `where('a = ?', 1)->where('b = ?', 2, 'OR')` also returned unpublished and deleted rows matching `b`; such lists can get shorter.
 - **Arrays reach modifiers**: `{{ $tags|feggImplode:', ' }}` now prints the joined tags (it printed nothing).
 - **`where()` fragments with `OR`** are bracketed: `where('category = ?', 1)->where('a = ? OR b = ?', ...)` is `category = 1 AND (a = ? OR b = ?)`. Fegg 4 matched rows of every category.
+- **Actions**: only a controller's own public methods can be called from a URL (see [Controller](../basic/controller.mdx#which-methods-are-actions)). An action defined in `MyApplication` or a base controller is a 404: write it in each controller that uses it. An action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) is a 404: rename it, or map the old URL with a route.
+- **CMS saving actions** with `requirePost()` answer 405 to a GET (see above). Edit and delete forms in copied templates must use `method="post"`.
+- **Basic authentication** with `basic_auth_scope = 1` is checked before the controller's `__init()` and action, so redirects, downloads and direct output are protected too.
+- **CMS sessions** need the session's user to still exist in `cms_user`: deleting a user ends their sessions.
 - **No more `exit`**: `displayPage()`, `redirect()`, `requirePost()` and the CMS login check throw `Fegg\Http\Halt`. A `catch (\Throwable $e)` around them must rethrow it (see [Controller](../basic/controller.mdx#ending-a-response)). Replace your own `exit` in controllers with `$this->halt()`.
 - **Environment**: error details need a `developer_ip` address **and** `FEGG_ENV` other than `production` (`site/config/env.php`). `FEGG_TEST_ENVIRONMENT` no longer looks at the host name.
 - **Sessions and cookies**: a session starts only when something is written to it. `setCookie()` takes SameSite as its own argument, and `unsetCookie()` really deletes the cookie (see [Parameters](../basic/parameters/index.mdx)).
@@ -165,6 +181,8 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 - [ ] `./fegg-cli core:status` prints `No changes to core files.`
 - [ ] Public pages, the contact form (through to sending), CMS login, create / edit / delete for each post type, and media and image uploads work
 - [ ] Every post type appears in the CMS side menu and on the dashboard
+- [ ] Every saving action in `site/controller/Cms/` calls `$this->requirePost()`: opening its URL in the browser (a GET, e.g. `/cms/news/update/`) answers 405
+- [ ] No page links to an action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) or defined only in a base controller (both are 404 now)
 - [ ] The PHP error log has no warnings and no `Fegg deprecated` entries
 - [ ] After deploying, `./fegg-cli doctor https://<production URL>` prints OK and the CMS dashboard shows no protection warnings
 

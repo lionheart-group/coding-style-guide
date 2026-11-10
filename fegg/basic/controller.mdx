@@ -73,6 +73,17 @@ Fegg\Application                                  core/src/Application.php
 
 - `Fegg\Application` provides the methods you call with `$this->...`: [request parameters](./parameters/index.mdx), templates (`displayPage()`, ...), `redirect()`, `loadConfig()`, ...
 - `Fegg\Controller\Controller` (core) loads `site/config/category_info.php` and `site/config/site_info.php` in its `__init()`, and declares the properties `$_model` and `$_lh` used by the CMS.
+
+### Which methods are actions
+
+Only a controller's own actions can be called from a URL. A method is an action when it is:
+
+- `public` and not `static`,
+- declared in the controller itself (or a parent that is not one of the base classes above). Methods declared in `Fegg\Controller\Controller`, `Site\Controller\Controller` and the two CMS base classes are never actions, even when a controller overrides them,
+- not named like a method of `Fegg\Application`: `mail`, `in`, `redirect`, `halt`, `setSession`, `setCookie`, `displayPage` ... are 404 as URL segments,
+- not starting with `_` (`__init()`, `_validatePostedData()`).
+
+Anything else answers 404. Put shared helpers in a base class as `protected` methods, and write an action used by several controllers in each of them (it can call a shared helper). Fegg 4 called any method the controller had, including `setSession()` and `mail()` of the framework: this is a Fegg 5 change.
 - `Site\Controller\Controller` (site) is yours: the base of the **public pages**. Put what every public page needs here (shared assigns, ...). It replaces `MyApplication` of Fegg 4.
 - `Fegg\Controller\Cms\Controller` (core) and `Site\Controller\Cms\Controller` (site) are the bases of the **CMS screens**: see [CMS screens](#cms-screens). Put what every CMS screen of the project needs in `Site\Controller\Cms\Controller`.
 
@@ -276,6 +287,14 @@ A CMS screen extends `Site\Controller\Cms\Controller` (in `site/controller/Cms/`
 - sends `Cache-Control: no-store` and `X-Robots-Tag: noindex`,
 - checks the CSRF token of every POST request: a POST without the session's token gets a 403 page.
 
+:::danger Every action that changes data calls `requirePost()` first
+
+The CSRF token is only checked on POST. An action that saves, deletes or sorts must start with `$this->requirePost()`: without it, the action also runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET gets a 405.
+
+This is new in Fegg 5. CMS controllers copied from a Fegg 4 project do not have it: add it to every `update`, `create`, `delete` ... (see [Migrating from v3 / v4](../first/migration.mdx)).
+
+:::
+
 ```php title="htdocs/_fegg/site/controller/Cms/Event.php"
 <?php
 namespace Site\Controller\Cms;
@@ -295,9 +314,15 @@ class Event extends Controller
         $this->_model = new Model(true, array('table' => 'cms_event', 'id' => 'event_id'));
     }
 
+    public function update()
+    {
+        // Required in every action that changes data (a link or a URL typed in the browser gets a 405)
+        $this->requirePost();
+        // validate $this->in('title', 'POST') ..., then insertRow() / updateRow()
+    }
+
     public function delete($internalId)
     {
-        // Data changes only on POST (a link or a URL typed in the browser gets a 405)
         $this->requirePost();
         $this->_model->delete($internalId);
         $this->redirect($this->_lh->getBackPath('index/DELETED'));
@@ -326,7 +351,8 @@ class Event extends Controller
 The login screens are core controllers (`Fegg\Controller\Cms\Login`, `Logout`):
 
 - `/cms/login/auth` accepts POST only. Deleted users (`valid = 0`) cannot log in, and old password hashes are upgraded at login.
-- **Login throttling**: after 5 failed logins for one login ID from one address, or 20 from one address, logins from that address are refused for 15 minutes. The failures are stored in the core table `cms_login_attempt`: run `fegg-cli migration` after updating. Without the table the login still works, unthrottled, and a warning is logged.
+- Every CMS request checks that the session's user still exists in `cms_user` (`valid = 1`): deleting a user ends their sessions at once.
+- **Login throttling**: every attempt is recorded before the password is checked. After 5 failed logins for one login ID from one address, or 20 from one address, logins from that address are refused for 15 minutes. The failures are stored in the core table `cms_login_attempt`: run `fegg-cli migration` after updating. Without the table the login still works, unthrottled, and a warning is logged.
 - **Logout is a POST** with the CSRF token, so another site cannot log a user out. `/cms/logout/` opened as a link shows a logout button; links with the class `js-cms-logout` post directly (`htdocs/cms/js/base.js`). If you copied the CMS frame templates to `site/template/cms/`, add that class to the logout link.
 - CMS users are created with [`fegg-cli user:create`](../first/cli.mdx#cms-users). `/cms/register/` needs a CMS login and [developer mode](../first/config.mdx#developer-mode).
 
