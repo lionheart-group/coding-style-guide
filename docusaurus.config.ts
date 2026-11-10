@@ -49,7 +49,7 @@ const config: Config = {
           label: "WordPress"
         },
         {
-          // "Fegg 5.x" / "Fegg 4.x": links to the Fegg docs and switches their version
+          // "Fegg 4.x" / "Fegg 5.x (next)": links to the Fegg docs and switches their version
           type: "docsVersionDropdown",
           docsPluginId: "fegg",
           position: "left"
@@ -156,15 +156,17 @@ const config: Config = {
         sidebarPath: require.resolve("./sidebarsFegg.js"),
         editUrl:
           "https://github.com/lionheart-group/coding-style-guide/edit/master/",
-        lastVersion: "current",
+        // Fegg 4.x is the released version (/docs/fegg/). Fegg 5.x is in development
+        // (/docs/fegg/next/) until the skeleton releases it: see README "Fegg docs and versions"
+        lastVersion: "4.x",
         versions: {
           current: {
-            label: "Fegg 5.x"
+            label: "Fegg 5.x (next)",
+            path: "next",
+            banner: "unreleased"
           },
           "4.x": {
-            label: "Fegg 4.x",
-            path: "4.x",
-            banner: "unmaintained"
+            label: "Fegg 4.x"
           }
         }
       }

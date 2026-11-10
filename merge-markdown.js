@@ -195,14 +195,20 @@ mergeMarkdownFiles(
   [
     // Every sub directory of docs/ is a category (llms-html.txt, llms-wordpress.txt ...)
     { dir: "./docs", url: "docs/" },
-    // Fegg is a versioned docs instance (see docusaurus.config.ts): the current version is
-    // llms-fegg.txt, older ones are kept out of llms-full.txt
-    { dir: "./fegg", url: "docs/fegg/", category: "fegg", title: "Fegg" },
+    // Fegg is a versioned docs instance (see docusaurus.config.ts): the released version
+    // (4.x) is llms-fegg.txt; the version in development (5.x, /docs/fegg/next/) is
+    // llms-fegg-next.txt and is kept out of llms-full.txt
     {
       dir: "./fegg_versioned_docs/version-4.x",
-      url: "docs/fegg/4.x/",
-      category: "fegg-4.x",
-      title: "Fegg 4.x",
+      url: "docs/fegg/",
+      category: "fegg",
+      title: "Fegg"
+    },
+    {
+      dir: "./fegg",
+      url: "docs/fegg/next/",
+      category: "fegg-next",
+      title: "Fegg 5.x (in development)",
       inFull: false
     }
   ],
