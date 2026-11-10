@@ -1,0 +1,30 @@
+---
+sidebar_position: 7
+---
+
+# Pdo::truncate
+
+> Set truncate query
+
+## Description
+
+```php
+public self Pdo::truncate( string $table )
+```
+
+Builds `Truncate "table"`, which removes every row. MySQL only: SQLite has no TRUNCATE (use [delete](./delete.mdx) without a condition there).
+
+## Arguments
+
+| Name   | Data type | Default | Remarks           |
+| ------ | --------- | ------- | ----------------- |
+| $table | string    |         | Target table name |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Truncate "sample_log"
+$db->truncate('sample_log')->execute();
+```

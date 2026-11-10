@@ -1,0 +1,34 @@
+---
+sidebar_position: 49
+---
+
+# Pdo::beginTransaction
+
+> Begin a transaction
+
+## Description
+
+```php
+public void Pdo::beginTransaction()
+```
+
+Opens a transaction on the master database. Until [commit](./commit.mdx) or [rollBack](./rollback.mdx), every query of every `Pdo` instance and every model runs inside it.
+
+Throws `LogicException` when a transaction is already open. With models, prefer `Model::transaction()`, which commits, rolls back and handles nesting for you.
+
+## Example
+
+```php title="Controller"
+use Fegg\Database\Pdo;
+
+$db = new Pdo();
+$db->beginTransaction();
+try {
+    $db->setValues(array('title' => 'A'))->insert('cms_news')->execute();
+    $db->setValues(array('title' => 'B'))->insert('cms_lab')->execute();
+    $db->commit();
+} catch (\Throwable $e) {
+    $db->rollBack();
+    throw $e;
+}
+```

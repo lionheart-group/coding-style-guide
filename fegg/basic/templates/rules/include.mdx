@@ -1,0 +1,114 @@
+---
+sidebar_position: 5
+---
+
+# Include
+
+> include, include head, head, include foot, foot, include html
+
+## Description
+
+```html
+{{ include '/path/to/template' }}
+```
+
+Renders another template at this place, with the same variables. Variables the included template assigns do not come back to the including one.
+
+```html
+{{ include head '/path/to/template' }}
+{{ head }}
+
+{{ include foot '/path/to/template' }}
+{{ foot }}
+```
+
+`{{ include head }}` and `{{ include foot }}` do not output anything where they are written. They queue a template that is rendered later where the layout writes `{{ head }}` (in `<head>`) or `{{ foot }}` (before `</body>`). A page uses them to add its own CSS or JavaScript to the shared layout. When several templates queue partials (a page and the layouts it transcludes), the partials of the outer layouts come first.
+
+```html
+{{ include html '/data/html/banner.html' }}
+```
+
+`{{ include html }}` includes a file under the document root (`htdocs/`) with PHP's `include`. The path starts with `/` and has its extension. It is not a template: `{{ }}` tags in it are not compiled.
+
+### Paths
+
+- Template paths have no `.tpl` extension.
+- A path starting with `/` is relative to the template root (`site/template/`, then `core/template/`). **Prefer it**: it works the same from any directory.
+- A path without `/` is relative to the directory of the template that contains the tag (`./parts/card`, `../include/head/news`). For `include head` / `include foot`, it stays relative to the template that queued it.
+- A missing target throws `Fegg\Template\TemplateException` (HTTP 500). `./fegg-cli template:lint` reports missing targets before you deploy (see [Lint and errors](../lint.mdx)).
+
+## Example
+
+### include
+
+```html title="site/template/parts/card.tpl"
+<div class="c-card">{{ $page.title }}</div>
+```
+
+```html title="site/template/news/detail.tpl"
+<p>Before</p>
+{{ include '/parts/card' }}
+```
+
+```html title="Output"
+<p>Before</p>
+<div class="c-card">Hello</div>
+```
+
+### include head / include foot
+
+```html title="site/template/include/head/about.tpl"
+<link rel="stylesheet" href="{{ base }}/data/css/about.css">
+```
+
+```html title="site/template/include/foot/about.tpl"
+<script src="{{ base }}/data/js/about.js"></script>
+```
+
+```html title="site/template/about.tpl"
+{{ transclude '/template/siteframe' }}
+
+{{ include head '/include/head/about' }}
+{{ include foot '/include/foot/about' }}
+
+{{ section contents }}
+<p>About us</p>
+{{ end section contents }}
+```
+
+```html title="site/template/template/siteframe.tpl"
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ $site.title }}</title>
+    {{ head }}
+</head>
+<body>
+    {{ section contents }}
+    {{ end section contents }}
+    {{ foot }}
+</body>
+</html>
+```
+
+```html title="Output"
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Example Inc.</title>
+    <link rel="stylesheet" href="/data/css/about.css">
+</head>
+<body>
+    <p>About us</p>
+    <script src="/data/js/about.js"></script>
+</body>
+</html>
+```
+
+:::note
+
+Write `{{ include head }}` and `{{ include foot }}` at the top level of the template, not inside a `{{ section }}`: a section runs as a function, so a partial queued inside it is lost.
+
+:::

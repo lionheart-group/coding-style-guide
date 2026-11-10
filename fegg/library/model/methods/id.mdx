@@ -1,0 +1,36 @@
+---
+sidebar_position: 35
+---
+
+# Model::id
+
+> Get one record by specified primary ID
+
+## Description
+
+```php
+public array|null Model::id( mixed $id )
+```
+
+Returns the row whose primary key (see [setPrimary](./setprimary.mdx)) is `$id`, or `null` when there is none. A public model (`$is_admin = false`) also returns `null` for a row that is not visible, and deleted rows (`valid = 0`) are never returned. Conditions chained before it with [where](./where.mdx) also apply.
+
+## Arguments
+
+| Name | Data type | Default | Remarks           |
+| ---- | --------- | ------- | ----------------- |
+| $id  | mixed     |         | Target primary ID |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$record = $model->id($this->in('id'));
+if ($record === null) {
+    // 404
+}
+```

@@ -1,0 +1,179 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Read and write database tables with `?` placeholders
+
+`Fegg\Model` builds SQL with `?` placeholders on top of [Fegg\Database\Pdo](../database/index.mdx). It is the normal way for a controller to read and write the database. SQLite is the default; the connection is set in `site/config/database_config.php` (see [Configuration](../database/configuration.mdx)).
+
+:::note
+
+The Fegg 4 class name `Model` still works through a compatibility layer, but every use is reported as `Fegg deprecated: ...` in the PHP error log, and it will be removed in Fegg 6. Write `use Fegg\Model;` at the top of the controller.
+
+:::
+
+## How to use
+
+```php title="Controller"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Model;
+
+class News extends Controller
+{
+    public function __init()
+    {
+        parent::__init();
+
+        $this->_model = new Model(false, array(
+            'table'   => 'cms_news',
+            'id'      => 'news_id',
+            'visible' => 'visible',
+        ));
+    }
+
+    public function index()
+    {
+        $this->page['data'] = $this->_model
+            ->where('category = ?', 2)
+            ->order('post_date', 'desc')
+            ->listMax(20)
+            ->current($this->in('p'))
+            ->find();
+        $this->page['pager'] = $this->_model->getPager();
+
+        $this->displayPage('news');
+    }
+}
+```
+
+## Tables
+
+Tables are defined in YAML: `htdocs/_fegg/site/config/database/*.yaml` (project) and `htdocs/_fegg/core/config/database/*.yaml` (CMS core tables). `./fegg-cli migration` applies them to the database.
+
+Use `./fegg-cli db:schema` to see the tables and columns (`./fegg-cli db:schema cms_news` for one table, `--json` for JSON). It reads the YAML files, so no database is needed, and it warns about tables that lack the columns below.
+
+### Required columns
+
+Every table used with `Fegg\Model` needs these columns. The model fills them by itself (see `core/config/database_regular_use_query.php`):
+
+| Column     | Type       | Set by                                                                                         |
+| ---------- | ---------- | ---------------------------------------------------------------------------------------------- |
+| `valid`    | `BOOLEAN`  | `1` on insert, `0` by [delete](./methods/delete.mdx). Reads only return rows with `valid = 1` |
+| `created`  | `DATETIME` | insert                                                                                         |
+| `modified` | `DATETIME` | insert and update                                                                              |
+
+## Creating a model
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',      // table name
+    'id'      => 'news_id',       // primary key
+    'visible' => 'visible',       // optional: public flag column
+    'bind'    => array('category' => 'INTEGER', 'post_date' => 'DATETIME'), // casts on write
+));
+```
+
+- The first argument is `$is_admin`. With `false`, reads only return rows whose `visible` column is 1 (public pages). The CMS uses `true` to see unpublished rows. See [Model::\_\_construct](./methods/construct.mdx).
+- `bind` types are `INTEGER`, `FLOAT`, `DATE` and `DATETIME` (case-insensitive). Any other type throws `InvalidArgumentException`. See [Model::addBindParam](./methods/addbindparam.mdx).
+- Table and column names (`table`, `id`, `visible`, and the names given to `order()`, `join()`, `whereIn()` and the other helpers) must be plain identifiers: letters, digits and `_`, optionally `table.column` (`news_id`, `cms_news.post_date`). Anything else throws `InvalidArgumentException`. Never build names from user input.
+
+## Reading
+
+```php title="Controller"
+$rows = $model
+    ->where('category = ?', 2)
+    ->whereLike('title', 'news')                 // contains; % and _ match literally
+    ->whereIn('news_id', array(1, 2, 3))
+    ->order('post_date', 'desc')
+    ->listMax(20)->current($this->in('p'))       // page size and page number
+    ->find();                                    // array of rows (associative arrays)
+$pager = $model->getPager();                     // current_page, last_page, number_of_records ...
+
+$rows  = $model->order('post_date', 'desc')->limit(5)->all();      // no paging
+$row   = $model->id($id);                                          // one row by primary key, or null
+$row   = $model->where('title = ?', $title)->one();                // first match, or null
+$title = $model->where('news_id = ?', $id)->value('title');        // one value, or null
+$ids   = $model->where('category = ?', 2)->column('news_id');      // array(3, 5, ...)
+$count = $model->where('category = ?', 2)->count();                // int
+$found = $model->where('title = ?', $title)->exists();             // bool
+```
+
+| Method                                            | Returns                                                                |
+| ------------------------------------------------- | ---------------------------------------------------------------------- |
+| [find](./methods/find.mdx)                        | One page of rows; [getPager](./methods/getpager.mdx) has the links     |
+| [all](./methods/all.mdx)                          | Every matching row ([limit](./methods/limit.mdx) caps it)              |
+| [one](./methods/one.mdx) / [id](./methods/id.mdx) | The first row, or `null`                                               |
+| [value](./methods/value.mdx)                      | The first column of the first row, or `null`                           |
+| [column](./methods/column.mdx)                    | One column of every row, optionally keyed by another column            |
+| [count](./methods/count.mdx)                      | Number of rows (of groups, with `group()`)                             |
+| [exists](./methods/exists.mdx)                    | `true` when a row matches                                              |
+| [toSql](./methods/tosql.mdx)                      | The SELECT `all()` would run, with the values filled in; runs nothing  |
+
+### find() or all()
+
+`find()` pages: set the page size with [listMax](./methods/listmax.mdx) and the page with [current](./methods/current.mdx), then read the links with `getPager()`. `all()` does not page; [limit](./methods/limit.mdx) caps it. Do not use `listMax(9999)` to get everything, and do not combine `limit()` with `find()` (it throws `LogicException`).
+
+### Conditions are reset after every query
+
+`where()`, `order()`, `select()`, `limit()` and the other chain methods only apply to the next query. After every query (`find()`, `all()`, `one()`, `count()`, `insertRow()` ...), failed ones included, the model forgets them, so each query starts clean. [Model::reset](./methods/reset.mdx) does the same by hand.
+
+The write methods ([updateRowsWhere](./methods/updaterowswhere.mdx), [deleteWhere](./methods/deletewhere.mdx) ...) take their condition as arguments. Conditions chained with `where()` are not used by them (and are cleared).
+
+## Writing
+
+```php title="Controller"
+$id  = $model->insertRow(array('title' => $title, 'category' => 2, 'content' => null));
+$n   = $model->updateRow(array('title' => $title), $id);                 // rows updated
+$n   = $model->updateRowsWhere(array('visible' => 0), 'category = ?', 3);
+$ids = $model->insertRows(array($row1, $row2));      // one transaction: all rows or none
+$n   = $model->delete($id);                          // soft delete: valid = 0
+$n   = $model->erase($id);                           // removes the row
+```
+
+- [insertRow](./methods/insertrow.mdx), [updateRow](./methods/updaterow.mdx) and [updateRowsWhere](./methods/updaterowswhere.mdx) write only the given keys; `null` is stored as NULL. Do not pass `created`, `modified` or `valid` unless you mean to override them.
+- Update and delete methods return the number of affected rows.
+- [delete](./methods/delete.mdx) and [deleteWhere](./methods/deletewhere.mdx) are soft deletes (`valid = 0`; reads no longer see the row). [erase](./methods/erase.mdx) and [eraseWhere](./methods/erasewhere.mdx) remove the row.
+- `updateWhere()`, `deleteWhere()`, `eraseWhere()` and `updateRowsWhere()` refuse an empty condition. Pass `'1 = 1'` to really affect every row.
+- The older [insert](./methods/insert.mdx) and [update](./methods/update.mdx) still work, but they write `''` for every listed column missing from the data and cannot store NULL.
+- [transaction](./methods/transaction.mdx) runs several writes, of any number of models, all or nothing.
+
+## Errors
+
+A failed query or connection throws `Fegg\Database\QueryException`. Its message ends with the SQL and its parameters (`(SQL: Select ... Where no_such_column = 'x')`); `getSql()` and `getParameters()` return them separately. Uncaught, it becomes an HTTP 500 and is written to the PHP error log and the [application log](../../basic/logging.mdx). Fegg 4 printed the error and called `exit` instead.
+
+Catch it only when the page can do something useful, for example with a duplicate key:
+
+```php title="Controller"
+try {
+    $model->insertRow($row);
+} catch (\Fegg\Database\QueryException $e) {
+    // ...
+}
+```
+
+Wrong use of the builder (an array bound to `<`, an invalid column name, an update without a condition) throws `InvalidArgumentException` with a message saying what to do instead.
+
+## Debugging
+
+[toSql](./methods/tosql.mdx) returns the SELECT a chain would run, without running it. [debug](./methods/debug.mdx) prints the last query. Both fill in the values for reading.
+
+```php title="Controller"
+echo $model->where('category = ?', 2)->order('post_date', 'desc')->toSql();
+// Select * From "cms_news" Where category = 2 AND cms_news.visible = '1' And "cms_news".valid = 1 Order By post_date DESC
+```
+
+## Raw SQL
+
+For what the model cannot express, use [Fegg\Database\Pdo](../database/index.mdx) directly. It shares the connection (and an open transaction) with the models. Raw queries get no automatic `valid` / `created` / `modified` handling.
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

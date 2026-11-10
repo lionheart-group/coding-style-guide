@@ -1,0 +1,35 @@
+---
+sidebar_position: 1
+title: Mail::__construct
+---
+
+# Mail::\_\_construct
+
+> Create a new email
+
+## Description
+
+```php
+public Mail::__construct( [ string $subject = null, string $body = null, array $header = null ] )
+```
+
+## Arguments
+
+| Name     | Data type | Default | Remarks                                                    |
+| -------- | --------- | ------- | ---------------------------------------------------------- |
+| $subject | string    | null    | Email subject                                              |
+| $body    | string    | null    | Email body (plain text)                                    |
+| $header  | array     | null    | Custom headers, passed to [Mail::pushHeader](./pushheader.mdx) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Mail;
+
+$mail = new Mail('Mail subject', 'Mail body');
+
+// Same with
+$mail = new Mail();
+$mail->subject('Mail subject');
+$mail->body('Mail body');
+```

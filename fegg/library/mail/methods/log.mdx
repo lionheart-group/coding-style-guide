@@ -1,0 +1,33 @@
+---
+sidebar_position: 10
+---
+
+# Mail::log
+
+> Append a message to the log file
+
+## Description
+
+```php
+public boolean Mail::log( string $message )
+```
+
+Appends a separator line and `$message` to the log file set by [Mail::setDebugFlag](./setdebugflag.mdx) (`/tmp/sendmaillog` by default). Nothing is written when the file or its directory is not writable. The return value is always `true`.
+
+[Mail::send](./send.mdx) calls this method with the whole message when the debug flag is enabled.
+
+## Arguments
+
+| Name     | Data type | Default | Remarks     |
+| -------- | --------- | ------- | ----------- |
+| $message | string    |         | Log message |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Mail;
+
+$mail = new Mail();
+$mail->setDebugFlag(true, FEGG_SITE_DIR . '/data/log/mail.log');
+$mail->log('Contact form posted');
+```

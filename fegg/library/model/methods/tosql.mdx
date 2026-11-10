@@ -1,0 +1,36 @@
+---
+sidebar_position: 40
+---
+
+# Model::toSql
+
+> Get the SELECT a chain would run
+
+## Description
+
+```php
+public string Model::toSql()
+```
+
+Returns the SELECT that [all](./all.mdx) would run with the conditions set so far, with the values filled in, without running it. Like after a query, the conditions are cleared afterwards. The values are quoted for reading only: never run the result.
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+echo $model
+    ->where('category = ?', 2)
+    ->whereIn('news_id', array(1, 2))
+    ->order('post_date', 'desc')
+    ->limit(5)
+    ->toSql();
+```
+
+```sql title="Output"
+Select * From "cms_news" Where category = 2 AND news_id IN (1, 2) AND cms_news.visible = '1' And "cms_news".valid = 1 Order By post_date DESC Limit 0, 5
+```

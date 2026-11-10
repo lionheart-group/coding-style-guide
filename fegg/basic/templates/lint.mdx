@@ -1,0 +1,94 @@
+---
+sidebar_position: 7
+---
+
+# Lint and errors
+
+> Check templates with `fegg-cli template:lint`, and find the template line of an error
+
+## template:lint
+
+```bash
+./fegg-cli template:lint                       # every template in site/template and core/template
+./fegg-cli template:lint path/to/file.tpl ...  # only the given files
+```
+
+The command compiles the templates without running them and prints one line per problem, as `file:line: message`, using the line of the `.tpl` file. It ends with `OK: n template(s)`, or with `NG: n problem(s) in m template(s)` and exit status 1, so it can be used in CI. A file given on the command line must be under a template directory.
+
+Run it after every template change. `composer test` runs it too, on every template of the repository.
+
+```text title="Example output"
+htdocs/_fegg/site/template/news/detail.tpl:2: text outside {{ section }} in a template with {{ transclude }}: it is output before the parent template
+htdocs/_fegg/site/template/news/detail.tpl:6: unknown tag {{ endif }} (it is output as text)
+htdocs/_fegg/site/template/news/detail.tpl:8: include target not found: ./missing
+htdocs/_fegg/site/template/news/detail.tpl:9: unknown modifier "fegDate" (define it in site/functions/*.php)
+NG: 4 problem(s) in 1 template(s)
+```
+
+## What it checks
+
+| Check | Example message |
+| --- | --- |
+| Tags no rule understands. They would be output as text | `unknown tag {{ endif }} (it is output as text)` |
+| Unclosed blocks (`if`, `foreach`, `loop`, `section`) | `{{ foreach }} is never closed` |
+| Extra closing tags, `else` outside an `if` | `{{ end }} without an open block`, `{{ else }} outside an {{ if }}` |
+| A closing tag that does not match its block (it still closes the open block) | `{{ end foreach }} closes the {{ if }} opened on line 1` |
+| PHP that does not parse after compiling (a broken expression in `if`, `assign`, `code` …) | `compiled PHP does not parse: syntax error, ...` |
+| Missing `transclude` parent | `transclude target "/no/such/frame" not found` |
+| Missing `include`, `include head`, `include foot` and `include html` targets (literal paths only) | `include target not found: ./missing` |
+| Modifiers that are not defined PHP functions | `unknown modifier "fegDate" (define it in site/functions/*.php)` |
+| Text outside `{{ section }}` in a template that uses `transclude` | `text outside {{ section }} in a template with {{ transclude }}: ...` |
+| An output in `<script>` without `feggJs` and `noescape` | `... is in <script>: write {{ $value\|feggJs\|noescape }} (no quotes around it)` |
+| An output in an `on...` attribute without `feggJs`, or with `noescape` | `... is in an event attribute: write {{ $value\|feggJs }} (no quotes around it, no noescape)` |
+| An output starting an `href`, `src`, `action` or `formaction` value without `feggUrl` | `... starts a URL: write {{ $value\|feggUrl }} so javascript: URLs are refused` |
+
+The last three checks skip `$site` values (configuration), the CMS URL modifiers (`getImageUrl`, `getImageUrlFromDB`, `getFileUrl`, `getFileRawUrl`) for URLs, and `<script>` elements whose `type` is not JavaScript (such as `text/template`). See [Security](./security.mdx).
+
+## Errors at runtime
+
+### `TemplateException`
+
+These problems throw `Fegg\Template\TemplateException`:
+
+- the template given to `displayPage()` / `fetchPage()` / `displayTemplate()` / `fetchTemplate()` does not exist;
+- an `{{ include }}` target or the `{{ transclude }}` parent does not exist;
+- blocks are unbalanced (an unclosed block, an extra `{{ end }}`, an `{{ else }}` outside an `{{ if }}`);
+- the cache file cannot be written (check that `htdocs/_fegg/site/data/cache/template/` is writable).
+
+Uncaught, the exception becomes an HTTP 500 and is written to the PHP error log. Nothing of the half-rendered page is sent. The message names the template and the line, for example `{{ if }} is never closed (htdocs/_fegg/site/template/news/detail.tpl:4)`.
+
+Catch it when a missing template is a normal case:
+
+```php
+try {
+    $this->displayPage('campaign/current');
+} catch (\Fegg\Template\TemplateException $e) {
+    $this->displayPage('not_found');
+}
+```
+
+### Errors inside a template
+
+A template runs as PHP compiled into the cache (`htdocs/_fegg/site/data/cache/template/*.cache.php`). The compiled code keeps the line numbers of the `.tpl` file, and Fegg maps errors back to the template: the error log gets a `Template: <file>.tpl:<line>` line.
+
+```text title="PHP error log"
+Fegg: Uncaught ErrorException: Undefined array key "x" in /path/to/htdocs/_fegg/site/data/cache/template/@news@detail.1a2b3c4d.cache.php:12
+Template: htdocs/_fegg/site/template/news/detail.tpl:12
+Stack trace:
+...
+```
+
+In [developer mode](../../first/config.mdx#developer-mode) (a `developer_ip` address on a server whose `FEGG_ENV` is not `production`) the browser also shows the error, the `Template:` line and the stack trace. Everyone else gets the error page (see [Logging and errors](../logging.mdx)).
+
+## Pitfalls
+
+- **Closing tags**: `{{ endif }}`, `{{ /if }}` and `{{ endforeach }}` are not tags; they are output as text. Use `{{ end }}` (any block), `{{ end foreach }}` or `{{ end section name }}`.
+- **Inside `{{ section }}`**, `{{ assign }}`, `{{ include head }}` and `{{ include foot }}` only affect the section, because it runs as a function. Write them at the top level of the template.
+- **Text outside sections**: in a template that uses `{{ transclude }}`, everything outside `{{ section }}` blocks is output before the parent layout.
+- **Loop variables** share the namespace of `$page`, `$site` …: `{{ foreach $list as $page }}` overwrites `$page`.
+- **Concatenation**: in tags, `$a.b` is always array access. Write `$a . $b`, with spaces, to concatenate.
+- **Arrays need a modifier**: `{{ $array }}` outputs nothing; `{{ $array|feggImplode:', ' }}` or `{{ $array|feggJs|noescape }}` turns it into text.
+- **Defaults for unset values**: `{{ $missing|feggDefault:'-' }}` outputs nothing, because output is skipped for unset values before the modifier runs. Use `{{ if $x }}...{{ else }}-{{ end }}`.
+- **Null-safe only in some places**: an unset variable reads as `null` in `if`, `else if`, `assign` and `loop`. In modifier arguments and `{{ code }}`, it raises a warning on PHP 8, which Fegg turns into an error.
+- **Relative paths**: a path without `/` in `include` / `transclude` is relative to the template that contains the tag. Counting `../` is the classic mistake: prefer `/`-rooted paths.
+- **Literal braces**: text that contains `{{` (Vue templates, copied text) is read as a tag. Write `{-{` and `}-}` (see [Literal braces](./rules/literal_braces.mdx)).

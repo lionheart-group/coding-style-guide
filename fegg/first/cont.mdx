@@ -1,0 +1,123 @@
+---
+sidebar_position: 1
+---
+
+# Directory structure
+
+Fegg 5 separates, by directory, the **core** shared by every project from the **site** that belongs to one project.
+
+There is only one rule: **do not edit `htdocs/_fegg/core/` or `htdocs/cms/`.** `fegg-cli core:update` replaces them. If you edit them, `fegg-cli core:status` lists the changed files and `core:update` stops. Anything you want to change goes on the `site/` side (see [Overriding the core](#overriding-the-core)).
+
+```yaml
+# Project root (does not need to be uploaded to the server)
+fegg-cli                  # project: CLI entry point (path definitions only)
+docs/ tests/ package.json composer.json ...
+
+htdocs/                   # document root
+    index.php             # project: web entry point (path definitions only)
+    .htaccess             # project: template is _fegg/core/dist/htaccess.dist
+    cms/                  # core: CMS admin assets (css/ is built by npm run build:scss)
+    data/                 # project: site assets (css, js, images)
+    up_dir/               # project: files uploaded from the CMS
+
+    _fegg/                # never readable from the web
+        .htaccess         # core: deny all
+        core/             # core: DO NOT EDIT (replaced on update)
+            src/          # Fegg\             Application, Model, Database\Pdo, Validation, Cms\Helper, Tool\* ...
+            controller/   # Fegg\Controller\  Controller (base class), Cms\Login, Cms\Media, Cms\Image ...
+            template/cms/ # CMS foundation templates
+            functions/    # template modifiers (feggDate, getImageUrl, ...)
+            config/       # default settings, YAML for the core tables (cms_user, cms_file, cms_image)
+            bin/          # fegg-cli commands
+            bootstrap/    # web and CLI start-up, autoloader
+            vendor/       # PHPMailer, Spyc
+            dist/         # templates for the project-owned entry files
+            VERSION  manifest.json  UPGRADE.md
+
+        site/             # project: edit freely (never touched by updates)
+            src/          # Site\             project classes (create it when you need it)
+            controller/   # Site\Controller\  Controller (project base class), Index, News, Cms\News ...
+            template/     # site templates (.tpl), CMS templates for post types
+            functions/    # project template modifiers (loaded automatically)
+            config/       # settings.php, env.php (per server, not committed), route.php, database_config.php, site_info.php, cms_menu.php ...
+                database/ # YAML table definitions for the project's tables
+            data/         # db/, log/, cache/, core-backup/ (not tracked by git)
+```
+
+The skeleton's sample code (`site/controller/Index.php`, `News.php`, `Contact.php`, `Cms/News.php`, ...) is project code. Change or delete it as the project needs.
+
+## Namespaces
+
+Classes are loaded by the core's own autoloader (`core/bootstrap/autoload.php`). Composer is not required; in the skeleton it is only used for the test suite.
+
+| Namespace          | Directory          |
+| ------------------ | ------------------ |
+| `Fegg\`            | `core/src/`        |
+| `Fegg\Controller\` | `core/controller/` |
+| `Fegg\Command\`    | `core/bin/`        |
+| `Site\`            | `site/src/`        |
+| `Site\Controller\` | `site/controller/` |
+
+Sub directories are namespaces: `site/src/Shop/Cart.php` is `Site\Shop\Cart`, `site/controller/Cms/News.php` is `Site\Controller\Cms\News`.
+
+Every PHP file under `htdocs/_fegg/` must start with `defined('FEGG_CORE_DIR') || exit;`. It stops the file from doing anything when it is requested directly from a URL.
+
+## Overriding the core
+
+The site is searched first, then the core. This works like a WordPress child theme.
+
+| What          | How                                                                                         | Example                                                                     |
+| ------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Templates     | Put a file at the same path under `site/template/`                                          | `site/template/cms/login.tpl` is used instead of `core/template/cms/login.tpl` |
+| Config files  | Put a file with the same name in `site/config/`                                             | `site/config/validation_error_message.php` replaces the core's messages     |
+| Settings      | Write only the keys you want to change in `site/config/settings.php`                        | `$settings['developer_ip'] = array(...);`                                   |
+| CMS screens   | Put a class that extends the core controller in `site/controller/`, with only the methods you change | See [Controller](../basic/controller.mdx#extending-a-core-controller) |
+| CMS menu      | Add one block to `site/config/cms_menu.php`                                                 | When you add a post type                                                    |
+| DB tables     | Put a YAML file in `site/config/database/` (a file with the same name wins over the core's) | `cms_news.yaml`                                                             |
+
+## Entry files and layout
+
+`htdocs/index.php` and `fegg-cli` belong to the project. They only define three paths and then load the core:
+
+```php title="htdocs/index.php"
+<?php
+define('FEGG_HTML_DIR', __DIR__);                 // document root
+define('FEGG_CORE_DIR', __DIR__ . '/_fegg/core'); // core
+define('FEGG_SITE_DIR', __DIR__ . '/_fegg/site'); // site
+
+require FEGG_CORE_DIR . '/bootstrap/web.php';
+```
+
+`fegg-cli` defines the same three constants and requires `core/bootstrap/cli.php`. Always keep the paths in the two files consistent. Templates for both are in `core/dist/`.
+
+| Layout                                                             | Entry file                                                                   |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| Standard: `htdocs/_fegg/`                                          | `core/dist/index.php.dist`                                                   |
+| `_fegg/` placed next to the document root (outside of it)          | `core/dist/index.outside-docroot.php.dist`                                   |
+| The document root has a different name (`public_html`, etc.)       | Keep the standard one. Only fix `FEGG_HTML_DIR` in `fegg-cli`                |
+| Installed in a subdirectory (`https://example.com/sub/`)           | Keep the standard one. The URL base is detected from `SCRIPT_NAME`           |
+
+## Protecting `_fegg/`
+
+In the standard layout `_fegg/` is inside the document root. It is protected by several layers, so that one missing layer is caught by the next:
+
+1. `htdocs/_fegg/.htaccess` denies all requests.
+2. `htdocs/.htaccess` returns 403 for `/_fegg/`, dotfiles and hidden directories (`.git/`; `.well-known/` stays reachable), and denies `.db`, `.sqlite`, `.yaml`, `.tpl`, `.log`, `.md`, `.json` and `.dist` files.
+3. Every PHP file under `_fegg/` and every compiled template starts with `defined('FEGG_CORE_DIR') || exit;`.
+4. `fegg-cli doctor https://example.com` checks over HTTP that nothing under `_fegg/` and no database file can be read (see [fegg-cli](./cli.mdx#doctor)). The CMS dashboard also warns about problems it can detect from the files, such as a missing `.htaccess`.
+5. If the server allows it, put the SQLite database outside the document root (see [Settings](./config.mdx#database)).
+
+On nginx, where `.htaccess` is not used, add equivalent rules:
+
+```nginx
+location ~ (^|/)_fegg(/|$) { deny all; }
+location ~ /\.(?!well-known/) { deny all; }
+location ~* ^/up_dir/.*\.(php\d?|phtml|phar|pht|cgi|pl|py|sh)$ { deny all; }
+location ~* \.(tpl|db|sqlite|ya?ml|log|md|json|dist)$ { deny all; }
+```
+
+:::caution
+
+Many FTP clients do not transfer dotfiles (`.htaccess`) by default. After uploading, always run `./fegg-cli doctor <URL>` from your local machine.
+
+:::

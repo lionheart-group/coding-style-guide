@@ -1,0 +1,46 @@
+---
+sidebar_position: 2
+---
+
+# Assign
+
+> Set a variable in the template
+
+## Description
+
+```html
+{{ assign $var = expression }}
+{{ assign $var.key = expression }}
+```
+
+Sets a template variable to the value of a PHP expression. The expression may use template variables (`$page.title`), string literals, operators and PHP functions, but cannot contain `}`. Nothing is output.
+
+A variable that is not set reads as `null` in the expression, without a warning.
+
+A common use is to change site information (`$site`) before `{{ transclude }}`, so that the parent layout sees the new value.
+
+## Example
+
+```html title="htdocs/_fegg/site/template/about.tpl"
+{{ assign $site.title = 'About | ' . $site.title }}
+{{ transclude '/template/siteframe' }}
+
+{{ section contents }}
+{{ assign $format = 'Y/m/d' }}
+<p>{{ $page.updated|feggDate:$format }}</p>
+{{ end section contents }}
+```
+
+```html title="htdocs/_fegg/site/template/template/siteframe.tpl"
+<title>{{ $site.title }}</title>
+```
+
+```html title="Output"
+<title>About | Example Inc.</title>
+```
+
+:::note
+
+Inside a `{{ section }}`, `assign` only changes the variable for that section: a section runs as a function. To change a value the layout reads (such as `$site.title`), assign it at the top level of the template, outside every section.
+
+:::

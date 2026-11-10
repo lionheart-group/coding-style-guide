@@ -1,0 +1,41 @@
+---
+sidebar_position: 53
+---
+
+# Model::transaction
+
+> Run queries all or nothing
+
+## Description
+
+```php
+public mixed Model::transaction( callable $callback )
+```
+
+Runs `$callback` in a transaction and returns what it returns. The transaction is committed when the callback returns and rolled back when it throws; the exception is then rethrown.
+
+- The callback receives this model.
+- Every query inside the callback takes part, whatever model (or [Fegg\Database\Pdo](../../database/index.mdx)) runs it.
+- A `transaction()` call inside another one joins the outer transaction.
+
+## Arguments
+
+| Name      | Data type | Default | Remarks                       |
+| --------- | --------- | ------- | ----------------------------- |
+| $callback | callable  |         | Receives this model           |
+
+## Example
+
+```php title="Controller"
+use Fegg\Model;
+
+$news = new Model(true, array('table' => 'cms_news', 'id' => 'news_id', 'visible' => 'visible'));
+$labs = new Model(true, array('table' => 'cms_lab', 'id' => 'lab_id', 'visible' => 'visible'));
+
+$id = $news->transaction(function (Model $news) use ($labs) {
+    $id = $news->insertRow(array('title' => 'A'));
+    $labs->insertRow(array('title' => 'B'));   // another model joins the same transaction
+
+    return $id;
+});
+```

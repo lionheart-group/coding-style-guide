@@ -1,0 +1,39 @@
+---
+sidebar_position: 9
+---
+
+# Pdo::createIndex
+
+> Set create index query
+
+## Description
+
+```php
+public self Pdo::createIndex( string $table, array $field )
+```
+
+Builds `Create [UNIQUE] Index "name" ON "table" (columns)`.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                    |
+| ------ | --------- | ------- | -------------------------- |
+| $table | string    |         | Table name                 |
+| $field | array     |         | Index definition (below)   |
+
+### Index definition
+
+| Key      | Data type | Remarks                              |
+| -------- | --------- | ------------------------------------ |
+| `name`   | string    | Index name                           |
+| `unique` | boolean   | Create a UNIQUE index                |
+| `target` | string    | Columns, separated by commas         |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Create UNIQUE Index "sample_title" ON "sample" (title)
+$db->createIndex('sample', array('name' => 'sample_title', 'unique' => true, 'target' => 'title'))->execute();
+```

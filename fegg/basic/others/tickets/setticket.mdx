@@ -1,0 +1,57 @@
+---
+sidebar_position: 1
+---
+
+# Application::setTicket
+
+> Issue a one-time ticket for a form
+
+## Description
+
+```php
+public void Application::setTicket( string $name )
+```
+
+Issue a one-time ticket (a random string) for a form. The ticket is stored in the session as `ticket_{$name}`, and the same value is registered as a hidden field named `ticket_{$name}`. Output it in the form with the `{{ hidden }}` template tag.
+
+When the form is submitted, check it with [Application::useTicket](./useticket.mdx). This prevents the same form from being processed twice (reload, double submit) and rejects posts that did not come from your form page.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks     |
+| :---- | :-------- | :------ | :---------- |
+| $name | string    |         | Ticket name |
+
+## Example
+
+```php title="Controller"
+public function confirm()
+{
+    $this->setTicket('contact');
+    $this->displayPage('contact/confirm');
+}
+```
+
+```php title="Controller"
+echo $this->getSession('ticket_contact');
+```
+
+```html title="Output"
+670f2f1232f30d4d716c1bc9c8a58388
+```
+
+```html title="Template: contact/confirm.tpl"
+<form method="post" action="{{ base }}/contact/result.html">
+    {{ hidden }}
+    <button type="submit">Send</button>
+</form>
+```
+
+```html title="Output"
+<form method="post" action="/contact/result.html">
+    <input type="hidden" name="ticket_contact" value="670f2f1232f30d4d716c1bc9c8a58388">
+    <button type="submit">Send</button>
+</form>
+```
+
+`{{ hidden }}` outputs every value registered with `setHidden()`, so other hidden values appear there too.

@@ -1,0 +1,30 @@
+---
+sidebar_position: 1
+title: RSS::__construct
+---
+
+# RSS::\_\_construct
+
+> Load RSS feed
+
+## Description
+
+```php
+public RSS::__construct( string $url )
+```
+
+Loads and parses the feed. The entries can then be read with [RSS::fetch](./fetch.mdx) or [RSS::fetchAll](./fetchall.mdx).
+
+## Arguments
+
+| Name | Data type | Default | Remarks      |
+| ---- | --------- | ------- | ------------ |
+| $url | string    |         | RSS Feed URL |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\RSS;
+
+$rss = new RSS('https://example.com/feed');
+```

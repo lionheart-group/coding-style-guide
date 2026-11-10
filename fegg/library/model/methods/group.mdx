@@ -1,0 +1,40 @@
+---
+sidebar_position: 27
+---
+
+# Model::group
+
+> Set Group Parameter
+
+## Description
+
+```php
+public self Model::group( string $group )
+```
+
+Adds GROUP BY. Several calls are joined with commas. The text is written into the SQL as it is: never put user input in it. With `group()`, [count](./count.mdx) counts the groups.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks         |
+| ------ | --------- | ------- | --------------- |
+| $group | string    |         | Group column(s) |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Select category, count(*) AS n
+// From "cms_news"
+// Where ...
+// Group By category
+$records = $model->select('category, count(*) AS n')->group('category')->all();
+
+// Number of categories that have news
+$categories = $model->group('category')->count();
+```

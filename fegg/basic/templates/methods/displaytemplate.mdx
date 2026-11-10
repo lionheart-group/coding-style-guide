@@ -1,0 +1,61 @@
+---
+sidebar_position: 3
+---
+
+# Application::displayTemplate
+
+> Output a template with only the variables you pass
+
+## Description
+
+```php
+public void Application::displayTemplate( string $template, [ array $assignedValue = array() ] )
+```
+
+Finds the template (`site/template/` first, then `core/template/`), compiles it when the cache is missing or out of date, and outputs it. Only the variables in `$assignedValue` are available: `$page`, `$site`, `$in` … are **not** set. Use [Application::displayPage](./displaypage.mdx) for pages.
+
+The template engine itself uses this method for `{{ include }}` and `{{ transclude }}`. Inside a template, a name not starting with `/` is relative to the directory of the current template; from a controller, names are relative to the template root.
+
+## Arguments
+
+| Name           | Data type | Default | Remarks |
+| -------------- | --------- | ------- | ------- |
+| $template      | string    |         | Template name without `.tpl` (`foo/bar`) |
+| $assignedValue | array     | array() | Variables for the template: the key `title` becomes `$title` |
+
+## Example
+
+```php title="htdocs/_fegg/site/controller/Foo.php"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+class Foo extends Controller
+{
+    public function bar()
+    {
+        $this->displayTemplate('foo/bar', array(
+            'title' => 'Hello',
+            'items' => array('a', 'b'),
+        ));
+    }
+}
+```
+
+```html title="htdocs/_fegg/site/template/foo/bar.tpl"
+<h1>{{ $title }}</h1>
+{{ foreach $items as $item }}<p>{{ $item }}</p>{{ end foreach }}
+{{ if $page.baz }}not shown: $page is not set{{ end }}
+```
+
+```html title="Output"
+<h1>Hello</h1>
+<p>a</p><p>b</p>
+```
+
+:::note
+
+Do not include the `.tpl` extension in the name. A missing template throws `Fegg\Template\TemplateException` (see [Lint and errors](../lint.mdx)).
+
+:::

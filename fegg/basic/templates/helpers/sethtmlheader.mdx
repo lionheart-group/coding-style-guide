@@ -1,0 +1,30 @@
+---
+sidebar_position: 3
+---
+
+# Application::setHtmlHeader
+
+> Send an HTTP response header
+
+## Description
+
+```php
+public void Application::setHtmlHeader( string $header )
+```
+
+Sends an HTTP response header (it calls PHP's `header()`). Call it before the page is output, for example before [Application::displayPage](../methods/displaypage.mdx).
+
+## Arguments
+
+| Name    | Data type | Default | Remarks |
+| ------- | --------- | ------- | ------- |
+| $header | string    |         | Header line, such as `Content-Type: application/json` |
+
+## Example
+
+```php title="Controller"
+$this->setHtmlHeader('Content-Type: text/javascript; charset=UTF-8');
+echo $this->fetchPage('data/config_js');
+```
+
+Sends the `Content-Type: text/javascript; charset=UTF-8` header, then outputs the template.

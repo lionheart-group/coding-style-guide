@@ -1,0 +1,42 @@
+---
+sidebar_position: 24
+---
+
+# Model::order
+
+> Set Order Parameter
+
+## Description
+
+```php
+public self Model::order( string $order, [ string $duration = 'ASC' ] )
+```
+
+Adds a column to ORDER BY. Call it again for a second sort key.
+
+- `$order` must be a column name (`post_date` or `cms_news.post_date`); anything else, such as `'post_date desc'` or an expression, throws `InvalidArgumentException`. Use [orderRaw](./orderraw.mdx) for expressions.
+- `$duration` is `DESC` (case-insensitive) or anything else for `ASC`, so it is safe to pass a sort direction from the request.
+- `order('random')` sorts in random order (`ORDER BY RANDOM()`, an SQLite function).
+
+## Arguments
+
+| Name      | Data type | Default | Remarks                         |
+| --------- | --------- | ------- | ------------------------------- |
+| $order    | string    |         | Column name, or `'random'`      |
+| $duration | string    | 'ASC'   | `'ASC'` or `'DESC'`             |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// ... Order By post_date DESC,news_id DESC
+$records = $model->order('post_date', 'desc')->order('news_id', 'desc')->find();
+
+// 3 random news
+$records = $model->order('random')->limit(3)->all();
+```

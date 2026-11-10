@@ -1,0 +1,36 @@
+---
+sidebar_position: 19
+---
+
+# Validation::upload
+
+> Check that a file was uploaded
+
+## Description
+
+```php
+public boolean Validation::upload( string $name, mixed $code )
+```
+
+Valid when `$_FILES[$name]` exists, has no upload error and is not empty. Unlike the other checks, it is not skipped when nothing was posted. To save the file and check its size and type, use [Upload](../../upload/index.mdx).
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                                                                          |
+| ----- | --------- | ------- | -------------------------------------------------------------------------------- |
+| $name | string    |         | `name` attribute of the `input[type="file"]` (also the key of the error message) |
+| $code | mixed     |         | Error code, array of error code and parameters, or error message                 |
+
+## Example
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+$validation->upload('image', '<strong>Image</strong> を選択してください');
+
+if ($validation->isError()) {
+    // No file was uploaded
+}
+```

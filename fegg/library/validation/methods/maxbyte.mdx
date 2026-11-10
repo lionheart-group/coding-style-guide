@@ -1,0 +1,46 @@
+---
+sidebar_position: 13
+---
+
+# Validation::maxbyte
+
+> Check maximum byte length
+
+## Description
+
+```php
+public boolean Validation::maxbyte( string $name, mixed $value, numeric $byte, [ mixed $code = '' ] )
+```
+
+Valid when the byte length (`strlen()`) of the value is `$byte` or less. A Japanese character is 3 bytes in UTF-8.
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                                                                                                      |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name  | string    |         | Field name (key of the error message)                                                                        |
+| $value | mixed     |         | Value to check                                                                                               |
+| $byte  | numeric   |         | Maximum number of bytes                                                                                      |
+| $code  | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+$validation->maxbyte('success', 'abc', 5, '<strong>Name</strong> が長すぎます'); // -> true
+$validation->maxbyte('failed', 'あいう', 5, '<strong>Name</strong> が長すぎます'); // -> false
+
+var_dump($validation->getErrorMessage());
+// -> array('failed' => '<strong>Name</strong> が長すぎます')
+```
+
+:::note
+
+The default `validation_error_message.php` has no `@maxbyte` code. Pass the error message itself, or add the code to your `site/config/validation_error_message.php`.
+
+:::

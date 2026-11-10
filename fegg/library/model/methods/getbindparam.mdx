@@ -1,0 +1,35 @@
+---
+sidebar_position: 10
+---
+
+# Model::getBindParam
+
+> Get Bind Parameter types
+
+## Description
+
+```php
+public array Model::getBindParam()
+```
+
+The types are returned in upper case.
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'bind' => array(
+        'category'  => 'integer',
+        'post_date' => 'DATETIME',
+    ),
+));
+
+var_dump($model->getBindParam());
+```
+
+```php title="Output"
+array(2) {
+  ["category"]=> string(7) "INTEGER"
+  ["post_date"]=> string(8) "DATETIME"
+}
+```

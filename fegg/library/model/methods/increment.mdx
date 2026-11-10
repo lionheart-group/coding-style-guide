@@ -1,0 +1,44 @@
+---
+sidebar_position: 45
+---
+
+# Model::increment
+
+> Add to a numeric column
+
+## Description
+
+```php
+public int Model::increment( string $column, mixed $id, [ int|float $by = 1 ] )
+```
+
+Adds `$by` to `$column` of the row whose primary key is `$id`, in the UPDATE itself (`"column" = "column" + ?`), and returns the number of updated rows. Simultaneous requests do not lose counts, as they would when reading, adding and writing back.
+
+Like every update, it also sets `modified`. Call [unsetRegularUseQuery](./unsetregularusequery.mdx) first to leave `modified` alone (for example for a view counter).
+
+Throws `InvalidArgumentException` when `$column` is not a plain name or `$by` is not a number.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                         |
+| ------- | --------- | ------- | ------------------------------- |
+| $column | string    |         | Numeric column                  |
+| $id     | mixed     |         | Target primary ID               |
+| $by     | int/float | 1       | Amount to add; negative to subtract |
+
+## Example
+
+```php title="Controller"
+// The table has a view_count INTEGER column
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Update "cms_news" Set "view_count" = "view_count" + 1 Where news_id = 24
+$model->unsetRegularUseQuery()->increment('view_count', 24);
+
+// Subtract 2 (modified is updated)
+$model->increment('view_count', 24, -2);
+```

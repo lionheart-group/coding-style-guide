@@ -1,0 +1,38 @@
+---
+sidebar_position: 3
+---
+
+# Application::unsetCookie
+
+> Delete a cookie
+
+## Description
+
+```php
+public void Application::unsetCookie( string $name )
+```
+
+Delete the cookie: it is sent again with an expiry date in the past (path `/`), so the browser drops it. It is also removed from `getCookie()` for the rest of the current request. From the next request on, the browser no longer sends it.
+
+Only cookies with the path `/` are deleted. Fegg 4 set an empty cookie for seven days instead.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks     |
+| :---- | :-------- | :------ | :---------- |
+| $name | string    |         | Cookie name |
+
+## Example
+
+```php title="Controller - First request"
+$this->setCookie('foo', 'bar');
+```
+
+```php title="Controller - Second request"
+echo $this->getCookie('foo'); // -> bar
+$this->unsetCookie('foo');
+```
+
+```php title="Controller - Third request"
+echo $this->getCookie('foo'); // -> ''
+```

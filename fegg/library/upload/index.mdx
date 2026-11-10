@@ -1,0 +1,82 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Providing some functions for uploading/validating files
+
+## How to use
+
+Import `Fegg\Tool\Upload` and create it with `new`. Set the upload directory, then call [Upload::upload](./methods/upload.mdx) with the `name` of the `input[type="file"]`.
+
+```php title="Controller"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Tool\Upload;
+
+class Entry extends Controller
+{
+    public function post()
+    {
+        $this->loadConfig('upload_dir');
+
+        $upload = new Upload();
+        $upload->setUploadDir($this->config['upload_dir']['path'] . '/entry');
+        $upload->setMaxFileSize(5);
+        $upload->setFileType(array('jpg', 'jpeg', 'png', 'pdf'));
+
+        if ($upload->upload('file', uniqid('f_'), 'Attachment')) {
+            $data = $upload->getUploadedData('file');
+            // $data['name'], $data['org_name'], $data['type'], $data['size'] ...
+        } else {
+            $errors = $upload->getErrorMessage('file');
+        }
+    }
+}
+```
+
+`$this->loadConfig('upload_dir')` reads `site/config/upload_dir.php` (`path` and `url` of `htdocs/up_dir`) into `$this->config['upload_dir']`. The CMS screens (`Fegg\Controller\Cms\Image`, `Media`, `Multi`) use this class in the same way.
+
+Error messages are defined in `file_error_message.php`, see [Configuration](./configuration.mdx).
+
+## What is checked
+
+- The extension must be allowed by [setFileType](./methods/setfiletype.mdx). Script extensions (`php`, `phtml`, `phar`, `cgi` ...) are refused even when listed.
+- The content must match the extension: `getimagesize()` for images, the `finfo` MIME type for known types. A mismatch is the error `@content`.
+- Files are saved under the name you give (`uniqid('f_')`, ...), never under the visitor's file name. Keep the original name (`org_name`) in the database only.
+- Directories are created with mode `0755` and files saved with `0644`.
+
+## Protecting the upload directory
+
+When the upload directory is below the document root, [setUploadDir](./methods/setuploaddir.mdx) writes an `.htaccess` into it that denies and disables scripts (`.php`, `.phtml`, `.phar`, `.cgi` ...), so an uploaded file can never run as code. The CMS dashboard also writes `htdocs/up_dir/.htaccess` when it opens, and the skeleton ships the file.
+
+`fegg-cli doctor` and the CMS dashboard report a missing `htdocs/up_dir/.htaccess` (see [fegg-cli](../../first/cli.mdx#doctor)). Remember it when you upload over FTP: many FTP clients skip dotfiles. On nginx, `.htaccess` is ignored: deny scripts under the upload URL yourself.
+
+```nginx
+location ~* ^/up_dir/.*\.(php\d?|phtml|phar|pht|cgi|pl|py|sh)$ { deny all; }
+```
+
+## Sending stored files
+
+The CMS sends stored files (`/up_dir/file/<id>/`, the media and image screens) with `Fegg\Http\Download::sendHeaders()`. It sends `X-Content-Type-Options: nosniff`, a valid `Cache-Control`, and an RFC 6266 `Content-Disposition` with the original name escaped (an ASCII fallback plus the UTF-8 name). HTML, SVG, XML and JavaScript files are always sent as attachments, never shown inline. Use it when your own controller sends a stored file:
+
+```php title="Controller"
+use Fegg\Http\Download;
+
+Download::sendHeaders(array(
+    'type'     => $file['type'],
+    'size'     => filesize($path),
+    'org_name' => $file['org_name'],
+), false);              // false: browser cache only (private); true: public
+$this->halt(file_get_contents($path));
+```
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

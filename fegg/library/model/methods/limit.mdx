@@ -1,0 +1,40 @@
+---
+sidebar_position: 30
+---
+
+# Model::limit
+
+> Cap the number of rows
+
+## Description
+
+```php
+public self Model::limit( int $count, [ int $offset = 0 ] )
+```
+
+Adds `LIMIT` to [all](./all.mdx), [column](./column.mdx) and [toSql](./tosql.mdx); [one](./one.mdx), [value](./value.mdx) and [exists](./exists.mdx) use the offset. [count](./count.mdx) ignores it. [find](./find.mdx) pages with [listMax](./listmax.mdx) and [current](./current.mdx) instead and throws `LogicException` when `limit()` was set.
+
+Throws `InvalidArgumentException` when `$count` is under 1 or `$offset` under 0.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                   |
+| ------- | --------- | ------- | ------------------------- |
+| $count  | int       |         | Maximum number of rows    |
+| $offset | int       | 0       | Number of rows to skip    |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// The 5 newest
+$records = $model->order('post_date', 'desc')->limit(5)->all();
+
+// The next 5 (rows 6 to 10)
+$records = $model->order('post_date', 'desc')->limit(5, 5)->all();
+```

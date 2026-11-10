@@ -1,0 +1,39 @@
+---
+sidebar_position: 3
+---
+
+# Validation::alphameric
+
+> Check half-width alphanumeric characters
+
+## Description
+
+```php
+public boolean Validation::alphameric( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+Valid when the value contains only `0-9`, `a-z` and `A-Z`.
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                                                                                                      |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name  | string    |         | Field name (key of the error message)                                                                        |
+| $value | mixed     |         | Value to check                                                                                               |
+| $code  | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+$validation->alphameric('success', 'abc123', array('@alphameric', 'Code')); // -> true
+$validation->alphameric('failed', 'abc-123', array('@alphameric', 'Code')); // -> false
+
+var_dump($validation->getErrorMessage());
+// -> array('failed' => '<strong>Code</strong> は半角英数で入力してください')
+```

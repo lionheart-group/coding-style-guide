@@ -15,10 +15,6 @@
     "message": "WordPress",
     "description": "Navbar item with label WordPress"
   },
-  "item.label.Fegg": {
-    "message": "Fegg",
-    "description": "Navbar item with label Fegg"
-  },
   "item.label.GitHub": {
     "message": "GitHub",
     "description": "Navbar item with label GitHub"

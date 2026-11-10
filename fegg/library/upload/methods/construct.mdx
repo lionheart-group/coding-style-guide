@@ -1,0 +1,33 @@
+---
+sidebar_position: 1
+title: Upload::__construct
+---
+
+# Upload::\_\_construct
+
+> Create the uploader and load the error messages
+
+## Description
+
+```php
+public Upload::__construct( [ string $languageCode = null ] )
+```
+
+Loads the error messages from `file_error_message.php` (see [Configuration](../configuration.mdx)). The default settings are: no upload directory, a maximum file size of 2 MB, and the file types `jpg`, `jpeg`, `png` and `gif`.
+
+## Arguments
+
+| Name          | Data type | Default | Remarks                                                          |
+| ------------- | --------- | ------- | ---------------------------------------------------------------- |
+| $languageCode | string    | null    | Language code / if set, `config/{languageCode}/file_error_message.php` is used |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+
+// English error messages from config/en/file_error_message.php
+$upload = new Upload('en');
+```

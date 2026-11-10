@@ -1,0 +1,56 @@
+---
+sidebar_position: 1
+---
+
+# Application::setCookie
+
+> Set COOKIE data
+
+## Description
+
+```php
+public void Application::setCookie( string $name, string $value, int $expire = '', string $path = '/', string $sameSite = 'Strict' )
+```
+
+Set COOKIE data. The cookie is always **`HttpOnly`** (JavaScript cannot read it). It is **`Secure`** (sent back over HTTPS only) when the request is HTTPS, or when `$sameSite` is `None`, which browsers require. Over plain HTTP, on a local development server for example, it works without `Secure`.
+
+## Arguments
+
+| Name    | Data type | Default                | Remarks |
+| :------ | :-------- | :--------------------- | :------ |
+| $name   | string    |                        | Cookie name |
+| $value  | string    |                        | Value |
+| $expire | int       | ''                     | Lifetime in **seconds from now**. When omitted (or `0`), 1 week (604800 seconds) |
+| $path   | string    | '/'                    | Path where the cookie is valid |
+| $sameSite | string  | 'Strict'               | `SameSite` attribute: `Strict`, `Lax` or `None` |
+
+## Example
+
+If you omit the third argument, the cookie expires **after 1 week**.
+
+```php title="Controller"
+$this->setCookie('foo', 'bar');
+```
+
+Set the lifetime in seconds with the third argument.
+
+```php title="Controller"
+// This cookie expires after 60 seconds.
+$this->setCookie('foo', 'bar', 60);
+```
+
+Set the path with the fourth argument and the `SameSite` attribute with the fifth.
+
+```php title="Controller"
+// This cookie is only valid under "/test/".
+$this->setCookie('foo', 'bar', 0, '/test/');
+
+// Sent back when the visitor follows a link from another site (SameSite=Lax)
+$this->setCookie('campaign', 'spring', 86400 * 30, '/', 'Lax');
+```
+
+:::note
+
+Fegg 4 passed SameSite inside the path (`'/test/; SameSite=Lax'`). That form still works: the attribute is taken out of the path and used as `$sameSite`.
+
+:::

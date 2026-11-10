@@ -1,0 +1,32 @@
+---
+sidebar_position: 5
+---
+
+# Mail::removeHeader
+
+> Remove custom header
+
+## Description
+
+```php
+public self Mail::removeHeader( [ string $key = null ] )
+```
+
+## Arguments
+
+| Name | Data type | Default | Remarks                                              |
+| ---- | --------- | ------- | ---------------------------------------------------- |
+| $key | string    | null    | Header name / if omitted, all custom headers are removed |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Mail;
+
+$mail = new Mail();
+$mail->pushHeader('X-Foo', 'bar');
+$mail->removeHeader('X-Foo');
+
+// Remove all custom headers
+$mail->removeHeader();
+```

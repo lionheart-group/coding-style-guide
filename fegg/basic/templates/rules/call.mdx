@@ -1,0 +1,58 @@
+---
+sidebar_position: 12
+---
+
+# Call
+
+> Run a controller method
+
+## Description
+
+```html
+{{ call 'controller/method' }}
+```
+
+Creates a new instance of a controller and runs one of its methods at this place. Whatever the method prints is part of the page.
+
+- The path is written in single quotes. The first segments name the controller, like a URL: `news` is `Site\Controller\News`, `cms/news` is `Site\Controller\Cms\News` (then `Fegg\Controller\...` of the core).
+- The next segment is the method; without it, `index()` is called.
+- Further segments are ignored: the method is called **without arguments**.
+- The controller is resolved when the template is compiled. When no controller matches, the tag is left in the page as text and `fegg-cli template:lint` reports it as an unknown tag.
+- Only the constructor runs before the method, not `__init()`. Have the method print a fragment (for example `echo $this->fetchTemplate(...)`). Do not call `displayPage()`: it ends the request.
+
+## Example
+
+```php title="htdocs/_fegg/site/controller/Banner.php"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+class Banner extends Controller
+{
+    public function latest()
+    {
+        echo $this->fetchTemplate('parts/banner', array(
+            'text' => 'Campaign now on',
+        ));
+    }
+}
+```
+
+```html title="htdocs/_fegg/site/template/parts/banner.tpl"
+<p class="c-banner">{{ $text }}</p>
+```
+
+```html title="Template"
+{{ call 'banner/latest' }}
+```
+
+```html title="Output"
+<p class="c-banner">Campaign now on</p>
+```
+
+:::tip
+
+To share a piece of HTML, `{{ include }}` is simpler. Load data in the page's own controller when you can, and keep `{{ call }}` for fragments that need their own controller code.
+
+:::

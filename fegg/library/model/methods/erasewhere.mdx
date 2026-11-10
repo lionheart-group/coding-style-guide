@@ -1,0 +1,37 @@
+---
+sidebar_position: 52
+---
+
+# Model::eraseWhere
+
+> Execute Physical Delete the records by specified condition
+
+## Description
+
+```php
+public int Model::eraseWhere( string $where, mixed $data )
+```
+
+Removes every row matching `$where` from the table (`DELETE`) and returns the number of deleted rows. `$data` is one value, or an array with one value per placeholder.
+
+The condition is required: an empty `$where` throws `InvalidArgumentException` (Fegg 4 deleted every row). Pass `'1 = 1'` to really delete every row.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                          |
+| ------ | --------- | ------- | -------------------------------- |
+| $where | string    |         | Condition with `?` placeholders  |
+| $data  | mixed     |         | Values for the placeholders      |
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Remove the rows deleted with delete()
+$erased = $model->eraseWhere('valid = ?', 0);
+```

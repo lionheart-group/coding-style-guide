@@ -1,0 +1,44 @@
+---
+sidebar_position: 13
+---
+
+# Model::whereOpen
+
+> Add open bracket on Where query
+
+## Description
+
+```php
+public self Model::whereOpen( [ string $andOr = 'AND' ] )
+```
+
+Opens a bracket in the WHERE clause; close it with [whereClose](./whereclose.mdx). The first condition inside the bracket is not prefixed with `AND` / `OR`.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                                            |
+| ------ | --------- | ------- | -------------------------------------------------- |
+| $andOr | string    | 'AND'   | How the bracket joins the previous condition: `AND` or `OR` |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->where('category = ?', 2);
+$model->whereOpen();
+$model->where('title = ?', 'foo');
+$model->where('post_date <= ?', '2021-01-01', 'OR');
+$model->whereClose();
+
+// Select *
+// From "cms_news"
+// Where category = 2
+//   AND (title = 'foo' OR post_date <= '2021-01-01')
+//   AND cms_news.visible = '1' And "cms_news".valid = 1
+$records = $model->find();
+```

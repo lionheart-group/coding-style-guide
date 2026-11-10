@@ -1,0 +1,95 @@
+---
+sidebar_position: 4
+---
+
+# Loop
+
+> foreach, loop
+
+## Description
+
+### foreach
+
+```html
+{{ foreach $array as $key => $value }}
+{{ end foreach }}
+
+{{ foreach $array as $value }}
+{{ end }}
+```
+
+Repeats the block for every element of an array, like PHP's `foreach`. The key is optional. The block is closed by `{{ end foreach }}` or simply `{{ end }}`.
+
+- When the array is not set, the block is skipped without a warning.
+- `$foreachIndex` counts the iterations from 0. In nested loops, the inner loop has its own `$foreachIndex` and the outer value is restored when the inner loop ends. After a loop, `$foreachIndex` holds the number of iterations.
+- The key and value variables live in the same namespace as `$page`, `$site` …: `{{ foreach $list as $page }}` overwrites `$page`. Pick other names.
+
+### loop
+
+```html
+{{ loop $i = 1 to 10 }}
+{{ end }}
+```
+
+Counts from the first bound to the second, both included: `{{ loop $i = 1 to 10 }}` is `for ($i = 1; $i <= 10; $i++)`. Each bound is a number or a variable (`$page.pager.last_page`), not an expression. A bound that is not set reads as `null`. Close the block with `{{ end }}`.
+
+## Example
+
+### foreach
+
+```php title="Controller"
+$this->page['list'] = array('foo' => 'bar', 'baz' => 'qux');
+```
+
+```html title="Template"
+<ul>
+    {{ foreach $page.list as $key => $value }}
+    <li>{{ $foreachIndex }} : {{ $key }} => {{ $value }}</li>
+    {{ end foreach }}
+</ul>
+```
+
+```html title="Output"
+<ul>
+    <li>0 : foo => bar</li>
+    <li>1 : baz => qux</li>
+</ul>
+```
+
+### Nested foreach
+
+```php title="Controller"
+$this->page['rows'] = array(array('a', 'b'), array('c', 'd', 'e'));
+```
+
+```html title="Template"
+{{ foreach $page.rows as $row }}[{{ foreach $row as $cell }}{{ $cell }}{{ end }}:{{ $foreachIndex }}]{{ end }}
+```
+
+```html title="Output"
+[ab:0][cde:1]
+```
+
+### loop
+
+```php title="Controller"
+$this->page['max'] = 5;
+```
+
+```html title="Template"
+<ul>
+    {{ loop $i = 1 to $page.max }}
+    <li>{{ $i }}</li>
+    {{ end }}
+</ul>
+```
+
+```html title="Output"
+<ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+</ul>
+```

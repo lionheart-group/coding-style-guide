@@ -1,0 +1,30 @@
+---
+sidebar_position: 7
+---
+
+# File::removeDirectory
+
+> Remove a directory with all its contents
+
+## Description
+
+```php
+public void File::removeDirectory( string $directory )
+```
+
+Deletes every file and subdirectory under `$directory` recursively, then removes `$directory` itself. Nothing happens when it is not a directory.
+
+## Arguments
+
+| Name       | Data type | Default | Remarks             |
+| ---------- | --------- | ------- | ------------------- |
+| $directory | string    |         | Directory to remove |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\File;
+
+$file = new File();
+$file->removeDirectory($this->config['upload_dir']['path'] . '/image/' . $id . '/');
+```

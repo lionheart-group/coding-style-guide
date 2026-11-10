@@ -1,0 +1,35 @@
+---
+sidebar_position: 17
+---
+
+# Pdo::setValues
+
+> Set the values to write from an associative array
+
+## Description
+
+```php
+public self Pdo::setValues( array $values )
+```
+
+Sets the values of an INSERT or UPDATE from `column => value` pairs. Unlike [setItem](./setitem.mdx), only the given columns are written and `null` is stored as NULL. `Model::insertRow()` and `Model::updateRow()` use it.
+
+Throws `InvalidArgumentException` for an empty array, a column name that is not a plain name (letters, digits and `_`, optionally `table.column`), or a value that is an array or an object.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                       |
+| ------- | --------- | ------- | ----------------------------- |
+| $values | array     |         | Values (`column => value`)    |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Insert Into "cms_news" ("title", "image_id", modified, created, valid) Values ('Sample', NULL, ...)
+$db->setValues(array('title' => 'Sample', 'image_id' => null))->insert('cms_news')->execute();
+
+// Update "cms_news" Set "title"= ?, modified = ? Where news_id = ?
+$db->setValues(array('title' => 'New title'))->setWhere('news_id = ?', 1)->update('cms_news')->execute();
+```

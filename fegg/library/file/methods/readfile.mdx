@@ -1,0 +1,30 @@
+---
+sidebar_position: 6
+---
+
+# File::readFile
+
+> Read a file and return its contents
+
+## Description
+
+```php
+public string File::readFile( string $fileName )
+```
+
+Returns the contents of `$fileName`, or an empty string when the file does not exist.
+
+## Arguments
+
+| Name      | Data type | Default | Remarks      |
+| --------- | --------- | ------- | ------------ |
+| $fileName | string    |         | File to read |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\File;
+
+$file = new File();
+$contents = $file->readFile('path/to/foo.txt');
+```

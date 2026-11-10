@@ -1,0 +1,69 @@
+---
+sidebar_position: 4
+---
+
+# Updating the core
+
+Because the core (`htdocs/_fegg/core/`) and the project (`htdocs/_fegg/site/`) are separate, security fixes and new features of Fegg can be rolled out to each project by replacing the core, the same way you update WordPress itself.
+
+## Routine updates
+
+```bash
+./fegg-cli core:status              # current version, and whether core files were changed
+./fegg-cli core:update --dry-run    # show the difference to the latest release (changes nothing)
+./fegg-cli core:update              # update to the latest tag (vX.Y.Z)
+./fegg-cli core:update v5.1.0       # update to a given version
+npm run build:scss                  # rebuild the CMS CSS if htdocs/cms/scss changed
+```
+
+- The release is fetched with `git`. If you can clone from GitHub over SSH (`git clone git@github.com:...` works for you), no token is needed.
+- Only core files are replaced: `htdocs/_fegg/core/`, `htdocs/_fegg/.htaccess` and `htdocs/cms/`. `site/`, `htdocs/index.php`, `htdocs/.htaccess` and `fegg-cli` are not changed.
+- If core files were edited in the project, the command lists them and stops. Move those changes to overrides in `site/` (see [Directory structure](./cont.mdx#overriding-the-core)) and run it again. Add `--force` only if you really want to overwrite them.
+- The replaced files are kept in `htdocs/_fegg/site/data/core-backup/<old version>-<timestamp>/`.
+- After the update, the template cache is cleared and `fegg-cli migration` runs automatically.
+- Finally, the `core/UPGRADE.md` sections for every version crossed are printed. They list what you have to change by hand (entry files, `.htaccess`, deprecated APIs). Read them.
+
+Run the tests and check the site, then commit. `git status` should show only core files.
+
+### Changing the source repository
+
+By default the release is fetched from `git@github.com:lionheart-group/lh-fegg-skelton.git`. To use another repository (a fork, or HTTPS), set it in the project:
+
+```php title="htdocs/_fegg/site/config/fegg_update.php"
+<?php
+defined('FEGG_CORE_DIR') || exit;
+
+$fegg_update['repository'] = 'https://github.com/lionheart-group/lh-fegg-skelton.git';
+```
+
+The environment variable `FEGG_UPDATE_REPO` takes precedence over this file.
+
+## When the server has no SSH (FTP-only hosting)
+
+1. Run `./fegg-cli core:update` in your local working copy, then run the tests and check that everything works.
+2. Commit the changed files.
+3. Upload `htdocs/_fegg/core/` and `htdocs/cms/` (including the built CSS) over FTP. Upload `htdocs/_fegg/.htaccess` only if it changed.
+4. `fegg-cli migration` cannot run on the server. For versions that change tables, either upload a database file built locally or open `/cms/migrate/` in the CMS.
+5. Check the live site with `./fegg-cli doctor https://example.com`.
+
+## Merging upstream with git
+
+You can also update by adding the skeleton repository as `upstream` and merging a release tag:
+
+```bash
+git remote add upstream git@github.com:lionheart-group/lh-fegg-skelton.git
+git fetch upstream --tags
+git merge v5.1.0
+```
+
+If the project only edited `site/`, there are no conflicts in the core. The skeleton's sample files in `site/` (sample controllers and templates) may also have changed; in that case keep the project's version.
+
+## Versions
+
+| Version         | Meaning |
+| :-------------- | :------ |
+| Patch (5.0.x)   | Fixes inside the core. `core:update` alone is enough |
+| Minor (5.x.0)   | New features. Optional work for projects is described in `UPGRADE.md` |
+| Major (x.0.0)   | Changes that require fixes to project code |
+
+The full text, including the release procedure for skeleton maintainers, is in [docs/updating.md](https://github.com/lionheart-group/lh-fegg-skelton/blob/master/docs/updating.md) of the skeleton repository.

@@ -1,0 +1,34 @@
+---
+sidebar_position: 11
+---
+
+# Mail::setDebugFlag
+
+> Set debug flag and log file name
+
+## Description
+
+```php
+public self Mail::setDebugFlag( boolean $is_debug, string $log_name )
+```
+
+When `$is_debug` is `true`, [Mail::send](./send.mdx) does not send the email but writes the whole message to `$log_name`.
+
+## Arguments
+
+| Name      | Data type | Default | Remarks                    |
+| --------- | --------- | ------- | -------------------------- |
+| $is_debug | boolean   |         | `true`: write a log instead of sending |
+| $log_name | string    |         | Log file path              |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Mail;
+
+$mail = new Mail('Mail subject', 'Mail body');
+$mail->setDebugFlag(true, FEGG_SITE_DIR . '/data/log/contact_admin.log');
+
+// Written to the log file instead of being sent
+$mail->send('mail@example.com', 'John Doe', 'from@example.com');
+```

@@ -1,0 +1,32 @@
+---
+sidebar_position: 8
+---
+
+# Mail::pushAttached
+
+> Add attachment file
+
+## Description
+
+```php
+public self Mail::pushAttached( string $filePath, [ string $fileName = null ] )
+```
+
+Nothing is added when `$filePath` does not exist. Attachments are sent with [Mail::send](./send.mdx).
+
+## Arguments
+
+| Name      | Data type | Default | Remarks                                                     |
+| --------- | --------- | ------- | ----------------------------------------------------------- |
+| $filePath | string    |         | Attachment file path                                        |
+| $fileName | string    | null    | File name shown in the email / if omitted, the base name of `$filePath` |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Mail;
+
+$mail = new Mail('Mail subject', 'Mail body');
+$mail->pushAttached('path/to/file.pdf', 'document.pdf');
+$mail->send('mail@example.com', 'John Doe', 'from@example.com');
+```

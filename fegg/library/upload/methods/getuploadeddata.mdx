@@ -1,0 +1,46 @@
+---
+sidebar_position: 10
+---
+
+# Upload::getUploadedData
+
+> Get the information of the uploaded file
+
+## Description
+
+```php
+public mixed Upload::getUploadedData( string $name )
+```
+
+Returns an array describing the file saved by [Upload::upload](./upload.mdx), or `null` when no file was saved for `$name`.
+
+| Key      | Remarks                                                      |
+| -------- | ------------------------------------------------------------ |
+| name     | Saved file name (`$up_name` + extension)                     |
+| org_name | Original file name                                           |
+| type     | MIME type                                                    |
+| size     | File size (bytes)                                            |
+| up_time  | Upload time (Unix timestamp)                                 |
+| width    | Image width (images only)                                    |
+| height   | Image height (images only)                                   |
+| attr     | `width="..." height="..."` string (images only)              |
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                                      |
+| ----- | --------- | ------- | -------------------------------------------- |
+| $name | string    |         | `name` attribute of the `input[type="file"]` |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+$upload->setUploadDir($this->config['upload_dir']['path']);
+
+if ($upload->upload('image', uniqid('i_'))) {
+    $data = $upload->getUploadedData('image');
+    // $data['name'] -> "i_65f0c3a1b2c4d.jpg"
+}
+```

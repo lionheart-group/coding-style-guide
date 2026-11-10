@@ -1,0 +1,44 @@
+---
+sidebar_position: 4
+---
+
+# Application::fetchTemplate
+
+> Return a template rendered with only the variables you pass, as a string
+
+## Description
+
+```php
+public string Application::fetchTemplate( string $template, [ array $assignedValue = array() ] )
+```
+
+Same as [Application::displayTemplate](./displaytemplate.mdx), but returns the output as a string instead of printing it. Leading blank lines are removed from the result.
+
+The name is always relative to the template root, even when `fetchTemplate` is called while another template is running. If rendering fails, the partial output is discarded and the exception is thrown again.
+
+Typical uses are mail bodies and HTML fragments for Ajax responses.
+
+## Arguments
+
+| Name           | Data type | Default | Remarks |
+| -------------- | --------- | ------- | ------- |
+| $template      | string    |         | Template name without `.tpl` |
+| $assignedValue | array     | array() | Variables for the template: the key `name` becomes `$name` |
+
+## Example
+
+```php title="Controller"
+$body = $this->fetchTemplate('mail/notice', array(
+    'name' => $this->in('name'),
+));
+```
+
+```text title="htdocs/_fegg/site/template/mail/notice.tpl"
+A message from {{ $name }}.
+```
+
+:::note
+
+Do not include the `.tpl` extension in the name. `$page`, `$site`, `$in` … are only set by [Application::fetchPage](./fetchpage.mdx): pass what the template needs in `$assignedValue`.
+
+:::

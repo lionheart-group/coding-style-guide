@@ -1,0 +1,26 @@
+---
+sidebar_position: 3
+---
+
+# Upload::getUploadDir
+
+> Get the upload directory
+
+## Description
+
+```php
+public string Upload::getUploadDir()
+```
+
+Returns the directory set by [Upload::setUploadDir](./setuploaddir.mdx), or an empty string when none is set.
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+$upload->setUploadDir('path/to/up_dir');
+
+echo $upload->getUploadDir(); // -> "path/to/up_dir"
+```

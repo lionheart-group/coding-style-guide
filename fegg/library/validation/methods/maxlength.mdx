@@ -1,0 +1,40 @@
+---
+sidebar_position: 15
+---
+
+# Validation::maxlength
+
+> Check maximum character length
+
+## Description
+
+```php
+public boolean Validation::maxlength( string $name, mixed $value, numeric $length, [ mixed $code = '' ] )
+```
+
+Valid when the number of characters (`mb_strlen()` in UTF-8) is `$length` or less. The `@maxlength` message takes the label and the length as parameters.
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                                                                                                      |
+| ------- | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name   | string    |         | Field name (key of the error message)                                                                        |
+| $value  | mixed     |         | Value to check                                                                                               |
+| $length | numeric   |         | Maximum number of characters                                                                                 |
+| $code   | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+$validation->maxlength('success', 'あいう', 5, array('@maxlength', 'Name', 5)); // -> true
+$validation->maxlength('failed', 'あいうえおか', 5, array('@maxlength', 'Name', 5)); // -> false
+
+var_dump($validation->getErrorMessage());
+// -> array('failed' => '<strong>Name</strong> は <strong>5</strong> 文字以内で入力してください')
+```

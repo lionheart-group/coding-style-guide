@@ -1,0 +1,39 @@
+---
+sidebar_position: 15
+---
+
+# Model::whereIn
+
+> Match a column against a list of values
+
+## Description
+
+```php
+public self Model::whereIn( string $column, array $values, [ string $andOr = 'AND' ] )
+```
+
+Adds `column IN (?, ?, ...)`. An empty array matches no row (`1 = 0`), so an empty selection returns nothing instead of failing. Throws `InvalidArgumentException` when `$column` is not a plain name.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                                              |
+| ------- | --------- | ------- | ---------------------------------------------------- |
+| $column | string    |         | Column name (`news_id` or `cms_news.news_id`)        |
+| $values | array     |         | Values to match                                      |
+| $andOr  | string    | 'AND'   | How it joins the previous condition: `AND` or `OR`   |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// ... Where news_id IN (1, 2, 3) AND ...
+$records = $model->whereIn('news_id', array(1, 2, 3))->all();
+
+// ... Where 1 = 0 AND ...  (no rows)
+$records = $model->whereIn('news_id', array())->all();
+```

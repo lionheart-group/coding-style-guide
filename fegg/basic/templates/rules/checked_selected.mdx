@@ -1,0 +1,72 @@
+---
+sidebar_position: 8
+---
+
+# Checked/Selected
+
+> checked, selected
+
+## Description
+
+```html
+{{ checked key=$optionValue value=$currentValue }}
+{{ selected key=$optionValue value=$currentValue }}
+{{ checked key=1 value=$currentValue typecheck=true }}
+```
+
+Prints ` checked` (or ` selected`, with a leading space) when the current value matches the value of this input or option:
+
+- `key` is the value of this `<input>` / `<option>`: a variable, a number or a quoted string.
+- `value` is the current value, usually from the request (`$in.category`) or the stored data (`$page.data[$id]`).
+- It matches when `value == key`, or when `value` is an array that contains `key` (multiple checkboxes, multiple select).
+- Add `typecheck=true` to compare with `===` (and a strict `in_array`).
+- Nothing is printed when `value` is not set.
+
+Put the tag directly after the other attributes, without a space before it: the output starts with its own space.
+
+## Example
+
+```php title="Controller"
+$this->page['current'] = 'value';
+```
+
+```html title="Template"
+<label><input type="radio" name="radio" value="value"{{ checked key='value' value=$page.current }}> value</label>
+<label><input type="radio" name="radio" value="other"{{ checked key='other' value=$page.current }}> other</label>
+
+<select name="select">
+    <option value="value"{{ selected key='value' value=$page.current }}>value</option>
+    <option value="other"{{ selected key='other' value=$page.current }}>other</option>
+</select>
+```
+
+```html title="Output"
+<label><input type="radio" name="radio" value="value" checked> value</label>
+<label><input type="radio" name="radio" value="other"> other</label>
+
+<select name="select">
+    <option value="value" selected>value</option>
+    <option value="other">other</option>
+</select>
+```
+
+### Multiple checkboxes
+
+```php title="Controller"
+$this->page['data']['colors'] = array('red', 'blue');
+$this->page['colors'] = array('red', 'green', 'blue');
+```
+
+```html title="Template"
+{{ foreach $page.colors as $color }}
+<label><input type="checkbox" name="colors[]" value="{{ $color }}"{{ checked key=$color value=$page.data.colors }}> {{ $color }}</label>
+{{ end foreach }}
+```
+
+```html title="Output"
+<label><input type="checkbox" name="colors[]" value="red" checked> red</label>
+<label><input type="checkbox" name="colors[]" value="green"> green</label>
+<label><input type="checkbox" name="colors[]" value="blue" checked> blue</label>
+```
+
+See [Options](./options.mdx) to build all the `<option>` tags of a `<select>` from an array.

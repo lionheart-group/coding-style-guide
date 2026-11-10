@@ -1,0 +1,222 @@
+---
+sidebar_position: 2
+---
+
+# Settings
+
+## Basic settings
+
+The defaults are in `htdocs/_fegg/core/config/settings.php`. Do not edit that file (it is replaced on update). Put the values for your project in **`htdocs/_fegg/site/config/settings.php`**.
+
+The core file is loaded first, then the site file. Only the keys the site file sets are changed, so write one key per line and never reassign the whole array (`$settings = array(...)` would drop the defaults).
+
+```php title="htdocs/_fegg/site/config/settings.php"
+<?php
+defined('FEGG_CORE_DIR') || exit;
+
+// Run mode  1: running, empty: under maintenance
+$settings['run_mode'] = '1';
+
+// Maintenance page URL
+$settings['maintenance_page_url'] = '';
+
+// Developer IP addresses (multiple allowed). Error details only outside production (FEGG_ENV)
+$settings['developer_ip'] = array('192.168.65.1', '203.0.113.10');
+
+// Basic authentication scope (0: none, 1: whole site, 2: partial)
+#$settings['basic_auth_scope'] = 0;
+#$settings['basic_auth_user'] = '';
+#$settings['basic_auth_password'] = '';
+
+// HSTS, once the whole site is served over HTTPS
+#$settings['hsts'] = 'max-age=31536000';
+```
+
+Per-server values and secrets (the environment, database passwords, API keys) do not belong here: see [Environments and secrets](#environments-and-secrets).
+
+| Key                    | Default                         | Remarks |
+| :--------------------- | :------------------------------ | :------ |
+| `run_mode`             | `'1'`                           | `'1'`: running. Empty: under maintenance. During maintenance every request that does not come from `developer_ip` is redirected to `maintenance_page_url`, or gets a short maintenance message when it is empty. |
+| `maintenance_page_url` | `''`                            | Redirect target during maintenance |
+| `developer_ip`         | `array()`                       | Addresses that can see error details outside production (see [Developer mode](#developer-mode)) and that bypass maintenance |
+| `timezone`             | `''`                            | Time zone of the application, set once at startup. `''`: `FEGG_DEFAULT_TIMEZONE` (`Asia/Tokyo`) |
+| `log_level`            | `''`                            | Lowest level written to the application log (`debug`, `info`, `notice`, `warning`, `error` ...). `''`: `warning` in production, `debug` elsewhere. See [Logging and errors](../basic/logging.mdx) |
+| `log_retention_days`   | `30`                            | Days to keep the application log files (`0`: keep all) |
+| `mail`                 | `array('transport' => 'sendmail')` | Outgoing mail of `Fegg\Tool\Mail`. For SMTP see [Mail](../library/mail/index.mdx#smtp) |
+| `security_headers`     | `array()`                       | Changes the default security headers: `'Header-Name' => 'value'`, `''` removes one. See [Security](../basic/security.mdx#security-headers) |
+| `hsts`                 | `''`                            | `Strict-Transport-Security` value sent on HTTPS responses, e.g. `'max-age=31536000'`. `''`: not sent |
+| `csp`                  | `''`                            | `Content-Security-Policy` value. `''`: not sent |
+| `csp_report_only`      | `false`                         | `true`: send the policy as `Content-Security-Policy-Report-Only` (reports only, blocks nothing) |
+| `default_language`     | not set                         | Language code used when none is detected, e.g. `'ja'`. Only for multilingual sites |
+| `support_language`     | not set                         | Supported language codes, e.g. `array('ja', 'en')`. Only for multilingual sites |
+| `basic_auth_scope`     | `0`                             | `0`: no Basic authentication. `1`: every page rendered by Fegg. `2`: only where the controller calls `$this->basicAuth()` |
+| `basic_auth_user`      | `''`                            | Basic authentication user |
+| `basic_auth_password`  | `''`                            | Basic authentication password (compared with `hash_equals()`) |
+| `basic_auth_message`   | not set                         | Realm shown in the browser's login dialog |
+| `basic_auth_error_message` | not set                     | Text sent with the 401 response when the login fails (default `Authorization Required`) |
+| `template_dir`         | `site/template`, `core/template` | Template directories, searched in this order |
+| `template_ext`         | `'tpl'`                         | Template file extension |
+| `template_cache_dir`   | `site/data/cache/template`      | Compiled template cache |
+| `global_config_dir`    | `''`                            | Optional directory searched by `loadConfig()` before `site/config/`. End it with `/` |
+
+Read a setting from a controller with [`$this->getSetting()`](../basic/others/config/getsetting.mdx).
+
+## Environments and secrets
+
+Values that differ per server (the environment, the database, API keys, passwords) are **not** written in `settings.php` or any other committed file. They are read with `feggEnv()`:
+
+```php
+$secret = feggEnv('FEGG_RECAPTCHA_SECRET', '');   // feggEnv(string $name, mixed $default = null)
+```
+
+`feggEnv()` returns the first of:
+
+1. the environment variable with that name (`SetEnv` in Apache, `fastcgi_param` in nginx, Docker `environment` ...),
+2. the key in **`htdocs/_fegg/site/config/env.php`**,
+3. the key in the committed environment file **`htdocs/_fegg/site/config/env/<name>.php`** chosen for this server by its path (see [Test servers deployed with git pull](#test-servers-deployed-with-git-pull)),
+4. `$default`.
+
+`SetEnv` reaches only the web. `fegg-cli` (and a `fegg-cli migration` run after a deploy) sees only its own shell's environment and the files, so keep database settings in a file when the server runs `fegg-cli`.
+
+`env.php` returns a PHP array. It is in `.gitignore` and is created on each server by copying `site/config/env.php.dist`:
+
+```php title="htdocs/_fegg/site/config/env.php"
+<?php
+defined('FEGG_CORE_DIR') || exit;
+
+return array(
+    // production | staging | development
+    'FEGG_ENV' => 'development',
+
+    // Database. Default: SQLite file in site/data/db/db.db
+    // 'FEGG_DB_DSN'      => 'mysql:host=127.0.0.1;port=3306;dbname=example;charset=utf8mb4',
+    // 'FEGG_DB_USER'     => '',
+    // 'FEGG_DB_PASSWORD' => '',
+
+    // Contact form spam protection
+    'FEGG_RECAPTCHA_SITE_KEY' => '',
+    'FEGG_RECAPTCHA_SECRET'   => '',
+    'FEGG_TURNSTILE_SITE_KEY' => '',
+    'FEGG_TURNSTILE_SECRET'   => '',
+);
+```
+
+| Name | Used for |
+| :--- | :------- |
+| `FEGG_ENV` | `production` (default, also for unknown values), `staging` or `development`. Available as the constant `FEGG_ENV` |
+| `FEGG_DB_DSN`, `FEGG_DB_USER`, `FEGG_DB_PASSWORD`, `FEGG_DB_SLAVE_DSN` | Database connection (see [Database](#database)) |
+| `FEGG_DB_PATH` | SQLite file path, when `FEGG_DB_DSN` is not set |
+| `FEGG_RECAPTCHA_SITE_KEY`, `FEGG_RECAPTCHA_SECRET`, `FEGG_TURNSTILE_SITE_KEY`, `FEGG_TURNSTILE_SECRET` | Contact form spam protection (see [Captcha](../library/captcha/index.mdx)) |
+| `FEGG_SMTP_PASSWORD` (`FEGG_SMTP_HOST`, `FEGG_SMTP_USERNAME`) | SMTP sending (see [Mail](../library/mail/index.mdx#smtp)) |
+| `FEGG_LOG_DIR` | Directory of the application log instead of `site/data/log` |
+| `FEGG_RECAPTCHA_SCORE_THRESHOLD` | reCAPTCHA score needed (default `0.5`; `1.0` rejects every form, to check the error message) |
+| `FEGG_CMS_INITIAL_LOGIN`, `FEGG_CMS_INITIAL_NAME`, `FEGG_CMS_INITIAL_PASSWORD_HASH` (or `FEGG_CMS_INITIAL_PASSWORD`) | First CMS user, created by [`fegg-cli migration`](./cli.mdx#migration) |
+| `FEGG_ENV_NAME` | Environment variable only: chooses `site/config/env/<name>.php` instead of `paths.php` |
+
+Add your own keys the same way and read them with `feggEnv('NAME', $default)`.
+
+:::warning
+
+**A site without `env.php` and without a matching environment file runs as production.** On your machine, create `env.php` with `'FEGG_ENV' => 'development'`. Otherwise developers do not see error details there. Test servers on the LionHeart develop server run as `staging` without any file of their own (next section).
+
+:::
+
+`FEGG_ENV` decides:
+
+- whether [developer mode](#developer-mode) is possible (not in production),
+- whether the contact form sends the administrator mail to the test address (outside production),
+- the default `log_level` (`warning` in production, `debug` elsewhere),
+- the Fegg 4 constant `FEGG_TEST_ENVIRONMENT`, which is `true` outside production. It no longer looks at the host name.
+
+### Test servers deployed with git pull
+
+On the LionHeart develop server (`http://p83.<project>.develop.lionheart.co.jp/`, project directory `/var/www/vhosts/<project>/p83`) a deploy is `git pull` followed by `fegg-cli migration`. Nothing can be placed on the server by hand, so the test server's settings are committed:
+
+```php title="htdocs/_fegg/site/config/env/paths.php"
+return array(
+    // project root pattern (fnmatch; * and ? do not cross /) => environment file name
+    '/var/www/vhosts/*/p[0-9]*' => 'staging',
+);
+```
+
+```php title="htdocs/_fegg/site/config/env/staging.php"
+return array(
+    'FEGG_ENV' => 'staging',
+    // first CMS user, created by fegg-cli migration (see below)
+    'FEGG_CMS_INITIAL_LOGIN'         => 'admin',
+    'FEGG_CMS_INITIAL_PASSWORD_HASH' => '$2y$10$...',   // ./fegg-cli user:hash
+    // Turnstile test keys: always pass (2x00000000000000000000AB / 2x0000000000000000000000000000000AA always fail)
+    'FEGG_TURNSTILE_SITE_KEY' => '1x00000000000000000000AA',
+    'FEGG_TURNSTILE_SECRET'   => '1x0000000000000000000000000000000AA',
+);
+```
+
+Both files come with the skeleton. The project root (the directory of `fegg-cli`) is matched against `paths.php`; the first match chooses `site/config/env/<name>.php`. Any other path (production, your machine) does not match and behaves as before.
+
+- **Why the path:** the host name of a request is chosen by the client. Matching it would let a request to production with `Host: x.develop.lionheart.co.jp` switch production to the test settings (test captcha keys that always pass, the test administrator). The path is set by the server, and `fegg-cli` sees the same path as the web.
+- **Check it:** the first line of `fegg-cli migration` in the deploy log names the environment and its file, e.g. `Environment: staging (site/config/env/staging.php, /var/www/vhosts/*/p[0-9]*) / DB: sqlite:...`.
+- **First CMS user:** `fegg-cli migration` creates `FEGG_CMS_INITIAL_LOGIN` when no row with that login exists, deleted rows included. It never changes an existing user, so it is safe on every deploy: a password changed in the CMS stays, and a deleted user does not come back. Commit the hash (`./fegg-cli user:hash`), not the password, and change the password after the first login.
+- **Captcha:** the Turnstile test keys need no host name registration. reCAPTCHA v3 has no test keys: use a key registered for `develop.lionheart.co.jp`. `'FEGG_RECAPTCHA_SCORE_THRESHOLD' => '1.0'` shows the rejection.
+
+:::warning
+
+Everyone who can read the repository can read these files. Put only values made for the test server there, never production keys or passwords. `env.php` on a server and environment variables still win over them.
+
+:::
+
+### Developer mode
+
+Fegg runs in developer mode (the constant `FEGG_DEVELOPER` is `'1'`) only when **both** are true:
+
+- the request comes from an address in `developer_ip`, and
+- `FEGG_ENV` is not `production`.
+
+In developer mode:
+
+- PHP errors are displayed.
+- An uncaught exception shows the message, the file and line, the template line (`Template: <file>.tpl:<line>`), the stack trace and `$this->page`. Other visitors get the error page (see [Logging and errors](../basic/logging.mdx)). In both cases the error is written to the PHP error log and the application log.
+- The 404 page shows which controller file Fegg tried to load.
+
+On a production server developers see the same error page as everyone; the details are in the logs. `developer_ip` alone is not a security boundary: behind a proxy or load balancer every request may come from the same address.
+
+Requests from `developer_ip` also reach the site during maintenance (`run_mode` empty), in every environment.
+
+## Database
+
+The connection is set in **`htdocs/_fegg/site/config/database_config.php`**. The skeleton's file reads it from `feggEnv()`, so the file itself is the same on every server. Without settings, it is the SQLite file `htdocs/_fegg/site/data/db/db.db`.
+
+```php title="htdocs/_fegg/site/config/env.php (MySQL)"
+'FEGG_DB_DSN'      => 'mysql:host=127.0.0.1;port=3306;dbname=example;charset=utf8mb4',
+'FEGG_DB_USER'     => 'example',
+'FEGG_DB_PASSWORD' => '...',
+```
+
+| Name | Remarks |
+| :--- | :------ |
+| `FEGG_DB_DSN` | PDO DSN. Default: `sqlite:` + `FEGG_DB_PATH` |
+| `FEGG_DB_USER`, `FEGG_DB_PASSWORD` | User and password (MySQL) |
+| `FEGG_DB_SLAVE_DSN` | Read-only replica. Default: the same as the master |
+| `FEGG_DB_PATH` | SQLite file. Default `site/data/db/db.db`. As an environment variable it wins over `FEGG_DB_DSN` in `env.php` (the test suite uses it) |
+
+- `master` is used for writes and `slave` for reads. With one database both point to the same DSN.
+- If the server allows it, put the SQLite file **outside the document root** with `FEGG_DB_PATH` (or `FEGG_DB_DSN`).
+- MySQL / MariaDB are supported, including `fegg-cli migration`. See [Database configuration](../library/database/configuration.mdx#mysql).
+
+Tables are defined in YAML files (`core/config/database/` for the CMS tables, `site/config/database/` for the project's tables) and created or changed with `./fegg-cli migration` (see [fegg-cli](./cli.mdx#migration)). Every table needs the columns `valid`, `created` and `modified`.
+
+## Other files in `site/config/`
+
+| File                  | Remarks |
+| :-------------------- | :------ |
+| `route.php`           | URL routing (see [URL](../basic/url.mdx#routing)) |
+| `site_info.php`       | Site title, description, OGP image, `picture` breakpoints, ... Loaded by the base controller and available in templates as `$site` |
+| `category_info.php`   | Labels for categories and the CMS visibility states. Loaded by the base controller into `$this->config['category_info']` |
+| `cms_menu.php`        | CMS side menu. Add one block per post type |
+| `env.php`             | Per-server settings and secrets, read with `feggEnv()`. Not committed; copy `env.php.dist` (see [Environments and secrets](#environments-and-secrets)) |
+| `database_config.php` | Database connection, from `feggEnv()` (see [Database](#database)) |
+| `upload_dir.php`      | Path and URL of the CMS upload directory (`htdocs/up_dir`) |
+| `database/*.yaml`     | Table definitions for `fegg-cli migration` |
+| `define.php`          | Optional. Project constants, loaded right after the core starts (web and CLI) |
+| `fegg_update.php`     | Optional. Repository used by `fegg-cli core:update` (see [Updating the core](./update.mdx)) |
+
+Any other file in `site/config/` can be loaded with [`$this->loadConfig()`](../basic/others/config/loadconfig.mdx). A file with the same name as one in `core/config/` (for example `validation_error_message.php`) replaces the core's file.

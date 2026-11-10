@@ -1,0 +1,43 @@
+---
+sidebar_position: 44
+---
+
+# Model::updateRowsWhere
+
+> Update the rows matching a condition from an associative array
+
+## Description
+
+```php
+public int Model::updateRowsWhere( array $row, string $where, [ mixed $params = [] ] )
+```
+
+Updates every row matching `$where` and returns the number of updated rows. Columns are written as in [updateRow](./updaterow.mdx). `$params` works as in [where](./where.mdx): one value, or an array of values in placeholder order (an array on a single `IN (?)` placeholder expands it).
+
+The condition is required: an empty `$where` throws `InvalidArgumentException`. Pass `'1 = 1'` to really update every row. Conditions chained with [where](./where.mdx) are not used.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                                                |
+| ------- | --------- | ------- | ------------------------------------------------------ |
+| $row    | array     |         | Values (`column => value`)                             |
+| $where  | string    |         | Condition with `?` placeholders                        |
+| $params | mixed     | []      | One value, or an array of values in placeholder order  |
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Hide every news of category 3
+$updated = $model->updateRowsWhere(array('visible' => 0), 'category = ?', 3);
+
+$updated = $model->updateRowsWhere(array('category' => 1), 'news_id IN (?)', array(4, 5, 6));
+
+// Every row
+$updated = $model->updateRowsWhere(array('visible' => 1), '1 = 1');
+```

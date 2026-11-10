@@ -1,0 +1,31 @@
+---
+sidebar_position: 10
+---
+
+# File::touchDirectory
+
+> Change the modification time of the files in a directory
+
+## Description
+
+```php
+public void File::touchDirectory( string $directory, string $datetime )
+```
+
+Sets the modification time of every file and subdirectory under `$directory` (recursively) to `$datetime`. `$datetime` is parsed with `strtotime()`; nothing happens when it cannot be parsed.
+
+## Arguments
+
+| Name       | Data type | Default | Remarks                                |
+| ---------- | --------- | ------- | -------------------------------------- |
+| $directory | string    |         | Target directory                       |
+| $datetime  | string    |         | Date and time (any `strtotime()` format) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\File;
+
+$file = new File();
+$file->touchDirectory('path/to/foo', '2024-04-01 10:00:00');
+```

@@ -1,0 +1,161 @@
+---
+sidebar_position: 5
+---
+
+# Modifiers
+
+Modifiers transform a value before it is output.
+
+## How to use modifiers
+
+A modifier follows the variable after a pipe (`|`). Arguments follow the modifier name after colons (`:`). Modifiers can be chained: they are applied from left to right, each one receiving the result of the previous one.
+
+```html
+{{ $page.post_date|feggDate:'Y/m/d' }}
+{{ $page.text|lineStrimWidth:80|br }}
+```
+
+- Any PHP function works as a modifier: `{{ $x|name:arg1:arg2 }}` calls `name($x, arg1, arg2)`.
+- Arguments are PHP expressions: quote strings (`'Y/m/d'`), and use template variables freely (`feggDate:$format`). A `:` or `|` inside a quoted string is part of the string.
+- The result is HTML-escaped like any output, unless `noescape` is in the chain.
+- Modifiers only run when the variable is set: `{{ $missing|feggDefault:'-' }}` outputs nothing, so use `{{ if }}` for defaults. Arrays are passed to modifiers (`{{ $tags|feggImplode:', ' }}`); when the result is still an array, nothing is output.
+- An unknown modifier is reported by `fegg-cli template:lint` (see [Lint and errors](./lint.mdx)).
+
+## Built into the template engine
+
+### noescape
+
+Outputs the value without HTML escaping. Use it only for trusted HTML (CMS rich text written by administrators, messages from your own config). See [Security](./security.mdx).
+
+```php title="Controller"
+$this->page['foo'] = '<p>bar</p>';
+```
+
+```html title="Template"
+{{ $page.foo }}
+{{ $page.foo|noescape }}
+```
+
+```html title="Output"
+&lt;p&gt;bar&lt;/p&gt;
+<p>bar</p>
+```
+
+### br
+
+Escapes the value, then converts newlines to `<br />` (`nl2br`).
+
+```php title="Controller"
+$this->page['foo'] = "First line.\nSecond line.";
+```
+
+```html title="Template"
+{{ $page.foo|br }}
+```
+
+```html title="Output"
+First line.<br />
+Second line.
+```
+
+### replace
+
+`replace:'pattern':'replacement'` replaces with `mb_ereg_replace()`. The pattern is a regular expression, so escape special characters (`'\.'`).
+
+```html title="Template"
+{{ $page.tel|replace:'-':'' }}
+```
+
+## Fegg modifiers
+
+Defined in `htdocs/_fegg/core/functions/modifier.php`.
+
+| Modifier | Description |
+| --- | --- |
+| `feggDate:'Y/m/d'` | Formats a date string or a Unix timestamp with the `date()` format. Also accepts `x` / `X` (Japanese day of the week: `火` / `火曜日`) and `V` / `v` (Japanese era and year: `令和` / `7`). Outputs nothing for an empty or invalid date |
+| `feggImplode:', '` | Joins an array with the glue |
+| `feggDefault:'-'` | The replacement when the value is an empty string or an empty array. Does not apply to unset variables |
+| `feggCheck:'value':'yes':'no'` | `'yes'` when the value is identical (`===`) to `'value'`, otherwise `'no'` |
+| `feggReplace:'a':'b'` | `str_replace('a', 'b', $value)` |
+| `feggPregReplace:'/a/':'b'` | `preg_replace('/a/', 'b', $value)`. An optional third argument is the maximum number of replacements |
+| `feggUrlParam:$params` | Appends query parameters (an array or a string) to a URL, with `?` or `&` |
+| `feggUrl` | A URL safe for `href` / `src`: any scheme other than `http`, `https`, `mailto` and `tel` (`javascript:`, `data:` …) becomes `#` |
+| `feggJs` | The value as a JavaScript literal (string, number, array, object, null) with `<`, `>`, `&`, `'` and `"` encoded. Do not put quotes around it. See [Security](./security.mdx) |
+
+```php title="Controller"
+$this->page['post_date'] = '2025-04-01 10:00:00';
+$this->page['category'] = '1';
+$this->page['data']['link'] = 'javascript:alert(1)';
+$this->page['query'] = array('category' => 2, 'p' => 3);
+$this->setSiteinfo('prefix', '/news/');
+```
+
+```html title="Template"
+{{ $page.post_date|feggDate:'Y年n月j日(x)' }}
+<li class="c-tab{{ $page.category|feggCheck:'1':' is-active':'' }}">
+<a href="{{ $page.data.link|feggUrl }}">Link</a>
+<a href="{{ $site.prefix|feggUrlParam:$page.query }}">Search</a>
+```
+
+```html title="Output"
+2025年4月1日(火)
+<li class="c-tab is-active">
+<a href="#">Link</a>
+<a href="/news/?category=2&amp;p=3">Search</a>
+```
+
+### Joining an array
+
+```html title="Template"
+{{ $page.tags|feggImplode:', ' }}
+```
+
+## CMS modifiers
+
+Defined in `htdocs/_fegg/core/functions/cms-modifier.php` and `model.php`.
+
+| Modifier | Description |
+| --- | --- |
+| `getImageUrl` | URL of a CMS image from its ID |
+| `getImageUrl:320` | Resized to a width of 320px |
+| `getImageUrl:780:360` | Resized to 780 × 360px. A third argument changes the crop mode in the file name (default `'i'`) |
+| `getImageUrlFromDB`, `getImageUrlFromDB:320`, `getImageUrlFromDB:780:360` | URL that generates the image on every request (`/cms/image/get/...`) |
+| `getFileUrl` | URL of a CMS file from its ID |
+| `getFileRawUrl` | Direct URL of the stored file (looks the file up in `cms_file`) |
+| `byteConvert` | A byte count as a readable size: `1536` → `1.5 KB` |
+| `lineStrimWidth:40` | Removes tags and newlines, then shortens the text to a display width of 40, adding `…`. A second argument replaces `…` |
+| `url2link` | Turns URLs in text into `<a>` links. The result is HTML: see the warning below |
+| `feggCategoryLabel:'news'` | Label of a category ID, from the list `news` of `site/config/category_info.php` |
+
+```html title="Template"
+<img src="{{ $page.data.image_id|getImageUrl:780:360 }}" alt="">
+<a href="{{ $page.data.file_id|getFileUrl }}">Download</a>
+<span class="c-label">{{ $post.category|feggCategoryLabel:'news' }}</span>
+<p>{{ $post.body|lineStrimWidth:80 }}</p>
+```
+
+:::warning
+
+`url2link` returns HTML and does not escape the rest of the text, so it needs `noescape`. Use it only on trusted text (written by administrators in the CMS), never on user input.
+
+:::
+
+## Project modifiers
+
+Put your own modifiers in `htdocs/_fegg/site/functions/*.php`. These files are loaded automatically after the core's. Every file under `htdocs/_fegg/` starts with the direct-access guard.
+
+```php title="htdocs/_fegg/site/functions/modifier.php"
+<?php
+defined('FEGG_CORE_DIR') || exit;
+
+function priceFormat($value)
+{
+    return number_format((int) $value) . ' yen';
+}
+```
+
+```html title="Template"
+{{ $page.price|priceFormat }}
+```
+
+The skeleton defines `isNew($date, $gap = 2)`: true when the date is less than `$gap` days old. Use it in a condition: `{{ if isNew($post.post_date) }}NEW{{ end }}`.

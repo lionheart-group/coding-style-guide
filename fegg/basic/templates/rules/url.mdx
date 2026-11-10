@@ -1,0 +1,45 @@
+---
+sidebar_position: 7
+---
+
+# Base URL
+
+> base, base_url, current_url
+
+## Description
+
+```html
+{{ base }}
+{{ base_url }}
+{{ current_url }}
+```
+
+| Tag | Output | Example |
+| --- | --- | --- |
+| `{{ base }}` | URL path of the site root, without a trailing slash. Empty when the site is at the document root | (empty), `/sub` |
+| `{{ base_url }}` | Scheme, host (and port) plus `{{ base }}`: the absolute URL of the site root | `https://example.com`, `https://example.com/sub` |
+| `{{ current_url }}` | Absolute URL of the current request, including the query string | `https://example.com/news/?p=2` |
+
+All three are HTML-escaped.
+
+Start every link and asset path with `{{ base }}/`, so the site keeps working when it is installed in a subdirectory. Use `{{ base_url }}` and `{{ current_url }}` where an absolute URL is required (canonical, OGP).
+
+## Example
+
+```html title="Template"
+<link rel="stylesheet" href="{{ base }}/data/css/style.css">
+<a href="{{ base }}/news/">News</a>
+<img src="{{ base }}/data/img/common/pc/logo.png" alt="">
+
+<link rel="canonical" href="{{ current_url }}">
+<meta property="og:image" content="{{ base_url }}/data/img/ogp.png">
+```
+
+```html title="Output (site at https://example.com/, page /news/?p=2)"
+<link rel="stylesheet" href="/data/css/style.css">
+<a href="/news/">News</a>
+<img src="/data/img/common/pc/logo.png" alt="">
+
+<link rel="canonical" href="https://example.com/news/?p=2">
+<meta property="og:image" content="https://example.com/data/img/ogp.png">
+```

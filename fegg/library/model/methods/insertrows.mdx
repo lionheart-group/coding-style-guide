@@ -1,0 +1,37 @@
+---
+sidebar_position: 42
+---
+
+# Model::insertRows
+
+> Insert several rows in one transaction
+
+## Description
+
+```php
+public array Model::insertRows( array $rows )
+```
+
+Inserts each row with [insertRow](./insertrow.mdx) inside one [transaction](./transaction.mdx) and returns the new IDs in order. When one row fails, none is inserted and the exception is rethrown. Throws `InvalidArgumentException` when an element of `$rows` is not an array.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                                  |
+| ----- | --------- | ------- | ---------------------------------------- |
+| $rows | array     |         | List of rows (`column => value` arrays)  |
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$ids = $model->insertRows(array(
+    array('title' => 'First', 'category' => 1),
+    array('title' => 'Second', 'category' => 2),
+));
+// -> array(25, 26)
+```

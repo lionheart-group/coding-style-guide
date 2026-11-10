@@ -1,0 +1,38 @@
+---
+sidebar_position: 2
+---
+
+# Application::getSetting
+
+> Get a value from the settings
+
+## Description
+
+```php
+public mixed Application::getSetting( string $name )
+```
+
+Get a value of `$settings`: the defaults in `core/config/settings.php`, overridden by `site/config/settings.php` (see [Settings](../../../first/config.mdx)). Returns `''` when the key does not exist.
+
+Project-specific keys work too: add them to `site/config/settings.php` and read them with `getSetting()`.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks     |
+| :---- | :-------- | :------ | :---------- |
+| $name | string    |         | Setting key |
+
+## Example
+
+```php title="htdocs/_fegg/site/config/settings.php"
+$settings['developer_ip'] = array('192.168.65.1');
+
+// A project-specific setting
+$settings['contact_admin_email'] = 'info@example.com';
+```
+
+```php title="Controller"
+var_dump($this->getSetting('developer_ip'));      // -> array(1) { [0]=> string(12) "192.168.65.1" }
+echo $this->getSetting('contact_admin_email');    // -> info@example.com
+echo $this->getSetting('no_such_key');            // -> ''
+```

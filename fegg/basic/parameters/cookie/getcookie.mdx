@@ -1,0 +1,52 @@
+---
+sidebar_position: 2
+---
+
+# Application::getCookie
+
+> Get COOKIE data
+
+## Description
+
+```php
+public string|array Application::getCookie( string $name = '' )
+```
+
+Get COOKIE data sent by the browser. If the cookie does not exist, returns `''`. If you omit the argument, returns all COOKIE data as an array.
+
+Cookies set with `setCookie()` are sent back by the browser from the **next** request on; `getCookie()` does not see them in the same request.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                                 |
+| :---- | :-------- | :------ | :-------------------------------------- |
+| $name | string    | ''      | Cookie name. All COOKIE data when omitted |
+
+## Example
+
+```php title="Controller - First request"
+$this->setCookie('foo', 'bar');
+```
+
+```php title="Controller - Second request"
+echo $this->getCookie('foo'); // -> bar
+```
+
+### Get all cookie data
+
+If you omit the argument, `getCookie` returns all COOKIE data.
+
+```php title="Controller - First request"
+$this->setCookie('foo', 'bar');
+$this->setCookie('baz', 'qux');
+```
+
+```php title="Controller - Second request"
+var_dump( $this->getCookie() );
+```
+
+```html title="Output"
+array(2) { ["foo"]=> string(3) "bar" ["baz"]=> string(3) "qux" }
+```
+
+The array also contains the other cookies of the site, such as the session cookie.

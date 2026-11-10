@@ -1,0 +1,33 @@
+---
+sidebar_position: 8
+---
+
+# File::removeExpiredFile
+
+> Remove the files older than the specified minutes
+
+## Description
+
+```php
+public boolean File::removeExpiredFile( string $path, int $min )
+```
+
+Deletes the files directly under `$path` whose modification time is `$min` minutes ago or older. Subdirectories are not touched. The return value is always `false`.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                                          |
+| ----- | --------- | ------- | ------------------------------------------------ |
+| $path | string    |         | Target directory                                 |
+| $min  | int       |         | Age in minutes after which a file is deleted     |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\File;
+
+$file = new File();
+
+// Delete temporary files older than one day
+$file->removeExpiredFile('path/to/tmp', 60 * 24);
+```
