@@ -24,7 +24,8 @@ return array(
 );
 ```
 
-- A site without `env.php` runs as **production**: no error details on screen, for anyone.
+- A site without `env.php` runs as **production**: no error details on screen, for anyone. Test servers whose project path matches `site/config/env/paths.php` (the LionHeart develop server) use the committed `site/config/env/staging.php` instead: it holds only test values, never production secrets ([Test servers deployed with git pull](../first/config.mdx#test-servers-deployed-with-git-pull)).
+- Environments are chosen by the server's path, never by the request's host name, which the client controls.
 - Error details are shown only in [developer mode](../first/config.mdx#developer-mode): a `developer_ip` address **and** `FEGG_ENV` other than `production`. `developer_ip` alone is not a security boundary: behind a proxy or load balancer every request may come from the same address.
 
 ## Security headers

@@ -65,7 +65,14 @@ The keys differ per server, and the secret keys must not be committed. Put them 
 'FEGG_TURNSTILE_SECRET'   => '...',
 ```
 
-Use different keys (or the providers' test keys) for development and production.
+Use different keys (or the providers' test keys) for development and production. On a test server the keys can go in the committed `site/config/env/staging.php` (see [Test servers deployed with git pull](../../first/config.mdx#test-servers-deployed-with-git-pull)):
+
+| | Site key | Secret |
+| :--- | :--- | :--- |
+| Turnstile, always passes | `1x00000000000000000000AA` | `1x0000000000000000000000000000000AA` |
+| Turnstile, always fails | `2x00000000000000000000AB` | `2x0000000000000000000000000000000AA` |
+
+Test secrets accept only the dummy token of the test site keys ([Cloudflare](https://developers.cloudflare.com/turnstile/troubleshooting/testing/)); never use them in production. reCAPTCHA v3 has no test keys: register the test server's domain, and set `FEGG_RECAPTCHA_SCORE_THRESHOLD` to `1.0` to see a rejection. When a captcha is enabled but a key is empty, every form is rejected and an error is logged.
 
 ## Contact form
 

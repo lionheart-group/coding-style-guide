@@ -21,6 +21,7 @@ Like `htdocs/index.php`, the file itself only defines the paths (`FEGG_HTML_DIR`
 | `user:create LOGIN [NAME]`                      | Add a CMS user |
 | `user:password LOGIN`                           | Set a new password for a CMS user |
 | `user:list`                                     | List the CMS users |
+| `user:hash`                                     | Print a password hash for `FEGG_CMS_INITIAL_PASSWORD_HASH` |
 | `core:status`                                   | Show the core version and core files changed in this project |
 | `core:update [vX.Y.Z] [--dry-run] [--force]`    | Update the core from the skeleton repository |
 | `doctor [URL]`                                  | Check that `_fegg/` cannot be read from the web |
@@ -36,7 +37,9 @@ Running a command group without a sub command prints its help: `./fegg-cli core`
 Compares the table definitions in the YAML files with the database (SQLite, or MySQL / MariaDB) and applies the difference (adds tables, columns and indexes).
 
 - The core's files (`core/config/database/`: `cms_user`, `cms_file`, `cms_image`, `cms_login_attempt`) are read first, then the project's (`site/config/database/`). A project file with the same name replaces the core's file.
+- Starts with one line naming the environment, its file and the database, e.g. `Environment: staging (site/config/env/staging.php, /var/www/vhosts/*/p[0-9]*) / DB: sqlite:...` (see [Environments and secrets](./config.mdx#test-servers-deployed-with-git-pull)).
 - Prints `Fegg-cli migration diff : Not changed` when the database already matches, `Fegg-cli migration diff : Finished migration` after applying changes.
+- Then creates the first CMS user when `FEGG_CMS_INITIAL_LOGIN` is set and no row with that login exists (deleted rows included), with `FEGG_CMS_INITIAL_PASSWORD_HASH` (or `FEGG_CMS_INITIAL_PASSWORD`) and `FEGG_CMS_INITIAL_NAME`. An existing user is never changed, so this is safe on every deploy. Without a usable password it exits with 1 after the migration.
 - `fegg-cli core:update` runs it automatically after updating the core.
 - On MySQL the YAML types are mapped to MySQL types and changed tables are altered in place. See [Database configuration](../library/database/configuration.mdx#mysql).
 - `/cms/migrate/` in the CMS shows the same pending changes and applies them with its "Run migration" button (POST), for servers where you cannot run `fegg-cli`.
@@ -113,6 +116,8 @@ printf '%s\n' "$CMS_PASSWORD" | ./fegg-cli user:create admin --password-stdin
 ```
 
 `user:create` refuses a login that already exists; use `user:password` for it.
+
+`user:hash` prints `password_hash()` of a password (asked without echo, or `--password-stdin`) for `FEGG_CMS_INITIAL_PASSWORD_HASH` in a committed environment file.
 
 :::note
 
