@@ -1,0 +1,54 @@
+---
+sidebar_position: 59
+---
+
+# Model::pragma
+
+> Execute Pragma
+
+## Description
+
+```php
+public array Model::pragma( string $mode )
+```
+
+Runs an SQLite `PRAGMA` on the model's table and returns its rows. SQLite only.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks     |
+| ----- | --------- | ------- | ----------- |
+| $mode | string    |         | Pragma mode |
+
+### Pragma mode
+
+| Mode         | Query                                                 |
+| ------------ | ----------------------------------------------------- |
+| `table`      | `PRAGMA table_info("table")` (also any unknown mode)  |
+| `index_list` | `PRAGMA index_list("table")`                          |
+| `index`      | `PRAGMA index_info("table")`                          |
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table' => 'cms_news',
+));
+
+// PRAGMA table_info("cms_news")
+$columns = $model->pragma('table');
+
+print_r($columns[0]);
+```
+
+```php title="Output"
+Array
+(
+    [cid] => 0
+    [name] => news_id
+    [type] => INTEGER
+    [notnull] => 1
+    [dflt_value] =>
+    [pk] => 1
+)
+```

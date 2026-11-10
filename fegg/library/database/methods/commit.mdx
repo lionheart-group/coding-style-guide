@@ -1,0 +1,25 @@
+---
+sidebar_position: 50
+---
+
+# Pdo::commit
+
+> Commit the open transaction
+
+## Description
+
+```php
+public void Pdo::commit()
+```
+
+Commits the transaction opened with [beginTransaction](./begintransaction.mdx). Any instance can commit it. Throws `LogicException` when no transaction is open.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$db->beginTransaction();
+$db->setValues(array('title' => 'A'))->insert('cms_news')->execute();
+$db->commit();
+```

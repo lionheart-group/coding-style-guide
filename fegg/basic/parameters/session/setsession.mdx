@@ -1,0 +1,31 @@
+---
+sidebar_position: 1
+---
+
+# Application::setSession
+
+> Set SESSION data (and start the session)
+
+## Description
+
+```php
+public void Application::setSession( string $name, mixed $value )
+```
+
+Set SESSION data. Starts the session if it has not been started, so you never call `session_start()` yourself. Writing is what starts a session: a page that never calls `setSession()` (or `setTicket()`) sends no session cookie.
+
+The session cookie is `HttpOnly`, `SameSite=Lax`, and `Secure` over HTTPS. The data is saved when the response ends (`displayPage()`, `redirect()`, `$this->halt()`, or the end of the method).
+
+## Arguments
+
+| Name   | Data type | Default | Remarks     |
+| :----- | :-------- | :------ | :---------- |
+| $name  | string    |         | Session key |
+| $value | mixed     |         | Value       |
+
+## Example
+
+```php title="Controller"
+$this->setSession('foo', 'bar');
+$this->setSession('cart', array('item_id' => 3, 'quantity' => 1));
+```

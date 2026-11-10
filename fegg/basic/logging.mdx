@@ -1,0 +1,92 @@
+---
+sidebar_position: 7
+---
+
+# Logging and errors
+
+> The application log, the error page, and requests to other services
+
+## Application log
+
+`Fegg\Log` writes one line per entry to **`htdocs/_fegg/site/data/log/fegg-YYYY-MM-DD.log`**. Call it from anywhere (controllers, your classes in `site/src/`):
+
+```php title="Controller"
+use Fegg\Log;
+
+Log::info('Import finished', array('rows' => $count));
+Log::warning('Unknown category {id}', array('id' => $id));
+
+try {
+    $this->_import($file);
+} catch (\Exception $e) {
+    Log::error('Import failed for {file}', array('file' => $name, 'exception' => $e));
+}
+```
+
+```text title="site/data/log/fegg-2026-11-10.log"
+[2026-11-10 12:34:56 +09:00] ERROR Import failed for news.csv {"file":"news.csv","exception":"RuntimeException: Bad line 3 at /path/Import.php:42"} | POST /cms/import/ 203.0.113.5
+```
+
+- `{key}` in the message is replaced with `$context['key']`. The context is appended as JSON; an exception is written as its class, message, file and line.
+- For web requests the line ends with the method, the URL and the visitor's address.
+- The method names are the PSR-3 levels, from lowest to highest: `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`. Each returns `true` when the entry was written.
+- Never log passwords, tokens or full personal data.
+
+### Settings
+
+| Setting | Default | Remarks |
+| :------ | :------ | :------ |
+| `$settings['log_level']` | `''` | Lowest level written. `''`: `warning` in production, `debug` elsewhere (`FEGG_ENV`) |
+| `$settings['log_retention_days']` | `30` | Files older than this are removed. `0`: keep all |
+| `FEGG_LOG_DIR` (`env.php` or environment variable) | `site/data/log` | Directory of the log files |
+
+```php title="htdocs/_fegg/site/config/settings.php"
+$settings['log_level'] = 'info';
+$settings['log_retention_days'] = 90;
+```
+
+`site/data/` is not tracked by git and is denied to the web by `htdocs/_fegg/.htaccess`.
+
+## Uncaught errors
+
+An exception or error that no code catches (a `Fegg\Database\QueryException`, a missing template, a PHP error ...) ends the request with **HTTP 500**:
+
+- It is written to the PHP error log and to the application log, with the stack trace and, for errors raised by a template, the `.tpl` file and line (`Template: news/detail.tpl:12`).
+- In [developer mode](../first/config.mdx#developer-mode) the details are shown in the browser.
+- Everyone else gets the error page `core/template/error/500.html`. What a half-rendered page already printed is discarded.
+
+To use your own design, put a file at **`htdocs/_fegg/site/template/error/500.html`**. It is plain HTML, not a template (no `{{ }}` tags, no includes), so it still works when the templates or the database are what broke. Inline its CSS or link to files under `htdocs/data/`.
+
+Catch an exception only when the page can do something useful with it; otherwise let it reach the 500 page and the log. When you catch `\Throwable`, rethrow `Fegg\Http\Halt` (see [Ending a response](./controller.mdx#ending-a-response)).
+
+## Requests to other services
+
+`Fegg\Http\Client` is a small HTTP client for calling other services. Fegg itself uses it for the captcha checks, oEmbed and `fegg-cli doctor`.
+
+```php title="Controller"
+use Fegg\Http\Client;
+use Fegg\Http\ClientException;
+use Fegg\Log;
+
+$client = new Client(10, 3);   // seconds for the whole request, seconds to connect
+
+try {
+    $response = $client->get('https://api.example.com/items?category=2', array('Accept: application/json'));
+    if ($response['status'] === 200) {
+        $items = json_decode($response['body'], true);
+    }
+
+    $response = $client->post('https://api.example.com/entries', array('name' => $name));
+} catch (ClientException $e) {
+    Log::warning('API not reachable: {message}', array('message' => $e->getMessage()));
+}
+```
+
+- `get($url, $headers = array())` and `post($url, $body, $headers = array())` return `array('status' => int, 'body' => string)`. A `$body` array is sent as `application/x-www-form-urlencoded`; a string is sent as is (set the `Content-Type` header yourself, for JSON for example).
+- A response with an error status (404, 500 ...) is returned normally: check `status`. Only a transport failure (no connection, timeout) throws `Fegg\Http\ClientException`.
+- Only `http` and `https` URLs are accepted (anything else throws `InvalidArgumentException`), and redirects are not followed.
+- It uses cURL when the extension is installed, otherwise PHP's http stream wrapper.
+
+## Mail
+
+`Fegg\Tool\Mail` sends through sendmail unless `$settings['mail']` selects SMTP, with the password in `env.php` as `FEGG_SMTP_PASSWORD`. See [Mail](../library/mail/index.mdx#smtp).

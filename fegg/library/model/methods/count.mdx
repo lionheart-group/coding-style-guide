@@ -1,0 +1,35 @@
+---
+sidebar_position: 38
+---
+
+# Model::count
+
+> Get the number of matching rows
+
+## Description
+
+```php
+public int Model::count()
+```
+
+Returns the number of matching rows. With [group](./group.mdx) or [having](./having.mdx), it returns the number of groups. [order](./order.mdx) and [limit](./limit.mdx) are ignored.
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$count = $model->count();
+// -> 23
+
+$count = $model->where('category = ?', 2)->count();
+// -> 7
+
+// Number of categories
+$count = $model->group('category')->count();
+// -> 3
+```

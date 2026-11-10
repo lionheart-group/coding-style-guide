@@ -1,0 +1,38 @@
+---
+sidebar_position: 37
+---
+
+# Model::column
+
+> Get one column of every matching row
+
+## Description
+
+```php
+public array Model::column( string $column, [ string $key = null ] )
+```
+
+Returns the values of `$column` of every matching row, as a list or, with `$key`, keyed by another column. [order](./order.mdx) and [limit](./limit.mdx) apply. Both names must be column names (`title` or `cms_news.title`), or `InvalidArgumentException` is thrown.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                        |
+| ------- | --------- | ------- | ------------------------------ |
+| $column | string    |         | Column to return               |
+| $key    | string    | null    | Column to use as the array key |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$ids = $model->where('category = ?', 2)->column('news_id');
+// -> array(2, 5, 8, ...)
+
+$titles = $model->order('news_id')->column('title', 'news_id');
+// -> array(1 => 'News 1', 2 => 'News 2', ...)
+```

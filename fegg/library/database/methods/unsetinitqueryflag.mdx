@@ -1,0 +1,28 @@
+---
+sidebar_position: 31
+---
+
+# Pdo::unsetInitQueryFlag
+
+> Disable reset query flag
+
+## Description
+
+```php
+public self Pdo::unsetInitQueryFlag()
+```
+
+Keeps what was set (items, conditions, joins, order, limit ...) after [execute](./execute.mdx), so the next query can reuse it. `Model::find()` uses it to count and fetch with the same conditions. Turn it back on with [setInitQueryFlag](./setinitqueryflag.mdx), or drop everything with [reset](./reset.mdx).
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Count and fetch with the same conditions
+$db->unsetInitQueryFlag()->setWhere('category = ?', 2);
+$count = $db->count('cms_news')->execute()->one();
+
+$db->setInitQueryFlag()->setLimit(10);
+$rows = $db->select('cms_news')->execute()->all();
+```

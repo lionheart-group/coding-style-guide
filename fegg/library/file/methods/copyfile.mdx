@@ -1,0 +1,31 @@
+---
+sidebar_position: 3
+---
+
+# File::copyFile
+
+> Copy a file
+
+## Description
+
+```php
+public void File::copyFile( string $source, string $dest )
+```
+
+Copies `$source` to `$dest` and sets the permission of the copy to `0666`. Nothing happens when `$source` does not exist.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks          |
+| ------- | --------- | ------- | ---------------- |
+| $source | string    |         | Source file      |
+| $dest   | string    |         | Destination file |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\File;
+
+$file = new File();
+$file->copyFile('path/to/foo.txt', 'path/to/bar.txt');
+```

@@ -1,0 +1,45 @@
+---
+sidebar_position: 2
+---
+
+# Configuration
+
+The error messages of [Upload](./index.mdx) are defined in `htdocs/_fegg/core/config/file_error_message.php`.
+
+To change them, do not edit the core: copy the file to `htdocs/_fegg/site/config/file_error_message.php` and edit the copy. The file in `site/config/` is used instead of the core's one (the whole file is replaced, so keep every key).
+
+`@content` was added in Fegg 5. A copy made from an older core file works without it (a built-in Japanese text is used), but add the key to translate or change it.
+
+```php title="htdocs/_fegg/core/config/file_error_message.php"
+<?php
+defined('FEGG_CORE_DIR') || exit;
+
+/**
+ * Error messages for the Tool/File class.
+ * @see Tool/File.php
+ */
+// @file is too big.
+$file_error_message['@size']   = '<strong>%s</strong> のサイズが大きすぎます';
+// @file is not selected specified type.
+$file_error_message['@type']   = '<strong>%s</strong> が指定の型式で選択されていません';
+// @file failed to upload.
+$file_error_message['@failed'] = '<strong>%s</strong> のアップロードに失敗しました';
+// @file's content does not match its extension.
+$file_error_message['@content'] = '<strong>%s</strong> の内容がファイル形式と一致しません';
+// @file is not selected.
+$file_error_message['@empty']  = '<strong>%s</strong> が選択されていません';
+```
+
+`%s` is replaced with the `$label` passed to [Upload::upload](./methods/upload.mdx).
+
+| Code      | When                                                                  |
+| --------- | --------------------------------------------------------------------- |
+| `@empty`  | No file was selected (only when the file is required)                 |
+| `@size`   | The file is larger than the maximum size, or than the php.ini / form limit |
+| `@type`   | The extension is not one of the allowed file types, or is a script extension |
+| `@content` | The content does not match the extension (checked with `finfo` and `getimagesize()`) |
+| `@failed` | Any other upload error, or the file could not be moved to the upload directory |
+
+## Other languages
+
+When a language code is passed to the constructor (`new Upload('en')`), the messages are read from `config/en/file_error_message.php` (searched in `site/config/` first, then `core/config/`).

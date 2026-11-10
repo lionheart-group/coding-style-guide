@@ -1,0 +1,39 @@
+---
+sidebar_position: 10
+---
+
+# Validation::zipcode
+
+> Check Japanese postal code format
+
+## Description
+
+```php
+public boolean Validation::zipcode( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+Valid when the value is 3 digits and 4 digits, with or without `-` between them (`123-4567` or `1234567`).
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                                                                                                      |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name  | string    |         | Field name (key of the error message)                                                                        |
+| $value | mixed     |         | Value to check                                                                                               |
+| $code  | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+$validation->zipcode('success', '123-4567', array('@zipcode', 'Zip code')); // -> true
+$validation->zipcode('failed', '123-456', array('@zipcode', 'Zip code')); // -> false
+
+var_dump($validation->getErrorMessage());
+// -> array('failed' => '<strong>Zip code</strong> は登録できない形式です')
+```

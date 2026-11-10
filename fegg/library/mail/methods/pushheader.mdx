@@ -1,0 +1,38 @@
+---
+sidebar_position: 4
+---
+
+# Mail::pushHeader
+
+> Add custom header
+
+## Description
+
+```php
+public self Mail::pushHeader( mixed $key, [ string $val = null ] )
+```
+
+Line breaks in the header name and value are removed.
+
+## Arguments
+
+| Name | Data type | Default | Remarks                                     |
+| ---- | --------- | ------- | ------------------------------------------- |
+| $key | mixed     |         | Header name, or an array of name => value   |
+| $val | string    | null    | Header value when `$key` is a string        |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Mail;
+
+$mail = new Mail();
+$mail->pushHeader('X-Foo', 'bar');
+$mail->pushHeader('X-Baz', 'qux');
+
+// Same with
+$mail->pushHeader(array(
+    'X-Foo' => 'bar',
+    'X-Baz' => 'qux',
+));
+```

@@ -1,0 +1,33 @@
+---
+sidebar_position: 6
+---
+
+# Pdo::delete
+
+> Set delete query
+
+## Description
+
+```php
+public self Pdo::delete( [ string $table = '' ] )
+```
+
+Builds a `DELETE` on `$table` with the condition set with [setWhere](./setwhere.mdx). This removes the rows; for a soft delete (`valid = 0`) use `Model::delete()`.
+
+`Pdo` does not refuse a DELETE without a condition: without `setWhere()` every row is removed.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks           |
+| ------ | --------- | ------- | ----------------- |
+| $table | string    | ''      | Target table name |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Delete From "cms_news" Where news_id = ?
+$db->setWhere('news_id = ?', 3)->delete('cms_news')->execute();
+$deleted = $db->getAffectedRow();
+```

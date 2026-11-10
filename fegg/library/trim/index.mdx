@@ -1,0 +1,45 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Providing some functions for processing image (especially image crop)
+
+`Fegg\Tool\Trim` resizes and crops JPEG, GIF and PNG images with the GD extension. JPEG images are rotated according to their Exif orientation.
+
+## How to use
+
+Import `Fegg\Tool\Trim` and create it with `new`. Set the source image and the output path with [Trim::setImage](./methods/setimage.mdx), resize it with one of the `resize*` methods, then save it with [Trim::create](./methods/create.mdx).
+
+```php title="Controller"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Tool\Trim;
+
+class Thumbnail extends Controller
+{
+    public function index()
+    {
+        $trim = new Trim();
+        $trim->setImage('path/to/image.jpg', 'path/to/thumbnail/300_300.jpg');
+
+        $trim->resizeTrim(300, 300, 'm');
+        $trim->create();
+
+        // Output the saved image to the browser
+        $trim->view();
+    }
+}
+```
+
+The thumbnails of CMS images (`Fegg\Controller\Up_dir::image()`) are generated with this class.
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

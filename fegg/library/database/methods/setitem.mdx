@@ -1,0 +1,40 @@
+---
+sidebar_position: 16
+---
+
+# Pdo::setItem
+
+> Set query item values
+
+## Description
+
+```php
+public self Pdo::setItem( string $query, [ array $parameter = '' ] )
+```
+
+Sets the columns of a query.
+
+- Without `$parameter`: the columns of a SELECT (`'news_id, title'`, expressions allowed).
+- With an associative array: the values of an INSERT / UPDATE, matched to the columns in `$query` by name. A listed column missing from the array is written as `''`.
+- With a list: the values in the order of the columns in `$query`.
+
+For INSERT and UPDATE, prefer [setValues](./setvalues.mdx): it writes only the given columns, can store NULL and checks the column names.
+
+## Arguments
+
+| Name       | Data type | Default | Remarks                          |
+| ---------- | --------- | ------- | -------------------------------- |
+| $query     | string    |         | Columns, separated by commas     |
+| $parameter | array     | ''      | Values (by name or by position)  |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Select news_id, title From "cms_news" Where "cms_news".valid = 1
+$rows = $db->setItem('news_id, title')->select('cms_news')->execute()->all();
+
+// Insert Into "cms_news" ("title", "category", modified, created, valid) Values (?, ?, ?, ?, ?)
+$db->setItem('title, category', array('title' => 'Sample', 'category' => 2))->insert('cms_news')->execute();
+```

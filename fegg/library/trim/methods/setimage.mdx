@@ -1,0 +1,37 @@
+---
+sidebar_position: 1
+---
+
+# Trim::setImage
+
+> Set target image and output file path
+
+## Description
+
+```php
+public void Trim::setImage( string $org_path, string $cnv_path )
+```
+
+Loads the source image. The output format is decided by the extension of `$cnv_path`.
+
+:::caution
+
+This method stops the script with `exit` when the source file does not exist (`Not File`), when the output extension is not `jpg`, `gif` or `png` (`Error Extension`; `.jpeg` is not accepted), or when the source is not a JPEG, GIF or PNG image (`NotImage`). Check the files beforehand.
+
+:::
+
+## Arguments
+
+| Name      | Data type | Default | Remarks                                                 |
+| --------- | --------- | ------- | ------------------------------------------------------- |
+| $org_path | string    |         | Source image path                                       |
+| $cnv_path | string    |         | Output image path (`.jpg`, `.gif` or `.png`)            |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Trim;
+
+$trim = new Trim();
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+```

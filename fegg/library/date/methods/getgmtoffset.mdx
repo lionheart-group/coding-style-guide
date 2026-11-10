@@ -1,0 +1,32 @@
+---
+sidebar_position: 6
+---
+
+# Date::getGmtOffset
+
+> Get the current GMT offset of a time zone
+
+## Description
+
+```php
+public string Date::getGmtOffset( [ string $timeZone = 'Asia/Tokyo' ] )
+```
+
+Returns the offset in `+09:00` format.
+
+## Arguments
+
+| Name      | Data type | Default      | Remarks                        |
+| --------- | --------- | ------------ | ------------------------------ |
+| $timeZone | string    | 'Asia/Tokyo' | Time zone identifier           |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Date;
+
+$date = new Date();
+
+echo $date->getGmtOffset();                      // -> "+09:00"
+echo $date->getGmtOffset('America/Los_Angeles'); // -> "-08:00" (or "-07:00" in summer)
+```

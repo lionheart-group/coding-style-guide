@@ -1,0 +1,30 @@
+---
+sidebar_position: 20
+---
+
+# Pdo::setOrder
+
+> Set order value
+
+## Description
+
+```php
+public self Pdo::setOrder( string $query )
+```
+
+Sets ORDER BY. The text is written into the SQL as it is: never put user input in it. Another call appends its text directly, so give every sort key in one call.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                          |
+| ------ | --------- | ------- | -------------------------------- |
+| $query | string    |         | ORDER BY expression              |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// ... Order By post_date DESC, news_id DESC
+$rows = $db->setOrder('post_date DESC, news_id DESC')->select('cms_news')->execute()->all();
+```

@@ -1,0 +1,25 @@
+---
+sidebar_position: 38
+---
+
+# Pdo::getAffectedRow
+
+> Get affected row number of executed update query
+
+## Description
+
+```php
+public int Pdo::getAffectedRow()
+```
+
+Returns the number of rows the last query inserted, updated or deleted. After a SELECT the value depends on the driver (0 on SQLite); count the rows of [all](./all.mdx) instead.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$db->setValues(array('visible' => 0))->setWhere('category = ?', 3)->update('cms_news')->execute();
+$updated = $db->getAffectedRow();
+// -> 4
+```

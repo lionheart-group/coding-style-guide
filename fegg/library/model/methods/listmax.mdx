@@ -1,0 +1,34 @@
+---
+sidebar_position: 28
+---
+
+# Model::listMax
+
+> Set ListMax Parameter
+
+## Description
+
+```php
+public self Model::listMax( [ int $listMax = 10 ] )
+```
+
+Sets the number of rows per page of [find](./find.mdx). Without it, `find()` returns 10 rows. A value under 1 is treated as 1. Only `find()` uses it: use [limit](./limit.mdx) with [all](./all.mdx) instead of a large `listMax()` to get every row.
+
+## Arguments
+
+| Name     | Data type | Default | Remarks        |
+| -------- | --------- | ------- | -------------- |
+| $listMax | int       | 10      | Rows per page  |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// First page, 5 rows
+$records = $model->listMax(5)->find();
+```

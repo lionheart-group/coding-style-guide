@@ -1,0 +1,77 @@
+---
+sidebar_position: 12
+---
+
+# Model::where
+
+> Set Where Parameter
+
+## Description
+
+```php
+public self Model::where( string $query, [ mixed $data = [], string $andOr = 'AND' ] )
+```
+
+Adds a condition with `?` placeholders. Values are always bound, never written into the SQL. Several calls are joined with `AND` (or `OR` with `$andOr`).
+
+- `$data` is one value, or an array of values in placeholder order. A query without placeholders (`'note IS NULL'`) needs none.
+- An array bound to a single placeholder expands it: `id = ?` and `id IN (?)` become `id IN (?, ?, ...)`, `id <> ?` / `id != ?` / `id NOT IN (?)` become `NOT IN`, `title LIKE ?` becomes `(title LIKE ? OR title LIKE ? ...)` and `title NOT LIKE ?` becomes `(title NOT LIKE ? AND ...)`. An empty array matches no row (`=`, `IN`, `LIKE`) or every row (`<>`, `NOT IN`, `NOT LIKE`). An array on any other operator (`<`, `BETWEEN` ...) throws `InvalidArgumentException` when the query runs.
+- A `?` inside a quoted string literal (`'?'`) is not a placeholder.
+- An empty `$query` (`''`) adds nothing, which is handy for optional search conditions.
+
+A query with its own `OR` outside brackets is put in brackets when it is joined to other conditions: `where('category = ?', 1)->where('title = ? OR summary = ?', array($q, $q))` is `category = 1 AND (title = ? OR summary = ?)`. Fegg 4 wrote `category = 1 AND title = ? OR summary = ?`, which matched rows of every category. [having](./having.mdx) works the same way.
+
+The conditions the model adds by itself (the visible flag and `valid = 1`) are joined with `AND` after yours. When your conditions have an `OR` outside brackets, the model puts them in brackets first (`Where (a = ? OR b = ?) AND ...`), so hidden and deleted rows never match. To group conditions inside your own, use [whereOpen](./whereopen.mdx) and [whereClose](./whereclose.mdx).
+
+For common cases there are helpers that also check the column name: [whereIn](./wherein.mdx), [whereNotIn](./wherenotin.mdx), [whereLike](./wherelike.mdx), [whereNull](./wherenull.mdx), [whereNotNull](./wherenotnull.mdx) and [whereBetween](./wherebetween.mdx).
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                                                           |
+| ------ | --------- | ------- | ----------------------------------------------------------------- |
+| $query | string    |         | Condition with `?` placeholders (never put user input in it)      |
+| $data  | mixed     | []      | One value, or an array of values in placeholder order             |
+| $andOr | string    | 'AND'   | How it joins the previous condition: `AND` or `OR`                |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$records = $model->where('category = ?', 2)->find();
+// Select * From "cms_news" Where category = 2 AND cms_news.visible = '1' And "cms_news".valid = 1 ...
+
+// Several placeholders: an array in placeholder order
+$records = $model->where('category = ? AND post_date >= ?', array(2, '2026-01-01'))->find();
+
+// An array on one placeholder: IN (...)
+$records = $model->where('news_id IN (?)', array(1, 2, 3))->find();
+// ... Where news_id IN (1, 2, 3) AND ...
+```
+
+### Complex WHERE query
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->where('category = ?', 2);
+$model->whereOpen();
+$model->where('title = ?', 'foo');
+$model->where('post_date <= ?', '2021-01-01', 'OR');
+$model->whereClose();
+
+// Select *
+// From "cms_news"
+// Where category = 2
+//   AND (title = 'foo' OR post_date <= '2021-01-01')
+//   AND cms_news.visible = '1' And "cms_news".valid = 1
+$records = $model->find();
+```

@@ -1,0 +1,33 @@
+---
+sidebar_position: 61
+---
+
+# Model::debug
+
+> Print the last executed query
+
+## Description
+
+```php
+public void Model::debug()
+```
+
+Prints (`echo`) the last query of this model with its values filled in. The values are quoted for reading only: never run the result. To see a SELECT without running it, use [toSql](./tosql.mdx).
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->where('category = ?', 1)
+    ->listMax(5)
+    ->current(2)
+    ->find();
+
+$model->debug();
+// -> Select * From "cms_news" Where category = 1 AND cms_news.visible = '1' And "cms_news".valid = 1 Limit 5, 5
+```

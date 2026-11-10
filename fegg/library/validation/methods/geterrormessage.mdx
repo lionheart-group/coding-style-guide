@@ -1,0 +1,36 @@
+---
+sidebar_position: 23
+---
+
+# Validation::getErrorMessage
+
+> Get error messages
+
+## Description
+
+```php
+public mixed Validation::getErrorMessage()
+```
+
+Returns the error messages as an array of field name => message, or `false` when there is no error.
+
+## Example
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+$validation->required('name', '', array('@required', 'Name'));
+$validation->email('mail', 'foo@', array('@email', 'Email'));
+
+$errorMessage = $validation->getErrorMessage();
+// -> array(
+//     'name' => '<strong>Name</strong> をご入力ください',
+//     'mail' => '<strong>Email</strong> は登録できない形式です',
+// )
+
+if (!$errorMessage) {
+    // No error
+}
+```

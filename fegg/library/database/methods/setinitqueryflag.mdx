@@ -1,0 +1,28 @@
+---
+sidebar_position: 30
+---
+
+# Pdo::setInitQueryFlag
+
+> Enable reset query flag
+
+## Description
+
+```php
+public self Pdo::setInitQueryFlag()
+```
+
+Turns the reset after [execute](./execute.mdx) back on (the default), after [unsetInitQueryFlag](./unsetinitqueryflag.mdx).
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Count and fetch with the same conditions
+$db->unsetInitQueryFlag()->setWhere('category = ?', 2);
+$count = $db->count('cms_news')->execute()->one();
+
+$db->setInitQueryFlag()->setLimit(10);
+$rows = $db->select('cms_news')->execute()->all();
+```

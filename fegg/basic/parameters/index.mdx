@@ -1,0 +1,31 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# About Parameters
+
+`Fegg\Application`, the class every controller extends, has helper methods for POST, GET, SESSION and COOKIE. Call them with `$this->...` in a controller.
+
+## POST/GET
+
+Get request data. Values are returned as sent: validate them, and let the template escape them on output.
+
+<CategoryDocCardList label="POST/GET" />
+
+## SESSION
+
+Set and read SESSION data. Never call `session_start()` yourself: Fegg starts the session **only when something is written to it** (`setSession()`, `setTicket()`, the CMS). Reading with `getSession()` or `{{ $session }}` on a request without a session cookie returns nothing and starts nothing, so ordinary public pages send no `Set-Cookie` and can be cached.
+
+- The session cookie is `HttpOnly` and `SameSite=Lax`. It is `Secure` when the request is HTTPS (also behind a proxy that sends `X-Forwarded-Proto: https`).
+- `session.use_strict_mode` is on: a session ID the server did not issue is replaced by a new one.
+- The session is written when the response ends: after `displayPage()`, `redirect()`, `$this->halt()` or the end of the method (see [Ending a response](../controller.mdx#ending-a-response)).
+
+<CategoryDocCardList label="SESSION" />
+
+## COOKIE
+
+Set and read COOKIE data. Cookies set with `setCookie()` are `HttpOnly`, `SameSite=Strict` by default and `Secure` over HTTPS.
+
+<CategoryDocCardList label="COOKIE" />

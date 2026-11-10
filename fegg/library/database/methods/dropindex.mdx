@@ -1,0 +1,30 @@
+---
+sidebar_position: 13
+---
+
+# Pdo::dropIndex
+
+> Set create drop index query
+
+## Description
+
+```php
+public self Pdo::dropIndex( string $index )
+```
+
+Builds `Drop Index "index"`.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks    |
+| ------ | --------- | ------- | ---------- |
+| $index | string    |         | Index name |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Drop Index "sample_title"
+$db->dropIndex('sample_title')->execute();
+```

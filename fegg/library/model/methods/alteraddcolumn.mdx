@@ -1,0 +1,39 @@
+---
+sidebar_position: 57
+---
+
+# Model::alterAddColumn
+
+> Execute Alter Add Column
+
+## Description
+
+```php
+public void Model::alterAddColumn( array $field )
+```
+
+Adds a column to the model's table. Throws `Fegg\Database\QueryException` when the query fails.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                                                                        |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------ |
+| $field | array     |         | Column definition, with every key described in [create](./create.mdx)         |
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table' => 'sample',
+));
+
+// Alter Table "sample" ADD COLUMN note TEXT
+$model->alterAddColumn(array(
+    'name'       => 'note',
+    'type'       => 'TEXT',
+    'notnull'    => false,
+    'dflt_value' => null,
+    'pk'         => false,
+    'ai'         => false,
+));
+```

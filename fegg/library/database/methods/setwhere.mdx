@@ -1,0 +1,45 @@
+---
+sidebar_position: 22
+---
+
+# Pdo::setWhere
+
+> Set where condition
+
+## Description
+
+```php
+public self Pdo::setWhere( string $query, [ mixed ...$parameters ] )
+```
+
+Adds to the WHERE clause. Give one argument per `?` placeholder, after the query.
+
+- Another call appends its text after a space: write the `AND` / `OR` yourself (`setWhere('AND title = ?', $title)`).
+- An array bound to one placeholder expands it: `id = ?` and `id IN (?)` become `id IN (?, ?, ...)`, `<>` / `!=` / `NOT IN` become `NOT IN`, `LIKE ?` becomes `(... LIKE ? OR ... LIKE ?)` and `NOT LIKE ?` becomes `(... NOT LIKE ? AND ...)`. An empty array matches no row (`=`, `IN`, `LIKE`) or every row (`<>`, `NOT IN`, `NOT LIKE`). An array on any other operator (`<`, `BETWEEN` ...) throws `InvalidArgumentException`.
+- A `?` inside a quoted string literal (`'?'`) is not a placeholder.
+
+## Arguments
+
+| Name           | Data type | Default | Remarks                                    |
+| -------------- | --------- | ------- | ------------------------------------------ |
+| $query         | string    |         | Condition with `?` placeholders            |
+| ...$parameters | mixed     |         | One value (or array of values) per placeholder |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// ... Where category = ? AND title = ? And "cms_news".valid = 1
+$rows = $db->setWhere('category = ?', 1)
+    ->setWhere('AND title = ?', 'A')
+    ->select('cms_news')
+    ->execute()
+    ->all();
+
+// ... Where post_date >= ? AND news_id IN (?, ?, ?) ...
+$rows = $db->setWhere('post_date >= ? AND news_id IN (?)', '2026-01-01', array(1, 2, 3))
+    ->select('cms_news')
+    ->execute()
+    ->all();
+```

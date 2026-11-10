@@ -1,0 +1,62 @@
+---
+sidebar_position: 21
+---
+
+# Model::having
+
+> Set Having Parameter
+
+## Description
+
+```php
+public self Model::having( string $query, [ mixed $data = [], string $andOr = 'AND' ] )
+```
+
+Adds a HAVING condition, used with [group](./group.mdx). `$data` works as in [where](./where.mdx): one value, or an array of values in placeholder order. With `having()`, [count](./count.mdx) counts the groups that match.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                                                       |
+| ------ | --------- | ------- | ------------------------------------------------------------- |
+| $query | string    |         | Condition with `?` placeholders (never put user input in it)  |
+| $data  | mixed     | []      | One value, or an array of values in placeholder order         |
+| $andOr | string    | 'AND'   | How it joins the previous condition: `AND` or `OR`            |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Categories with more than 5 news
+// Select category, count(*) AS n From "cms_news" Where ... Group By category Having n > 5
+$records = $model
+    ->select('category, count(*) AS n')
+    ->group('category')
+    ->having('n > ?', 5)
+    ->all();
+```
+
+### Complex HAVING query
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->select('category, count(*) AS n, max(post_date) AS latest')->group('category');
+$model->having('n > ?', 5);
+$model->havingOpen();
+$model->having('category = ?', 1);
+$model->having('latest >= ?', '2026-01-01', 'OR');
+$model->havingClose();
+
+// ... Group By category
+// Having n > 5 AND (category = 1 OR latest >= '2026-01-01')
+$records = $model->all();
+```

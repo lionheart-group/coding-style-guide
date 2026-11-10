@@ -1,0 +1,35 @@
+---
+sidebar_position: 2
+---
+
+# Pdo::select
+
+> Set select query
+
+## Description
+
+```php
+public self Pdo::select( string $table )
+```
+
+Builds a SELECT on `$table` from what was set with [setItem](./setitem.mdx) (columns, default `*`), [setJoin](./setjoin.mdx) / [setOn](./seton.mdx), [setWhere](./setwhere.mdx), [setGroup](./setgroup.mdx), [setHaving](./sethaving.mdx), [setOrder](./setorder.mdx) and [setLimit](./setlimit.mdx). `CURRENT_TABLE.valid = 1` is added (see [Configuration](../configuration.mdx)). Run it with [execute](./execute.mdx).
+
+## Arguments
+
+| Name   | Data type | Default | Remarks           |
+| ------ | --------- | ------- | ----------------- |
+| $table | string    |         | Target table name |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Select * From "cms_news" Where category = ? And "cms_news".valid = 1 Order By post_date DESC Limit 0, 10
+$rows = $db->setWhere('category = ?', 2)
+    ->setOrder('post_date DESC')
+    ->setLimit(10)
+    ->select('cms_news')
+    ->execute()
+    ->all();
+```

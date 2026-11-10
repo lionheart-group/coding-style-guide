@@ -1,0 +1,45 @@
+---
+sidebar_position: 26
+---
+
+# Model::join
+
+> Set Join Parameter
+
+## Description
+
+```php
+public self Model::join( string|array $table, [ string $type = 'INNER', string $on = null, mixed $data = [] ] )
+```
+
+Joins another table. `$table` is a table name, or `array('table', 'alias')`; both must be plain names, or `InvalidArgumentException` is thrown. `$on` takes `?` placeholders and `$data` works as in [where](./where.mdx).
+
+The automatic `valid = 1` and visible conditions only apply to the model's own table. Add them to `$on` for the joined table when you need them.
+
+## Arguments
+
+| Name   | Data type    | Default | Remarks                                                   |
+| ------ | ------------ | ------- | --------------------------------------------------------- |
+| $table | string/array |         | Table name, or `array('table', 'alias')`                  |
+| $type  | string       | 'INNER' | `'INNER'`, `'LEFT'` or `'RIGHT'` (anything else: `INNER`) |
+| $on    | string       | null    | ON condition with `?` placeholders                        |
+| $data  | mixed        | []      | Values for the ON placeholders                            |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Select cms_news.*, f.org_name
+// From "cms_news"
+// LEFT JOIN "cms_file" AS "f" ON f.file_id = cms_news.file_id AND f.valid = 1
+// Where ...
+$records = $model
+    ->select('cms_news.*, f.org_name')
+    ->join(array('cms_file', 'f'), 'LEFT', 'f.file_id = cms_news.file_id AND f.valid = ?', 1)
+    ->find();
+```

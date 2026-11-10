@@ -1,0 +1,24 @@
+---
+sidebar_position: 3
+---
+
+# Model::getTableName
+
+> Get Table name
+
+## Description
+
+```php
+public string Model::getTableName()
+```
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table' => 'cms_news',
+));
+
+echo $model->getTableName();
+// -> 'cms_news'
+```

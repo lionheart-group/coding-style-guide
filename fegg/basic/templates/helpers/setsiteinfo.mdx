@@ -1,0 +1,46 @@
+---
+sidebar_position: 1
+---
+
+# Application::setSiteinfo
+
+> Set website information (title, description, keywords …)
+
+## Description
+
+```php
+public void Application::setSiteinfo( string $id, mixed $value )
+```
+
+Sets one entry of the site information. Templates read it as `$site` (set by [Application::fetchPage](../methods/fetchpage.mdx)).
+
+The base controller (`Fegg\Controller\Controller::__init()`) already loads every entry of `htdocs/_fegg/site/config/site_info.php` this way, so `$site.title`, `$site.description` … have their default values on every page. Call `setSiteinfo()` in a controller to change a value for one page. A template can also change it with `{{ assign }}` before its `{{ transclude }}` (see [Assign](../rules/assign.mdx)).
+
+## Arguments
+
+| Name   | Data type | Default | Remarks |
+| ------ | --------- | ------- | ------- |
+| $id    | string    |         | Key |
+| $value | mixed     |         | Value (a string or an array) |
+
+## Example
+
+```php title="htdocs/_fegg/site/config/site_info.php"
+$site_info = array(
+    'title'       => 'Example Inc.',
+    'description' => '',
+    // ...
+);
+```
+
+```php title="Controller"
+$this->setSiteinfo('title', 'News | Example Inc.');
+```
+
+```html title="Template"
+<title>{{ $site.title }}</title>
+```
+
+```html title="Output"
+<title>News | Example Inc.</title>
+```

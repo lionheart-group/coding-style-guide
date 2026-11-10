@@ -1,0 +1,32 @@
+---
+sidebar_position: 6
+---
+
+# Upload::setFileType
+
+> Set the allowed file types (extensions)
+
+## Description
+
+```php
+public boolean Upload::setFileType( array $type )
+```
+
+Replaces the list of allowed extensions. The extensions are compared in lower case. Returns `false` when `$type` is not an array. The default is `array('jpg', 'jpeg', 'png', 'gif')`.
+
+Extensions a web server may run as code (`php`, `php5`, `phtml`, `phar`, `pht`, `phps`, `cgi`, `pl`, `py`, `rb`, `sh`, `asp`, `aspx`, `jsp`, `shtml`, `htaccess`, `htpasswd`) are **always refused**, even when listed here. The file's content must also match its extension (see [Upload::upload](./upload.mdx)).
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                                  |
+| ----- | --------- | ------- | ---------------------------------------- |
+| $type | array     |         | Allowed extensions, without the leading dot |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+$upload->setFileType(array('pdf', 'docx', 'xlsx'));
+```

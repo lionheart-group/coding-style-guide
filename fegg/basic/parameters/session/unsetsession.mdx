@@ -1,0 +1,51 @@
+---
+sidebar_position: 3
+---
+
+# Application::unsetSession
+
+> Unset SESSION data
+
+## Description
+
+```php
+public void Application::unsetSession( string $name = '' )
+```
+
+Remove one key from the SESSION data. If you omit the argument, `unsetSession` removes all SESSION data, destroys the session and deletes the session cookie (use it to log a user out). Without a session it does nothing.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                                          |
+| :---- | :-------- | :------ | :----------------------------------------------- |
+| $name | string    | ''      | Session key. Destroys the whole session and its cookie when omitted |
+
+## Example
+
+```php title="Controller - First request"
+$this->setSession('foo', 'bar');
+```
+
+```php title="Controller - Second request"
+echo $this->getSession('foo'); // -> bar
+```
+
+```php title="Controller - Third request"
+$this->unsetSession('foo');
+echo $this->getSession('foo'); // -> ''
+```
+
+### Remove all session data
+
+If you omit the argument, `unsetSession` removes all SESSION data, destroys the session and deletes the session cookie.
+
+```php title="Controller - First request"
+$this->setSession('foo', 'bar');
+$this->setSession('baz', 'qux');
+```
+
+```php title="Controller - Second request"
+$this->unsetSession();
+echo $this->getSession('foo'); // -> ''
+echo $this->getSession('baz'); // -> ''
+```

@@ -1,0 +1,30 @@
+---
+sidebar_position: 12
+---
+
+# Pdo::dropTable
+
+> Set create drop table query
+
+## Description
+
+```php
+public self Pdo::dropTable( string $table )
+```
+
+Builds `Drop Table "table"`.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks    |
+| ------ | --------- | ------- | ---------- |
+| $table | string    |         | Table name |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Drop Table "sample_old"
+$db->dropTable('sample_old')->execute();
+```

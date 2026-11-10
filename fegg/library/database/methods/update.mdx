@@ -1,0 +1,37 @@
+---
+sidebar_position: 5
+---
+
+# Pdo::update
+
+> Set update query
+
+## Description
+
+```php
+public self Pdo::update( string $table )
+```
+
+Builds an UPDATE on `$table` from the values set with [setValues](./setvalues.mdx) (or [setItem](./setitem.mdx)) and [setIncrement](./setincrement.mdx), and the condition set with [setWhere](./setwhere.mdx). `modified` is added unless given. Run it with [execute](./execute.mdx) and read the number of updated rows with [getAffectedRow](./getaffectedrow.mdx).
+
+Unlike `Model::updateRowsWhere()`, `Pdo` does not refuse an UPDATE without a condition: without `setWhere()` every row is updated.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks           |
+| ------ | --------- | ------- | ----------------- |
+| $table | string    |         | Target table name |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Update "cms_news" Set "title"= ?, modified = ? Where news_id IN (?, ?)
+$db->setValues(array('title' => 'New title'))
+    ->setWhere('news_id IN (?)', array(1, 2))
+    ->update('cms_news')
+    ->execute();
+$updated = $db->getAffectedRow();
+// -> 2
+```

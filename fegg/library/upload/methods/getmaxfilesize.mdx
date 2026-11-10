@@ -1,0 +1,25 @@
+---
+sidebar_position: 5
+---
+
+# Upload::getMaxFileSize
+
+> Get the maximum file size (MB)
+
+## Description
+
+```php
+public numeric Upload::getMaxFileSize()
+```
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+echo $upload->getMaxFileSize(); // -> 2
+
+$upload->setMaxFileSize(32);
+echo $upload->getMaxFileSize(); // -> 32
+```

@@ -1,0 +1,88 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Getting the embed URL of a YouTube video etc. through oEmbed
+
+`Fegg\Tool\OEmbed` asks the oEmbed endpoint of the service matching a URL (e.g. a YouTube video page) and extracts the URL to embed. The request is sent with `Fegg\Http\Client` (cURL when it is installed, otherwise PHP's http stream wrapper; 10 second timeout). A transport failure or an answer other than HTTP 200 throws an `Exception`.
+
+## How to use
+
+Import `Fegg\Tool\OEmbed` and create it with `new`, passing the page URL. The constructor throws an `Exception` when the URL is not supported or the request fails.
+
+```php title="Controller"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Tool\OEmbed;
+
+class Movie extends Controller
+{
+    public function index()
+    {
+        try {
+            $oembed = new OEmbed('https://www.youtube.com/watch?v=xxxxxxxxxxx');
+            $this->page['youtube'] = $oembed->media;
+        } catch (\Exception $e) {
+            $this->page['youtube'] = '';
+        }
+
+        $this->displayPage('movie');
+    }
+}
+```
+
+```html title="Template"
+{{ if $page.youtube }}
+<iframe width="560" height="315" src="{{ $page.youtube|feggUrl }}" frameborder="0" allowfullscreen class="c-youtube"></iframe>
+{{ end }}
+```
+
+## Properties
+
+The result is read through these read-only properties.
+
+| Property | Data type | Remarks                                                                 |
+| -------- | --------- | ----------------------------------------------------------------------- |
+| media    | string    | URL to embed: `src` of the `iframe` (video), `src` of the `img` (photo) or `href` of the `a` (link) |
+| type     | string    | `video`, `photo` or `link`                                              |
+| data     | array     | The whole oEmbed response (`title`, `author_name`, `thumbnail_url`, `html` ...) |
+| service  | string    | Matched service name in the configuration, e.g. `youtube`              |
+| url      | string    | URL passed to the constructor                                           |
+
+Reading any other property throws an `Exception`.
+
+## Configuration
+
+The services are defined in `htdocs/_fegg/core/config/oembed_schemes.php`. Only YouTube is defined by default.
+
+```php title="htdocs/_fegg/core/config/oembed_schemes.php"
+<?php
+defined('FEGG_CORE_DIR') || exit;
+
+
+$oembed_schemes = array();
+
+$oembed_schemes['youtube'] = array(
+    'endpoint' => 'https://www.youtube.com/oembed',
+    'schemes' => array(
+        '|^https?://.*\\.youtube\\.com/watch.*$|i',
+        '|^https?://.*\\.youtube\\.com/v/.*$|i',
+        '|^https?://youtu\\.be/.*$|i',
+        '|^https?://.*\\.youtube\\.com/playlist\\?list\\=.*$|i',
+        '|^https?://youtube\\.com/playlist\\?list\\=.*$|i',
+    ),
+);
+```
+
+`endpoint` is the oEmbed endpoint of the service and `schemes` are regular expressions matching the supported URLs. To add a service, copy the file to `htdocs/_fegg/site/config/oembed_schemes.php` and add an entry there (the file in `site/config/` is used instead of the core's one).
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

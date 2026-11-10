@@ -1,0 +1,39 @@
+---
+sidebar_position: 34
+---
+
+# Model::one
+
+> Get the first matching row
+
+## Description
+
+```php
+public array|null Model::one( [ array $options = [] ] )
+```
+
+Returns the first matching row as an associative array, or `null` when nothing matches. [order](./order.mdx) decides which row is first; the offset of [limit](./limit.mdx) is used.
+
+## Arguments
+
+| Name     | Data type | Default | Remarks                                       |
+| -------- | --------- | ------- | --------------------------------------------- |
+| $options | array     | []      | `array('select' => ...)` overrides [select](./select.mdx) |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// The newest news, or null
+$latest = $model->order('post_date', 'desc')->one();
+
+$record = $model->where('title = ?', $title)->one();
+if ($record === null) {
+    // not found
+}
+```

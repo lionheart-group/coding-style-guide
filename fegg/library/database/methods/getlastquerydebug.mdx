@@ -1,0 +1,37 @@
+---
+sidebar_position: 41
+---
+
+# Pdo::getLastQueryDebug
+
+> Get the last executed query and parameter separately for debugging
+
+## Description
+
+```php
+public array Pdo::getLastQueryDebug()
+```
+
+Returns `array('query' => ..., 'parameter' => ...)`: the last query with its `?` placeholders, and the values bound to them.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$db->setWhere('category = ?', 2)->select('cms_news')->execute();
+
+print_r($db->getLastQueryDebug());
+```
+
+```php title="Output"
+Array
+(
+    [query] => Select * From "cms_news" Where  category = ?  And "cms_news".valid = 1
+    [parameter] => Array
+        (
+            [0] => 2
+        )
+
+)
+```

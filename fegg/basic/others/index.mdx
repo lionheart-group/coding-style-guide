@@ -1,0 +1,27 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# About Other methods
+
+Other `Fegg\Application` methods you can call with `$this->...` in a controller.
+
+## Config
+
+Load config files from `site/config/` and read the settings.
+
+<CategoryDocCardList label="Config" />
+
+## Ticket
+
+A ticket protects form processing. `setTicket()` creates a random string, stores it in the session and adds it to the form as a hidden field (output with `{{ hidden }}`). When the form is posted, `useTicket()` checks that the posted value matches the session and then removes it, so the same form cannot be processed twice.
+
+<CategoryDocCardList label="Ticket" />
+
+## Redirect
+
+`redirect()` ends the response by throwing `Fegg\Http\Halt`, like `displayPage()`. Never write `exit` in a controller; use `$this->halt()` (see [Ending a response](../controller.mdx#ending-a-response)).
+
+<CategoryDocCardList label="Redirect" />

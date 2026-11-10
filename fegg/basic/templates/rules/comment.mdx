@@ -1,0 +1,48 @@
+---
+sidebar_position: 13
+---
+
+# Comment
+
+> Template comments
+
+## Description
+
+```html
+{{* comment *}}
+```
+
+Everything between `{{*` and `*}}` is removed when the template is compiled: it never reaches the browser, unlike an HTML comment. A comment may span several lines, and tags inside it are ignored, so it can also disable a part of the template.
+
+The newlines of a comment are kept, so errors and `fegg-cli template:lint` still report the right `.tpl` line after a multi-line comment.
+
+## Example
+
+```html title="Template"
+<p>Visible</p>
+{{* TODO: show the campaign banner from April *}}
+{{*
+{{ if $page.campaign }}
+<p>{{ $page.campaign.title }}</p>
+{{ end }}
+*}}
+<p>Also visible</p>
+```
+
+```html title="Output"
+<p>Visible</p>
+
+
+
+
+
+<p>Also visible</p>
+```
+
+The lines of the comments remain as empty lines.
+
+:::note
+
+`<!-- ... -->` is an ordinary HTML comment: it is sent to the browser, and the tags inside it still run.
+
+:::

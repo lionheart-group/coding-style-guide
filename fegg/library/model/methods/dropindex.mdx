@@ -1,0 +1,32 @@
+---
+sidebar_position: 56
+---
+
+# Model::dropIndex
+
+> Execute Drop index
+
+## Description
+
+```php
+public void Model::dropIndex( string $index )
+```
+
+Drops an index. Throws `Fegg\Database\QueryException` when the query fails.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks    |
+| ------ | --------- | ------- | ---------- |
+| $index | string    |         | Index name |
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table' => 'sample',
+));
+
+// Drop Index "sample_title"
+$model->dropIndex('sample_title');
+```

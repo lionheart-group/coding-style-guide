@@ -1,0 +1,35 @@
+---
+sidebar_position: 12
+---
+
+# Upload::getErrorMessage
+
+> Get the error messages of a file
+
+## Description
+
+```php
+public mixed Upload::getErrorMessage( string $name )
+```
+
+Returns the error messages of the last [Upload::upload](./upload.mdx) call for `$name` as an array, or `null` when there is no error. The messages are defined in `file_error_message.php` (see [Configuration](../configuration.mdx)).
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                                      |
+| ----- | --------- | ------- | -------------------------------------------- |
+| $name | string    |         | `name` attribute of the `input[type="file"]` |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+$upload->setUploadDir($this->config['upload_dir']['path']);
+
+if (!$upload->upload('image', uniqid('i_'), 'Image')) {
+    var_dump($upload->getErrorMessage('image'));
+    // -> array('<strong>Image</strong> のサイズが大きすぎます')
+}
+```

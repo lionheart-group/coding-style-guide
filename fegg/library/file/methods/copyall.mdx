@@ -1,0 +1,31 @@
+---
+sidebar_position: 1
+---
+
+# File::copyAll
+
+> Copy all the files in a directory to another directory
+
+## Description
+
+```php
+public void File::copyAll( string $fromDirectory, string $toDirectory )
+```
+
+Copies every file directly under `$fromDirectory` to `$toDirectory` and sets the permission of the copied files to `0666`. Both directories must exist; otherwise nothing happens. Subdirectories are not copied, use [File::copyDirectory](./copydirectory.mdx) for them.
+
+## Arguments
+
+| Name           | Data type | Default | Remarks                              |
+| -------------- | --------- | ------- | ------------------------------------ |
+| $fromDirectory | string    |         | Source directory                     |
+| $toDirectory   | string    |         | Destination directory (must exist)   |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\File;
+
+$file = new File();
+$file->copyAll('path/to/foo', 'path/to/bar');
+```

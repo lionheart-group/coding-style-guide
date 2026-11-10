@@ -1,0 +1,64 @@
+---
+sidebar_position: 2
+---
+
+# Application::setHidden
+
+> Set values for hidden inputs
+
+## Description
+
+```php
+public void Application::setHidden( mixed $name, [ mixed $value = "" ] )
+public void Application::unsetHidden( string $name )
+```
+
+`setHidden()` stores a value that the `{{ hidden }}` tag prints as `<input type="hidden">`. `unsetHidden()` removes one again.
+
+Names and values are HTML-escaped (a value that is already escaped is not escaped twice). An array value is printed as one input per element, with names such as `tags[0]` and `tags[1]`.
+
+See also [Hidden](../rules/hidden.mdx).
+
+## Arguments
+
+| Name   | Data type      | Default | Remarks |
+| ------ | -------------- | ------- | ------- |
+| $name  | string / array |         | Hidden name, or an array `name => value` to set several at once |
+| $value | string / array | ""      | Hidden value (ignored when `$name` is an array) |
+
+## Example
+
+```php title="Controller"
+$this->setHidden('internal_id', $internalId);
+```
+
+```html title="Template"
+{{ hidden }}
+```
+
+```html title="Output"
+<input type="hidden" name="internal_id" value="12">
+```
+
+### Assigning multiple values
+
+```php title="Controller"
+$this->setHidden(array(
+    'foo'  => 'bar',
+    'tags' => array('a', 'b'),
+));
+```
+
+```html title="Template"
+{{ hidden }}
+```
+
+```html title="Output"
+<input type="hidden" name="foo" value="bar"><input type="hidden" name="tags[0]" value="a"><input type="hidden" name="tags[1]" value="b">
+```
+
+### Removing a value
+
+```php title="Controller"
+$this->unsetHidden('internal_id');
+```

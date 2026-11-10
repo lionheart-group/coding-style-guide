@@ -1,0 +1,38 @@
+---
+sidebar_position: 20
+---
+
+# Model::whereBetween
+
+> Match a range of values
+
+## Description
+
+```php
+public self Model::whereBetween( string $column, mixed $from, mixed $to, [ string $andOr = 'AND' ] )
+```
+
+Adds `column BETWEEN ? AND ?`. Both ends are included. Throws `InvalidArgumentException` when `$column` is not a plain name.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                                              |
+| ------- | --------- | ------- | ---------------------------------------------------- |
+| $column | string    |         | Column name                                          |
+| $from   | mixed     |         | Lowest value                                         |
+| $to     | mixed     |         | Highest value                                        |
+| $andOr  | string    | 'AND'   | How it joins the previous condition: `AND` or `OR`   |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// News of January 2026
+// ... Where post_date BETWEEN '2026-01-01 00:00:00' AND '2026-01-31 23:59:59' AND ...
+$records = $model->whereBetween('post_date', '2026-01-01 00:00:00', '2026-01-31 23:59:59')->find();
+```

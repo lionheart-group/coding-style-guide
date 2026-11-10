@@ -1,0 +1,32 @@
+---
+sidebar_position: 58
+---
+
+# Model::alterRenameTo
+
+> Execute Alter Rename
+
+## Description
+
+```php
+public void Model::alterRenameTo( string $rename )
+```
+
+Renames the model's table. The model keeps the old name; call [setTableName](./settablename.mdx) to keep using it. Throws `Fegg\Database\QueryException` when the query fails.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks         |
+| ------- | --------- | ------- | --------------- |
+| $rename | string    |         | New table name  |
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table' => 'sample',
+));
+
+// Alter Table "sample" RENAME TO "sample_old"
+$model->alterRenameTo('sample_old');
+```

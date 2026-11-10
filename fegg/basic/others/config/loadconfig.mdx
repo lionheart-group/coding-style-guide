@@ -1,0 +1,65 @@
+---
+sidebar_position: 1
+---
+
+# Application::loadConfig
+
+> Load a config file
+
+## Description
+
+```php
+public array Application::loadConfig( string $name, string $languageCode = '' )
+```
+
+Load the config file `{$name}.php`, store its variable in `$this->config[$name]` and return it.
+
+The file must define a variable with the same name as the file (`sample.php` defines `$sample`). It is searched in this order, and the first file found is loaded:
+
+1. `htdocs/_fegg/site/config/{$name}.php`
+2. `htdocs/_fegg/core/config/{$name}.php`
+
+So a site file replaces the core file with the same name (for example `validation_error_message.php`). If `global_config_dir` is set in the [settings](../../../first/config.mdx), the file in that directory is loaded first and the file above can overwrite its values.
+
+On a multilingual site (`default_language` and `support_language` are set), `config/{language code}/{$name}.php` is loaded afterwards and can overwrite values for that language.
+
+The result is cached: calling `loadConfig()` again with the same name returns `$this->config[$name]` without reading the file. If no file defines the variable, Fegg prints `Can't Read Config File: {$name}` and stops.
+
+## Arguments
+
+| Name          | Data type | Default | Remarks |
+| :------------ | :-------- | :------ | :------ |
+| $name         | string    |         | Config file name without `.php` (also the name of the variable the file defines) |
+| $languageCode | string    | ''      | Language code for the per-language file. The current language when omitted |
+
+## Example
+
+```php title="htdocs/_fegg/site/config/sample.php"
+<?php
+defined('FEGG_CORE_DIR') || exit;
+
+// The variable name must be the same as the file name
+$sample = array();
+
+$sample['foo'] = 'bar';
+$sample['baz'] = 'qux';
+```
+
+```php title="Controller"
+$this->loadConfig('sample');
+
+var_dump($this->config['sample']);
+```
+
+```html title="Output"
+array(2) { ["foo"]=> string(3) "bar" ["baz"]=> string(3) "qux" }
+```
+
+The return value can also be used directly:
+
+```php title="Controller"
+$sample = $this->loadConfig('sample');
+echo $sample['foo']; // -> bar
+```
+
+`site_info.php` and `category_info.php` are loaded by the base controller's `__init()`, so `$this->config['site_info']` and `$this->config['category_info']` are available in every controller that calls `parent::__init()`.

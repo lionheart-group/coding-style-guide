@@ -1,0 +1,34 @@
+---
+sidebar_position: 3
+---
+
+# RSS::fetchAll
+
+> Fetch all entries or specified number of entries of RSS feed
+
+## Description
+
+```php
+public array RSS::fetchAll( [ int $max = 0 ] )
+```
+
+Returns the remaining entries (see [Entry data](../index.mdx#entry-data)) as an array.
+
+## Arguments
+
+| Name | Data type | Default | Remarks                                         |
+| ---- | --------- | ------- | ----------------------------------------------- |
+| $max | int       | 0       | Maximum number of entries / `0`: all the entries |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\RSS;
+
+$rss = new RSS('https://example.com/feed');
+$posts = $rss->fetchAll(5);
+
+foreach ($posts as $post) {
+    // $post['title'], $post['link'], $post['datetime'] ...
+}
+```

@@ -1,0 +1,31 @@
+---
+sidebar_position: 3
+---
+
+# Mail::body
+
+> Set mail body
+
+## Description
+
+```php
+public self Mail::body( string $body )
+```
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                 |
+| ----- | --------- | ------- | ----------------------- |
+| $body | string    |         | Email body (plain text) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Mail;
+
+$mail = new Mail();
+$mail->body('Mail body');
+
+// Use a template for the body
+$mail->body($this->fetchPage('/contact/mail/to_admin'));
+```

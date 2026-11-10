@@ -1,0 +1,101 @@
+---
+sidebar_position: 1
+---
+
+# About Extension libraries
+
+Fegg's goal is lightweight and less typing, so the controller base class only has the minimum required functions. Additional functions are provided as library classes in the core (`htdocs/_fegg/core/src/`).
+
+## How to use
+
+Every library is a namespaced class that is loaded by the autoloader. Import it with `use` and create it with `new`.
+
+```php title="Controller"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Tool\Mail;
+use Fegg\Validation;
+
+class Contact extends Controller
+{
+    public function post()
+    {
+        $validation = new Validation();
+        $validation->required('mail', $this->in('mail'), array('@required', 'Email'));
+
+        if (!$validation->isError()) {
+            $mail = new Mail('Mail subject', 'Mail body');
+            $mail->send($this->in('mail'), 'Sender name', 'from@example.com');
+        }
+    }
+}
+```
+
+:::note
+
+Fegg 4 code such as `$this->getClass('Tool/Mail')` still works in Fegg 5 through `Fegg\Legacy`, but every use is written to the PHP error log as `Fegg deprecated: ...` and it will be removed in Fegg 6. Replace it with `new`.
+
+| Fegg 4 | Fegg 5 |
+| --- | --- |
+| `$this->getClass('Validation')` | `new \Fegg\Validation()` |
+| `$this->getClass('Tool/Mail', $subject, $body)` | `new \Fegg\Tool\Mail($subject, $body)` |
+| `$this->getClass('Tool/Upload')` | `new \Fegg\Tool\Upload()` |
+| `$this->getClass('ReCAPTCHA', $secret)` | `new \Fegg\Captcha\ReCAPTCHA($secret)` |
+| `$this->getClass('DB_pdo')` | `new \Fegg\Database\Pdo()` |
+
+The same applies to the other `Tool/...` classes (`Tool/Date`, `Tool/File`, `Tool/OEmbed`, `Tool/RSS`, `Tool/Trim`), which became `Fegg\Tool\Date` and so on.
+
+:::
+
+## Extension Libraries
+
+| Library | Class | Description |
+| --- | --- | --- |
+| [Validation](./validation/index.mdx) | `Fegg\Validation` | Providing some functions for validation |
+| [Database](./database/index.mdx) | `Fegg\Database\Pdo` | Providing necessary functions for using database |
+| [Model](./model/index.mdx) | `Fegg\Model` | Extended Database Library for LH project |
+| [File](./file/index.mdx) | `Fegg\Tool\File` | Providing some functions for managing files/directories |
+| [Upload](./upload/index.mdx) | `Fegg\Tool\Upload` | Providing some functions for uploading/validating files |
+| [Mail](./mail/index.mdx) | `Fegg\Tool\Mail` | Providing some functions for sending email (PHPMailer wrapper) |
+| [RSS](./rss/index.mdx) | `Fegg\Tool\RSS` | Providing some functions for analyzing RSS document |
+| [Trim](./trim/index.mdx) | `Fegg\Tool\Trim` | Providing some functions for processing image (especially image crop) |
+| [Date](./date/index.mdx) | `Fegg\Tool\Date` | Providing some functions for calculating dates |
+| [OEmbed](./oembed/index.mdx) | `Fegg\Tool\OEmbed` | Getting the embed URL of a YouTube video etc. through oEmbed |
+| [Captcha](./captcha/index.mdx) | `Fegg\Captcha\ReCAPTCHA`, `Fegg\Captcha\Turnstile` | Verifying Google reCAPTCHA / Cloudflare Turnstile responses |
+
+## Project libraries
+
+Put your own classes in `htdocs/_fegg/site/src/` with the `Site\` namespace. They are autoloaded in the same way.
+
+```php title="htdocs/_fegg/site/src/MyLib/Foo.php"
+<?php
+namespace Site\MyLib;
+
+defined('FEGG_CORE_DIR') || exit;
+
+class Foo
+{
+}
+```
+
+```php title="Controller"
+use Site\MyLib\Foo;
+
+$foo = new Foo();
+```
+
+## External Libraries
+
+These libraries are bundled in `htdocs/_fegg/core/vendor/` and autoloaded.
+
+- [PHPMailer](https://github.com/PHPMailer/PHPMailer) (7.0)
+  - Used by [Mail](./mail/index.mdx). Namespace `PHPMailer\PHPMailer`
+  - A failed send throws `PHPMailer\PHPMailer\Exception`
+- [Spyc](https://github.com/mustangostang/spyc)
+  - YAML document loader (global class `Spyc`)
+  - Used by the database migration (`fegg-cli migration`)
+
+JSON documents are handled with PHP's own `json_encode` and `json_decode`.

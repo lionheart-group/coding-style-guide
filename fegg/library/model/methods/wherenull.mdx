@@ -1,0 +1,35 @@
+---
+sidebar_position: 18
+---
+
+# Model::whereNull
+
+> Match rows where a column is NULL
+
+## Description
+
+```php
+public self Model::whereNull( string $column, [ string $andOr = 'AND' ] )
+```
+
+Adds `column IS NULL`. Throws `InvalidArgumentException` when `$column` is not a plain name.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                                              |
+| ------- | --------- | ------- | ---------------------------------------------------- |
+| $column | string    |         | Column name                                          |
+| $andOr  | string    | 'AND'   | How it joins the previous condition: `AND` or `OR`   |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// ... Where image_id IS NULL AND ...
+$records = $model->whereNull('image_id')->find();
+```

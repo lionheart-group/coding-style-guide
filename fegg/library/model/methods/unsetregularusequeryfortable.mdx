@@ -1,0 +1,26 @@
+---
+sidebar_position: 63
+---
+
+# Model::unsetRegularUseQueryForTable
+
+> Skip the automatic queries of the table for the next query
+
+## Description
+
+```php
+public self Model::unsetRegularUseQueryForTable()
+```
+
+For the next query only, skips the queries configured for this table (the `table` section of `database_regular_use_query.php`, see [Configuration](../../database/configuration.mdx)). The queries added for every table still apply; see [unsetRegularUseQuery](./unsetregularusequery.mdx).
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table' => 'cms_news',
+    'id'    => 'news_id',
+));
+
+$records = $model->unsetRegularUseQueryForTable()->all();
+```

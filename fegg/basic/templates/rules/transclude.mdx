@@ -1,0 +1,122 @@
+---
+sidebar_position: 6
+---
+
+# Transclude
+
+> transclude, section
+
+## Description
+
+```html
+{{ transclude '/path/to/layout' }}
+
+{{ section name }}
+{{ end section name }}
+```
+
+`{{ transclude }}` makes the template inherit a layout (the parent template). The parent declares named `{{ section }}` blocks; the child fills them, and the parent prints each one where it is declared.
+
+- In the parent, a section is a placeholder. Its content is the default, printed when the child does not define the section.
+- In the child, a section defines the content. The section name must match the parent's.
+- Inheritance works through any number of levels: a child can fill a section declared by its parent or by any layout further up.
+- A template has one `{{ transclude }}`. Paths follow the [include rules](./include.mdx#paths): prefer `/`-rooted paths such as `'/template/siteframe'`. A missing parent throws `Fegg\Template\TemplateException` with the line of the tag.
+- Close a section with `{{ end section name }}` (recommended) or `{{ end section }}`.
+
+Things to know:
+
+- Text outside any `{{ section }}` in a child template is output **before** the parent layout. Keep everything inside sections (`fegg-cli template:lint` warns about stray text).
+- A section runs as a function. `{{ assign }}`, `{{ include head }}` and `{{ include foot }}` written inside it only affect that section. Put them at the top level of the template, next to `{{ transclude }}`.
+- A section the parent does not declare is printed where the child defines it.
+
+## Example
+
+```html title="site/template/template/siteframe.tpl"
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ $site.title }}</title>
+</head>
+<body>
+    <main>
+        {{ section contents }}
+        <p>Default content</p>
+        {{ end section contents }}
+    </main>
+</body>
+</html>
+```
+
+```html title="site/template/index.tpl"
+{{ transclude '/template/siteframe' }}
+
+{{ section contents }}
+<p>This is the index content.</p>
+{{ end section contents }}
+```
+
+```html title="Output"
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Example Inc.</title>
+</head>
+<body>
+    <main>
+        <p>This is the index content.</p>
+    </main>
+</body>
+</html>
+```
+
+### Multiple levels
+
+```html title="site/template/base.tpl"
+<html>
+<body>
+    {{ section header }}<header>Default header</header>{{ end section header }}
+    {{ section body }}{{ end section body }}
+</body>
+</html>
+```
+
+```html title="site/template/layout/two_columns.tpl"
+{{ transclude '/base' }}
+
+{{ section body }}
+<div class="l-columns">
+    <aside>Menu</aside>
+    <div class="l-columns__main">
+        {{ section main }}{{ end section main }}
+    </div>
+</div>
+{{ end section body }}
+```
+
+```html title="site/template/news/detail.tpl"
+{{ transclude '/layout/two_columns' }}
+
+{{ section header }}<header>News</header>{{ end section header }}
+
+{{ section main }}
+<p>This is the news content.</p>
+{{ end section main }}
+```
+
+```html title="Output (whitespace simplified)"
+<html>
+<body>
+    <header>News</header>
+    <div class="l-columns">
+        <aside>Menu</aside>
+        <div class="l-columns__main">
+            <p>This is the news content.</p>
+        </div>
+    </div>
+</body>
+</html>
+```
+
+`news/detail` fills `header`, which is declared two levels up in `base`, and `main`, which is declared by its direct parent.

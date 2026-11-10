@@ -1,0 +1,38 @@
+---
+sidebar_position: 2
+---
+
+# Validation::required
+
+> Check required
+
+## Description
+
+```php
+public boolean Validation::required( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+A string is valid when it is not empty after trimming (`'0'` is valid). For an array, only the first element is checked: it must not be `''` or `null`.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                                                                                                      |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name  | string    |         | Field name (key of the error message)                                                                        |
+| $value | mixed     |         | Value to check                                                                                               |
+| $code  | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+$validation->required('name', 'John', array('@required', 'Name')); // -> true
+$validation->required('mail', '', array('@required', 'Email'));    // -> false
+
+var_dump($validation->isError()); // -> true
+var_dump($validation->getErrorMessage());
+// -> array('mail' => '<strong>Email</strong> をご入力ください')
+```

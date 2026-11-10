@@ -1,0 +1,26 @@
+---
+sidebar_position: 35
+---
+
+# Pdo::one
+
+> Shift the result of executed select query
+
+## Description
+
+```php
+public array|null Pdo::one()
+```
+
+Returns the first row of the last SELECT or PRAGMA, or `null` when it returned no row.
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+$row = $db->setWhere('news_id = ?', 1)->select('cms_news')->execute()->one();
+if ($row === null) {
+    // not found
+}
+```

@@ -1,0 +1,51 @@
+---
+sidebar_position: 54
+---
+
+# Model::create
+
+> Execute Create Table
+
+## Description
+
+```php
+public void Model::create( array $fields )
+```
+
+Creates the model's table. Tables are normally defined in `site/config/database/*.yaml` and created with `./fegg-cli migration`; use this only for tables made at run time. Throws `Fegg\Database\QueryException` when the query fails.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                                  |
+| ------- | --------- | ------- | ---------------------------------------- |
+| $fields | array     |         | List of column definitions (below)       |
+
+### Column definition
+
+Every key must be present.
+
+| Key          | Data type | Remarks                                                     |
+| ------------ | --------- | ----------------------------------------------------------- |
+| `name`       | string    | Column name                                                 |
+| `type`       | string    | Column type                                                 |
+| `notnull`    | boolean   | Add NOT NULL                                                |
+| `dflt_value` | mixed     | Default value (`null`, `''` or `0`: no default)             |
+| `pk`         | boolean   | Add PRIMARY KEY                                             |
+| `ai`         | boolean   | Add AUTOINCREMENT                                           |
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table' => 'sample',
+));
+
+// Create Table "sample" (sample_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, title TEXT DEFAULT 'none', valid BOOLEAN, created DATETIME, modified DATETIME)
+$model->create(array(
+    array('name' => 'sample_id', 'type' => 'INTEGER',  'notnull' => true,  'dflt_value' => null,   'pk' => true,  'ai' => true),
+    array('name' => 'title',     'type' => 'TEXT',     'notnull' => false, 'dflt_value' => 'none', 'pk' => false, 'ai' => false),
+    array('name' => 'valid',     'type' => 'BOOLEAN',  'notnull' => false, 'dflt_value' => null,   'pk' => false, 'ai' => false),
+    array('name' => 'created',   'type' => 'DATETIME', 'notnull' => false, 'dflt_value' => null,   'pk' => false, 'ai' => false),
+    array('name' => 'modified',  'type' => 'DATETIME', 'notnull' => false, 'dflt_value' => null,   'pk' => false, 'ai' => false),
+));
+```

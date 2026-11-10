@@ -1,0 +1,55 @@
+---
+sidebar_position: 5
+---
+
+# Trim::resizeTrim
+
+> Resize the image with keeping ratio and trimming the overflow (Like `object-fit: cover`)
+
+## Description
+
+```php
+public void Trim::resizeTrim( int $w, int $h, string $cp )
+```
+
+The output is exactly `$w` x `$h`. The image is scaled to cover the whole area, keeping its aspect ratio, and the overflow is cut off. `$cp` decides which part of the image is kept. `0` means the original width or height.
+
+## Arguments
+
+| Name | Data type | Default | Remarks                                 |
+| ---- | --------- | ------- | --------------------------------------- |
+| $w   | int       |         | Output width / `0`: original width      |
+| $h   | int       |         | Output height / `0`: original height    |
+| $cp  | string    |         | Crop position (see below)               |
+
+### Crop position
+
+| $cp  | Kept part                       |
+| ---- | ------------------------------- |
+| `t`  | Top center                      |
+| `rt` | Top right                       |
+| `l`  | Middle left                     |
+| `m`  | Center                          |
+| `r`  | Middle right                    |
+| `b`  | Bottom center                   |
+| `lb` | Middle left (same as `l`)       |
+| `rb` | Bottom center (same as `b`)     |
+| `lt` or any other value | Top left |
+
+:::note
+
+In the current implementation `lb` and `rb` do not crop at the bottom corners: they behave like `l` and `b`.
+
+:::
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Trim;
+
+$trim = new Trim();
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+
+$trim->resizeTrim(300, 300, 'm');
+$trim->create();
+```

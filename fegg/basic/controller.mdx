@@ -1,0 +1,392 @@
+---
+sidebar_position: 2
+---
+
+# Controller
+
+## About Controller
+
+### What is a Controller?
+
+A controller is the class that handles a request. Fegg picks the controller class and its method from the URL (see [URL](./url.mdx)).
+
+```
+https://example.com/foo/bar/
+```
+
+For this URL, Fegg loads **`htdocs/_fegg/site/controller/Foo.php`** and calls its `bar()` method:
+
+```php title="htdocs/_fegg/site/controller/Foo.php"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+class Foo extends Controller
+{
+    public function bar()
+    {
+        // process here...
+    }
+}
+```
+
+### File, namespace and class
+
+Every controller file follows the same rules:
+
+- The file is in `htdocs/_fegg/site/controller/`, and the file name is the class name (`Foo.php` declares `class Foo`).
+- The namespace is `Site\Controller`. **Sub directories are namespaces**: `site/controller/Cms/News.php` declares `namespace Site\Controller\Cms;` and `class News`.
+- The first line after the namespace is `defined('FEGG_CORE_DIR') || exit;`. It is required in every PHP file under `htdocs/_fegg/`: it stops the file from running when someone requests it directly by URL.
+- The class extends `Controller`, the project's base class.
+
+```php title="htdocs/_fegg/site/controller/Cms/News.php"
+<?php
+namespace Site\Controller\Cms;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Cms\Helper;
+use Fegg\Model;
+use Site\Controller\Controller; // the base class is in the parent namespace
+
+class News extends Controller
+{
+    // ...
+}
+```
+
+### Base classes
+
+There are two kinds of controllers, with a base class each: **public pages** and **CMS screens**.
+
+```
+Fegg\Application                                  core/src/Application.php
+└ Fegg\Controller\Controller (abstract)            core/controller/Controller.php
+  ├ Site\Controller\Controller (abstract)          site/controller/Controller.php       public pages
+  │ └ Site\Controller\Index, News, Contact, ...
+  └ Fegg\Controller\Cms\Controller (abstract)      core/controller/Cms/Controller.php   CMS screens (core)
+    ├ Fegg\Controller\Cms\Image, Media, Login, ...
+    └ Site\Controller\Cms\Controller (abstract)    site/controller/Cms/Controller.php   CMS screens (project)
+      └ Site\Controller\Cms\News, Lab, ...
+```
+
+- `Fegg\Application` provides the methods you call with `$this->...`: [request parameters](./parameters/index.mdx), templates (`displayPage()`, ...), `redirect()`, `loadConfig()`, ...
+- `Fegg\Controller\Controller` (core) loads `site/config/category_info.php` and `site/config/site_info.php` in its `__init()`, and declares the properties `$_model` and `$_lh` used by the CMS.
+- `Site\Controller\Controller` (site) is yours: the base of the **public pages**. Put what every public page needs here (shared assigns, ...). It replaces `MyApplication` of Fegg 4.
+- `Fegg\Controller\Cms\Controller` (core) and `Site\Controller\Cms\Controller` (site) are the bases of the **CMS screens**: see [CMS screens](#cms-screens). Put what every CMS screen of the project needs in `Site\Controller\Cms\Controller`.
+
+```php title="htdocs/_fegg/site/controller/Controller.php"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+abstract class Controller extends \Fegg\Controller\Controller
+{
+    public function __init()
+    {
+        parent::__init();
+
+        // Shared by every page of the site
+        $this->page['year'] = date('Y');
+    }
+}
+```
+
+Abstract classes are never called from a URL.
+
+### Constructor
+
+A constructor is optional. If you write one, call the parent constructor: it loads the settings, sets up error handling and the language.
+
+```php
+public function __construct()
+{
+    parent::__construct();
+}
+```
+
+### Initialize
+
+`__init()` is called after the constructor, before the method of the URL. Because the instance already exists, you can use the `Application` methods through `$this` (for example `$this->in()`), which you should not do in the constructor.
+
+**Always call `parent::__init()` first.** Otherwise `site_info.php` and `category_info.php` are not loaded.
+
+```php
+public function __init()
+{
+    parent::__init();
+
+    $this->_lh = new Helper();
+    $this->_model = new Model(false, array(
+        'table'   => 'cms_news',
+        'id'      => 'news_id',
+        'visible' => 'visible',
+    ));
+}
+```
+
+:::note
+
+You can omit `__init()` when the controller does not need it. The parent `__init()` is then called automatically.
+
+:::
+
+### Method
+
+The second segment of the URL is the method name.
+
+```php
+// Called by https://example.com/foo/bar/
+public function bar()
+{
+    // any process
+}
+```
+
+If the second segment is empty, `index()` is called.
+
+```php
+// Called by https://example.com/foo/ or https://example.com/foo/index/
+public function index()
+{
+    // any process
+}
+```
+
+Every **public** method can be called from a URL. Make helper methods `private` or `protected` so that they cannot.
+
+```php
+// https://example.com/foo/_common/ does NOT run this method
+private function _common()
+{
+    // shared process
+}
+```
+
+If the method does not exist, the 404 page is shown.
+
+### Arguments
+
+The segments after the method are passed to the method as strings.
+
+```php
+// $param1 is "bar" and $param2 is "baz"
+//   for https://example.com/foo/show/bar/baz/
+public function show($param1 = '', $param2 = '')
+{
+    echo $param1; // bar
+    echo $param2; // baz
+}
+```
+
+Give the arguments a default value: a visitor can always open the URL with fewer segments, and a missing required argument is an error (HTTP 500).
+
+### Ending a response
+
+[displayPage()](./templates/methods/displaypage.mdx), [redirect()](./others/redirect/redirect.mdx), `requirePost()`, Basic authentication and the CMS login check end the response by throwing `Fegg\Http\Halt`. The dispatcher catches it, writes the session and sends the output. Code after them does not run, as before, but Fegg 5 never calls `exit`.
+
+To stop a controller yourself, call `$this->halt()` instead of `exit`. It prints its argument, if any, and ends the response the same way:
+
+```php
+public function ping()
+{
+    header('Content-Type: text/plain; charset=utf-8');
+    $this->halt('pong');   // not: echo 'pong'; exit;
+}
+```
+
+With `halt()` the dispatcher finishes the request itself (it writes the session and sends the buffered output), and the code stays testable. `exit` still stops the script, but skips all of that.
+
+`Halt` extends `\Error`, not `\Exception`, so `catch (\Exception $e)` does not stop a redirect. A **`catch (\Throwable $e)`** around `displayPage()` or `redirect()` would catch it: rethrow it first.
+
+```php
+try {
+    $this->_import($file);
+    $this->redirect('/cms/import/done/');
+} catch (\Fegg\Http\Halt $halt) {
+    throw $halt;   // the redirect: let it through
+} catch (\Throwable $e) {
+    \Fegg\Log::error('Import failed', array('exception' => $e));
+    $this->displayPage('cms/import/error');
+}
+```
+
+## Using other classes
+
+Classes are autoloaded. Import them with `use`, or write the full name with a leading `\`, and create them with `new`:
+
+```php
+use Fegg\Cms\Helper;
+use Fegg\Model;
+use Fegg\Validation;
+
+$this->_lh   = new Helper('news');
+$validation  = new Validation();
+$upload      = new \Fegg\Tool\Upload();
+$cart        = new \Site\Shop\Cart();   // htdocs/_fegg/site/src/Shop/Cart.php
+```
+
+Inside a namespace, **prefix PHP's own classes and constants with `\`**. Without it, PHP looks for the class in the current namespace (`Site\Controller\Exception`) and fails.
+
+```php
+throw new \Exception('Something went wrong');
+$date = new \DateTime('now');
+$statement->bindValue(1, $id, \PDO::PARAM_INT);
+```
+
+Catch Fegg's exceptions by their full name, for example `\Fegg\Database\QueryException` or `\Fegg\Template\TemplateException`.
+
+:::note
+
+`$this->getClass()` still works for Fegg 4 code, but it is deprecated (each call writes `Fegg deprecated: ...` to the PHP error log) and will be removed in Fegg 6.
+
+:::
+
+## Extending a core controller
+
+The CMS screens provided by the core (`/cms/login/`, `/cms/media/`, `/cms/image/`, ...) are in `htdocs/_fegg/core/controller/Cms/`. Do not edit them. To change one, put a class with the same name in `site/controller/Cms/` that extends the core class, and write only the methods you change. The site class is found first, so it replaces the core one for its URL.
+
+```php title="htdocs/_fegg/site/controller/Cms/Media.php"
+<?php
+namespace Site\Controller\Cms;
+
+defined('FEGG_CORE_DIR') || exit;
+
+// Changes only the /cms/media/ list
+class Media extends \Fegg\Controller\Cms\Media
+{
+    public function index($message = null)
+    {
+        // project-specific processing
+        parent::index($message);
+    }
+}
+```
+
+Keep the parent method's signature (the same arguments with the same defaults).
+
+## CMS screens
+
+A CMS screen extends `Site\Controller\Cms\Controller` (in `site/controller/Cms/`, where `Controller` is that class without a `use`). Before your method runs, the base class:
+
+- sends a visitor who is not logged in to the login page,
+- creates `$this->_lh` (`Fegg\Cms\Helper`) for the section set in `$_cmsSection`, and sets `$this->page['prefix']` and `$this->page['prev_num']`,
+- sends `Cache-Control: no-store` and `X-Robots-Tag: noindex`,
+- checks the CSRF token of every POST request: a POST without the session's token gets a 403 page.
+
+```php title="htdocs/_fegg/site/controller/Cms/Event.php"
+<?php
+namespace Site\Controller\Cms;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Model;
+
+class Event extends Controller
+{
+    // The URL segment under /cms/ (/cms/event/...)
+    protected $_cmsSection = 'event';
+
+    public function __init()
+    {
+        parent::__init();
+        $this->_model = new Model(true, array('table' => 'cms_event', 'id' => 'event_id'));
+    }
+
+    public function delete($internalId)
+    {
+        // Data changes only on POST (a link or a URL typed in the browser gets a 405)
+        $this->requirePost();
+        $this->_model->delete($internalId);
+        $this->redirect($this->_lh->getBackPath('index/DELETED'));
+    }
+}
+```
+
+### Forms and the CSRF token
+
+- A form that prints `{{ hidden }}` sends the token already (the base class adds it to the hidden values).
+- Any other POST form adds it with `{{ include '/cms/parts/csrf' }}`.
+- Delete buttons are small POST forms, not links. `link-alert` asks for confirmation before sending:
+
+```html title="htdocs/_fegg/site/template/cms/event/lists.tpl"
+<form class="link-alert" action="{{ $site.prefix }}/delete/{{ $post[$page.this_id] }}" method="post" data-message="削除してもよろしいですか？" style="display: inline;">
+    {{ include '/cms/parts/csrf' }}
+    <button type="submit" class="c-button is-micro is-danger">削除</button>
+</form>
+```
+
+- JavaScript can read the token from `<meta name="csrf-token">` and send it as the `cms_csrf` POST field.
+- The token is the same for the whole session (several tabs work) and changes when you log in.
+
+### Login and logout
+
+The login screens are core controllers (`Fegg\Controller\Cms\Login`, `Logout`):
+
+- `/cms/login/auth` accepts POST only. Deleted users (`valid = 0`) cannot log in, and old password hashes are upgraded at login.
+- **Login throttling**: after 5 failed logins for one login ID from one address, or 20 from one address, logins from that address are refused for 15 minutes. The failures are stored in the core table `cms_login_attempt`: run `fegg-cli migration` after updating. Without the table the login still works, unthrottled, and a warning is logged.
+- **Logout is a POST** with the CSRF token, so another site cannot log a user out. `/cms/logout/` opened as a link shows a logout button; links with the class `js-cms-logout` post directly (`htdocs/cms/js/base.js`). If you copied the CMS frame templates to `site/template/cms/`, add that class to the logout link.
+- CMS users are created with [`fegg-cli user:create`](../first/cli.mdx#cms-users). `/cms/register/` needs a CMS login and [developer mode](../first/config.mdx#developer-mode).
+
+## Template of Controller class
+
+```php title="htdocs/_fegg/site/controller/Index.php"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Cms\Helper;
+use Fegg\Model;
+
+/**
+ * Index Class
+ * This file name should be Index.php
+ */
+class Index extends Controller
+{
+    /**
+     * Initialize
+     * Runs after the constructor, so Application methods such as $this->in() can be used.
+     * Optional. Always call parent::__init() first.
+     */
+    public function __init()
+    {
+        parent::__init();
+
+        $this->_lh = new Helper();
+        $this->_model = new Model(false, array(
+            'table'   => 'cms_news',
+            'id'      => 'news_id',
+            'visible' => 'visible',
+        ));
+    }
+
+    /**
+     * Shared process
+     * Private, so it cannot be called from a URL.
+     */
+    private function _common()
+    {
+    }
+
+    /**
+     * Default page
+     * Called when the URL has no method segment.
+     */
+    public function index()
+    {
+        $this->_common();
+
+        $this->page['news'] = $this->_model
+            ->order('post_date', 'desc')
+            ->limit(5)
+            ->all();
+
+        // Display the compiled template site/template/index.tpl
+        $this->displayPage('index');
+    }
+}
+```

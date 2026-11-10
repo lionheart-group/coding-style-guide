@@ -1,0 +1,39 @@
+---
+sidebar_position: 50
+---
+
+# Model::deleteWhere
+
+> Execute Logical Delete the records by specified condition
+
+## Description
+
+```php
+public int Model::deleteWhere( string $where, mixed $data )
+```
+
+Soft-deletes every row matching `$where` (sets `valid = 0`) and returns the number of updated rows. `$data` is one value, or an array with one value per placeholder.
+
+The condition is required: an empty `$where` throws `InvalidArgumentException` (Fegg 4 deleted every row). Pass `'1 = 1'` to really delete every row.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                          |
+| ------ | --------- | ------- | -------------------------------- |
+| $where | string    |         | Condition with `?` placeholders  |
+| $data  | mixed     |         | Values for the placeholders      |
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$deleted = $model->deleteWhere('category = ?', 1);
+
+// Every row
+$deleted = $model->deleteWhere('1 = 1', array());
+```

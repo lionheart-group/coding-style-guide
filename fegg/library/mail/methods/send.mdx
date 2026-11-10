@@ -1,0 +1,51 @@
+---
+sidebar_position: 9
+---
+
+# Mail::send
+
+> Send email
+
+## Description
+
+```php
+public boolean Mail::send( mixed $to, [ string $from_name = null, string $from_ad = null ] )
+```
+
+Sends the email with its attachments and returns `true` on success. A failed send (including an invalid address) throws `PHPMailer\PHPMailer\Exception`.
+
+When the debug flag is enabled with [Mail::setDebugFlag](./setdebugflag.mdx), the email is not sent: the whole message is written to the log file with [Mail::log](./log.mdx) instead.
+
+:::note
+
+`$from_ad` is required in practice: without a valid sender address the send throws.
+
+Each call sends only to the addresses given to it, so one `Mail` object can send the same message to several people in turn. To send one email to several recipients, pass them as an array.
+
+:::
+
+## Arguments
+
+| Name       | Data type | Default | Remarks                                         |
+| ---------- | --------- | ------- | ----------------------------------------------- |
+| $to        | mixed     |         | Recipient address, or an array of addresses     |
+| $from_name | string    | null    | Sender name                                     |
+| $from_ad   | string    | null    | Sender address (also used as the envelope sender) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Mail;
+use PHPMailer\PHPMailer\Exception;
+
+try {
+    $mail = new Mail('Mail subject', 'Mail body');
+    $mail->send('mail@example.com', 'John Doe', 'from@example.com');
+
+    // Several recipients
+    $mail = new Mail('Mail subject', 'Mail body');
+    $mail->send(array('foo@example.com', 'bar@example.com'), 'John Doe', 'from@example.com');
+} catch (Exception $e) {
+    // Failed to send: $e->getMessage()
+}
+```

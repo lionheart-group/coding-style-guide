@@ -1,0 +1,39 @@
+---
+sidebar_position: 43
+---
+
+# Model::updateRow
+
+> Update a row from an associative array
+
+## Description
+
+```php
+public int Model::updateRow( array $row, mixed $id )
+```
+
+Updates the row whose primary key is `$id` and returns the number of updated rows (0 when there is no such row). Only the given columns are written; `null` is stored as NULL. `modified` is set automatically, and [bind](./addbindparam.mdx) types are applied.
+
+Throws `InvalidArgumentException` like [insertRow](./insertrow.mdx).
+
+## Arguments
+
+| Name | Data type | Default | Remarks                       |
+| ---- | --------- | ------- | ----------------------------- |
+| $row | array     |         | Values (`column => value`)    |
+| $id  | mixed     |         | Target primary ID             |
+
+## Example
+
+```php title="Controller"
+$model = new Model(true, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// Only title (and modified) are written; the other columns keep their value
+// Update "cms_news" Set "title"= 'New title', modified = '2026-11-09 17:40:25' Where news_id = 1
+$updated = $model->updateRow(array('title' => 'New title'), 1);
+// -> 1
+```

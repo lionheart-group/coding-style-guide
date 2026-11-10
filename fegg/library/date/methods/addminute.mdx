@@ -1,0 +1,33 @@
+---
+sidebar_position: 2
+---
+
+# Date::addMinute
+
+> Add minutes to a date
+
+## Description
+
+```php
+public string Date::addMinute( string $dateTime, int $interval, [ string $format = 'Y-m-d H:i:s' ] )
+```
+
+Returns `$dateTime` plus `$interval` minutes, formatted with `date()` format `$format`. The seconds of `$dateTime` are dropped (set to `00`).
+
+## Arguments
+
+| Name      | Data type | Default       | Remarks                                  |
+| --------- | --------- | ------------- | ---------------------------------------- |
+| $dateTime | string    |               | Base date and time                       |
+| $interval | int       |               | Number of minutes (negative: before)     |
+| $format   | string    | 'Y-m-d H:i:s' | `date()` format of the result            |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Date;
+
+$date = new Date();
+
+echo $date->addMinute('2024-04-01 10:00:30', 90); // -> "2024-04-01 11:30:00"
+```

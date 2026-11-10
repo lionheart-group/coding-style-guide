@@ -1,0 +1,43 @@
+---
+sidebar_position: 8
+---
+
+# Model::setBindParam
+
+> Set Bind Parameter types
+
+## Description
+
+```php
+public self Model::setBindParam( array $bind )
+```
+
+Replaces every bind type set before. See [addBindParam](./addbindparam.mdx) for the types and what they do.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                         |
+| ----- | --------- | ------- | ------------------------------- |
+| $bind | array     |         | Bind types (`column => type`)   |
+
+## Example
+
+```php title="Controller"
+$model = new Model();
+$model->setBindParam(array(
+    'category'  => 'INTEGER',
+    'image_id'  => 'INTEGER',
+    'file_id'   => 'INTEGER',
+    'post_date' => 'DATETIME',
+));
+
+// Same as the following
+$model = new Model(false, array(
+    'bind' => array(
+        'category'  => 'INTEGER',
+        'image_id'  => 'INTEGER',
+        'file_id'   => 'INTEGER',
+        'post_date' => 'DATETIME',
+    ),
+));
+```

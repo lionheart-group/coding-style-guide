@@ -1,0 +1,39 @@
+---
+sidebar_position: 5
+---
+
+# Validation::date
+
+> Check date format
+
+## Description
+
+```php
+public boolean Validation::date( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+The separators `/` and `-` are removed, then the value must be digits only: `YYYY` (a year), `YYYYMM` (a year and a month from 01 to 12) or `YYYYMMDD` (an existing date, checked with `checkdate()`). So `2024`, `2024/04`, `2024-04-01` and `20240401` are valid; `2024/4/1` is not (8 digits are required for a day).
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                                                                                                      |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name  | string    |         | Field name (key of the error message)                                                                        |
+| $value | mixed     |         | Value to check                                                                                               |
+| $code  | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+$validation->date('success', '2024-04-01', array('@date', 'Date')); // -> true
+$validation->date('failed', '2024-02-30', array('@date', 'Date')); // -> false
+
+var_dump($validation->getErrorMessage());
+// -> array('failed' => '<strong>Date</strong> の日付では登録できません')
+```

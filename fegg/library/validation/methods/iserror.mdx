@@ -1,0 +1,29 @@
+---
+sidebar_position: 22
+---
+
+# Validation::isError
+
+> Check whether any error was set
+
+## Description
+
+```php
+public boolean Validation::isError()
+```
+
+Returns `true` once any check failed or any error was set on this object.
+
+## Example
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+$validation->required('name', 'John', array('@required', 'Name'));
+var_dump($validation->isError()); // -> false
+
+$validation->required('mail', '', array('@required', 'Email'));
+var_dump($validation->isError()); // -> true
+```

@@ -1,0 +1,37 @@
+---
+sidebar_position: 11
+---
+
+# File::writeFile
+
+> Write data to a file
+
+## Description
+
+```php
+public void File::writeFile( string $file, string $data, [ string $writeOption = 'a' ] )
+```
+
+Opens `$file` with the `fopen()` mode `$writeOption`, writes `$data` and sets the permission of the file to `0666`. The default mode `a` appends to the file; use `w` to overwrite it.
+
+## Arguments
+
+| Name         | Data type | Default | Remarks                                    |
+| ------------ | --------- | ------- | ------------------------------------------ |
+| $file        | string    |         | File to write                              |
+| $data        | string    |         | Data to write                              |
+| $writeOption | string    | 'a'     | `fopen()` mode (`a`: append, `w`: overwrite) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\File;
+
+$file = new File();
+
+// Append a line
+$file->writeFile('path/to/foo.log', date('Y-m-d H:i:s') . " done\n");
+
+// Overwrite the file
+$file->writeFile('path/to/foo.txt', 'New contents', 'w');
+```

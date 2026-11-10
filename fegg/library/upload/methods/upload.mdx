@@ -1,0 +1,52 @@
+---
+sidebar_position: 9
+---
+
+# Upload::upload
+
+> Validate uploaded file and move to upload directory
+
+## Description
+
+```php
+public boolean Upload::upload( string $name, string $up_name, [ string $label = 'ファイル', boolean $required = true ] )
+```
+
+Checks the file posted as `$_FILES[$name]` and moves it to `{upload directory}/{$up_name}.{extension}` with mode `0644`. The extension is the lower-cased extension of the original file name.
+
+The checks, in order:
+
+1. Upload errors and the size (`@empty`, `@size`, `@failed`).
+2. The extension must be in [setFileType](./setfiletype.mdx), and must not be a script extension (`@type`).
+3. The content must match the extension (`@content`): images (`jpg`, `jpeg`, `png`, `gif`, `webp`) must be readable by `getimagesize()`, and for known types (images, `pdf`, Office files, `zip`, `txt`, `csv`) the MIME type reported by `finfo` must fit the extension. A PHP file renamed to `.jpg`, or a text file named `.pdf`, is refused. Other extensions are checked by the extension only.
+
+Returns `true` on success. On failure it returns `false` and the error messages are available with [Upload::getErrorMessage](./geterrormessage.mdx). When `$required` is `false` and no file was selected, it returns `true` without saving anything.
+
+Set the upload directory with [Upload::setUploadDir](./setuploaddir.mdx) before calling this method.
+
+## Arguments
+
+| Name      | Data type | Default    | Remarks                                                   |
+| --------- | --------- | ---------- | --------------------------------------------------------- |
+| $name     | string    |            | `name` attribute of the `input[type="file"]`              |
+| $up_name  | string    |            | File name to save, without extension                      |
+| $label    | string    | 'ファイル' | Item label used in the error messages                     |
+| $required | boolean   | true       | `false`: no error when no file is selected                |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Upload;
+
+$upload = new Upload();
+$upload->setUploadDir($this->config['upload_dir']['path']);
+
+if ($upload->upload('image', uniqid('i_'), 'Image')) {
+    $data = $upload->getUploadedData('image');
+} else {
+    $errors = $upload->getErrorMessage('image');
+}
+
+// Optional file
+$upload->upload('attachment', uniqid('a_'), 'Attachment', false);
+```

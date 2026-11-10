@@ -1,0 +1,36 @@
+---
+sidebar_position: 24
+---
+
+# Pdo::setJoin
+
+> Set join table
+
+## Description
+
+```php
+public self Pdo::setJoin( string|array $table, [ string $type = null ] )
+```
+
+Adds a JOIN. Follow it with [setOn](./seton.mdx) for the condition. `$table` is a table name or `array('table', 'alias')`; the names are quoted as they are.
+
+## Arguments
+
+| Name   | Data type    | Default | Remarks                                                           |
+| ------ | ------------ | ------- | ----------------------------------------------------------------- |
+| $table | string/array |         | Table name, or `array('table', 'alias')`                          |
+| $type  | string       | null    | `'LEFT'`, `'INNER'` or `'RIGHT'` (anything else: plain `JOIN`)    |
+
+## Example
+
+```php title="Controller"
+$db = new \Fegg\Database\Pdo();
+
+// Select cms_news.title, f.org_name From "cms_news" LEFT JOIN "cms_file" AS "f" ON f.file_id = cms_news.file_id AND f.valid = ? Where "cms_news".valid = 1
+$rows = $db->setItem('cms_news.title, f.org_name')
+    ->setJoin(array('cms_file', 'f'), 'LEFT')
+    ->setOn('f.file_id = cms_news.file_id AND f.valid = ?', 1)
+    ->select('cms_news')
+    ->execute()
+    ->all();
+```

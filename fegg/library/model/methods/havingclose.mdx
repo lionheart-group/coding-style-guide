@@ -1,0 +1,36 @@
+---
+sidebar_position: 23
+---
+
+# Model::havingClose
+
+> Add close bracket on Having query
+
+## Description
+
+```php
+public self Model::havingClose()
+```
+
+Closes the bracket opened with [havingOpen](./havingopen.mdx).
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+$model->select('category, count(*) AS n, max(post_date) AS latest')->group('category');
+$model->having('n > ?', 5);
+$model->havingOpen();
+$model->having('category = ?', 1);
+$model->having('latest >= ?', '2026-01-01', 'OR');
+$model->havingClose();
+
+// ... Group By category
+// Having n > 5 AND (category = 1 OR latest >= '2026-01-01')
+$records = $model->all();
+```

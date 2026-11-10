@@ -1,0 +1,33 @@
+---
+sidebar_position: 29
+---
+
+# Pdo::reset
+
+> Forget the query being built
+
+## Description
+
+```php
+public self Pdo::reset()
+```
+
+Forgets everything set for the next query (table, items, conditions, joins, order, limit ...), turns the reset after [execute](./execute.mdx) back on (see [unsetInitQueryFlag](./unsetinitqueryflag.mdx)) and re-enables the automatic queries unless [disabledRegularUseQuery](./disabledregularusequery.mdx) was called. The result and the last query are kept.
+
+`execute()` already does this after a successful query. A query that throws keeps its state, so call `reset()` after catching a `QueryException` when you reuse the instance. `Fegg\Model` does this by itself.
+
+## Example
+
+```php title="Controller"
+use Fegg\Database\QueryException;
+
+$db = new \Fegg\Database\Pdo();
+
+try {
+    $db->setWhere('no_such_column = ?', 1)->select('cms_news')->execute();
+} catch (QueryException $e) {
+    $db->reset();
+}
+
+$rows = $db->select('cms_news')->execute()->all();
+```

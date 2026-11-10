@@ -1,0 +1,33 @@
+---
+sidebar_position: 9
+---
+
+# Date::makeupDateFormat
+
+> Normalize a date to `YYYY-MM-DD HH:MM:SS`
+
+## Description
+
+```php
+public string Date::makeupDateFormat( string $date )
+```
+
+Accepts a date with or without the separators `-`, `/` and `:`, and with the time or a part of the date omitted. The missing parts are filled with `01` (month, day) or `00` (time), and every part is zero-padded. A value that does not match is returned unchanged.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks         |
+| ----- | --------- | ------- | --------------- |
+| $date | string    |         | Date and time   |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Date;
+
+$date = new Date();
+
+echo $date->makeupDateFormat('2024');          // -> "2024-01-01 00:00:00"
+echo $date->makeupDateFormat('2024/4/1');      // -> "2024-04-01 00:00:00"
+echo $date->makeupDateFormat('2024/4/1 9:30'); // -> "2024-04-01 09:30:00"
+```

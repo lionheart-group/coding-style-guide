@@ -1,0 +1,48 @@
+---
+sidebar_position: 20
+---
+
+# Validation::setError
+
+> Set an error by error code
+
+## Description
+
+```php
+public mixed Validation::setError( string $name, [ mixed $code = '' ] )
+```
+
+Marks `$name` as an error with the message resolved from `$code` in the same way as the check methods. When `$name` already has an error, nothing changes and `false` is returned.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks                                                                                                      |
+| ----- | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name | string    |         | Field name (key of the error message)                                                                        |
+| $code | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+// Error code with parameters
+$validation->setError('name', array('@required', 'Name'));
+
+// Error message
+$validation->setError('zip1', '<strong>Zip code</strong> をご入力ください');
+
+var_dump($validation->getErrorMessage());
+// -> array(
+//     'name' => '<strong>Name</strong> をご入力ください',
+//     'zip1' => '<strong>Zip code</strong> をご入力ください',
+// )
+```
+
+:::note
+
+`_setError()` takes the same arguments but replaces an existing error of `$name`. The contact form of the skeleton uses it for checks combining several fields.
+
+:::

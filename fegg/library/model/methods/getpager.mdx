@@ -1,0 +1,54 @@
+---
+sidebar_position: 32
+---
+
+# Model::getPager
+
+> Get variables for making pager
+
+## Description
+
+```php
+public array Model::getPager()
+```
+
+Returns the page links of the latest [find](./find.mdx) on this model (an empty array before the first `find()`). Each `find()` replaces them.
+
+| Key                 | Remarks                                                |
+| ------------------- | ------------------------------------------------------ |
+| `current_page`      | Page returned by `find()`                              |
+| `page_min`          | First page number to show (up to 4 before the current) |
+| `page_max`          | Last page number to show (up to 4 after the current)   |
+| `previous_page`     | Previous page. Only set when there is one              |
+| `next_page`         | Next page. Only set when there is one                  |
+| `last_page`         | Number of pages                                        |
+| `number_of_records` | Number of matching rows                                |
+
+## Example
+
+```php title="Controller"
+$model = new Model(false, array(
+    'table'   => 'cms_news',
+    'id'      => 'news_id',
+    'visible' => 'visible',
+));
+
+// 23 rows, 5 per page, page 2
+$records = $model->listMax(5)->current(2)->find();
+$pager = $model->getPager();
+
+print_r($pager);
+```
+
+```php title="Output"
+Array
+(
+    [current_page] => 2
+    [page_min] => 1
+    [page_max] => 5
+    [previous_page] => 1
+    [next_page] => 3
+    [last_page] => 5
+    [number_of_records] => 23
+)
+```

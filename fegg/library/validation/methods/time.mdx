@@ -1,0 +1,39 @@
+---
+sidebar_position: 8
+---
+
+# Validation::time
+
+> Check time format
+
+## Description
+
+```php
+public boolean Validation::time( string $name, mixed $value, [ mixed $code = '' ] )
+```
+
+The separator `:` is removed, then the value must be 4 digits `HHMM` in 24-hour format (`00:00` to `23:59`). `9:30` is not valid: write `09:30`.
+
+An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks                                                                                                      |
+| ------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| $name  | string    |         | Field name (key of the error message)                                                                        |
+| $value | mixed     |         | Value to check                                                                                               |
+| $code  | mixed     | ''      | Error code, array of error code and parameters, or error message (see [Configuration](../configuration.mdx)) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Validation;
+
+$validation = new Validation();
+
+$validation->time('success', '09:30', array('@time', 'Time')); // -> true
+$validation->time('failed', '24:00', array('@time', 'Time')); // -> false
+
+var_dump($validation->getErrorMessage());
+// -> array('failed' => '<strong>Time</strong> の時間では登録できません')
+```
