@@ -20,6 +20,17 @@
 </ul>]]></content:encoded>
         </item>
         <item>
+            <title><![CDATA[v0.5.1]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.1</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.1</guid>
+            <pubDate>Tue, 10 Nov 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Fegg 5.x docs (/docs/fegg/next/): every CMS action that changes data must call requirePost() first; this is new in Fegg 5, so CMS controllers copied from Fegg 4 need it added (see the migration guide)]]></description>
+            <content:encoded><![CDATA[<ul>
+<li class="">Fegg 5.x docs (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next">/docs/fegg/next/</a>): every CMS action that changes data must call <code>requirePost()</code> first; this is new in Fegg 5, so CMS controllers copied from Fegg 4 need it added (see the migration guide)</li>
+<li class="">Fegg 5.x docs: which controller methods can be called from a URL, Basic authentication checked before the controller runs, CMS sessions of deleted users, and the first CMS user created only while <code>cms_user</code> is empty</li>
+</ul>]]></content:encoded>
+        </item>
+        <item>
             <title><![CDATA[v0.4.4]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/06/08/v0.4.4</link>
             <guid>https://lionheart-group.github.io/coding-style-guide/updated/2026/06/08/v0.4.4</guid>
@@ -241,16 +252,6 @@
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/aspect-ratio">Added coding tips for Aspect Ratio property</a></li>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/has">Added coding tips for <!-- -->:has<!-- --> selector</a></li>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/accordion">Added coding tips for Accordion</a></li>
-</ul>]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[v0.0.5]]></title>
-            <link>https://lionheart-group.github.io/coding-style-guide/updated/2022/08/04/v0.0.5</link>
-            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2022/08/04/v0.0.5</guid>
-            <pubDate>Thu, 04 Aug 2022 00:00:00 GMT</pubDate>
-            <description><![CDATA[- Prepared JavaScript library list]]></description>
-            <content:encoded><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/javascript">Prepared JavaScript library list</a></li>
 </ul>]]></content:encoded>
         </item>
     </channel>

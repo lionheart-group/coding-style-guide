@@ -19,6 +19,17 @@
 </ul>]]></content>
     </entry>
     <entry>
+        <title type="html"><![CDATA[v0.5.1]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/11/10/v0.5.1</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/11/10/v0.5.1"/>
+        <updated>2026-11-10T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- Fegg 5.x のドキュメント（/docs/fegg/next/）：データを変える CMS のアクションは、最初に必ず requirePost() を呼ぶことにしました。Fegg 5 で加わった決まりなので、Fegg 4 からコピーした CMS コントローラには追加が必要です（移行ガイドを参照）]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li class="">Fegg 5.x のドキュメント（<a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/fegg/next">/docs/fegg/next/</a>）：データを変える CMS のアクションは、最初に必ず <code>requirePost()</code> を呼ぶことにしました。Fegg 5 で加わった決まりなので、Fegg 4 からコピーした CMS コントローラには追加が必要です（移行ガイドを参照）</li>
+<li class="">Fegg 5.x のドキュメント：URL から呼べるコントローラのメソッドの条件、Basic 認証をコントローラの処理より前に確かめること、削除した CMS ユーザーのセッション、最初の CMS ユーザーは <code>cms_user</code> が空のときだけ作られることを書き加えました</li>
+</ul>]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[v0.4.4]]></title>
         <id>https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/06/08/v0.4.4</id>
         <link href="https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/06/08/v0.4.4"/>
@@ -250,16 +261,6 @@
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/aspect-ratio">コーディングTIPSのアスペクト比のプロパティについての説明を追加しました</a></li>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/has">コーディングTIPSの<!-- -->:has<!-- -->セレクタの使い方についての説明を追加しました</a></li>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/accordion">コーディングTIPSのアコーディオンについての説明を追加しました</a></li>
-</ul>]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[v0.0.5]]></title>
-        <id>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/08/04/v0.0.5</id>
-        <link href="https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/08/04/v0.0.5"/>
-        <updated>2022-08-04T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[- JavaScriptのライブラリリストを作成しました]]></summary>
-        <content type="html"><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript">JavaScriptのライブラリリストを作成しました</a></li>
 </ul>]]></content>
     </entry>
 </feed>
