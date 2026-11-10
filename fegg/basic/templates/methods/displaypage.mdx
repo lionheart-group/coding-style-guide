@@ -16,7 +16,7 @@ Renders the template with [Application::fetchPage](./fetchpage.mdx) (so `$page`,
 
 The security headers (`X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `Referrer-Policy` ...) are sent for every response before the controller runs, not by `displayPage()` (see [Security](../../security.mdx#security-headers)). To let other sites show one page in a frame, call `$this->allowFraming()` before `displayPage()`.
 
-This is the method to use for every page. When the site-wide Basic authentication is enabled (`basic_auth_scope = 1`), it is checked here.
+This is the method to use for every page. The site-wide Basic authentication (`basic_auth_scope = 1`) is checked earlier, before the controller runs.
 
 ## Arguments
 
