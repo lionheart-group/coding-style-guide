@@ -70,6 +70,6 @@ Controller name : Foo
 
 :::note
 
-The site-wide Basic authentication (`basic_auth_scope = 1`) is checked by `displayPage()`, not by `fetchPage()` called on its own.
+The site-wide Basic authentication (`basic_auth_scope = 1`) is checked before the controller runs, so it also protects actions that only call `fetchPage()`.
 
 :::
