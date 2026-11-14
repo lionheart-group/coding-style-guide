@@ -12,20 +12,20 @@ sidebar_position: 1
 public void Trim::setImage( string $org_path, string $cnv_path )
 ```
 
-Loads the source image. The output format is decided by the extension of `$cnv_path`.
+Loads the source image. The output format is decided by the extension of `$cnv_path`: `jpg` (or `jpeg`), `png` or `gif`. A JPEG photo is turned the way its Exif orientation says.
 
-:::caution
+Throws a `\RuntimeException` when:
 
-This method stops the script with `exit` when the source file does not exist (`Not File`), when the output extension is not `jpg`, `gif` or `png` (`Error Extension`; `.jpeg` is not accepted), or when the source is not a JPEG, GIF or PNG image (`NotImage`). Check the files beforehand.
-
-:::
+- `$org_path` is not a file;
+- the extension of `$cnv_path` is not `jpg`, `jpeg`, `png` or `gif`;
+- `$org_path` is not a JPEG, PNG or GIF image, or cannot be read.
 
 ## Arguments
 
 | Name      | Data type | Default | Remarks                                                 |
 | --------- | --------- | ------- | ------------------------------------------------------- |
 | $org_path | string    |         | Source image path                                       |
-| $cnv_path | string    |         | Output image path (`.jpg`, `.gif` or `.png`)            |
+| $cnv_path | string    |         | Output image path (`.jpg`, `.jpeg`, `.png` or `.gif`)   |
 
 ## Example
 
@@ -33,5 +33,9 @@ This method stops the script with `exit` when the source file does not exist (`N
 use Fegg\Tool\Trim;
 
 $trim = new Trim();
-$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+try {
+    $trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+} catch (\RuntimeException $e) {
+    // missing file, not an image, or another output type
+}
 ```

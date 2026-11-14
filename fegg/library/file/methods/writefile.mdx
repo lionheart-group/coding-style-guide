@@ -1,5 +1,5 @@
 ---
-sidebar_position: 11
+sidebar_position: 12
 ---
 
 # File::writeFile
@@ -9,10 +9,12 @@ sidebar_position: 11
 ## Description
 
 ```php
-public void File::writeFile( string $file, string $data, [ string $writeOption = 'a' ] )
+public bool File::writeFile( string $file, string $data, [ string $writeOption = 'a' ] )
 ```
 
-Opens `$file` with the `fopen()` mode `$writeOption`, writes `$data` and sets the permission of the file to `0666`. The default mode `a` appends to the file; use `w` to overwrite it.
+Opens `$file` with the `fopen()` mode `$writeOption`, writes `$data` and sets the permission of the file to `0644` (readable by everyone). The default mode `a` appends to the file; use `w` to overwrite it.
+
+Returns `false` when the file cannot be opened or written.
 
 ## Arguments
 
@@ -33,5 +35,7 @@ $file = new File();
 $file->writeFile('path/to/foo.log', date('Y-m-d H:i:s') . " done\n");
 
 // Overwrite the file
-$file->writeFile('path/to/foo.txt', 'New contents', 'w');
+if (!$file->writeFile('path/to/foo.txt', 'New contents', 'w')) {
+    // could not be written
+}
 ```

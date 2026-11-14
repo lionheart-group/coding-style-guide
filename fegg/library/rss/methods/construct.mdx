@@ -10,21 +10,42 @@ title: RSS::__construct
 ## Description
 
 ```php
-public RSS::__construct( string $url )
+public RSS::__construct( string $url, [ array $options = array() ] )
 ```
 
-Loads and parses the feed. The entries can then be read with [RSS::fetch](./fetch.mdx) or [RSS::fetchAll](./fetchall.mdx).
+Loads and parses an RSS 1.0, RSS 2.0 or Atom feed. The entries can then be read with [RSS::fetch](./fetch.mdx) or [RSS::fetchAll](./fetchall.mdx).
+
+An `http://` or `https://` URL is fetched with `Fegg\Http\Client`; any other value is read as a local file.
+
+Throws a `\RuntimeException` when:
+
+- the URL cannot be fetched (connection error, timeout, or an HTTP status other than 200);
+- the file does not exist or cannot be read;
+- the document is not XML, or is not an RSS or Atom feed.
 
 ## Arguments
 
-| Name | Data type | Default | Remarks      |
-| ---- | --------- | ------- | ------------ |
-| $url | string    |         | RSS Feed URL |
+| Name     | Data type | Default | Remarks                          |
+| -------- | --------- | ------- | -------------------------------- |
+| $url     | string    |         | Feed URL, or the path of a file  |
+| $options | array     | array() | Options (see below)              |
+
+| Key     | Data type | Default | Remarks                                                         |
+| ------- | --------- | ------- | --------------------------------------------------------------- |
+| skip_pr | boolean   | false   | `true`: leave out the posts whose title contains `PR:`         |
+| timeout | int       | 10      | Seconds for the whole request (the connection: 3 seconds)       |
 
 ## Example
 
 ```php title="Controller"
 use Fegg\Tool\RSS;
 
-$rss = new RSS('https://example.com/feed');
+try {
+    $rss = new RSS('https://example.com/feed', array('skip_pr' => true, 'timeout' => 5));
+} catch (\RuntimeException $e) {
+    // cannot be fetched, or not a feed: $e->getMessage()
+}
+
+// A local file
+$rss = new RSS(FEGG_SITE_DIR . '/data/feed.xml');
 ```

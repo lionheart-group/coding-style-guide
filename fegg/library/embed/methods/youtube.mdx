@@ -1,0 +1,41 @@
+---
+sidebar_position: 6
+---
+
+# Embed::youtube
+
+> Get the HTML of a YouTube video as the editor writes it
+
+## Description
+
+```php
+public static string Embed::youtube( string $url, [ array $options = array() ] )
+```
+
+Returns the block the editor writes for a video, or `''` when `$url` is not a [YouTube URL](../index.mdx#youtube-urls). The template modifier `feggYoutube` calls this method.
+
+## Arguments
+
+| Name     | Data type | Default | Remarks                                                       |
+| -------- | --------- | ------- | ------------------------------------------------------------- |
+| $url     | string    |         | URL of a YouTube video page                                   |
+| $options | array     | array() | `ratio` (`'16-9'`, `'9-16'`), `align`, `width` (see [Options](../index.mdx#options)) |
+
+A short (`/shorts/`) is `'9-16'` unless `ratio` is given.
+
+## Example
+
+```php title="Controller"
+use Fegg\Embed;
+
+echo Embed::youtube('https://youtu.be/dQw4w9WgXcQ');
+// <div data-youtube-video class="fegg-video"><iframe src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ" width="640" height="360" allowfullscreen></iframe></div>
+
+echo Embed::youtube('https://www.youtube.com/shorts/dQw4w9WgXcQ', array('align' => 'center', 'width' => 50));
+// <div data-youtube-video class="fegg-video is-9-16 aligncenter" style="width: 50%"><iframe src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ" width="640" height="360" allowfullscreen></iframe></div>
+```
+
+```html title="Template"
+{{ $page.data.youtube_url|feggYoutube|noescape }}
+{{ $page.data.youtube_url|feggYoutube:'9-16':'center':50|noescape }}
+```

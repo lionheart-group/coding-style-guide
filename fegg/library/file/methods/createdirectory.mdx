@@ -9,23 +9,17 @@ sidebar_position: 4
 ## Description
 
 ```php
-public void File::createDirectory( string $directory, [ string $permission = '0777' ] )
+public bool File::createDirectory( string $directory, [ string|int $permission = '0755' ] )
 ```
 
-Creates `$directory` when it does not exist yet. Parent directories are not created, so the parent must exist.
-
-:::note
-
-The created directory always gets the permission `0777`. The `$permission` argument is currently ignored.
-
-:::
+Creates `$directory` and its missing parent directories with the permission `$permission`. Returns `true` when the directory exists afterwards (also when it existed already), `false` when it could not be created.
 
 ## Arguments
 
-| Name        | Data type | Default | Remarks                                  |
-| ----------- | --------- | ------- | ---------------------------------------- |
-| $directory  | string    |         | Directory to create                      |
-| $permission | string    | '0777'  | Permission (currently ignored, see note) |
+| Name        | Data type  | Default | Remarks                          |
+| ----------- | ---------- | ------- | -------------------------------- |
+| $directory  | string     |         | Directory to create              |
+| $permission | string/int | '0755'  | Permission, `'0755'` or `0755`   |
 
 ## Example
 

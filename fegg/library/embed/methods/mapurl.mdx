@@ -1,0 +1,33 @@
+---
+sidebar_position: 3
+---
+
+# Embed::mapUrl
+
+> Get the embed URL of a Google map
+
+## Description
+
+```php
+public static ?string Embed::mapUrl( string $pasted )
+```
+
+`$pasted` is what Google Maps gives in "Share" > "Embed a map": the whole `<iframe>`, or only its URL. Returns the URL of the map (`https://www.google.com/maps/embed?pb=...`), or `null` when it is not a Google Maps embed (see [Embed::isMapEmbed](./ismapembed.mdx)). `&amp;` in the URL becomes `&`.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                                  |
+| ------- | --------- | ------- | ---------------------------------------- |
+| $pasted | string    |         | The `<iframe>` of Google Maps, or its URL |
+
+## Example
+
+```php title="Controller"
+use Fegg\Embed;
+
+echo Embed::mapUrl('<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>');
+// -> "https://www.google.com/maps/embed?pb=!1m18!1m12"
+
+var_dump(Embed::mapUrl('https://maps.google.com/?q=Tokyo'));
+// -> NULL
+```

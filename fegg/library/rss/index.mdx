@@ -8,11 +8,11 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 > Providing some functions for analyzing RSS document
 
-`Fegg\Tool\RSS` loads an RSS 1.0 (RDF) or RSS 2.0 feed and returns its entries as arrays.
+`Fegg\Tool\RSS` loads an RSS 1.0 (RDF), RSS 2.0 or Atom feed and returns its posts as arrays. A feed URL is fetched with `Fegg\Http\Client` (10 second timeout by default); a local file can be read as well.
 
 ## How to use
 
-Import `Fegg\Tool\RSS` and create it with `new`, passing the feed URL.
+Import `Fegg\Tool\RSS` and create it with `new`, passing the feed URL. The constructor throws a `\RuntimeException` when the feed cannot be fetched or read, or is not RSS or Atom, so catch it when the feed may be unavailable.
 
 ```php title="Controller"
 <?php
@@ -26,8 +26,12 @@ class Index extends Controller
 {
     public function index()
     {
-        $rss = new RSS('https://example.com/feed');
-        $this->page['posts'] = $rss->fetchAll(10);
+        try {
+            $rss = new RSS('https://example.com/feed');
+            $this->page['posts'] = $rss->fetchAll(10);
+        } catch (\RuntimeException $e) {
+            $this->page['posts'] = array();
+        }
 
         $this->displayPage('index');
     }
@@ -36,25 +40,23 @@ class Index extends Controller
 
 ## Entry data
 
-Each entry returned by [RSS::fetch](./methods/fetch.mdx) and [RSS::fetchAll](./methods/fetchall.mdx) is an array with these keys.
+Each entry returned by [RSS::fetch](./methods/fetch.mdx) and [RSS::fetchAll](./methods/fetchall.mdx) is an array with these keys. A field the feed does not have is `''` (an empty array for `category` and `tag`).
 
-| Key         | Data type | Remarks                                                         |
-| ----------- | --------- | --------------------------------------------------------------- |
-| title       | string    | Title                                                           |
-| pubDate     | string    | Date as written in the feed (`pubDate`, or `dc:date` for RSS 1.0) |
-| datetime    | DateTime  | `pubDate` as a `DateTime` object                                |
-| link        | string    | Link URL                                                        |
-| description | string    | Description (HTML entities decoded)                             |
-| content     | string    | `content:encoded` (HTML entities decoded)                       |
-| author      | string    | `dc:creator`                                                    |
-| category    | array     | Category names (`category`, or `dc:subject` for RSS 1.0)        |
-| tag         | array     | Always an empty array (not implemented)                         |
+| Key         | Data type     | Remarks                                                         |
+| ----------- | ------------- | --------------------------------------------------------------- |
+| title       | string        | Title                                                           |
+| pubDate     | string        | Date as written in the feed (RSS 2.0: `pubDate`, or `dc:date`; RSS 1.0: `dc:date`; Atom: `published`, or `updated`) |
+| datetime    | DateTime/null | `pubDate` as a `DateTime` object, `null` when there is no date or it cannot be read |
+| link        | string        | Link URL (Atom: the `href` of `<link rel="alternate">`)         |
+| description | string        | Description (RSS: HTML entities decoded; Atom: `summary`)       |
+| content     | string        | `content:encoded` (HTML entities decoded); Atom: `content`      |
+| author      | string        | `dc:creator` (RSS 2.0: or `author`; Atom: `author` > `name`)    |
+| category    | array         | Category names (RSS 2.0: `category`; RSS 1.0: `dc:subject`; Atom: the `term` of `category`) |
+| tag         | array         | Always an empty array (not implemented)                         |
 
 :::note
 
-- Entries whose title contains `PR:` (advertisements) are skipped.
-- Atom feeds are not supported: no entry is returned.
-- The feed is loaded with `simplexml_load_file()` in the constructor. A feed that cannot be loaded is not handled, so check the URL beforehand when it may be unavailable.
+Posts whose title contains `PR:` (advertisements of some blog services) are kept. Pass `array('skip_pr' => true)` to the constructor to leave them out, as Fegg 4 always did.
 
 :::
 

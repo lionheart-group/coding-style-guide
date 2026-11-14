@@ -9,17 +9,19 @@ sidebar_position: 11
 ## Description
 
 ```php
-public self Mail::setDebugFlag( boolean $is_debug, string $log_name )
+public self Mail::setDebugFlag( boolean $is_debug, [ string $log_name = null ] )
 ```
 
-When `$is_debug` is `true`, [Mail::send](./send.mdx) does not send the email but writes the whole message to `$log_name`.
+When `$is_debug` is `true`, [Mail::send](./send.mdx) does not send the email but writes the whole message to the log file: `$log_name`, or `mail.log` in the log directory when it is not given (`htdocs/_fegg/site/data/log/mail.log`, or the directory of `FEGG_LOG_DIR`). [Mail::logFile](./logfile.mdx) returns the file used.
+
+The log is no longer written to `/tmp` (Fegg 4 used `/tmp/sendmaillog`, readable by the other users of the server).
 
 ## Arguments
 
 | Name      | Data type | Default | Remarks                    |
 | --------- | --------- | ------- | -------------------------- |
 | $is_debug | boolean   |         | `true`: write a log instead of sending |
-| $log_name | string    |         | Log file path              |
+| $log_name | string    | null    | Log file path (none: `mail.log` in the log directory) |
 
 ## Example
 
@@ -27,7 +29,8 @@ When `$is_debug` is `true`, [Mail::send](./send.mdx) does not send the email but
 use Fegg\Tool\Mail;
 
 $mail = new Mail('Mail subject', 'Mail body');
-$mail->setDebugFlag(true, FEGG_SITE_DIR . '/data/log/contact_admin.log');
+$mail->setDebugFlag(true);                                                // site/data/log/mail.log
+$mail->setDebugFlag(true, FEGG_SITE_DIR . '/data/log/contact_admin.log'); // another file
 
 // Written to the log file instead of being sent
 $mail->send('mail@example.com', 'John Doe', 'from@example.com');

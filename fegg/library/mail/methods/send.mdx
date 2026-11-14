@@ -14,11 +14,11 @@ public boolean Mail::send( mixed $to, [ string $from_name = null, string $from_a
 
 Sends the email with its attachments and returns `true` on success. A failed send (including an invalid address) throws `PHPMailer\PHPMailer\Exception`.
 
+When `$from_ad` is not given (`null` or `''`), the sender is `$settings['mail']['from']` and its name `$settings['mail']['from_name']` (`site/config/settings.php`, see [Sender](../index.mdx#sender)). When there is no sender address either way, it throws an `\InvalidArgumentException`.
+
 When the debug flag is enabled with [Mail::setDebugFlag](./setdebugflag.mdx), the email is not sent: the whole message is written to the log file with [Mail::log](./log.mdx) instead.
 
 :::note
-
-`$from_ad` is required in practice: without a valid sender address the send throws.
 
 Each call sends only to the addresses given to it, so one `Mail` object can send the same message to several people in turn. To send one email to several recipients, pass them as an array.
 
@@ -29,8 +29,8 @@ Each call sends only to the addresses given to it, so one `Mail` object can send
 | Name       | Data type | Default | Remarks                                         |
 | ---------- | --------- | ------- | ----------------------------------------------- |
 | $to        | mixed     |         | Recipient address, or an array of addresses     |
-| $from_name | string    | null    | Sender name                                     |
-| $from_ad   | string    | null    | Sender address (also used as the envelope sender) |
+| $from_name | string    | null    | Sender name (none: `$settings['mail']['from_name']` when `$from_ad` is not given either) |
+| $from_ad   | string    | null    | Sender address, also used as the envelope sender (none: `$settings['mail']['from']`) |
 
 ## Example
 
@@ -45,6 +45,10 @@ try {
     // Several recipients
     $mail = new Mail('Mail subject', 'Mail body');
     $mail->send(array('foo@example.com', 'bar@example.com'), 'John Doe', 'from@example.com');
+
+    // The sender of $settings['mail']
+    $mail = new Mail('Mail subject', 'Mail body');
+    $mail->send('mail@example.com');
 } catch (Exception $e) {
     // Failed to send: $e->getMessage()
 }

@@ -48,9 +48,23 @@ Error messages are defined in `file_error_message.php`, see [Configuration](./co
 ## What is checked
 
 - The extension must be allowed by [setFileType](./methods/setfiletype.mdx). Script extensions (`php`, `phtml`, `phar`, `cgi` ...) are refused even when listed.
-- The content must match the extension: `getimagesize()` for images, the `finfo` MIME type for known types. A mismatch is the error `@content`.
+- The content must match the extension: `getimagesize()` for images, the `finfo` MIME type for the extensions of `Upload::MIME_TYPES`. A mismatch is the error `@content`.
 - Files are saved under the name you give (`uniqid('f_')`, ...), never under the visitor's file name. Keep the original name (`org_name`) in the database only.
 - Directories are created with mode `0755` and files saved with `0644`.
+
+## MIME types
+
+`Upload::MIME_TYPES` is the one table of types by extension (`jpg`, `png`, `gif`, `webp`, `pdf`, the Office formats such as `docx`, `xlsm`, `pptx`, and `zip`, `txt`, `csv`). For each extension:
+
+- every type listed is accepted from `finfo` when the file is uploaded;
+- the first type is the one the stored file is sent with ([Upload::mimeType](./methods/mimetype.mdx)).
+
+```php
+Upload::MIME_TYPES['docx'];
+// array('application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/octet-stream')
+```
+
+An extension that is not in the table is checked by its extension only, and sent with the type `finfo` reads from it.
 
 ## Protecting the upload directory
 

@@ -1,0 +1,107 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Embedding YouTube videos and Google Maps the way the editor does
+
+`Fegg\Embed` reads a YouTube URL or a Google Maps embed code and writes the same HTML as the CMS editor (FeggEditor). It replaces `Fegg\Tool\OEmbed` of Fegg 4.
+
+Nothing is asked of YouTube or Google: the URL is read by rules, so there is no request, no timeout and no exception. A value that is not a YouTube URL or a map gives `null` (URL methods) or `''` (HTML methods). The player is always `https://www.youtube-nocookie.com/embed/<id>`.
+
+The editor and this class read URLs by the same rules (`assets/editor/lib/url.ts` and `htdocs/_fegg/core/src/Embed.php`, both tested with `tests/fixtures/embed/urls.json`), and `Fegg\Cms\HtmlSanitizer` keeps only the iframes whose URL [Embed::isYoutubeEmbed](./methods/isyoutubeembed.mdx) or [Embed::isMapEmbed](./methods/ismapembed.mdx) accepts.
+
+## How to use
+
+### In a template
+
+For a CMS field of its own (a "YouTube URL" or "map" input), print the block with the template modifiers `feggYoutube` and `feggMap`. They write nothing for another value. The result is HTML, so add `noescape` (the URL is checked and escaped by the modifier).
+
+```html title="Template"
+{{ $page.data.youtube_url|feggYoutube|noescape }}
+{{ $page.data.youtube_url|feggYoutube:'9-16':'center':50|noescape }}
+{{ $page.data.map|feggMap|noescape }}
+{{ $page.data.map|feggMap:'16-9':'center':80|noescape }}
+```
+
+The arguments are the ratio, the alignment and the width in % of the text (see [Options](#options)). Leave one empty (`''`) to keep its default.
+
+```html title="Output"
+<div data-youtube-video class="fegg-video"><iframe src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ" width="640" height="360" allowfullscreen></iframe></div>
+```
+
+For `feggMap`, the CMS field holds the `<iframe>` that Google Maps gives ("Share" > "Embed a map"), or only its URL.
+
+The styles of these blocks are those of the editor's text, under `.c-entry-block` (`htdocs/data/scss/object/component/_wysiwyg.scss`). Put the block inside `<div class="c-entry-block">`, or style `.fegg-video` / `.fegg-map` in the project.
+
+### In PHP
+
+```php title="Controller"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Embed;
+
+class Movie extends Controller
+{
+    public function index()
+    {
+        // https://www.youtube-nocookie.com/embed/xxxxxxxxxxx, or null
+        $this->page['youtube'] = Embed::youtubeUrl('https://www.youtube.com/watch?v=xxxxxxxxxxx');
+
+        $this->displayPage('movie');
+    }
+}
+```
+
+```html title="Template"
+{{ if $page.youtube }}
+<iframe src="{{ $page.youtube|feggUrl }}" width="640" height="360" allowfullscreen class="c-youtube"></iframe>
+{{ end }}
+```
+
+## YouTube URLs
+
+These URLs are read (also on `m.youtube.com` and `youtube-nocookie.com`, `http` or `https`):
+
+| URL | Embed URL |
+| --- | --- |
+| `https://www.youtube.com/watch?v=<id>` | `.../embed/<id>` |
+| `https://youtu.be/<id>` | `.../embed/<id>` |
+| `https://www.youtube.com/shorts/<id>` | `.../embed/<id>` (shown 9:16) |
+| `https://www.youtube.com/live/<id>`, `/embed/<id>`, `/v/<id>` | `.../embed/<id>` |
+| `https://www.youtube.com/playlist?list=<list>` | `.../embed/videoseries?list=<list>` |
+
+A start time (`t=` or `start=`, written `90`, `90s`, `1m30s` or `1h2m3s`) becomes `?start=<seconds>`. Other parameters are dropped. A video ID must be 11 characters.
+
+## Options
+
+[Embed::youtube](./methods/youtube.mdx), [Embed::map](./methods/map.mdx) and the modifiers take these options.
+
+| Option | Values | Default |
+| --- | --- | --- |
+| ratio | Video: `'16-9'`, `'9-16'`. Map: `'4-3'`, `'16-9'`, `'1-1'` | Video: `'16-9'` (a short: `'9-16'`). Map: `'4-3'` |
+| align | `'center'`, `'right'` | Left |
+| width | % of the text, 10 to 100 | 100 |
+
+The ratio becomes the class `is-<ratio>` (none for the default one), the alignment `aligncenter` / `alignright`, the width `style="width: N%"`. Other values are ignored.
+
+## Fegg 4 OEmbed
+
+`Fegg\Tool\OEmbed` and `core/config/oembed_schemes.php` are removed.
+
+| Fegg 4 | Fegg 5 |
+| --- | --- |
+| `(new OEmbed($url))->media` (a `youtube.com` URL, asked of YouTube) | `Embed::youtubeUrl($url)` (a `youtube-nocookie.com` URL, no request) |
+| An `<iframe>` written in the template | The `feggYoutube` modifier, which writes the whole block |
+
+For other oEmbed services, ask them with `Fegg\Http\Client` in the project (see [Requests to other services](../../basic/logging.mdx#requests-to-other-services)).
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

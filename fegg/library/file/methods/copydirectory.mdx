@@ -9,10 +9,12 @@ sidebar_position: 2
 ## Description
 
 ```php
-public void File::copyDirectory( string $fromDirectory, string $toDirectory, [ boolean $recursiveCallFlag = false ] )
+public bool File::copyDirectory( string $fromDirectory, string $toDirectory, [ boolean $recursiveCallFlag = false ] )
 ```
 
-Copies the files under `$fromDirectory` to `$toDirectory`. The destination directory must already exist. When `$recursiveCallFlag` is `true`, subdirectories are created in the destination and copied as well.
+Copies the files under `$fromDirectory` to `$toDirectory`. The destination directory must already exist. When `$recursiveCallFlag` is `true`, subdirectories are created in the destination and copied as well. Symbolic links are skipped.
+
+Returns `false` when one of the directories does not exist or something could not be copied.
 
 ## Arguments
 

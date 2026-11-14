@@ -1,0 +1,32 @@
+---
+sidebar_position: 4
+---
+
+# Embed::isYoutubeEmbed
+
+> Check whether a URL is a YouTube player URL
+
+## Description
+
+```php
+public static bool Embed::isYoutubeEmbed( string $src )
+```
+
+Returns `true` when `$src` is a YouTube player URL that may be saved as the `src` of an `iframe`: `https://www.youtube.com/embed/...` or `https://www.youtube-nocookie.com/embed/...`, with only simple parameters. `Fegg\Cms\HtmlSanitizer` keeps the iframes of the editor's text whose `src` this method (or [Embed::isMapEmbed](./ismapembed.mdx)) accepts.
+
+To read the URL of a video page, use [Embed::youtubeUrl](./youtubeurl.mdx).
+
+## Arguments
+
+| Name | Data type | Default | Remarks          |
+| ---- | --------- | ------- | ---------------- |
+| $src | string    |         | URL to check     |
+
+## Example
+
+```php title="Controller"
+use Fegg\Embed;
+
+Embed::isYoutubeEmbed('https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?start=90'); // -> true
+Embed::isYoutubeEmbed('https://www.youtube.com/watch?v=dQw4w9WgXcQ');                // -> false
+```

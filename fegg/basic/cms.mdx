@@ -158,6 +158,19 @@ Never print a rich text field with `noescape` unless it was saved through `HtmlS
 
 Plus paragraphs, headings (h2–h4, `text-align`), lists, quotes, lines, bold, italic, underline, strike, mark and links. The class names are written by the editor, so they are not FLOCSS names.
 
+### YouTube and maps outside the text
+
+A CMS field of its own that holds a YouTube URL or a Google map (the `<iframe>` of "Share" > "Embed a map", or its URL) is printed with the same block as the editor:
+
+```html title="site/template/news/detail.tpl"
+<div class="c-entry-block">
+    {{ $page.data.youtube_url|feggYoutube|noescape }}
+    {{ $page.data.map|feggMap|noescape }}
+</div>
+```
+
+The modifiers write nothing for another value, and nothing is asked of YouTube or Google. See [Embed](../library/embed/index.mdx) for the arguments and `Fegg\Embed` in PHP.
+
 ### Its look on the public site
 
 The public styles are in `htdocs/data/scss/object/component/_wysiwyg.scss` (`.c-entry-block`). Change them there for a project.

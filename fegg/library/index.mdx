@@ -46,7 +46,7 @@ Fegg 4 code such as `$this->getClass('Tool/Mail')` still works in Fegg 5 through
 | `$this->getClass('ReCAPTCHA', $secret)` | `new \Fegg\Captcha\ReCAPTCHA($secret)` |
 | `$this->getClass('DB_pdo')` | `new \Fegg\Database\Pdo()` |
 
-The same applies to the other `Tool/...` classes (`Tool/Date`, `Tool/File`, `Tool/OEmbed`, `Tool/RSS`, `Tool/Trim`), which became `Fegg\Tool\Date` and so on.
+The same applies to the other `Tool/...` classes (`Tool/File`, `Tool/RSS`, `Tool/Trim`), which became `Fegg\Tool\File` and so on. `Tool/Date` and `Tool/OEmbed` are removed: use PHP's `DateTimeImmutable` (see [Dates and time zone](../basic/controller.mdx#dates-and-time-zone)) and [Embed](./embed/index.mdx).
 
 :::
 
@@ -62,8 +62,7 @@ The same applies to the other `Tool/...` classes (`Tool/Date`, `Tool/File`, `Too
 | [Mail](./mail/index.mdx) | `Fegg\Tool\Mail` | Providing some functions for sending email (PHPMailer wrapper) |
 | [RSS](./rss/index.mdx) | `Fegg\Tool\RSS` | Providing some functions for analyzing RSS document |
 | [Trim](./trim/index.mdx) | `Fegg\Tool\Trim` | Providing some functions for processing image (especially image crop) |
-| [Date](./date/index.mdx) | `Fegg\Tool\Date` | Providing some functions for calculating dates |
-| [OEmbed](./oembed/index.mdx) | `Fegg\Tool\OEmbed` | Getting the embed URL of a YouTube video etc. through oEmbed |
+| [Embed](./embed/index.mdx) | `Fegg\Embed` | Embedding YouTube videos and Google Maps the way the editor does |
 | [Captcha](./captcha/index.mdx) | `Fegg\Captcha\ReCAPTCHA`, `Fegg\Captcha\Turnstile` | Verifying Google reCAPTCHA / Cloudflare Turnstile responses |
 
 ## Project libraries

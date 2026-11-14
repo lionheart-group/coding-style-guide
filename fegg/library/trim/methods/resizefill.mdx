@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Trim::resizeFill
@@ -12,7 +12,7 @@ sidebar_position: 3
 public void Trim::resizeFill( int $w, int $h )
 ```
 
-The output is exactly `$w` x `$h`. The image is scaled down to fit in it, keeping its aspect ratio, and placed in the center. The empty area is white for JPEG output and transparent for PNG output from a PNG source. Images smaller than the specified size are not enlarged. `0` means the original width or height.
+The output is exactly `$w` x `$h`. The image is scaled down to fit in it, keeping its aspect ratio, and placed in the center. The empty area is transparent for PNG output (and for GIF output from a PNG or GIF source), white otherwise. Images smaller than the specified size are not enlarged. `0` means the original width or height.
 
 ## Arguments
 

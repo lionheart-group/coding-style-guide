@@ -42,7 +42,7 @@ Per-server values and secrets (the environment, database passwords, API keys) do
 | `timezone`             | `''`                            | Time zone of the application, set once at startup. `''`: `FEGG_DEFAULT_TIMEZONE` (`Asia/Tokyo`) |
 | `log_level`            | `''`                            | Lowest level written to the application log (`debug`, `info`, `notice`, `warning`, `error` ...). `''`: `warning` in production, `debug` elsewhere. See [Logging and errors](../basic/logging.mdx) |
 | `log_retention_days`   | `30`                            | Days to keep the application log files (`0`: keep all) |
-| `mail`                 | `array('transport' => 'sendmail')` | Outgoing mail of `Fegg\Tool\Mail`. For SMTP see [Mail](../library/mail/index.mdx#smtp) |
+| `mail`                 | `array('transport' => 'sendmail', 'from' => '', 'from_name' => '')` | Outgoing mail of `Fegg\Tool\Mail`, and the sender when `send()` is given none (see [Sender](../library/mail/index.mdx#sender)). For SMTP see [Mail](../library/mail/index.mdx#smtp) |
 | `security_headers`     | `array()`                       | Changes the default security headers: `'Header-Name' => 'value'`, `''` removes one. See [Security](../basic/security.mdx#security-headers) |
 | `hsts`                 | `''`                            | `Strict-Transport-Security` value sent on HTTPS responses, e.g. `'max-age=31536000'`. `''`: not sent |
 | `csp`                  | `''`                            | `Content-Security-Policy` value. `''`: not sent |
@@ -215,7 +215,7 @@ Tables are defined in YAML files (`core/config/database/` for the CMS tables, `s
 | `cms_menu.php`        | CMS side menu. Add one block per post type |
 | `env.php`             | Per-server settings and secrets, read with `feggEnv()`. Not committed; copy `env.php.dist` (see [Environments and secrets](#environments-and-secrets)) |
 | `database_config.php` | Database connection, from `feggEnv()` (see [Database](#database)) |
-| `upload_dir.php`      | Path and URL of the CMS upload directory (`htdocs/up_dir`) |
+| `upload_dir.php`      | Path and URL of the CMS upload directory (`htdocs/up_dir`), and the limits of images in other sizes (`image_max`, `image_cache_max`, see [Trim](../library/trim/index.mdx#images-of-the-cms-in-other-sizes)) |
 | `database/*.yaml`     | Table definitions for `fegg-cli migration` |
 | `define.php`          | Optional. Project constants, loaded right after the core starts (web and CLI) |
 | `fegg_update.php`     | Optional. Repository used by `fegg-cli core:update` (see [Updating the core](./update.mdx)) |

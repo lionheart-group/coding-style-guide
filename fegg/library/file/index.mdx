@@ -26,15 +26,19 @@ class Export extends Controller
     {
         $file = new File();
 
-        $file->createDirectory(FEGG_SITE_DIR . '/data/export');
-        $file->writeFile(FEGG_SITE_DIR . '/data/export/list.csv', "id,title\n", 'w');
+        if (!$file->createDirectory(FEGG_SITE_DIR . '/data/export')
+            || !$file->writeFile(FEGG_SITE_DIR . '/data/export/list.csv', "id,title\n", 'w')) {
+            throw new \RuntimeException('The export could not be written');
+        }
     }
 }
 ```
 
 :::note
 
-Most methods do nothing (no error, no return value) when the source file or directory does not exist. Check the result yourself, e.g. with `file_exists()`, when it matters.
+Every method returns `true` when it did its work and `false` when something could not be done (a missing source, a file that cannot be written, a directory that cannot be read ...). [File::readFile](./methods/readfile.mdx) returns the content instead, `''` when the file cannot be read.
+
+Symbolic links are never followed when a directory is removed, copied or touched: a link is removed (or skipped), never what it points to.
 
 :::
 

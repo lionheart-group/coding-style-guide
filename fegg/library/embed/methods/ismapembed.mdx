@@ -1,0 +1,30 @@
+---
+sidebar_position: 5
+---
+
+# Embed::isMapEmbed
+
+> Check whether a URL is a Google Maps embed URL
+
+## Description
+
+```php
+public static bool Embed::isMapEmbed( string $src )
+```
+
+Returns `true` when `$src` is the URL of Google Maps' "Embed a map" (`https://www.google.com/maps/embed?pb=...`). `Fegg\Cms\HtmlSanitizer` keeps the iframes of the editor's text whose `src` this method (or [Embed::isYoutubeEmbed](./isyoutubeembed.mdx)) accepts.
+
+## Arguments
+
+| Name | Data type | Default | Remarks          |
+| ---- | --------- | ------- | ---------------- |
+| $src | string    |         | URL to check     |
+
+## Example
+
+```php title="Controller"
+use Fegg\Embed;
+
+Embed::isMapEmbed('https://www.google.com/maps/embed?pb=!1m18!1m12'); // -> true
+Embed::isMapEmbed('https://maps.google.com/?q=Tokyo');                // -> false
+```

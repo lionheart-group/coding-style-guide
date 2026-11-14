@@ -1,0 +1,36 @@
+---
+sidebar_position: 1
+---
+
+# Embed::youtubeUrl
+
+> Get the embed URL of a YouTube video or playlist
+
+## Description
+
+```php
+public static ?string Embed::youtubeUrl( string $url )
+```
+
+Returns the player URL of a YouTube video or playlist (`https://www.youtube-nocookie.com/embed/<id>`), or `null` when `$url` is not one of the [YouTube URLs](../index.mdx#youtube-urls). A start time becomes `?start=<seconds>`; other parameters are dropped. Nothing is asked of YouTube.
+
+## Arguments
+
+| Name | Data type | Default | Remarks                         |
+| ---- | --------- | ------- | ------------------------------- |
+| $url | string    |         | URL of a YouTube video page     |
+
+## Example
+
+```php title="Controller"
+use Fegg\Embed;
+
+echo Embed::youtubeUrl('https://youtu.be/dQw4w9WgXcQ?t=1m30s');
+// -> "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?start=90"
+
+echo Embed::youtubeUrl('https://www.youtube.com/playlist?list=PLabc123');
+// -> "https://www.youtube-nocookie.com/embed/videoseries?list=PLabc123"
+
+var_dump(Embed::youtubeUrl('https://example.com/'));
+// -> NULL
+```

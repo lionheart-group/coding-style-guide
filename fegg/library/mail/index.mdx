@@ -41,6 +41,19 @@ class Contact extends Controller
 
 The contact form of the skeleton (`htdocs/_fegg/site/controller/Contact.php`) is a complete example, including [Mail::setDebugFlag](./methods/setdebugflag.mdx) to write the emails to a log file instead of sending them.
 
+## Sender
+
+When [Mail::send](./methods/send.mdx) is given no sender address, it uses `from` and `from_name` of `$settings['mail']` in `site/config/settings.php`. When there is no sender address in either place, `send()` throws an `\InvalidArgumentException`.
+
+```php title="htdocs/_fegg/site/config/settings.php"
+$settings['mail'] = array('transport' => 'sendmail', 'from' => 'info@example.com', 'from_name' => 'Example Inc.');
+```
+
+```php title="Controller"
+$mail = new Mail('Mail subject', $body);
+$mail->send('admin@example.com');   // From: Example Inc. <info@example.com>
+```
+
 ## SMTP
 
 To send through an SMTP server instead of sendmail, set `$settings['mail']` in `site/config/settings.php`, and put the password in `site/config/env.php` (or an environment variable) as `FEGG_SMTP_PASSWORD`. Every `Mail` object then uses it, the contact form included.
@@ -66,6 +79,8 @@ $settings['mail'] = array(
 | `port`       | `587`         | Port |
 | `encryption` | `'tls'`       | `'tls'`: STARTTLS. `'ssl'`: SMTPS (usually port 465). `''`: none |
 | `username`   | `''`          | Login user; without it no authentication is used. `FEGG_SMTP_USERNAME` in `env.php` overrides it |
+| `from`       | `''`          | Sender address when `send()` is given none (see [Sender](#sender)) |
+| `from_name`  | `''`          | Sender name used with `from` |
 
 The connection times out after 10 seconds. Never write the password in `settings.php`, which is committed.
 

@@ -9,10 +9,10 @@ sidebar_position: 5
 ## Description
 
 ```php
-public void File::moveFile( string $from, string $to )
+public bool File::moveFile( string $from, string $to )
 ```
 
-Moves `$from` to `$to` with `rename()`. Nothing happens when `$from` does not exist.
+Moves `$from` to `$to` with `rename()`. Returns `false` when `$from` does not exist or it cannot be moved.
 
 ## Arguments
 

@@ -255,6 +255,36 @@ Catch Fegg's exceptions by their full name, for example `\Fegg\Database\QueryExc
 
 :::
 
+## Dates and time zone
+
+Work with dates with PHP's `DateTimeImmutable` (Fegg 4's `Fegg\Tool\Date` is removed) and print them with the template modifier `feggDate`.
+
+```php
+$deadline = (new \DateTimeImmutable('2026-04-01 10:00:00'))->modify('+7 day')->format('Y-m-d H:i:s');
+$lastDay  = (new \DateTimeImmutable('2026-02-10'))->format('t');                     // "28"
+$days     = (new \DateTimeImmutable('2026-04-01'))->diff(new \DateTimeImmutable('2026-04-10'))->days; // 9
+```
+
+| Fegg 4 `Tool\Date` | PHP |
+| --- | --- |
+| `addDay($d, 3)` | `(new \DateTimeImmutable($d))->modify('+3 day')->format('Y-m-d H:i:s')` |
+| `addMinute($d, 30)` | `->modify('+30 minute')` |
+| `getDiff($from, $to)` | `->diff()` |
+| `getTheLastday($d)` | `->format('t')` |
+
+A project that needs `addMonth()` (kept at the end of the month) or `getSocialTime()` copies the Fegg 4 class into `htdocs/_fegg/site/src/`.
+
+The time zone of the application is set **once at startup**, from `$settings['timezone']` in `site/config/settings.php` (default `FEGG_DEFAULT_TIMEZONE`, `Asia/Tokyo`). `date()`, `DateTimeImmutable` and `feggDate` all use it, and no Fegg method changes it afterwards:
+
+- `$this->getDatetime($format = 'Y-m-d H:i:s', $timeZone = '')` and `$this->convertDatetime($date, $fromTimezone, $toTimezone)` work on their own `DateTime` objects. Fegg 4 changed the process-wide time zone in them.
+- `convertDatetime()` returns `''` for a date it cannot read (Fegg 4 returned `1970-01-01 ...`).
+
+```php title="Controller"
+echo $this->getDatetime('Y-m-d H:i', 'UTC');                                        // now, in UTC
+echo $this->convertDatetime('2026-04-01 09:00:00', 'Asia/Tokyo', 'Europe/London');  // 2026-04-01 01:00:00
+echo $this->convertDatetime('not a date', 'Asia/Tokyo', 'UTC');                     // ''
+```
+
 ## Extending a core controller
 
 The CMS screens provided by the core (`/cms/login/`, `/cms/media/`, `/cms/image/`, ...) are in `htdocs/_fegg/core/controller/Cms/`. Do not edit them. To change one, put a class with the same name in `site/controller/Cms/` that extends the core class, and write only the methods you change. The site class is found first, so it replaces the core one for its URL.

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 10
+sidebar_position: 11
 ---
 
 # File::touchDirectory
@@ -9,10 +9,12 @@ sidebar_position: 10
 ## Description
 
 ```php
-public void File::touchDirectory( string $directory, string $datetime )
+public bool File::touchDirectory( string $directory, string $datetime )
 ```
 
-Sets the modification time of every file and subdirectory under `$directory` (recursively) to `$datetime`. `$datetime` is parsed with `strtotime()`; nothing happens when it cannot be parsed.
+Sets the modification time of every file and subdirectory under `$directory` (recursively) to `$datetime`, parsed with `strtotime()`. Symbolic links are skipped.
+
+Returns `false` when `$directory` is not a directory, `$datetime` cannot be parsed or a time could not be changed.
 
 ## Arguments
 

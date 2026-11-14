@@ -18,9 +18,14 @@ The checks, in order:
 
 1. Upload errors and the size (`@empty`, `@size`, `@failed`).
 2. The extension must be in [setFileType](./setfiletype.mdx), and must not be a script extension (`@type`).
-3. The content must match the extension (`@content`): images (`jpg`, `jpeg`, `png`, `gif`, `webp`) must be readable by `getimagesize()`, and for known types (images, `pdf`, Office files, `zip`, `txt`, `csv`) the MIME type reported by `finfo` must fit the extension. A PHP file renamed to `.jpg`, or a text file named `.pdf`, is refused. Other extensions are checked by the extension only.
+3. The content must match the extension (`@content`): images (`jpg`, `jpeg`, `png`, `gif`, `webp`) must be readable by `getimagesize()`, and for the extensions of `Upload::MIME_TYPES` (images, `pdf`, Office files, `zip`, `txt`, `csv`) the MIME type reported by `finfo` must be one of the types listed for the extension. A PHP file renamed to `.jpg`, or a text file named `.pdf`, is refused. Other extensions are checked by the extension only.
 
 Returns `true` on success. On failure it returns `false` and the error messages are available with [Upload::getErrorMessage](./geterrormessage.mdx). When `$required` is `false` and no file was selected, it returns `true` without saving anything.
+
+- A field that the form does not have (no `$_FILES[$name]`) is treated as "no file selected": `@empty`, or `true` when `$required` is `false`.
+- Several files in one field (`name="file[]"`) are not handled by this method: the result is `@failed`. Give each file its own field.
+
+Neither case writes a PHP warning.
 
 Set the upload directory with [Upload::setUploadDir](./setuploaddir.mdx) before calling this method.
 

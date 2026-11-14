@@ -18,6 +18,7 @@ sidebar_position: 6
 | Inside `<script>` | `var x = {{ $x\|feggJs\|noescape }};` (no quotes around it) |
 | Event attributes (`onclick` …) | `onclick="go({{ $x\|feggJs }})"` (no quotes around it, keep the escaping) |
 | Trusted HTML (CMS rich text saved through `HtmlSanitizer::clean()`, messages from your config) | `{{ $x\|noescape }}` |
+| A YouTube URL or a Google map from a CMS field | `{{ $x\|feggYoutube\|noescape }}`, `{{ $x\|feggMap\|noescape }}` (the modifier checks and escapes the URL) |
 
 Always quote attribute values (`class="{{ $x }}"`, not `class={{ $x }}`).
 
@@ -62,7 +63,7 @@ Arrays and objects work too, so a whole data set can go to a script in one line:
 
 ### `noescape`
 
-`noescape` outputs the value as it is. Use it only for HTML you trust: CMS rich text written by administrators and cleaned with `Fegg\Cms\HtmlSanitizer::clean()` when it was saved (see [CMS screens and the editor](../cms.mdx#rich-text-feggeditor)), validation messages from your config, or the result of `feggJs` inside `<script>`. Never use it on `$in` (request parameters) or anything a visitor can type.
+`noescape` outputs the value as it is. Use it only for HTML you trust: CMS rich text written by administrators and cleaned with `Fegg\Cms\HtmlSanitizer::clean()` when it was saved (see [CMS screens and the editor](../cms.mdx#rich-text-feggeditor)), validation messages from your config, the result of `feggJs` inside `<script>`, or the result of `feggYoutube` / `feggMap`. Never use it on `$in` (request parameters) or anything a visitor can type.
 
 ## Templates are code
 

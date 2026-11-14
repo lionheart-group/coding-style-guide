@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Trim::resizeTrim
@@ -24,21 +24,25 @@ The output is exactly `$w` x `$h`. The image is scaled to cover the whole area, 
 
 ### Crop position
 
-| $cp  | Kept part                       |
-| ---- | ------------------------------- |
-| `t`  | Top center                      |
-| `rt` | Top right                       |
-| `l`  | Middle left                     |
-| `m`  | Center                          |
-| `r`  | Middle right                    |
-| `b`  | Bottom center                   |
-| `lb` | Middle left (same as `l`)       |
-| `rb` | Bottom center (same as `b`)     |
-| `lt` or any other value | Top left |
+The positions are listed in `Trim::POSITIONS`.
+
+| $cp  | Kept part       |
+| ---- | --------------- |
+| `lt` | Top left        |
+| `t`  | Top center      |
+| `rt` | Top right       |
+| `l`  | Middle left     |
+| `m`  | Center          |
+| `r`  | Middle right    |
+| `lb` | Bottom left     |
+| `b`  | Bottom center   |
+| `rb` | Bottom right    |
+
+Any other value is `lt`.
 
 :::note
 
-In the current implementation `lb` and `rb` do not crop at the bottom corners: they behave like `l` and `b`.
+In Fegg 4, `lb` kept the middle left and `rb` the bottom center. Images of the CMS saved by Fegg 4 with these positions (`/up_dir/image/{id}/lb-...`) keep the old crop until they are deleted and made again.
 
 :::
 

@@ -1,0 +1,32 @@
+---
+sidebar_position: 2
+---
+
+# Trim::getSize
+
+> Get the width and height of the loaded image
+
+## Description
+
+```php
+public array Trim::getSize()
+```
+
+Returns `array(width, height)` of the image loaded by [Trim::setImage](./setimage.mdx), after its Exif orientation (a photo taken upright gives the upright size).
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Trim;
+
+$trim = new Trim();
+$trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
+
+list($width, $height) = $trim->getSize();
+if ($width > $height) {
+    $trim->resize(600, 0);
+} else {
+    $trim->resize(0, 600);
+}
+$trim->create();
+```

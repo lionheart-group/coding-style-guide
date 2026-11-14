@@ -9,10 +9,10 @@ sidebar_position: 3
 ## Description
 
 ```php
-public void File::copyFile( string $source, string $dest )
+public bool File::copyFile( string $source, string $dest )
 ```
 
-Copies `$source` to `$dest` and sets the permission of the copy to `0666`. Nothing happens when `$source` does not exist.
+Copies `$source` to `$dest` and sets the permission of the copy to `0644` (readable by everyone). Returns `false` when `$source` is not a file or the copy fails.
 
 ## Arguments
 
