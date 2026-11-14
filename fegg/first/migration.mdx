@@ -2,72 +2,49 @@
 sidebar_position: 5
 ---
 
-# Migrating a Fegg 3 / 4 project
+# Moving a Fegg 3 / 4 project
 
-Fegg 5 separates the core from the project code and moves classes into namespaces. Projects built on v3 or v4 are migrated by hand. Once migrated, they are updated with `fegg-cli core:update` like any Fegg 5 project.
+Fegg 5 keeps no compatibility with Fegg 3 / 4 code: there is no `getClass()`, no Fegg 4 class names (`MyApplication`, `Model`, `DB_pdo`, `LH_FW` ...), and controllers without a namespace are not dispatched. A project is not upgraded in place: **start a new project from the Fegg 5 skeleton and bring over what belongs to the project**, rewriting its PHP in the Fegg 5 style. The database, the uploaded files, the templates and the front-end files carry over. Once rebuilt, the project is updated with `fegg-cli core:update` like any Fegg 5 project.
 
-This page is a summary. The full steps, with the commands and the complete path tables, are in [docs/migration-v3-v4-to-v5.md](https://github.com/lionheart-group/lh-fegg-skelton/blob/master/docs/migration-v3-v4-to-v5.md) of the skeleton repository.
+This page is a summary. The full steps, with the commands and the complete tables, are in [docs/migration-v3-v4-to-v5.md](https://github.com/lionheart-group/lh-fegg-skelton/blob/master/docs/migration-v3-v4-to-v5.md) of the skeleton repository.
 
-Work on a separate branch and test against a copy of the production database.
+Work on a new branch of the project repository (the old code stays on the old branch) and test against a copy of the production database.
 
-## 1. Find the changes the project made to the core
+## 1. List what the old project has of its own
 
-Find the skeleton version the project started from (`version` in `package.json`, or `@version` in `fegg/Application.php`). Check out the skeleton at that tag, copy the project's core files over it (`fegg/`, `code/lib/`, `code/application/cms/`, `code/template/cms/`, `htdocs/cms/`, `htdocs/index.php`, `htdocs/.htaccess`) and look at `git diff`. Keep the list; each item is moved to `site/` in step 3.
+Find the skeleton version the project started from (`version` in `package.json`, or `@version` in `fegg/Application.php`). Check out the skeleton at that tag, copy the project's core files over it (`fegg/`, `code/lib/`, `code/application/cms/`, `code/template/cms/`, `htdocs/cms/`, `htdocs/index.php`, `htdocs/.htaccess`) and look at `git diff`. Write down:
 
-## 2. Move files into the new structure
+- **Changes to the core**: Fegg 5 rewrote most of the core, so decide for each whether the project still needs it. What is still needed is written again as an override in `site/` (see [Controller](../basic/controller.mdx#extending-a-core-controller)).
+- **The project's own code**: controllers (public pages and post types), project libraries in `code/lib/`, `code/lib/Modifire.php`, processing added to `MyApplication`.
+- **The project's own files**: templates, `htdocs/data/`, table definitions, config values, `code/data/`, uploads.
 
-| v3 / v4                                                         | Fegg 5                                                          |
-| :-------------------------------------------------------------- | :-------------------------------------------------------------- |
-| `fegg/*.php`, `code/lib/` (DB_pdo, LH_FW, Validation, Tool, ...) | `htdocs/_fegg/core/` (use the new version)                       |
-| Project values in `fegg/settings.php`                           | `htdocs/_fegg/site/config/settings.php`                          |
-| `fegg/MyApplication.php`                                        | `htdocs/_fegg/site/controller/Controller.php`                    |
-| `code/lib/Modifire.php`                                         | `htdocs/_fegg/site/functions/modifier.php`                       |
-| Other project libraries in `code/lib/`                          | `htdocs/_fegg/site/src/` (`Site\`)                               |
-| Shared CMS screens in `code/application/cms/` (Index, Login, Logout, Media, Image, Multi, Migrate, Register) | `htdocs/_fegg/core/controller/` (use the new version) |
-| Everything else in `code/application/`                          | `htdocs/_fegg/site/controller/` (`cms/` becomes `Cms/`)          |
-| Shared CMS templates in `code/template/cms/`                    | `htdocs/_fegg/core/template/cms/` (use the new version)          |
-| Everything else in `code/template/`                             | `htdocs/_fegg/site/template/`                                    |
-| `code/config/`, `code/config/database/` (project tables)        | `htdocs/_fegg/site/config/`, `htdocs/_fegg/site/config/database/` |
-| `code/data/`                                                    | `htdocs/_fegg/site/data/`                                        |
-| `htdocs/index.php`, `fegg-cli`                                  | Recreate from `core/dist/index.php.dist` and `core/dist/fegg-cli.dist` |
-| `htdocs/.htaccess`                                              | Add the Fegg rules from `core/dist/htaccess.dist`                |
-| `htdocs/cms/` (CMS CSS, JS, images, CKEditor, fonts)             | `htdocs/_fegg/assets/` (use the new version; delete `htdocs/cms/`) |
-| `htdocs/cms/scss/unique.scss` (the project's CMS styles)        | `htdocs/data/cms/scss/unique.scss`                               |
+## 2. Start from the Fegg 5 skeleton
 
-Then:
+1. Replace the branch's contents with the Fegg 5 skeleton (everything except `.git`) and rename it as for any new project (the package name in `package.json`, the local URL in `e2e/playwright.config.ts`).
+2. Copy `site/config/env.php.dist` to `site/config/env.php` on each development or staging server and set `'FEGG_ENV' => 'development'`: without it the site runs as production and shows no error details (see [Settings](./config.mdx#environments-and-secrets)).
+3. Set the values the project changed in the old `fegg/settings.php` (`developer_ip`, `run_mode`, `maintenance_page_url`, Basic authentication, languages) in `site/config/settings.php`.
+4. Add the project's own rules of the old `htdocs/.htaccess` (redirects, headers) to the new one. If the project changed the paths in `index.php`, set the three constants (`FEGG_HTML_DIR`, `FEGG_CORE_DIR`, `FEGG_SITE_DIR`) to match (see [Directory structure](./cont.mdx#entry-files-and-layout)).
 
-1. Copy `htdocs/_fegg/core/`, `htdocs/_fegg/assets/` (the CMS's CSS, JS and images, already built) and `htdocs/_fegg/.htaccess` from the Fegg 5 skeleton. Move the project's CMS styles to `htdocs/data/cms/scss/unique.scss`, set `"sass"` in `package.json` to `htdocs/data/scss,htdocs/data/cms/scss` as in the skeleton, and run `npm run build:scss`.
-2. Recreate the entry files. If the project changed the paths in `index.php`, set the three constants (`FEGG_HTML_DIR`, `FEGG_CORE_DIR`, `FEGG_SITE_DIR`) to match (see [Directory structure](./cont.mdx#entry-files-and-layout)).
-3. Add the `FilesMatch` block and the `_fegg` rule from `htaccess.dist` to `htdocs/.htaccess`: the `RewriteCond` that lets `_fegg/assets/` through, then `RewriteRule (^|/)_fegg(/|$) - [F,L]`. Without the `RewriteCond` the CMS has no CSS or JS.
-4. Move the project files with `git mv` (keeps the history).
-5. Carry over the changed values of the old `fegg/settings.php` (`developer_ip`, `run_mode`, `maintenance_page_url`, Basic authentication, languages) to `site/config/settings.php`. Copy `site/config/env.php.dist` to `site/config/env.php` on each development or staging server and set `'FEGG_ENV' => 'development'`: without it the site runs as production and shows no error details (see [Settings](./config.mdx#environments-and-secrets)).
-6. Create `site/config/cms_menu.php` with one block per post type that was in the old CMS menu.
-7. Replace the removed constants until `grep -rn "FEGG_DIR\|FEGG_CODE_DIR" htdocs/_fegg/site` finds nothing:
+## 3. Bring over the files that carry over
 
-   | v3 / v4                              | Fegg 5                                 |
-   | :----------------------------------- | :------------------------------------- |
-   | `FEGG_CODE_DIR . '/config/...'`      | `FEGG_SITE_DIR . '/config/...'`        |
-   | `FEGG_CODE_DIR . '/data/...'`        | `FEGG_SITE_DIR . '/data/...'`          |
-   | `FEGG_CODE_DIR . '/application/...'` | `FEGG_SITE_DIR . '/controller/...'`    |
-   | `FEGG_CODE_DIR . '/lib/...'`         | A namespaced class in `site/src/`      |
-   | `FEGG_DIR . '/...'`                  | Not needed (autoloaded)                |
+| v3 / v4                                                          | Fegg 5                                                     |
+| :--------------------------------------------------------------- | :--------------------------------------------------------- |
+| `htdocs/data/` (SCSS, JS, images)                                | `htdocs/data/` (`npm run build:scss`)                      |
+| `htdocs/cms/scss/unique.scss` (the project's CMS styles)         | `htdocs/data/cms/scss/unique.scss`                         |
+| `code/template/` except the core's CMS templates                 | `htdocs/_fegg/site/template/` (check with `./fegg-cli template:lint`) |
+| `code/config/database/` (project tables)                         | `htdocs/_fegg/site/config/database/`                       |
+| Project values in `code/config/`                                 | Merged into the skeleton's files in `htdocs/_fegg/site/config/` |
+| `code/data/`                                                     | `htdocs/_fegg/site/data/`                                  |
+| `htdocs/up_dir/`                                                 | `htdocs/up_dir/`                                           |
+| The post types in the old CMS menu                               | `htdocs/_fegg/site/config/cms_menu.php`, one block each    |
 
-At this point the site should work again. Old-style controllers (no namespace, `extends MyApplication`, `getClass()`) still run.
+`fegg/`, the core's libraries in `code/lib/`, the core's CMS screens and templates, `bin/` and `htdocs/cms/` are not brought over: the skeleton has their Fegg 5 versions.
 
-## 3. Move core changes into overrides in `site/`
+The database is used as it is: point the project at a copy of the production database and run `./fegg-cli migration`, which only adds the new core tables.
 
-Go through the list from step 1:
+## 4. Rewrite the PHP
 
-- Changed template of a shared CMS screen: put the changed file at the same path in `site/template/cms/`.
-- Changed controller of a shared CMS screen: extend the core class (`class Media extends \Fegg\Controller\Cms\Media`) and write only the changed methods (see [Controller](../basic/controller.mdx#extending-a-core-controller)).
-- Code added to `MyApplication`: move it to `__init()` of `site/controller/Controller.php`.
-- Changed shared library: create a subclass in `site/src/` and use it.
-
-When `./fegg-cli core:status` prints `No changes to core files.`, this step is done.
-
-## 4. Move to namespaces
-
-The Fegg 4 style keeps working through `Fegg\Legacy`, but every use writes `Fegg deprecated: ...` to the PHP error log, and the compatibility layer will be removed in Fegg 6. Use the log to fix the code step by step.
+Write each controller again as a namespaced class in `htdocs/_fegg/site/controller/` (`cms/` becomes `Cms/`). The skeleton's `Cms/News.php` and `Cms/Lab.php` are the models for post types.
 
 ```php title="Fegg 4: code/application/cms/News.php"
 <?php
@@ -114,38 +91,38 @@ class News extends Controller              // Site\Controller\Cms\Controller: th
 }
 ```
 
-CMS screens extend `Site\Controller\Cms\Controller` (copy `site/controller/Cms/Controller.php` from the skeleton), not `Site\Controller\Controller`: it checks the login and the CSRF token of every POST. Delete links in copied CMS list templates become POST forms (see [Controller](../basic/controller.mdx#cms-screens)).
+CMS screens extend `Site\Controller\Cms\Controller`, public pages `Site\Controller\Controller`. The CMS base checks the login and the CSRF token of every POST. Delete links in CMS list templates become POST forms (see [Controller](../basic/controller.mdx#cms-screens)). Processing that was added to `MyApplication` goes into `__init()` or a `protected` method of `site/controller/Controller.php`.
 
 :::danger Required: `requirePost()` in every action that changes data
 
-Fegg 4 had no such check, so copied CMS controllers do not have it. Add `$this->requirePost()` as the first line of every action that saves, deletes, sorts or otherwise writes (`update`, `create`, `delete` ...). The CSRF token is only checked on POST: an action without `requirePost()` still runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET answers 405. Check every action with `grep -n "public function" htdocs/_fegg/site/controller/Cms/*.php`.
+Fegg 4 had no such check. Add `$this->requirePost()` as the first line of every action that saves, deletes, sorts or otherwise writes (`update`, `create`, `delete` ...). The CSRF token is only checked on POST: an action without `requirePost()` still runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET answers 405. Check every action with `grep -n "public function" htdocs/_fegg/site/controller/Cms/*.php`.
 
 :::
 
 | v3 / v4                                    | Fegg 5                                              |
 | :----------------------------------------- | :-------------------------------------------------- |
 | `MyApplication`                            | `Site\Controller\Controller` (public pages), `Site\Controller\Cms\Controller` (CMS screens) |
-| `Application` / `CommandApplication`       | `Fegg\Application` / `Fegg\CommandApplication`      |
 | `Model`, `ModelWhere`, `ModelOrder`, ...   | `Fegg\Model`, `Fegg\Model\Where`, `Fegg\Model\Order`, ... |
 | `DB_pdo`                                   | `Fegg\Database\Pdo`                                 |
-| `LH_FW`                                    | `Fegg\Cms\Helper`                                   |
-| `Validation`                               | `Fegg\Tool\Validation`                                   |
-| `ReCAPTCHA`, `Turnstile`                   | `Fegg\Tool\Captcha\ReCAPTCHA`, `Fegg\Tool\Captcha\Turnstile`  |
-| `Tool/File`, `Tool/Mail`, `Tool/RSS`, `Tool/Trim`, `Tool/Upload` | `Fegg\Tool\File`, `Fegg\Tool\Mail`, ... |
+| `$this->getClass('LH_FW', 'news')`         | `new \Fegg\Cms\Helper('news')` (CMS screens get it as `$this->_lh`) |
+| `$this->getClass('Validation')`            | `new \Fegg\Tool\Validation()`                       |
+| `$this->getClass('Tool/Upload')`, `Tool/File`, `Tool/Mail`, `Tool/RSS`, `Tool/Trim` | `new \Fegg\Tool\Upload()` etc.  |
+| `ReCAPTCHA`, `Turnstile`                   | `Fegg\Tool\Captcha\ReCAPTCHA`, `Fegg\Tool\Captcha\Turnstile` |
 | `Tool/Date`                                | Removed: PHP's `DateTimeImmutable` (see [Dates and time zone](../basic/controller.mdx#dates-and-time-zone)) |
 | `Tool/OEmbed`                              | Removed: `Fegg\Tool\Embed` (see [Embed](../library/embed/index.mdx)) |
-| `$this->getClass('LH_FW', 'news')`         | `new \Fegg\Cms\Helper('news')`                      |
-| `$this->getClass('Validation')`            | `new \Fegg\Tool\Validation()`                            |
-| `$this->getClass('Tool/Upload')`           | `new \Fegg\Tool\Upload()`                           |
-| `$this->getClass('MyLib/Foo')`             | `new \Site\MyLib\Foo()` in `site/src/MyLib/Foo.php` |
+| `$this->getClass('MyLib/Foo')` (`code/lib/`) | `new \Site\MyLib\Foo()` in `site/src/MyLib/Foo.php` |
+| `code/lib/Modifire.php`                    | `htdocs/_fegg/site/functions/modifier.php`          |
+| `FEGG_CODE_DIR . '/config/...'`, `'/data/...'` | `FEGG_SITE_DIR . '/config/...'`, `'/data/...'`  |
+| `FEGG_DIR . '/...'`                        | Not needed (autoloaded)                             |
+| `FEGG_TEST_ENVIRONMENT`                    | `FEGG_ENV !== 'production'`                         |
 
-Inside a namespace, prefix PHP's own classes with `\` (`new \Exception`, `new \DateTime`, `\PDO::PARAM_INT`).
+Every file starts with `namespace`, `defined('FEGG_CORE_DIR') || exit;` and `use`. Inside a namespace, prefix PHP's own classes with `\` (`new \Exception`, `new \DateTime`, `\PDO::PARAM_INT`).
 
-You are done when `grep -rn "getClass\|MyApplication\|extends Model\b" htdocs/_fegg/site` finds nothing and the error log has no `Fegg deprecated` entries.
+`grep -rn "getClass\|MyApplication\|FEGG_DIR\|FEGG_CODE_DIR\|FEGG_TEST_ENVIRONMENT" htdocs/_fegg/site` must find nothing.
 
 ## Behaviour changes to check
 
-Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 section of `htdocs/_fegg/core/UPGRADE.md`. The ones most likely to affect an old project:
+Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 section of `htdocs/_fegg/core/UPGRADE.md`. The ones most likely to affect code brought over:
 
 - **Database errors** throw `Fegg\Database\QueryException` (the message includes the SQL and its parameters) instead of printing and calling `exit`. Uncaught, it is a logged HTTP 500.
 - **Missing templates**, `include` targets and `transclude` parents throw `Fegg\Template\TemplateException` (HTTP 500) instead of printing "Can't Read" into the page. `./fegg-cli template:lint` lists them all.
@@ -158,17 +135,17 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 - **Arrays reach modifiers**: `{{ $tags|feggImplode:', ' }}` now prints the joined tags (it printed nothing).
 - **`where()` fragments with `OR`** are bracketed: `where('category = ?', 1)->where('a = ? OR b = ?', ...)` is `category = 1 AND (a = ? OR b = ?)`. Fegg 4 matched rows of every category.
 - **Actions**: only a controller's own public methods can be called from a URL (see [Controller](../basic/controller.mdx#which-methods-are-actions)). An action defined in `MyApplication` or a base controller is a 404: write it in each controller that uses it. An action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) is a 404: rename it, or map the old URL with a route.
-- **CMS saving actions** with `requirePost()` answer 405 to a GET (see above). Edit and delete forms in copied templates must use `method="post"`.
+- **CMS saving actions** with `requirePost()` answer 405 to a GET (see above). Edit and delete forms in the project's CMS templates must use `method="post"`.
 - **Basic authentication** with `basic_auth_scope = 1` is checked before the controller's `__init()` and action, so redirects, downloads and direct output are protected too.
 - **CMS sessions** need the session's user to still exist in `cms_user`: deleting a user ends their sessions.
 - **No more `exit`**: `displayPage()`, `redirect()`, `requirePost()` and the CMS login check throw `Fegg\Http\Halt`. A `catch (\Throwable $e)` around them must rethrow it (see [Controller](../basic/controller.mdx#ending-a-response)). Replace your own `exit` in controllers with `$this->halt()`.
-- **Environment**: error details need a `developer_ip` address **and** `FEGG_ENV` other than `production` (`site/config/env.php`). `FEGG_TEST_ENVIRONMENT` no longer looks at the host name.
-- **Sessions and cookies**: a session starts only when something is written to it. `setCookie()` takes SameSite as its own argument, and `unsetCookie()` really deletes the cookie (see [Parameters](../basic/parameters/index.mdx)).
+- **Environment**: error details need a `developer_ip` address **and** `FEGG_ENV` other than `production` (`site/config/env.php`). `FEGG_TEST_ENVIRONMENT` is gone.
+- **Sessions and cookies**: a session starts only when something is written to it. `setCookie()` takes SameSite as its own argument (not `'/; SameSite=Lax'` in the path), and `unsetCookie()` really deletes the cookie (see [Parameters](../basic/parameters/index.mdx)).
 - **Security headers** (`X-Frame-Options: SAMEORIGIN`, `nosniff`, `Referrer-Policy`) are sent with every response. A page meant to be framed by another site calls `$this->allowFraming()` (see [Security](../basic/security.mdx)).
 - **CMS login**: logout is a POST. Copied CMS frame templates in `site/template/cms/` add the class `js-cms-logout` to the logout link. Run `fegg-cli migration` for the login throttling table `cms_login_attempt`. `/cms/login/create/...` is gone: use `fegg-cli user:create` (see [fegg-cli](./cli.mdx#cms-users)).
 - **Uploads** check the content against the extension; add the `@content` message to a copied `site/config/file_error_message.php` (see [Upload](../library/upload/configuration.mdx)).
 - **`htdocs/.htaccess`**: remove the `<IfModule mod_php5.c>` block and the Apache 2.2 `Order` / `Deny from all` lines (500 on Apache 2.4), and add the dotfile rules of `core/dist/htaccess.dist`. `fegg-cli doctor` warns about the old lines.
-- **Captcha keys and the database DSN** move to `env.php`: the skeleton's `database_config.php` and `contact/contact_config.php` read them with `feggEnv()`. Copied old files keep working; move the keys out of committed files when convenient.
+- **Captcha keys and the database DSN** move to `env.php`: the skeleton's `database_config.php` and `contact/contact_config.php` read them with `feggEnv()`. Put the project's keys there, not in committed files.
 - **The CMS's files** are in `htdocs/_fegg/assets/`, read at `/_fegg/assets/`. Copies of CMS templates in `site/template/cms/` load them with `{{ $site.cms_assets }}` instead of `{{ $site.cms_dir }}` (`css/`, `js/`, `img/`, `vendor/`). `_fegg/` can no longer be outside the document root. See [CMS screens and the editor](../basic/cms.mdx).
 - **No jQuery in the CMS** (nor jQuery UI, Select2 or the datetimepicker). Rewrite `$(...)` in the project's CMS templates (`site/template/cms/*/html_head.tpl`) with plain JavaScript and the `FeggCms` helpers, or load a jQuery of your own there.
   - Date fields: `<input type="datetime-local">` with `feggDate:"Y-m-d\TH:i"`; the controller checks them with `$validation->datetime()` and saves `Fegg\Tool\Validation::toDatetime($value)`.
@@ -178,7 +155,7 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 - **Spyc is removed.** YAML is read by `Fegg\Tool\Yaml` (see [YAML](../library/index.mdx#yaml)): replace `spyc_load_file()` / `Spyc::YAMLLoad()` in project code with `Fegg\Tool\Yaml::parseFile()`. Table definitions read as before; `yes` / `no` and numbers with a leading zero are now text, and anchors or tags are refused with the file and the line.
 - **`Fegg\Tool\Date` is removed.** Use PHP's `DateTimeImmutable`: `addDay($d, 3)` is `(new \DateTimeImmutable($d))->modify('+3 day')->format('Y-m-d H:i:s')`, `getDiff()` is `->diff()`, `getTheLastday()` is `->format('t')`, and a format in a template is `feggDate`. A project that needs `addMonth()` or `getSocialTime()` copies the Fegg 4 class into `site/src/`.
 - **`Fegg\Tool\OEmbed` is removed**, with `core/config/oembed_schemes.php`. `Fegg\Tool\Embed::youtubeUrl($url)` gives the player URL without asking YouTube (`https://www.youtube-nocookie.com/embed/<id>`), and `{{ $page.data.youtube_url|feggYoutube|noescape }}` / `|feggMap|noescape` write the whole block (see [Embed](../library/embed/index.mdx)). Other oEmbed services: ask them with `Fegg\Http\Client` in the project.
-- **Images in other sizes** (`/up_dir/image/<id>/i-300_200.jpg`, `getImageUrl`): a width or height over `$upload_dir['image_max']` (2000) is a 404, and past `$upload_dir['image_cache_max']` (50) sizes of one image, new sizes are made for each request instead of being saved. Add both to a copied `site/config/upload_dir.php`. The positions `lb` and `rb` now keep the bottom left and the bottom right (see [Trim](../library/trim/index.mdx#images-of-the-cms-in-other-sizes)).
+- **Images in other sizes** (`/up_dir/image/<id>/i-300_200.jpg`, `getImageUrl`): a width or height over `$upload_dir['image_max']` (2000) is a 404, and past `$upload_dir['image_cache_max']` (50) sizes of one image, new sizes are made for each request instead of being saved. Both are in the skeleton's `site/config/upload_dir.php`. The positions `lb` and `rb` now keep the bottom left and the bottom right (see [Trim](../library/trim/index.mdx#images-of-the-cms-in-other-sizes)).
 - **`Fegg\Tool\Trim`** throws a `\RuntimeException` for a missing file, a file that is not a JPEG, PNG or GIF, or another output type (it called `exit`).
 - **`Fegg\Tool\File`** methods return `true` / `false`. `removeDirectory()` removes symbolic links, never what they point to.
 - **`Fegg\Tool\Upload::upload()`** for a field the form does not have is `@empty` (or OK when not required), and several files (`name="file[]"`) are `@failed`, without PHP warnings.
@@ -200,11 +177,11 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 - [ ] `./fegg-cli migration` against a copy of the production database only adds new core tables such as `cms_login_attempt` (no project table definition is missing, and every YAML file is read: an error names the file and the line)
 - [ ] `./fegg-cli core:status` prints `No changes to core files.`
 - [ ] The browser console of every CMS screen shows no errors (`$ is not defined` means a template still uses jQuery), and dates (with the time), rich text and gallery ordering are saved
-- [ ] Public pages, the contact form (through to sending), CMS login, create / edit / delete for each post type, and media and image uploads work
+- [ ] Public pages, the contact form (through to sending), CMS login, create / edit / delete for each post type, and media and image uploads work, with the data and uploads of the old site
 - [ ] Every post type appears in the CMS side menu and on the dashboard
 - [ ] Every saving action in `site/controller/Cms/` calls `$this->requirePost()`: opening its URL in the browser (a GET, e.g. `/cms/news/update/`) answers 405
 - [ ] No page links to an action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) or defined only in a base controller (both are 404 now)
-- [ ] The PHP error log has no warnings and no `Fegg deprecated` entries
+- [ ] The PHP error log has no warnings
 - [ ] After deploying, `./fegg-cli doctor https://<production URL>` prints OK (`/_fegg/assets/js/base.js` is served, the rest of `/_fegg/` is not) and the CMS dashboard shows no protection warnings
 
-To roll back, redeploy the old branch. The table definitions are compatible, so the same database file works before and after the migration.
+To roll back, redeploy the old branch. The table definitions are compatible, so the same database works with both.

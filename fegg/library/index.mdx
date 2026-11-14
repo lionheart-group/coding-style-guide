@@ -36,7 +36,7 @@ class Contact extends Controller
 
 :::note
 
-Fegg 4 code such as `$this->getClass('Tool/Mail')` still works in Fegg 5 through `Fegg\Legacy`, but every use is written to the PHP error log as `Fegg deprecated: ...` and it will be removed in Fegg 6. Replace it with `new`.
+Fegg 5 has no `getClass()`. Fegg 4 code is rewritten with `new`:
 
 | Fegg 4 | Fegg 5 |
 | --- | --- |

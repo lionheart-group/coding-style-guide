@@ -126,8 +126,9 @@ Add your own keys the same way and read them with `feggEnv('NAME', $default)`.
 
 - whether [developer mode](#developer-mode) is possible (not in production),
 - whether the contact form sends the administrator mail to the test address (outside production),
-- the default `log_level` (`warning` in production, `debug` elsewhere),
-- the Fegg 4 constant `FEGG_TEST_ENVIRONMENT`, which is `true` outside production. It no longer looks at the host name.
+- the default `log_level` (`warning` in production, `debug` elsewhere).
+
+The Fegg 4 constant `FEGG_TEST_ENVIRONMENT` is gone: compare `FEGG_ENV` with `'production'`.
 
 ### Test servers deployed with git pull
 

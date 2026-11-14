@@ -249,12 +249,6 @@ $statement->bindValue(1, $id, \PDO::PARAM_INT);
 
 Catch Fegg's exceptions by their full name, for example `\Fegg\Database\QueryException` or `\Fegg\Template\TemplateException`.
 
-:::note
-
-`$this->getClass()` still works for Fegg 4 code, but it is deprecated (each call writes `Fegg deprecated: ...` to the PHP error log) and will be removed in Fegg 6.
-
-:::
-
 ## Dates and time zone
 
 Work with dates with PHP's `DateTimeImmutable` (Fegg 4's `Fegg\Tool\Date` is removed) and print them with the template modifier `feggDate`.
@@ -321,7 +315,7 @@ A CMS screen extends `Site\Controller\Cms\Controller` (in `site/controller/Cms/`
 
 The CSRF token is only checked on POST. An action that saves, deletes or sorts must start with `$this->requirePost()`: without it, the action also runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET gets a 405.
 
-This is new in Fegg 5. CMS controllers copied from a Fegg 4 project do not have it: add it to every `update`, `create`, `delete` ... (see [Migrating from v3 / v4](../first/migration.mdx)).
+This is new in Fegg 5. Code brought over from a Fegg 4 project does not have it: add it to every `update`, `create`, `delete` ... (see [Migrating from v3 / v4](../first/migration.mdx)).
 
 :::
 

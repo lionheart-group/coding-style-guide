@@ -31,7 +31,7 @@ LionHeart projects start from the skeleton repository [lionheart-group/lh-fegg-s
 - **A modern CMS.** No jQuery: the CMS's scripts are plain JavaScript. Rich text fields use FeggEditor (Tiptap) instead of CKEditor 4, with columns, galleries, buttons, maps and links to files, and the saved HTML is cleaned on the server. The icons are Tabler Icons. See [CMS screens and the editor](./basic/cms.mdx).
 - **Command line tools.** `fegg-cli` checks templates (`template:lint`), lists the database schema (`db:schema`), manages CMS users (`user:create`), updates the core (`core:update`) and checks that `_fegg/` cannot be read from the web (`doctor`).
 
-Fegg 4 code (`MyApplication`, `getClass()`, controllers without a namespace, `Model`, `DB_pdo`, `LH_FW`) still runs through a compatibility layer. Every use is logged as `Fegg deprecated: ...` in the PHP error log, and the layer will be removed in Fegg 6.
+Fegg 5 keeps no compatibility with Fegg 3 / 4 code (`MyApplication`, `getClass()`, controllers without a namespace): a project of those versions is rebuilt from the Fegg 5 skeleton, bringing over its templates, front-end files, database and uploads (see [Moving a Fegg 3 / 4 project](./first/migration.mdx)).
 
 ## Where to start
 
@@ -39,7 +39,7 @@ Fegg 4 code (`MyApplication`, `getClass()`, controllers without a namespace, `Mo
 - [Settings](./first/config.mdx): `site/config/settings.php`, `env.php` and the database connection
 - [fegg-cli](./first/cli.mdx): command line tools
 - [Updating the core](./first/update.mdx)
-- [Migrating a Fegg 3 / 4 project](./first/migration.mdx)
+- [Moving a Fegg 3 / 4 project](./first/migration.mdx)
 - [URL](./basic/url.mdx) and [Controller](./basic/controller.mdx): how a request reaches your code
 - [Security](./basic/security.mdx) and [Logging and errors](./basic/logging.mdx)
 - [CMS screens and the editor](./basic/cms.mdx): the CMS's scripts, icons and rich text fields

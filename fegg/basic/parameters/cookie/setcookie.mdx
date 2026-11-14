@@ -51,6 +51,6 @@ $this->setCookie('campaign', 'spring', 86400 * 30, '/', 'Lax');
 
 :::note
 
-Fegg 4 passed SameSite inside the path (`'/test/; SameSite=Lax'`). That form still works: the attribute is taken out of the path and used as `$sameSite`.
+Fegg 4 passed SameSite inside the path (`'/test/; SameSite=Lax'`). Fegg 5 does not read that form: pass SameSite as the fifth argument.
 
 :::

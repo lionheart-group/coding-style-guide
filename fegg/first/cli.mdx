@@ -170,14 +170,6 @@ Prints `OK: https://example.com does not expose _fegg/`, or `NG` with the list o
 
 It also prints `Warning:` lines, without failing, for outdated rules in `htdocs/.htaccess`: a `<IfModule mod_php5.c>` block (ignored by PHP 7 and 8), and Apache 2.2 `Order` / `Deny from` lines (an HTTP 500 on Apache 2.4 without `mod_access_compat`; use `Require all denied`). Compare the file with `core/dist/htaccess.dist`.
 
-## install:class
-
-```bash
-./fegg-cli install:class <owner>/<repository>
-```
-
-Clones a Fegg library repository (from GitHub, or a full `https://` / `git:` URL) and copies its `src/` directory into `htdocs/_fegg/site/lib/`. This is the Fegg 4 library mechanism: classes in `site/lib/` are only loaded through `getClass()`, which is deprecated in Fegg 5. For new code, put namespaced classes in `site/src/` instead.
-
 ## Developer commands in the skeleton
 
 The skeleton repository also has Composer scripts for the test suite and code checks. Composer is only used for development; the application never loads `vendor/`.
