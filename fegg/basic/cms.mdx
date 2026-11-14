@@ -1,0 +1,166 @@
+---
+sidebar_position: 8
+---
+
+# CMS screens and the editor
+
+> The CMS's files, scripts and icons, and rich text fields with FeggEditor
+
+The controller side of a CMS screen (login check, `requirePost()`, the CSRF token) is described in [Controller](./controller.mdx#cms-screens). This page covers its templates.
+
+## The CMS's files
+
+The core's CMS files (CSS, JavaScript, images, icons, libraries and the editor) are in `htdocs/_fegg/assets/`. It is the only part of `_fegg/` the web server serves, and only for CSS, JS, images and fonts (see [Directory structure](../first/cont.mdx#protecting-_fegg)). Templates load them from `{{ $site.cms_assets }}` (`/_fegg/assets`):
+
+```html title="site/template/cms/event/html_head.tpl"
+<script type="text/javascript" src="{{ $site.cms_assets }}/js/modal.js"></script>
+```
+
+`{{ $site.cms_dir }}` (`/cms`) is still the URL of the CMS screens, for links and form actions.
+
+- Do not edit `_fegg/assets/`: it is part of the core and `fegg-cli core:update` replaces it. Its files come built, so a project never builds them.
+- The project's own CMS styles go in `htdocs/data/cms/scss/unique.scss`. `npm run build:scss` builds it into `htdocs/data/cms/css/unique.css` together with the public site's CSS, and the CMS loads it after the core's CSS.
+
+## Scripts
+
+The CMS does not load jQuery. The core's scripts are plain JavaScript, and `_fegg/assets/js/base.js` (loaded by every CMS frame) gives a few helpers. Write the scripts of the project's CMS templates with these and the DOM APIs:
+
+| Helper | What it does |
+| :----- | :----------- |
+| `FeggCms.ready(fn)` | Runs `fn` once the DOM is ready |
+| `FeggCms.on(event, selector, handler)` | Delegated listener on `document`; `this` is the element that matches `selector` |
+| `FeggCms.show(el)` / `FeggCms.hide(el)` | `display: block` / `none` |
+| `FeggCms.csrfToken()` | The session's CSRF token, for a POST sent with `fetch()` |
+
+```html title="site/template/cms/event/html_head.tpl"
+<script>
+FeggCms.ready(function () {
+    FeggCms.on("change", ".js-event-type", function () {
+        var place = document.querySelector(".js-event-place");
+        this.value === "online" ? FeggCms.hide(place) : FeggCms.show(place);
+    });
+});
+</script>
+```
+
+A project that really needs jQuery loads its own copy in its `html_head.tpl`.
+
+### Dates
+
+Date fields are `<input type="datetime-local">`: the browser shows its own picker. Print the value in the format the field expects, check it with `datetime()` and convert it before saving:
+
+```html title="site/template/cms/news/form.tpl"
+{{ assign $format = "Y-m-d\TH:i" }}
+<input type="datetime-local" name="post_date" value="{{ $page.data.post_date|feggDate:$format }}" required>
+```
+
+```php title="site/controller/Cms/News.php"
+$validation->datetime('post_date', $this->in('post_date'), array('@date', '投稿日'));
+// ...
+// "2026-11-10T10:00" -> "2026-11-10 10:00:00"
+$data['post_date'] = Validation::toDatetime($data['post_date']);
+```
+
+### Drag and drop ordering
+
+Add `data-sortable` to the list and load SortableJS and `js/sortable.js` (see `site/template/cms/lab/`):
+
+```html
+<script type="text/javascript" src="{{ $site.cms_assets }}/vendor/sortablejs/Sortable.min.js"></script>
+<script type="text/javascript" src="{{ $site.cms_assets }}/js/sortable.js"></script>
+
+<div class="c-uploader-list" data-sortable> ... </div>
+```
+
+The CMS's third-party libraries are in `_fegg/assets/vendor/`.
+
+## Icons
+
+The CMS's icons are [Tabler Icons](https://tabler.io/icons) (MIT, outline):
+
+```html
+<i class="ti ti-search"></i>
+```
+
+The core's `_fegg/assets/vendor/tabler-icons/icons.css` contains only the icons the core uses, collected from their names when the core is built. So:
+
+- Write the names whole (`ti-h-2`, not `'ti-h-' + n` in a script).
+- An icon the core does not use shows nothing. Add it to the project's `unique.scss`, with its SVG from tabler.io as a data URL (black strokes, `#` written `%23`):
+
+```scss title="htdocs/data/cms/scss/unique.scss"
+.ti-star { --ti: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z'/%3E%3C/svg%3E"); }
+```
+
+In SCSS, draw an icon with its variable as a mask: `background-color: currentcolor; mask: var(--ti-link) center / contain no-repeat;`.
+
+## Rich text (FeggEditor)
+
+Rich text fields use FeggEditor, an editor built on [Tiptap](https://tiptap.dev/) (MIT). It replaces CKEditor 4. Text written with CKEditor opens in it as it is (images, YouTube videos, tables).
+
+### Using it in a CMS screen
+
+Mark the textarea with `data-fegg-editor` and load the editor in the screen's `html_head.tpl`. Every `textarea[data-fegg-editor]` becomes an editor when the page is ready; no script of your own is needed.
+
+```html title="site/template/cms/news/form.tpl"
+<textarea name="content" data-fegg-editor="full">{{ $page.data.content }}</textarea>
+<textarea name="summary" data-fegg-editor="simple">{{ $page.data.summary }}</textarea>
+```
+
+```html title="site/template/cms/news/html_head.tpl"
+<link rel="stylesheet" type="text/css" href="{{ $site.cms_assets }}/js/editor.css" />
+<script type="text/javascript" src="{{ $site.cms_assets }}/js/modal.js"></script>
+<script type="text/javascript" src="{{ $site.cms_assets }}/js/modal/image.js"></script>
+<script type="text/javascript" src="{{ $site.cms_assets }}/js/modal/file.js"></script>
+<script type="text/javascript" src="{{ $site.cms_assets }}/js/editor.js"></script>
+```
+
+- `full`: every block. `simple`: inline formatting and links only.
+- Several fields on one page are independent editors (their own toolbar, undo and draft).
+- For a textarea added to the page later, call `FeggEditor.attach(textarea, { toolbar: 'full' })`.
+- While text is typed, a draft is kept in the browser. When the page opens with a draft different from the saved text, the editor offers to restore it.
+
+### Saving and showing it
+
+The textarea receives the HTML when the form is sent. **Always clean each field on the server before saving it:**
+
+```php title="site/controller/Cms/News.php"
+use Fegg\Cms\HtmlSanitizer;
+
+$data['content'] = HtmlSanitizer::clean($this->in('content'));
+```
+
+`HtmlSanitizer::clean()` keeps only the tags, attributes, classes and URLs the editor writes (below). Everything else is removed: scripts, event handlers, `javascript:` URLs, other iframes, other classes. The saved HTML can then be printed as it is, inside `.c-entry-block`:
+
+```html title="site/template/news/detail.tpl"
+<div class="c-entry-block">
+    {{ $page.data.content|noescape }}
+</div>
+```
+
+:::danger
+
+Never print a rich text field with `noescape` unless it was saved through `HtmlSanitizer::clean()`. Text saved before the project used FeggEditor, or written by another tool, is cleaned only when it is saved again: until then, the controller can clean it before showing it (`$row['content'] = HtmlSanitizer::clean($row['content']);`).
+
+:::
+
+### What the editor writes
+
+| Block | HTML | Classes |
+| :---- | :--- | :------ |
+| Image | `<figure class="fegg-image aligncenter" style="width: 50%"><a href><img></a><figcaption>` | `alignleft` / `aligncenter` / `alignright`; width 1–100 %; `is-zoom`: shown large on a click (no link then) |
+| Columns | `<div class="fegg-columns is-1-2"><div class="fegg-column">…</div>…</div>` | `is-1-1`, `is-1-2`, `is-2-1`, `is-1-1-1` |
+| Button link | `<div class="fegg-button is-primary is-center"><a href>Text</a></div>` | `is-primary` (filled) / `is-secondary` (outlined), `is-center` |
+| Gallery | `<div class="fegg-gallery is-cols-3 is-1-1 is-contain is-zoom"><figure><img></figure>…</div>` | `is-cols-2` … `is-cols-4`; frame `is-16-9` / `is-1-1` / `is-3-4` (4:3 without); `is-contain`: whole images (filled and cut without); `is-zoom` |
+| Google Maps | `<div class="fegg-map is-16-9 aligncenter" style="width: 50%"><iframe src="https://www.google.com/maps/embed?pb=…" loading="lazy"></iframe></div>` | ratio `is-16-9` / `is-1-1` (4:3 without), `aligncenter` / `alignright`; width 10–100 % |
+| Link to a file | `<a class="fegg-file is-pdf" href>Name（PDF・1.2 MB）</a>` | `is-pdf`, `is-word`, `is-excel`, `is-powerpoint`, `is-zip`, `is-other` |
+| YouTube | `<div data-youtube-video class="fegg-video is-9-16"><iframe src="https://www.youtube-nocookie.com/embed/…"></iframe></div>` | ratio `is-9-16` (a short; 16:9 without), alignment and width as maps |
+| Table | `<table><thead>…</thead><tbody>…</tbody></table>` | merged cells: `colspan` / `rowspan` |
+
+Plus paragraphs, headings (h2–h4, `text-align`), lists, quotes, lines, bold, italic, underline, strike, mark and links. The class names are written by the editor, so they are not FLOCSS names.
+
+### Its look on the public site
+
+The public styles are in `htdocs/data/scss/object/component/_wysiwyg.scss` (`.c-entry-block`). Change them there for a project.
+
+- In a narrow body, blocks change by the **body's own width** (container queries on `.c-entry-block`), not by the project's breakpoints: under 600px columns are stacked, under 480px images lose their width and float, and galleries have 2 columns. The editor uses the same values, so what editors see matches the site.
+- Images and galleries with `is-zoom` open the image large in a modal (`<dialog class="c-lightbox">`) on a click or Enter, with its caption, and arrows in a gallery. The script is `htdocs/data/js/common/lightbox.js` (loaded by `siteframe.tpl`), the styles `htdocs/data/scss/object/component/_lightbox.scss`. Keep both when the project replaces the skeleton's frame.

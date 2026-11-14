@@ -13,11 +13,11 @@ Because the core (`htdocs/_fegg/core/`) and the project (`htdocs/_fegg/site/`) a
 ./fegg-cli core:update --dry-run    # show the difference to the latest release (changes nothing)
 ./fegg-cli core:update              # update to the latest tag (vX.Y.Z)
 ./fegg-cli core:update v5.1.0       # update to a given version
-npm run build:scss                  # rebuild the CMS CSS if htdocs/cms/scss changed
+npm run build:scss                  # the project's CSS, if its SCSS changed (the CMS's comes built)
 ```
 
 - The release is fetched with `git`. If you can clone from GitHub over SSH (`git clone git@github.com:...` works for you), no token is needed.
-- Only core files are replaced: `htdocs/_fegg/core/`, `htdocs/_fegg/.htaccess` and `htdocs/cms/`. `site/`, `htdocs/index.php`, `htdocs/.htaccess` and `fegg-cli` are not changed.
+- Only core files are replaced: `htdocs/_fegg/core/`, `htdocs/_fegg/assets/` (the CMS's CSS, JS, images and icons, already built) and `htdocs/_fegg/.htaccess`. There is nothing to build after an update. `site/`, `htdocs/index.php`, `htdocs/.htaccess`, `htdocs/data/` and `fegg-cli` are not changed.
 - If core files were edited in the project, the command lists them and stops. Move those changes to overrides in `site/` (see [Directory structure](./cont.mdx#overriding-the-core)) and run it again. Add `--force` only if you really want to overwrite them.
 - The replaced files are kept in `htdocs/_fegg/site/data/core-backup/<old version>-<timestamp>/`.
 - After the update, the template cache is cleared and `fegg-cli migration` runs automatically.
@@ -42,7 +42,7 @@ The environment variable `FEGG_UPDATE_REPO` takes precedence over this file.
 
 1. Run `./fegg-cli core:update` in your local working copy, then run the tests and check that everything works.
 2. Commit the changed files.
-3. Upload `htdocs/_fegg/core/` and `htdocs/cms/` (including the built CSS) over FTP. Upload `htdocs/_fegg/.htaccess` only if it changed.
+3. Upload `htdocs/_fegg/core/` and `htdocs/_fegg/assets/` over FTP. Upload `htdocs/_fegg/.htaccess` only if it changed.
 4. `fegg-cli migration` cannot run on the server. For versions that change tables, either upload a database file built locally or open `/cms/migrate/` in the CMS.
 5. Check the live site with `./fegg-cli doctor https://example.com`.
 

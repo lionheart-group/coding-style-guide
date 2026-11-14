@@ -6,22 +6,24 @@ sidebar_position: 1
 
 Fegg 5 separates, by directory, the **core** shared by every project from the **site** that belongs to one project.
 
-There is only one rule: **do not edit `htdocs/_fegg/core/` or `htdocs/cms/`.** `fegg-cli core:update` replaces them. If you edit them, `fegg-cli core:status` lists the changed files and `core:update` stops. Anything you want to change goes on the `site/` side (see [Overriding the core](#overriding-the-core)).
+There is only one rule: **do not edit `htdocs/_fegg/core/` or `htdocs/_fegg/assets/`.** `fegg-cli core:update` replaces them. If you edit them, `fegg-cli core:status` lists the changed files and `core:update` stops. Anything you want to change goes on the `site/` side (see [Overriding the core](#overriding-the-core)).
 
 ```yaml
 # Project root (does not need to be uploaded to the server)
 fegg-cli                  # project: CLI entry point (path definitions only)
 docs/ tests/ package.json composer.json ...
+assets/                   # skeleton only: sources of the core's CMS files (SCSS, the editor), built into _fegg/assets/
 
 htdocs/                   # document root
     index.php             # project: web entry point (path definitions only)
     .htaccess             # project: template is _fegg/core/dist/htaccess.dist
-    cms/                  # core: CMS admin assets (css/ is built by npm run build:scss)
     data/                 # project: site assets (css, js, images)
+        cms/scss/unique.scss  # project: the project's CMS styles (npm run build:scss)
     up_dir/               # project: files uploaded from the CMS
 
-    _fegg/                # never readable from the web
+    _fegg/                # never readable from the web, except assets/
         .htaccess         # core: deny all
+        assets/           # core: the CMS's CSS, JS, images, icons and libraries (built; {{ $site.cms_assets }})
         core/             # core: DO NOT EDIT (replaced on update)
             src/          # Fegg\             Application, Model, Database\Pdo, Validation, Cms\Helper, Tool\* ...
             controller/   # Fegg\Controller\  Controller (base class), Cms\Login, Cms\Media, Cms\Image ...
@@ -30,7 +32,7 @@ htdocs/                   # document root
             config/       # default settings, YAML for the core tables (cms_user, cms_file, cms_image)
             bin/          # fegg-cli commands
             bootstrap/    # web and CLI start-up, autoloader
-            vendor/       # PHPMailer, Spyc
+            vendor/       # PHPMailer
             dist/         # templates for the project-owned entry files
             VERSION  manifest.json  UPGRADE.md
 
@@ -92,8 +94,7 @@ require FEGG_CORE_DIR . '/bootstrap/web.php';
 
 | Layout                                                             | Entry file                                                                   |
 | ------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
-| Standard: `htdocs/_fegg/`                                          | `core/dist/index.php.dist`                                                   |
-| `_fegg/` placed next to the document root (outside of it)          | `core/dist/index.outside-docroot.php.dist`                                   |
+| Standard: `htdocs/_fegg/` (always inside the document root: the CMS's CSS and JS are served from `_fegg/assets/`) | `core/dist/index.php.dist` |
 | The document root has a different name (`public_html`, etc.)       | Keep the standard one. Only fix `FEGG_HTML_DIR` in `fegg-cli`                |
 | Installed in a subdirectory (`https://example.com/sub/`)           | Keep the standard one. The URL base is detected from `SCRIPT_NAME`           |
 
@@ -101,8 +102,8 @@ require FEGG_CORE_DIR . '/bootstrap/web.php';
 
 In the standard layout `_fegg/` is inside the document root. It is protected by several layers, so that one missing layer is caught by the next:
 
-1. `htdocs/_fegg/.htaccess` denies all requests.
-2. `htdocs/.htaccess` returns 403 for `/_fegg/`, dotfiles and hidden directories (`.git/`; `.well-known/` stays reachable), and denies `.db`, `.sqlite`, `.yaml`, `.tpl`, `.log`, `.md`, `.json` and `.dist` files.
+1. `htdocs/_fegg/.htaccess` denies all requests. `_fegg/assets/.htaccess` lets only CSS, JS, images and fonts through.
+2. `htdocs/.htaccess` returns 403 for `/_fegg/` (except those files in `_fegg/assets/`), dotfiles and hidden directories (`.git/`; `.well-known/` stays reachable), and denies `.db`, `.sqlite`, `.yaml`, `.tpl`, `.log`, `.md`, `.json` and `.dist` files.
 3. Every PHP file under `_fegg/` and every compiled template starts with `defined('FEGG_CORE_DIR') || exit;`.
 4. `fegg-cli doctor https://example.com` checks over HTTP that nothing under `_fegg/` and no database file can be read (see [fegg-cli](./cli.mdx#doctor)). The CMS dashboard also warns about problems it can detect from the files, such as a missing `.htaccess`.
 5. If the server allows it, put the SQLite database outside the document root (see [Settings](./config.mdx#database)).
@@ -110,6 +111,8 @@ In the standard layout `_fegg/` is inside the document root. It is protected by 
 On nginx, where `.htaccess` is not used, add equivalent rules:
 
 ```nginx
+# The CMS's files in _fegg/assets/ first (nginx uses the first regex that matches)
+location ~* ^/_fegg/assets/[^?]+\.(css|js|map|png|jpe?g|gif|svg|webp|woff2?|ico)$ { }
 location ~ (^|/)_fegg(/|$) { deny all; }
 location ~ /\.(?!well-known/) { deny all; }
 location ~* ^/up_dir/.*\.(php\d?|phtml|phar|pht|cgi|pl|py|sh)$ { deny all; }

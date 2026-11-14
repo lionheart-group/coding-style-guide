@@ -60,7 +60,7 @@ class Post extends Controller
 
 ## Trailing slash
 
-URLs without an extension are normalised to end with `/`. A `GET` or `HEAD` request to `/news/detail/1` is redirected (301) to `/news/detail/1/`, keeping the query string. Other methods (`POST`, ...) are handled in place without a redirect. URLs with an extension (`/news/post_1.html`) are not changed.
+URLs without an extension are normalised to end with `/`. A `GET` or `HEAD` request to `/news/detail/1` is redirected (301) to `/news/detail/1/`, keeping the query string (`/news?p=2` → `/news/?p=2`). Other methods (`POST`, ...) are handled in place without a redirect. URLs with an extension (`/news/post_1.html`) are not changed.
 
 Write links in templates with the trailing slash to avoid the extra redirect.
 

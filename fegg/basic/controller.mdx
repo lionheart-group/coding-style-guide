@@ -330,6 +330,8 @@ class Event extends Controller
 }
 ```
 
+The scripts, icons and rich text fields of a CMS screen's templates: see [CMS screens and the editor](./cms.mdx).
+
 ### Forms and the CSRF token
 
 - A form that prints `{{ hidden }}` sends the token already (the base class adds it to the hidden values).
@@ -353,7 +355,7 @@ The login screens are core controllers (`Fegg\Controller\Cms\Login`, `Logout`):
 - `/cms/login/auth` accepts POST only. Deleted users (`valid = 0`) cannot log in, and old password hashes are upgraded at login.
 - Every CMS request checks that the session's user still exists in `cms_user` (`valid = 1`): deleting a user ends their sessions at once.
 - **Login throttling**: every attempt is recorded before the password is checked. After 5 failed logins for one login ID from one address, or 20 from one address, logins from that address are refused for 15 minutes. The failures are stored in the core table `cms_login_attempt`: run `fegg-cli migration` after updating. Without the table the login still works, unthrottled, and a warning is logged.
-- **Logout is a POST** with the CSRF token, so another site cannot log a user out. `/cms/logout/` opened as a link shows a logout button; links with the class `js-cms-logout` post directly (`htdocs/cms/js/base.js`). If you copied the CMS frame templates to `site/template/cms/`, add that class to the logout link.
+- **Logout is a POST** with the CSRF token, so another site cannot log a user out. `/cms/logout/` opened as a link shows a logout button; links with the class `js-cms-logout` post directly (`_fegg/assets/js/base.js`). If you copied the CMS frame templates to `site/template/cms/`, add that class to the logout link.
 - CMS users are created with [`fegg-cli user:create`](../first/cli.mdx#cms-users). `/cms/register/` needs a CMS login and [developer mode](../first/config.mdx#developer-mode).
 
 ## Template of Controller class

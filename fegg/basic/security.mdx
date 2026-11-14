@@ -62,10 +62,19 @@ $settings['csp_report_only'] = true;
 ## Sessions and cookies
 
 - A session starts only when something is written to it (`setSession()`, `setTicket()`, the CMS). Reading does not create one, so ordinary public pages send no `Set-Cookie`.
-- The session cookie is `HttpOnly`, `SameSite=Lax`, and `Secure` when the request is HTTPS (also behind a proxy that sends `X-Forwarded-Proto: https`).
+- The session cookie is `HttpOnly`, `SameSite=Lax`, and `Secure` when the request is HTTPS (see [HTTPS](#https)).
 - `session.use_strict_mode` is on: a session ID the server did not issue is replaced.
 - Call [regenerateSessionId()](./parameters/session/regeneratesessionid.mdx) after a login. [unsetSession()](./parameters/session/unsetsession.mdx) without a name ends the session and deletes its cookie.
 - [setCookie()](./parameters/cookie/setcookie.mdx) sets `HttpOnly` cookies, `SameSite=Strict` by default, `Secure` over HTTPS. [unsetCookie()](./parameters/cookie/unsetcookie.mdx) deletes one.
+
+## HTTPS
+
+`feggIsHttps()` decides whether a request came over HTTPS (the constant `FEGG_CURRENT_PROTOCOL`, used by `{{ base_url }}` and the `Secure` cookies). It looks at:
+
+- `HTTPS` set to anything but `off`, `REQUEST_SCHEME`, port 443 (HTTPS on the server itself);
+- the headers of a proxy, load balancer or CDN that terminates TLS: `X-Forwarded-Proto`, `CloudFront-Forwarded-Proto`, `X-Forwarded-Ssl`, `X-SSL-Request`, `Front-End-Https`, `Forwarded: proto=https`.
+
+Behind a proxy that sends none of these, configure it to send one (usually `X-Forwarded-Proto`). [redirect()](./others/redirect/redirect.mdx) within the site does not depend on it: it sends a path, and the browser keeps the scheme of the page.
 
 ## Forms
 
@@ -96,4 +105,4 @@ See [Upload](../library/upload/index.mdx).
 
 ## Protecting `_fegg/`
 
-`htdocs/_fegg/` is inside the document root in the standard layout. It is protected by `.htaccess` files, and every PHP file starts with `defined('FEGG_CORE_DIR') || exit;`. Check a live site with `./fegg-cli doctor https://example.com` after every FTP upload: it also warns about outdated `.htaccess` rules. See [Directory structure](../first/cont.mdx) and [fegg-cli](../first/cli.mdx#doctor).
+`htdocs/_fegg/` is always inside the document root. It is protected by `.htaccess` files (only the CMS's CSS, JS, images and fonts in `_fegg/assets/` are served), and every PHP file starts with `defined('FEGG_CORE_DIR') || exit;`. Check a live site with `./fegg-cli doctor https://example.com` after every FTP upload: it also warns about outdated `.htaccess` rules. See [Directory structure](../first/cont.mdx) and [fegg-cli](../first/cli.mdx#doctor).

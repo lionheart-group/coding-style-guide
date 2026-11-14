@@ -17,7 +17,7 @@ Send a `Location` header (HTTP 302) and end the response. Code after `redirect()
 `redirect()` does not call `exit`: it throws `Fegg\Http\Halt`, which the dispatcher catches before it writes the session and sends the response. There is no need to write `exit` after it. A `catch (\Throwable $e)` around `redirect()` must rethrow `Fegg\Http\Halt` (see [Ending a response](../../controller.mdx#ending-a-response)); `catch (\Exception $e)` is not affected.
 
 - A URL starting with `http://` or `https://` is used as is.
-- Any other URL is a path inside the site. A `/` is added at the start if missing, a trailing `/` is added when the path has no extension (to avoid a second redirect, see [URL](../../url.mdx#trailing-slash)), and the current protocol, domain and base path are added in front. This also works when the site is installed in a subdirectory.
+- Any other URL is a path inside the site. A `/` is added at the start if missing, a trailing `/` is added when the path has no extension (to avoid a second redirect, see [URL](../../url.mdx#trailing-slash)), and the base path is added in front, so it also works when the site is installed in a subdirectory. It is sent as a path (`Location: /news/`), without protocol and domain: the browser stays on the scheme and host of the current page, so an HTTPS page always redirects to HTTPS, even behind a proxy that does not say it is HTTPS (see [Security](../../security.mdx#https)).
 
 ## Arguments
 
@@ -28,16 +28,19 @@ Send a `Location` header (HTTP 302) and end the response. Code after `redirect()
 ## Example
 
 ```php title="Controller"
-// -> https://example.com/news/
+// Location: /news/
 $this->redirect('/news/');
 
-// -> https://example.com/news/ (slashes added)
+// Location: /news/ (slashes added)
 $this->redirect('news');
 
-// -> https://example.com/contact/result.html
+// Location: /contact/result.html
 $this->redirect('/contact/result.html');
 
-// -> https://www.example.org/
+// Location: /sub/news/ (site installed in /sub/)
+$this->redirect('/news/');
+
+// Location: https://www.example.org/
 $this->redirect('https://www.example.org/');
 ```
 

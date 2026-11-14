@@ -109,6 +109,7 @@ return array(
 | `FEGG_RECAPTCHA_SITE_KEY`, `FEGG_RECAPTCHA_SECRET`, `FEGG_TURNSTILE_SITE_KEY`, `FEGG_TURNSTILE_SECRET` | Contact form spam protection (see [Captcha](../library/captcha/index.mdx)) |
 | `FEGG_SMTP_PASSWORD` (`FEGG_SMTP_HOST`, `FEGG_SMTP_USERNAME`) | SMTP sending (see [Mail](../library/mail/index.mdx#smtp)) |
 | `FEGG_LOG_DIR` | Directory of the application log instead of `site/data/log` |
+| `FEGG_UPLOAD_DIR` | Another directory for CMS uploads (default `htdocs/up_dir`, see `site/config/upload_dir.php`). The web server must serve it at `/up_dir/` |
 | `FEGG_RECAPTCHA_SCORE_THRESHOLD` | reCAPTCHA score needed (default `0.5`; `1.0` rejects every form, to check the error message) |
 | `FEGG_CMS_INITIAL_LOGIN`, `FEGG_CMS_INITIAL_NAME`, `FEGG_CMS_INITIAL_PASSWORD_HASH` (or `FEGG_CMS_INITIAL_PASSWORD`) | First CMS user, created by [`fegg-cli migration`](./cli.mdx#migration) |
 | `FEGG_ENV_NAME` | Environment variable only: chooses `site/config/env/<name>.php` instead of `paths.php` |
@@ -202,7 +203,7 @@ The connection is set in **`htdocs/_fegg/site/config/database_config.php`**. The
 - If the server allows it, put the SQLite file **outside the document root** with `FEGG_DB_PATH` (or `FEGG_DB_DSN`).
 - MySQL / MariaDB are supported, including `fegg-cli migration`. See [Database configuration](../library/database/configuration.mdx#mysql).
 
-Tables are defined in YAML files (`core/config/database/` for the CMS tables, `site/config/database/` for the project's tables) and created or changed with `./fegg-cli migration` (see [fegg-cli](./cli.mdx#migration)). Every table needs the columns `valid`, `created` and `modified`.
+Tables are defined in YAML files (`core/config/database/` for the CMS tables, `site/config/database/` for the project's tables) and created or changed with `./fegg-cli migration` (see [fegg-cli](./cli.mdx#migration)). Every table needs the columns `valid`, `created` and `modified`. The files are read by `Fegg\Yaml`: see [YAML](../library/index.mdx#yaml) for what it reads.
 
 ## Other files in `site/config/`
 

@@ -107,7 +107,7 @@ Prints `OK: <n> template(s)` when there is nothing to fix. Run it after every te
 ./fegg-cli user:list                                # user_id, login and name of every CMS user
 ```
 
-Manage the CMS users (table `cms_user`). `user:create` and `user:password` ask for the password twice without showing it. It must have at least 8 characters, and it is stored with `password_hash()`.
+Manage the CMS users (table `cms_user`). `user:create` and `user:password` ask for the password twice without showing it. It must not be empty (there is no length rule), and it is stored with `password_hash()`.
 
 The password is never an argument (it would stay in the shell history). To pass it from a script, or where there is no terminal, give it on standard input with `--password-stdin`:
 
@@ -190,3 +190,11 @@ The skeleton repository also has Composer scripts for the test suite and code ch
 | `composer cs:check`        | PSR-12 check of `core/src` and the tests (`composer cs:fix` applies the fixes) |
 
 The integration tests run with `FEGG_ENV=development` and a throwaway SQLite database, so they never touch `site/data/db/db.db`.
+
+The skeleton also builds the core's CMS files. Projects do not run these: the files come built with `core:update`.
+
+| Command               | What it does |
+| :-------------------- | :----------- |
+| `npm run build:cms`   | The core's CMS CSS, the editor (`assets/editor/`) and the icons it uses, into `htdocs/_fegg/assets/` (committed) |
+| `npm run typecheck`   | TypeScript check of the editor's source |
+| `npm run cms:vendor`  | Copy the CMS's libraries (SortableJS ...) from `node_modules` to `htdocs/_fegg/assets/vendor/` |

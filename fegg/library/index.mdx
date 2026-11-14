@@ -91,11 +91,30 @@ $foo = new Foo();
 
 These libraries are bundled in `htdocs/_fegg/core/vendor/` and autoloaded.
 
-- [PHPMailer](https://github.com/PHPMailer/PHPMailer) (7.0)
+- [PHPMailer](https://github.com/PHPMailer/PHPMailer) (7.2)
   - Used by [Mail](./mail/index.mdx). Namespace `PHPMailer\PHPMailer`
   - A failed send throws `PHPMailer\PHPMailer\Exception`
-- [Spyc](https://github.com/mustangostang/spyc)
-  - YAML document loader (global class `Spyc`)
-  - Used by the database migration (`fegg-cli migration`)
 
 JSON documents are handled with PHP's own `json_encode` and `json_decode`.
+
+## YAML
+
+YAML is read and written by the core's own `Fegg\Yaml`, without a library (Fegg 4 bundled Spyc, which is no longer maintained). The table definitions use it, and so can the project:
+
+```php
+use Fegg\Yaml;
+
+$data = Yaml::parseFile(FEGG_SITE_DIR . '/config/shops.yaml');   // array
+$text = Yaml::dump($data);                                        // YAML that reads back as $data
+```
+
+It reads YAML written by hand:
+
+- block mappings and lists, with lists also at the indentation of their key;
+- `[a, b]` and `{a: 1}`, also over several lines;
+- `|` and `>` text, with `-` / `+` and an indentation indicator;
+- single and double quoted text with every escape, plain text over several lines, comments.
+
+Values follow YAML 1.2: `null` / `~`, `true` / `false`, integers (also `0x`, `0o`), floats (also `.inf`, `.nan`). `yes`, `no`, `on`, `off` and numbers with a leading zero (`014`) stay text.
+
+Anything else is refused with `Fegg\YamlException`, whose message names the file and the line: anchors and aliases (`&`, `*`), merge keys (`<<`), tags (`!`), directives (`%YAML`), complex keys (`?`), several documents in one file, tabs as indentation. It is never read differently.

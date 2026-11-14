@@ -31,12 +31,14 @@ Find the skeleton version the project started from (`version` in `package.json`,
 | `code/data/`                                                    | `htdocs/_fegg/site/data/`                                        |
 | `htdocs/index.php`, `fegg-cli`                                  | Recreate from `core/dist/index.php.dist` and `core/dist/fegg-cli.dist` |
 | `htdocs/.htaccess`                                              | Add the Fegg rules from `core/dist/htaccess.dist`                |
+| `htdocs/cms/` (CMS CSS, JS, images, CKEditor, fonts)             | `htdocs/_fegg/assets/` (use the new version; delete `htdocs/cms/`) |
+| `htdocs/cms/scss/unique.scss` (the project's CMS styles)        | `htdocs/data/cms/scss/unique.scss`                               |
 
 Then:
 
-1. Copy `htdocs/_fegg/core/`, `htdocs/_fegg/.htaccess` and `htdocs/cms/` from the Fegg 5 skeleton, and run `npm run build:scss`.
+1. Copy `htdocs/_fegg/core/`, `htdocs/_fegg/assets/` (the CMS's CSS, JS and images, already built) and `htdocs/_fegg/.htaccess` from the Fegg 5 skeleton. Move the project's CMS styles to `htdocs/data/cms/scss/unique.scss`, set `"sass"` in `package.json` to `htdocs/data/scss,htdocs/data/cms/scss` as in the skeleton, and run `npm run build:scss`.
 2. Recreate the entry files. If the project changed the paths in `index.php`, set the three constants (`FEGG_HTML_DIR`, `FEGG_CORE_DIR`, `FEGG_SITE_DIR`) to match (see [Directory structure](./cont.mdx#entry-files-and-layout)).
-3. Add the `FilesMatch` block and the `RewriteRule (^|/)_fegg(/|$) - [F,L]` line from `htaccess.dist` to `htdocs/.htaccess`.
+3. Add the `FilesMatch` block and the `_fegg` rule from `htaccess.dist` to `htdocs/.htaccess`: the `RewriteCond` that lets `_fegg/assets/` through, then `RewriteRule (^|/)_fegg(/|$) - [F,L]`. Without the `RewriteCond` the CMS has no CSS or JS.
 4. Move the project files with `git mv` (keeps the history).
 5. Carry over the changed values of the old `fegg/settings.php` (`developer_ip`, `run_mode`, `maintenance_page_url`, Basic authentication, languages) to `site/config/settings.php`. Copy `site/config/env.php.dist` to `site/config/env.php` on each development or staging server and set `'FEGG_ENV' => 'development'`: without it the site runs as production and shows no error details (see [Settings](./config.mdx#environments-and-secrets)).
 6. Create `site/config/cms_menu.php` with one block per post type that was in the old CMS menu.
@@ -165,6 +167,14 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 - **Uploads** check the content against the extension; add the `@content` message to a copied `site/config/file_error_message.php` (see [Upload](../library/upload/configuration.mdx)).
 - **`htdocs/.htaccess`**: remove the `<IfModule mod_php5.c>` block and the Apache 2.2 `Order` / `Deny from all` lines (500 on Apache 2.4), and add the dotfile rules of `core/dist/htaccess.dist`. `fegg-cli doctor` warns about the old lines.
 - **Captcha keys and the database DSN** move to `env.php`: the skeleton's `database_config.php` and `contact/contact_config.php` read them with `feggEnv()`. Copied old files keep working; move the keys out of committed files when convenient.
+- **The CMS's files** are in `htdocs/_fegg/assets/`, read at `/_fegg/assets/`. Copies of CMS templates in `site/template/cms/` load them with `{{ $site.cms_assets }}` instead of `{{ $site.cms_dir }}` (`css/`, `js/`, `img/`, `vendor/`). `_fegg/` can no longer be outside the document root. See [CMS screens and the editor](../basic/cms.mdx).
+- **No jQuery in the CMS** (nor jQuery UI, Select2 or the datetimepicker). Rewrite `$(...)` in the project's CMS templates (`site/template/cms/*/html_head.tpl`) with plain JavaScript and the `FeggCms` helpers, or load a jQuery of your own there.
+  - Date fields: `<input type="datetime-local">` with `feggDate:"Y-m-d\TH:i"`; the controller checks them with `$validation->datetime()` and saves `Fegg\Validation::toDatetime($value)`.
+  - Drag & drop ordering: `data-sortable` on the list, with `vendor/sortablejs/Sortable.min.js` and `js/sortable.js`.
+- **CKEditor 4 is removed.** Rich text fields use FeggEditor: replace `CKEDITOR.replace(...)` and `ckeditor/ckeditor.js` with `data-fegg-editor="full"` on the textarea and `js/editor.js`, and clean the saved HTML with `Fegg\Cms\HtmlSanitizer::clean()`. Text written with CKEditor opens in FeggEditor. Copied `cms/image/` and `cms/media/` templates use the new picker scripts (`js/modal/image_picker.js`, `file_picker.js`; parameters `from=wysiwyg&picker=<id>`).
+- **Font Awesome 4.3 is removed.** Icons are Tabler Icons: replace `fa fa-…` with `ti ti-…`: `search` → `search`, `angle-right` → `chevron-right`, `image` / `picture-o` → `photo`, `times` → `x`, `cog` → `settings` (`pencil`, `trash`, `plus`, `link`, `check`, `download`, `upload` keep their names; others: tabler.io/icons). An icon the core does not use needs a line in `unique.scss` (see [Icons](../basic/cms.mdx#icons)). Copies of `cms/frame/sitewire.tpl` and `popframe.tpl` load `vendor/tabler-icons/icons.css` instead of `fonts/font-awesome.min.css`.
+- **Spyc is removed.** YAML is read by `Fegg\Yaml` (see [YAML](../library/index.mdx#yaml)): replace `spyc_load_file()` / `Spyc::YAMLLoad()` in project code with `Fegg\Yaml::parseFile()`. Table definitions read as before; `yes` / `no` and numbers with a leading zero are now text, and anchors or tags are refused with the file and the line.
+- **HTTPS** is detected from more server variables and proxy headers, and `redirect()` within the site sends a path, so HTTPS pages are no longer redirected to HTTP when the detection fails (see [Security](../basic/security.mdx#https)).
 - **Route-only controllers**: controllers that implement `Fegg\Http\RouteOnly` (such as the skeleton's `Site\Controller\Page`) are only reached through `site/config/route.php`. Add a route such as `$route['about/'] = 'page/render/about';` for each static page that was reached as `/page/render/...` (see [URL](../basic/url.mdx#static-pages)).
 
 ### Additional work for v3 projects
@@ -177,13 +187,14 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 
 - [ ] `./fegg-cli template:lint` prints OK
 - [ ] `php -l` reports no syntax errors for the PHP files under `htdocs/_fegg` (excluding `vendor/` and `data/`)
-- [ ] `./fegg-cli migration` against a copy of the production database only adds new core tables such as `cms_login_attempt` (no project table definition is missing)
+- [ ] `./fegg-cli migration` against a copy of the production database only adds new core tables such as `cms_login_attempt` (no project table definition is missing, and every YAML file is read: an error names the file and the line)
 - [ ] `./fegg-cli core:status` prints `No changes to core files.`
+- [ ] The browser console of every CMS screen shows no errors (`$ is not defined` means a template still uses jQuery), and dates (with the time), rich text and gallery ordering are saved
 - [ ] Public pages, the contact form (through to sending), CMS login, create / edit / delete for each post type, and media and image uploads work
 - [ ] Every post type appears in the CMS side menu and on the dashboard
 - [ ] Every saving action in `site/controller/Cms/` calls `$this->requirePost()`: opening its URL in the browser (a GET, e.g. `/cms/news/update/`) answers 405
 - [ ] No page links to an action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) or defined only in a base controller (both are 404 now)
 - [ ] The PHP error log has no warnings and no `Fegg deprecated` entries
-- [ ] After deploying, `./fegg-cli doctor https://<production URL>` prints OK and the CMS dashboard shows no protection warnings
+- [ ] After deploying, `./fegg-cli doctor https://<production URL>` prints OK (`/_fegg/assets/js/base.js` is served, the rest of `/_fegg/` is not) and the CMS dashboard shows no protection warnings
 
 To roll back, redeploy the old branch. The table definitions are compatible, so the same database file works before and after the migration.
