@@ -31,7 +31,7 @@ When the service cannot be reached or does not answer with HTTP 200 JSON, `succe
 ## Example
 
 ```php title="Controller"
-use Fegg\Captcha\ReCAPTCHA;
+use Fegg\Tool\Captcha\ReCAPTCHA;
 
 $recaptcha = new ReCAPTCHA(feggEnv('FEGG_RECAPTCHA_SECRET', ''), 0.5);
 $result = $recaptcha->auth($this->in('g-recaptcha-response'));

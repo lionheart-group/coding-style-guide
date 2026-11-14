@@ -10,8 +10,8 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 Two classes verify the token posted by a CAPTCHA widget with the service's API:
 
-- `Fegg\Captcha\ReCAPTCHA`: [Google reCAPTCHA v3](https://developers.google.com/recaptcha/docs/v3) (score based)
-- `Fegg\Captcha\Turnstile`: [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/)
+- `Fegg\Tool\Captcha\ReCAPTCHA`: [Google reCAPTCHA v3](https://developers.google.com/recaptcha/docs/v3) (score based)
+- `Fegg\Tool\Captcha\Turnstile`: [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/)
 
 Both send the token with `Fegg\Http\Client` (cURL when it is installed, otherwise PHP's http stream wrapper; 5 second timeout, 3 seconds to connect).
 
@@ -27,9 +27,9 @@ namespace Site\Controller;
 
 defined('FEGG_CORE_DIR') || exit;
 
-use Fegg\Captcha\ReCAPTCHA;
-use Fegg\Captcha\Turnstile;
-use Fegg\Validation;
+use Fegg\Tool\Captcha\ReCAPTCHA;
+use Fegg\Tool\Captcha\Turnstile;
+use Fegg\Tool\Validation;
 
 class Entry extends Controller
 {

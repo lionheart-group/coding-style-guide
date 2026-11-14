@@ -23,7 +23,7 @@ Returns `true` when `$url` is a YouTube short (`/shorts/<id>`). [Embed::youtube]
 ## Example
 
 ```php title="Controller"
-use Fegg\Embed;
+use Fegg\Tool\Embed;
 
 Embed::isYoutubeShort('https://www.youtube.com/shorts/dQw4w9WgXcQ');  // -> true
 Embed::isYoutubeShort('https://www.youtube.com/watch?v=dQw4w9WgXcQ'); // -> false

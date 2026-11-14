@@ -10,7 +10,7 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 ## How to use
 
-Import `Fegg\Validation` and create it with `new`. Call a check method for each field, then read the result with [Validation::getErrorMessage](./methods/geterrormessage.mdx).
+Import `Fegg\Tool\Validation` and create it with `new`. Call a check method for each field, then read the result with [Validation::getErrorMessage](./methods/geterrormessage.mdx).
 
 ```php title="Controller"
 <?php
@@ -18,7 +18,7 @@ namespace Site\Controller;
 
 defined('FEGG_CORE_DIR') || exit;
 
-use Fegg\Validation;
+use Fegg\Tool\Validation;
 
 class Contact extends Controller
 {

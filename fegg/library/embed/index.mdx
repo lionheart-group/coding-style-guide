@@ -8,11 +8,11 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 > Embedding YouTube videos and Google Maps the way the editor does
 
-`Fegg\Embed` reads a YouTube URL or a Google Maps embed code and writes the same HTML as the CMS editor (FeggEditor). It replaces `Fegg\Tool\OEmbed` of Fegg 4.
+`Fegg\Tool\Embed` reads a YouTube URL or a Google Maps embed code and writes the same HTML as the CMS editor (FeggEditor). It replaces `Fegg\Tool\OEmbed` of Fegg 4.
 
 Nothing is asked of YouTube or Google: the URL is read by rules, so there is no request, no timeout and no exception. A value that is not a YouTube URL or a map gives `null` (URL methods) or `''` (HTML methods). The player is always `https://www.youtube-nocookie.com/embed/<id>`.
 
-The editor and this class read URLs by the same rules (`assets/editor/lib/url.ts` and `htdocs/_fegg/core/src/Embed.php`, both tested with `tests/fixtures/embed/urls.json`), and `Fegg\Cms\HtmlSanitizer` keeps only the iframes whose URL [Embed::isYoutubeEmbed](./methods/isyoutubeembed.mdx) or [Embed::isMapEmbed](./methods/ismapembed.mdx) accepts.
+The editor and this class read URLs by the same rules (`assets/editor/lib/url.ts` and `htdocs/_fegg/core/src/Tool/Embed.php`, both tested with `tests/fixtures/embed/urls.json`), and `Fegg\Cms\HtmlSanitizer` keeps only the iframes whose URL [Embed::isYoutubeEmbed](./methods/isyoutubeembed.mdx) or [Embed::isMapEmbed](./methods/ismapembed.mdx) accepts.
 
 ## How to use
 
@@ -45,7 +45,7 @@ namespace Site\Controller;
 
 defined('FEGG_CORE_DIR') || exit;
 
-use Fegg\Embed;
+use Fegg\Tool\Embed;
 
 class Movie extends Controller
 {

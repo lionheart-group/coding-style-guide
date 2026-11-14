@@ -23,7 +23,7 @@ Returns `true` when `$src` is the URL of Google Maps' "Embed a map" (`https://ww
 ## Example
 
 ```php title="Controller"
-use Fegg\Embed;
+use Fegg\Tool\Embed;
 
 Embed::isMapEmbed('https://www.google.com/maps/embed?pb=!1m18!1m12'); // -> true
 Embed::isMapEmbed('https://maps.google.com/?q=Tokyo');                // -> false

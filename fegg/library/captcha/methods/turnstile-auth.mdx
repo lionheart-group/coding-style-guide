@@ -30,7 +30,7 @@ When the service cannot be reached or does not answer with HTTP 200 JSON, `succe
 ## Example
 
 ```php title="Controller"
-use Fegg\Captcha\Turnstile;
+use Fegg\Tool\Captcha\Turnstile;
 
 $turnstile = new Turnstile(feggEnv('FEGG_TURNSTILE_SECRET', ''));
 $result = $turnstile->auth($this->in('cf-turnstile-response'));

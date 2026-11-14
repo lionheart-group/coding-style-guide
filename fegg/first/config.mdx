@@ -203,7 +203,7 @@ The connection is set in **`htdocs/_fegg/site/config/database_config.php`**. The
 - If the server allows it, put the SQLite file **outside the document root** with `FEGG_DB_PATH` (or `FEGG_DB_DSN`).
 - MySQL / MariaDB are supported, including `fegg-cli migration`. See [Database configuration](../library/database/configuration.mdx#mysql).
 
-Tables are defined in YAML files (`core/config/database/` for the CMS tables, `site/config/database/` for the project's tables) and created or changed with `./fegg-cli migration` (see [fegg-cli](./cli.mdx#migration)). Every table needs the columns `valid`, `created` and `modified`. The files are read by `Fegg\Yaml`: see [YAML](../library/index.mdx#yaml) for what it reads.
+Tables are defined in YAML files (`core/config/database/` for the CMS tables, `site/config/database/` for the project's tables) and created or changed with `./fegg-cli migration` (see [fegg-cli](./cli.mdx#migration)). Every table needs the columns `valid`, `created` and `modified`. The files are read by `Fegg\Tool\Yaml`: see [YAML](../library/index.mdx#yaml) for what it reads.
 
 ## Other files in `site/config/`
 

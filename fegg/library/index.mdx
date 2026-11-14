@@ -17,7 +17,7 @@ namespace Site\Controller;
 defined('FEGG_CORE_DIR') || exit;
 
 use Fegg\Tool\Mail;
-use Fegg\Validation;
+use Fegg\Tool\Validation;
 
 class Contact extends Controller
 {
@@ -40,10 +40,10 @@ Fegg 4 code such as `$this->getClass('Tool/Mail')` still works in Fegg 5 through
 
 | Fegg 4 | Fegg 5 |
 | --- | --- |
-| `$this->getClass('Validation')` | `new \Fegg\Validation()` |
+| `$this->getClass('Validation')` | `new \Fegg\Tool\Validation()` |
 | `$this->getClass('Tool/Mail', $subject, $body)` | `new \Fegg\Tool\Mail($subject, $body)` |
 | `$this->getClass('Tool/Upload')` | `new \Fegg\Tool\Upload()` |
-| `$this->getClass('ReCAPTCHA', $secret)` | `new \Fegg\Captcha\ReCAPTCHA($secret)` |
+| `$this->getClass('ReCAPTCHA', $secret)` | `new \Fegg\Tool\Captcha\ReCAPTCHA($secret)` |
 | `$this->getClass('DB_pdo')` | `new \Fegg\Database\Pdo()` |
 
 The same applies to the other `Tool/...` classes (`Tool/File`, `Tool/RSS`, `Tool/Trim`), which became `Fegg\Tool\File` and so on. `Tool/Date` and `Tool/OEmbed` are removed: use PHP's `DateTimeImmutable` (see [Dates and time zone](../basic/controller.mdx#dates-and-time-zone)) and [Embed](./embed/index.mdx).
@@ -52,9 +52,11 @@ The same applies to the other `Tool/...` classes (`Tool/File`, `Tool/RSS`, `Tool
 
 ## Extension Libraries
 
+The libraries a project uses as needed are in the `Fegg\Tool\` namespace. `Fegg\Model` and `Fegg\Database\Pdo` are part of the framework itself (directly under `Fegg\`, like `Fegg\Application`), and are listed here because projects call them all the time.
+
 | Library | Class | Description |
 | --- | --- | --- |
-| [Validation](./validation/index.mdx) | `Fegg\Validation` | Providing some functions for validation |
+| [Validation](./validation/index.mdx) | `Fegg\Tool\Validation` | Providing some functions for validation |
 | [Database](./database/index.mdx) | `Fegg\Database\Pdo` | Providing necessary functions for using database |
 | [Model](./model/index.mdx) | `Fegg\Model` | Extended Database Library for LH project |
 | [File](./file/index.mdx) | `Fegg\Tool\File` | Providing some functions for managing files/directories |
@@ -62,8 +64,8 @@ The same applies to the other `Tool/...` classes (`Tool/File`, `Tool/RSS`, `Tool
 | [Mail](./mail/index.mdx) | `Fegg\Tool\Mail` | Providing some functions for sending email (PHPMailer wrapper) |
 | [RSS](./rss/index.mdx) | `Fegg\Tool\RSS` | Providing some functions for analyzing RSS document |
 | [Trim](./trim/index.mdx) | `Fegg\Tool\Trim` | Providing some functions for processing image (especially image crop) |
-| [Embed](./embed/index.mdx) | `Fegg\Embed` | Embedding YouTube videos and Google Maps the way the editor does |
-| [Captcha](./captcha/index.mdx) | `Fegg\Captcha\ReCAPTCHA`, `Fegg\Captcha\Turnstile` | Verifying Google reCAPTCHA / Cloudflare Turnstile responses |
+| [Embed](./embed/index.mdx) | `Fegg\Tool\Embed` | Embedding YouTube videos and Google Maps the way the editor does |
+| [Captcha](./captcha/index.mdx) | `Fegg\Tool\Captcha\ReCAPTCHA`, `Fegg\Tool\Captcha\Turnstile` | Verifying Google reCAPTCHA / Cloudflare Turnstile responses |
 
 ## Project libraries
 
@@ -98,10 +100,10 @@ JSON documents are handled with PHP's own `json_encode` and `json_decode`.
 
 ## YAML
 
-YAML is read and written by the core's own `Fegg\Yaml`, without a library (Fegg 4 bundled Spyc, which is no longer maintained). The table definitions use it, and so can the project:
+YAML is read and written by the core's own `Fegg\Tool\Yaml`, without a library (Fegg 4 bundled Spyc, which is no longer maintained). The table definitions use it, and so can the project:
 
 ```php
-use Fegg\Yaml;
+use Fegg\Tool\Yaml;
 
 $data = Yaml::parseFile(FEGG_SITE_DIR . '/config/shops.yaml');   // array
 $text = Yaml::dump($data);                                        // YAML that reads back as $data
@@ -116,4 +118,4 @@ It reads YAML written by hand:
 
 Values follow YAML 1.2: `null` / `~`, `true` / `false`, integers (also `0x`, `0o`), floats (also `.inf`, `.nan`). `yes`, `no`, `on`, `off` and numbers with a leading zero (`014`) stay text.
 
-Anything else is refused with `Fegg\YamlException`, whose message names the file and the line: anchors and aliases (`&`, `*`), merge keys (`<<`), tags (`!`), directives (`%YAML`), complex keys (`?`), several documents in one file, tabs as indentation. It is never read differently.
+Anything else is refused with `Fegg\Tool\YamlException`, whose message names the file and the line: anchors and aliases (`&`, `*`), merge keys (`<<`), tags (`!`), directives (`%YAML`), complex keys (`?`), several documents in one file, tabs as indentation. It is never read differently.

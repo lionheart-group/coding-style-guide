@@ -129,13 +129,13 @@ Fegg 4 had no such check, so copied CMS controllers do not have it. Add `$this->
 | `Model`, `ModelWhere`, `ModelOrder`, ...   | `Fegg\Model`, `Fegg\Model\Where`, `Fegg\Model\Order`, ... |
 | `DB_pdo`                                   | `Fegg\Database\Pdo`                                 |
 | `LH_FW`                                    | `Fegg\Cms\Helper`                                   |
-| `Validation`                               | `Fegg\Validation`                                   |
-| `ReCAPTCHA`, `Turnstile`                   | `Fegg\Captcha\ReCAPTCHA`, `Fegg\Captcha\Turnstile`  |
+| `Validation`                               | `Fegg\Tool\Validation`                                   |
+| `ReCAPTCHA`, `Turnstile`                   | `Fegg\Tool\Captcha\ReCAPTCHA`, `Fegg\Tool\Captcha\Turnstile`  |
 | `Tool/File`, `Tool/Mail`, `Tool/RSS`, `Tool/Trim`, `Tool/Upload` | `Fegg\Tool\File`, `Fegg\Tool\Mail`, ... |
 | `Tool/Date`                                | Removed: PHP's `DateTimeImmutable` (see [Dates and time zone](../basic/controller.mdx#dates-and-time-zone)) |
-| `Tool/OEmbed`                              | Removed: `Fegg\Embed` (see [Embed](../library/embed/index.mdx)) |
+| `Tool/OEmbed`                              | Removed: `Fegg\Tool\Embed` (see [Embed](../library/embed/index.mdx)) |
 | `$this->getClass('LH_FW', 'news')`         | `new \Fegg\Cms\Helper('news')`                      |
-| `$this->getClass('Validation')`            | `new \Fegg\Validation()`                            |
+| `$this->getClass('Validation')`            | `new \Fegg\Tool\Validation()`                            |
 | `$this->getClass('Tool/Upload')`           | `new \Fegg\Tool\Upload()`                           |
 | `$this->getClass('MyLib/Foo')`             | `new \Site\MyLib\Foo()` in `site/src/MyLib/Foo.php` |
 
@@ -171,13 +171,13 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 - **Captcha keys and the database DSN** move to `env.php`: the skeleton's `database_config.php` and `contact/contact_config.php` read them with `feggEnv()`. Copied old files keep working; move the keys out of committed files when convenient.
 - **The CMS's files** are in `htdocs/_fegg/assets/`, read at `/_fegg/assets/`. Copies of CMS templates in `site/template/cms/` load them with `{{ $site.cms_assets }}` instead of `{{ $site.cms_dir }}` (`css/`, `js/`, `img/`, `vendor/`). `_fegg/` can no longer be outside the document root. See [CMS screens and the editor](../basic/cms.mdx).
 - **No jQuery in the CMS** (nor jQuery UI, Select2 or the datetimepicker). Rewrite `$(...)` in the project's CMS templates (`site/template/cms/*/html_head.tpl`) with plain JavaScript and the `FeggCms` helpers, or load a jQuery of your own there.
-  - Date fields: `<input type="datetime-local">` with `feggDate:"Y-m-d\TH:i"`; the controller checks them with `$validation->datetime()` and saves `Fegg\Validation::toDatetime($value)`.
+  - Date fields: `<input type="datetime-local">` with `feggDate:"Y-m-d\TH:i"`; the controller checks them with `$validation->datetime()` and saves `Fegg\Tool\Validation::toDatetime($value)`.
   - Drag & drop ordering: `data-sortable` on the list, with `vendor/sortablejs/Sortable.min.js` and `js/sortable.js`.
 - **CKEditor 4 is removed.** Rich text fields use FeggEditor: replace `CKEDITOR.replace(...)` and `ckeditor/ckeditor.js` with `data-fegg-editor="full"` on the textarea and `js/editor.js`, and clean the saved HTML with `Fegg\Cms\HtmlSanitizer::clean()`. Text written with CKEditor opens in FeggEditor. Copied `cms/image/` and `cms/media/` templates use the new picker scripts (`js/modal/image_picker.js`, `file_picker.js`; parameters `from=wysiwyg&picker=<id>`).
 - **Font Awesome 4.3 is removed.** Icons are Tabler Icons: replace `fa fa-…` with `ti ti-…`: `search` → `search`, `angle-right` → `chevron-right`, `image` / `picture-o` → `photo`, `times` → `x`, `cog` → `settings` (`pencil`, `trash`, `plus`, `link`, `check`, `download`, `upload` keep their names; others: tabler.io/icons). An icon the core does not use needs a line in `unique.scss` (see [Icons](../basic/cms.mdx#icons)). Copies of `cms/frame/sitewire.tpl` and `popframe.tpl` load `vendor/tabler-icons/icons.css` instead of `fonts/font-awesome.min.css`.
-- **Spyc is removed.** YAML is read by `Fegg\Yaml` (see [YAML](../library/index.mdx#yaml)): replace `spyc_load_file()` / `Spyc::YAMLLoad()` in project code with `Fegg\Yaml::parseFile()`. Table definitions read as before; `yes` / `no` and numbers with a leading zero are now text, and anchors or tags are refused with the file and the line.
+- **Spyc is removed.** YAML is read by `Fegg\Tool\Yaml` (see [YAML](../library/index.mdx#yaml)): replace `spyc_load_file()` / `Spyc::YAMLLoad()` in project code with `Fegg\Tool\Yaml::parseFile()`. Table definitions read as before; `yes` / `no` and numbers with a leading zero are now text, and anchors or tags are refused with the file and the line.
 - **`Fegg\Tool\Date` is removed.** Use PHP's `DateTimeImmutable`: `addDay($d, 3)` is `(new \DateTimeImmutable($d))->modify('+3 day')->format('Y-m-d H:i:s')`, `getDiff()` is `->diff()`, `getTheLastday()` is `->format('t')`, and a format in a template is `feggDate`. A project that needs `addMonth()` or `getSocialTime()` copies the Fegg 4 class into `site/src/`.
-- **`Fegg\Tool\OEmbed` is removed**, with `core/config/oembed_schemes.php`. `Fegg\Embed::youtubeUrl($url)` gives the player URL without asking YouTube (`https://www.youtube-nocookie.com/embed/<id>`), and `{{ $page.data.youtube_url|feggYoutube|noescape }}` / `|feggMap|noescape` write the whole block (see [Embed](../library/embed/index.mdx)). Other oEmbed services: ask them with `Fegg\Http\Client` in the project.
+- **`Fegg\Tool\OEmbed` is removed**, with `core/config/oembed_schemes.php`. `Fegg\Tool\Embed::youtubeUrl($url)` gives the player URL without asking YouTube (`https://www.youtube-nocookie.com/embed/<id>`), and `{{ $page.data.youtube_url|feggYoutube|noescape }}` / `|feggMap|noescape` write the whole block (see [Embed](../library/embed/index.mdx)). Other oEmbed services: ask them with `Fegg\Http\Client` in the project.
 - **Images in other sizes** (`/up_dir/image/<id>/i-300_200.jpg`, `getImageUrl`): a width or height over `$upload_dir['image_max']` (2000) is a 404, and past `$upload_dir['image_cache_max']` (50) sizes of one image, new sizes are made for each request instead of being saved. Add both to a copied `site/config/upload_dir.php`. The positions `lb` and `rb` now keep the bottom left and the bottom right (see [Trim](../library/trim/index.mdx#images-of-the-cms-in-other-sizes)).
 - **`Fegg\Tool\Trim`** throws a `\RuntimeException` for a missing file, a file that is not a JPEG, PNG or GIF, or another output type (it called `exit`).
 - **`Fegg\Tool\File`** methods return `true` / `false`. `removeDirectory()` removes symbolic links, never what they point to.
