@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # Updating the core
 
-Because the core (`htdocs/_fegg/core/`) and the project (`htdocs/_fegg/site/`) are separate, security fixes and new features of Fegg can be rolled out to each project by replacing the core, the same way you update WordPress itself.
+`core:update` replaces the core (`htdocs/_fegg/core/`) with a newer release; `site/` is never touched.
 
 ## Routine updates
 
@@ -16,8 +16,15 @@ Because the core (`htdocs/_fegg/core/`) and the project (`htdocs/_fegg/site/`) a
 npm run build:scss                  # the project's CSS, if its SCSS changed (the CMS's comes built)
 ```
 
+| `core:update` option | Remarks |
+| :------------------- | :------ |
+| `vX.Y.Z`             | Version to install. The latest tag when omitted |
+| `--dry-run`          | Show what would change without changing anything |
+| `--force`            | Overwrite core files that were changed in the project |
+
+- `core:status` prints the core version and compares the core files with `core/manifest.json`. `No changes to core files.` means the core is untouched and can be updated; otherwise it lists the changed files.
 - The release is fetched with `git`. If you can clone from GitHub over SSH (`git clone git@github.com:...` works for you), no token is needed.
-- Only core files are replaced: `htdocs/_fegg/core/`, `htdocs/_fegg/assets/` (the CMS's CSS, JS, images and icons, already built) and `htdocs/_fegg/.htaccess`. There is nothing to build after an update. `site/`, `htdocs/index.php`, `htdocs/.htaccess`, `htdocs/data/` and `fegg-cli` are not changed.
+- Only core files are replaced: `htdocs/_fegg/core/`, `htdocs/_fegg/assets/` (the CMS's CSS, JS, images and icons, already built) and `htdocs/_fegg/.htaccess`. There is nothing to build after an update. `site/` (with the sites' templates and assets and the uploads), `htdocs/index.php`, `htdocs/.htaccess` and `fegg-cli` are not changed.
 - If core files were edited in the project, the command lists them and stops. Move those changes to overrides in `site/` (see [Directory structure](./cont.mdx#overriding-the-core)) and run it again. Add `--force` only if you really want to overwrite them.
 - The replaced files are kept in `htdocs/_fegg/site/data/core-backup/<old version>-<timestamp>/`.
 - After the update, the template cache is cleared and `fegg-cli migration` runs automatically.

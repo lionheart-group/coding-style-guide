@@ -1,0 +1,32 @@
+---
+sidebar_position: 2
+---
+
+# Log::log
+
+> Write an entry at a level given as text
+
+## Description
+
+```php
+public static bool Log::log( string $level, string $message [, array $context = array() ] )
+```
+
+The same as [Log::error() and the other levels](./levels.mdx), with the level as an argument: for code that decides the level itself. An unknown level throws `\InvalidArgumentException`.
+
+## Arguments
+
+| Name     | Data type | Default   | Remarks |
+| -------- | --------- | --------- | ------- |
+| $level   | string    |           | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert` or `emergency` (any case) |
+| $message | string    |           | Message. `{key}` is replaced with `$context['key']` |
+| $context | array     | `array()` | Values added to the line as JSON |
+
+## Example
+
+```php title="Controller"
+use Fegg\Log;
+
+$level = $response['status'] >= 500 ? 'error' : 'warning';
+Log::log($level, 'Items API answered {status}', array('status' => $response['status']));
+```

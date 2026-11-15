@@ -17,11 +17,8 @@ assets/                   # skeleton only: sources of the core's CMS files (SCSS
 htdocs/                   # document root
     index.php             # project: web entry point (path definitions only)
     .htaccess             # project: template is _fegg/core/dist/htaccess.dist
-    data/                 # project: site assets (css, js, images)
-        cms/scss/unique.scss  # project: the project's CMS styles (npm run build:scss)
-    up_dir/               # project: files uploaded from the CMS
 
-    _fegg/                # never readable from the web, except assets/
+    _fegg/                # never readable from the web, except assets/, the sites' css/ js/ img/ font/ and up_dir/
         .htaccess         # core: deny all
         assets/           # core: the CMS's CSS, JS, images, icons and libraries (built; {{ $site.cms_assets }})
         core/             # core: DO NOT EDIT (replaced on update)
@@ -29,24 +26,32 @@ htdocs/                   # document root
             controller/   # Fegg\Controller\  Controller (base class), Cms\Login, Cms\Media, Cms\Image ...
             template/cms/ # CMS foundation templates
             functions/    # template modifiers (feggDate, getImageUrl, ...)
-            config/       # default settings, YAML for the core tables (cms_user, cms_file, cms_image)
+            config/       # default settings, YAML for the core tables (cms_user, cms_file, cms_image, rate_limit)
             bin/          # fegg-cli commands
             bootstrap/    # web and CLI start-up, autoloader
             vendor/       # PHPMailer
-            dist/         # templates for the project-owned entry files
+            dist/         # templates for the project-owned entry files, and the starting folder of a new site (dist/site/)
             VERSION  manifest.json  UPGRADE.md
 
         site/             # project: edit freely (never touched by updates)
             src/          # Site\             project classes (create it when you need it)
             controller/   # Site\Controller\  Controller (project base class), Index, News, Cms\News ...
-            template/     # site templates (.tpl), CMS templates for post types
+            template/
+                main/     # the site at / (one folder per site, see site/config/sites.php)
+                    tpl/  # its templates (every template path is relative to it)
+                    scss/ # its styles, built into css/ by npm run build:scss
+                    css/ js/ img/  # served from /_fegg/site/template/main/ ({{ $site.assets }})
+                cms/      # the CMS, the same shape: tpl/ (post types, overrides of core/template/cms/), scss/unique.scss
             functions/    # project template modifiers (loaded automatically)
             config/       # settings.php, env.php (per server, not committed), route.php, database_config.php, site_info.php, cms_menu.php ...
                 database/ # YAML table definitions for the project's tables
+            up_dir/       # files uploaded from the CMS (not tracked by git), served at /_fegg/site/up_dir/
             data/         # db/, log/, cache/, core-backup/ (not tracked by git)
 ```
 
 The skeleton's sample code (`site/controller/Index.php`, `News.php`, `Contact.php`, `Cms/News.php`, ...) is project code. Change or delete it as the project needs.
+
+A project can hold several sites (a recruiting site at `/recruit/`, landing pages), each with its own folder in `site/template/`: see [Sites](../basic/templates/index.mdx#sites).
 
 ## Namespaces
 
@@ -70,7 +75,7 @@ The site is searched first, then the core. This works like a WordPress child the
 
 | What          | How                                                                                         | Example                                                                     |
 | ------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Templates     | Put a file at the same path under `site/template/`                                          | `site/template/cms/login.tpl` is used instead of `core/template/cms/login.tpl` |
+| Templates     | Put a file in `site/template/cms/tpl/` at the path it has under `core/template/cms/`        | `site/template/cms/tpl/login.tpl` is used instead of `core/template/cms/login.tpl` |
 | Config files  | Put a file with the same name in `site/config/`                                             | `site/config/validation_error_message.php` replaces the core's messages     |
 | Settings      | Write only the keys you want to change in `site/config/settings.php`                        | `$settings['developer_ip'] = array(...);`                                   |
 | CMS screens   | Put a class that extends the core controller in `site/controller/`, with only the methods you change | See [Controller](../basic/controller.mdx#extending-a-core-controller) |
@@ -100,27 +105,29 @@ require FEGG_CORE_DIR . '/bootstrap/web.php';
 
 ## Protecting `_fegg/`
 
-In the standard layout `_fegg/` is inside the document root. It is protected by several layers, so that one missing layer is caught by the next:
+In the standard layout `_fegg/` is inside the document root. It is protected in layers:
 
-1. `htdocs/_fegg/.htaccess` denies all requests. `_fegg/assets/.htaccess` lets only CSS, JS, images and fonts through.
-2. `htdocs/.htaccess` returns 403 for `/_fegg/` (except those files in `_fegg/assets/`), dotfiles and hidden directories (`.git/`; `.well-known/` stays reachable), and denies `.db`, `.sqlite`, `.yaml`, `.tpl`, `.log`, `.md`, `.json` and `.dist` files.
-3. Every PHP file under `_fegg/` and every compiled template starts with `defined('FEGG_CORE_DIR') || exit;`.
-4. `fegg-cli doctor https://example.com` checks over HTTP that nothing under `_fegg/` and no database file can be read (see [fegg-cli](./cli.mdx#doctor)). The CMS dashboard also warns about problems it can detect from the files, such as a missing `.htaccess`.
+1. `htdocs/_fegg/.htaccess` denies all requests. `_fegg/assets/.htaccess` and the `.htaccess` of each site folder (`site/template/<site>/`) let only CSS, JS, images and fonts through; `site/up_dir/.htaccess` only the file types that can be uploaded (see [Upload](../library/upload/index.mdx#protecting-the-upload-directory)).
+2. `htdocs/.htaccess` returns 403 for `/_fegg/` (except the CSS, JS, images and fonts of `_fegg/assets/` and of each site folder's `css/` `js/` `img/` `font/`, and the files of `_fegg/site/up_dir/`), dotfiles and hidden directories (`.git/`; `.well-known/` stays reachable), and denies `.db`, `.sqlite`, `.yaml`, `.tpl`, `.log`, `.md`, `.json` and `.dist` files.
+3. Every PHP file under `_fegg/` and every compiled template starts with the guard line (see [Namespaces](#namespaces)).
+4. `fegg-cli doctor https://example.com` checks over HTTP that nothing under `_fegg/` (a site's SCSS sources included) and no database file can be read (see [fegg-cli](./cli.mdx#doctor)). Run it from your local machine after every upload: many FTP clients skip `.htaccess`. The CMS dashboard also warns about problems it can detect from the files, such as a missing `.htaccess`.
 5. If the server allows it, put the SQLite database outside the document root (see [Settings](./config.mdx#database)).
 
 On nginx, where `.htaccess` is not used, add equivalent rules:
 
 ```nginx
-# The CMS's files in _fegg/assets/ first (nginx uses the first regex that matches)
-location ~* ^/_fegg/assets/[^?]+\.(css|js|map|png|jpe?g|gif|svg|webp|woff2?|ico)$ { }
+# The CMS's files (_fegg/assets/) and each site's (_fegg/site/template/<site>/{css,js,img,font}/) first
+# (nginx uses the first regex that matches)
+location ~* ^/_fegg/(assets|site/template/[a-z0-9-]+/(css|js|img|font))/[^?]+\.(css|js|map|png|jpe?g|gif|svg|webp|woff2?|ico)$ { }
+# The uploaded files (_fegg/site/up_dir/): the uploaded file types only, never scripts; a missing image
+# size and /file/<id>/ go to PHP. ^~ keeps the regex locations below (and the PHP handler) out
+location ^~ /_fegg/site/up_dir/ {
+    location ~* \.(jpe?g|png|gif|webp|pdf|docx?|docm|dotx|dotm|xlsx?|xlsm|xltx|xltm|xlsb|xlam|pptx?|pptm|ppsx|ppsm|potx|potm|ppam|sldx|sldm|thmx|one|zip|txt|csv)$ { try_files $uri /index.php?$query_string; }
+    location ~ /\. { deny all; }
+    location ~* \.[a-z0-9]+$ { deny all; }
+    rewrite ^ /index.php last;
+}
 location ~ (^|/)_fegg(/|$) { deny all; }
 location ~ /\.(?!well-known/) { deny all; }
-location ~* ^/up_dir/.*\.(php\d?|phtml|phar|pht|cgi|pl|py|sh)$ { deny all; }
 location ~* \.(tpl|db|sqlite|ya?ml|log|md|json|dist)$ { deny all; }
 ```
-
-:::caution
-
-Many FTP clients do not transfer dotfiles (`.htaccess`) by default. After uploading, always run `./fegg-cli doctor <URL>` from your local machine.
-
-:::

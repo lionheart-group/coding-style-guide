@@ -6,11 +6,9 @@ import { CategoryDocCardList, SiblingDocCardList } from '@site/src/components/Ca
 
 # About Template
 
-## About Template
-
 Fegg has its own template engine that keeps the application code (PHP) apart from the display (HTML/CSS). A template (`.tpl`) is HTML with `{{ ... }}` tags. Fegg compiles it to PHP, caches the result and runs it when a controller displays the page.
 
-```html title="htdocs/_fegg/site/template/news/detail.tpl"
+```html title="htdocs/_fegg/site/template/main/tpl/news/detail.tpl"
 {{ transclude '/template/siteframe' }}
 
 {{ section contents }}
@@ -21,32 +19,59 @@ Fegg has its own template engine that keeps the application code (PHP) apart fro
 
 ## Where templates live
 
+Every site has one folder, `htdocs/_fegg/site/template/<site>/` (`main` is the site at `/`). The CMS's folder `cms/` has the same shape:
+
+```yaml
+site/template/
+    main/
+        tpl/            # templates (index.tpl, template/siteframe.tpl, include/, news/ ...)
+        scss/           # styles, built into css/ by npm run build:scss
+        css/ js/ img/   # served from /_fegg/site/template/main/ ({{ $site.assets }}); .htaccess
+    cms/
+        tpl/            # the project's CMS templates, and overrides of core/template/cms/ (without its cms/)
+        scss/           # unique.scss, the project's CMS styles
+```
+
 | Directory | Owner |
 | --- | --- |
 | `htdocs/_fegg/site/template/` | The project. Put your templates here. |
 | `htdocs/_fegg/core/template/` | The core (CMS screens). Never edit it: it is replaced by `fegg-cli core:update`. |
 
-Templates are looked up in `site/template/` first, then in `core/template/`. To change a core template, copy it to the same path under `site/template/` and edit the copy: the project file wins.
-
-Template names never include the `.tpl` extension. A controller renders `site/template/news/detail.tpl` with:
+Template names never include the `.tpl` extension and are relative to the `tpl/` of the site the URL belongs to. A controller renders `site/template/main/tpl/news/detail.tpl` with:
 
 ```php title="htdocs/_fegg/site/controller/News.php"
 $this->displayPage('news/detail');
 ```
 
-When the site is multi-language (`default_language` and `support_language` are set in the settings), the language code is put in front of the name: `news/detail` is read from `site/template/<language code>/news/detail.tpl`.
+The CMS's templates keep their `cms/` names: `displayPage('cms/news/lists')` reads `site/template/cms/tpl/news/lists.tpl`, then `core/template/cms/news/lists.tpl`. To change a core template, copy it to `site/template/cms/tpl/` at its path under `core/template/cms/` and edit the copy: the project file wins.
 
-### Paths in `include` and `transclude`
+When the site is multi-language (`default_language` and `support_language` are set in the settings), the language code is put in front of the name: `news/detail` is read from `site/template/main/tpl/<language code>/news/detail.tpl`.
 
-- A path starting with `/` is relative to the template root (`site/template/`, then `core/template/`). It works the same in a template at any depth. **Prefer it.**
-- Any other path is relative to the directory of the template that contains the tag (`./parts/card`, `../template/siteframe`).
+In `include` and `transclude`, prefer paths starting with `/` (relative to the site's `tpl/`): see [Include](./rules/include.mdx#paths).
+
+## Sites
+
+A project can hold several sites: the corporate site at `/`, a recruiting site at `/recruit/`, landing pages. `site/config/sites.php` lists them, one line each:
+
+```php title="htdocs/_fegg/site/config/sites.php"
+$sites['main']    = array('path' => '/');
+$sites['recruit'] = array('path' => '/recruit/', 'info' => array('name' => '採用サイト', 'title' => '採用情報 | 会社名'));
+```
+
+- A request belongs to the site whose path is the longest match of its URL. The CMS (`/cms/`) belongs to the site at `/`.
+- [`./fegg-cli site:create recruit /recruit/`](../../first/cli.mdx#site-create) creates `site/template/recruit/` from a starting folder and adds the lines to `sites.php` and `route.php`. `./fegg-cli site:list` lists the sites.
+- `'info'` overrides `site_info.php` (what every site shares) for that site.
+- Templates get `$site.key` (`recruit`), `$site.home` (`/recruit/`) and `$site.assets` (`/_fegg/site/template/recruit`):
 
 ```html
-{{ transclude '/template/siteframe' }}      site/template/template/siteframe.tpl
-{{ transclude '/cms/frame/siteframe' }}     core/template/cms/frame/siteframe.tpl (CMS screens)
-{{ include head '/include/head/about' }}    site/template/include/head/about.tpl
-{{ include './parts/card' }}                parts/card.tpl next to this template
+<link rel="stylesheet" href="{{ $site.assets }}/css/style.css?v={{ $site.version }}">
+<img src="{{ $site.assets }}/img/views/about/pc/main.jpg" alt="">
 ```
+
+- Only the CSS, JS, images and fonts in `css/`, `js/`, `img/` and `font/` are served (the root `.htaccess` and the folder's own `.htaccess` allow them). `tpl/`, `scss/` and anything else stay denied like the rest of `_fegg/`. `css/` is built and not tracked: put a library's CSS next to its JS (`js/vendor/swiper/`).
+- `npm run build:scss` builds every folder's `scss/*.scss` into its `css/` (the CMS's `unique.scss` too). A new site needs no configuration.
+- Sites share no SCSS: each has its own foundation (values, mixins, breakpoints).
+- Controllers are found by the URL as before: `/recruit/jobs/` is `site/controller/Recruit/Jobs.php`, or a route to `Page` (`$route['recruit/jobs/'] = 'page/render/jobs'` renders `recruit/tpl/jobs.tpl`, see [Static pages](../url.mdx#static-pages)).
 
 ## Cache
 
@@ -64,7 +89,7 @@ It compiles every template without running it and reports unknown tags, unclosed
 
 ## Display methods
 
-Display methods render a template from a controller. Use `displayPage` for pages: it sets the variables templates expect and protects against clickjacking.
+Display methods render a template from a controller. Use `displayPage` for pages: it sets the variables templates expect.
 
 <CategoryDocCardList label="Display methods" />
 

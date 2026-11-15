@@ -6,9 +6,9 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # Introduction
 
-> Providing some functions for analyzing RSS document
+> Reading RSS / Atom feeds
 
-`Fegg\Tool\RSS` loads an RSS 1.0 (RDF), RSS 2.0 or Atom feed and returns its posts as arrays. A feed URL is fetched with `Fegg\Http\Client` (10 second timeout by default); a local file can be read as well.
+`Fegg\Tool\RSS` loads an RSS 1.0 (RDF), RSS 2.0 or Atom feed and returns its posts as arrays. A feed URL is fetched with [Fegg\Http\Client](../http-client/index.mdx) (10 second timeout by default); a local file can be read as well.
 
 ## How to use
 
@@ -53,12 +53,6 @@ Each entry returned by [RSS::fetch](./methods/fetch.mdx) and [RSS::fetchAll](./m
 | author      | string        | `dc:creator` (RSS 2.0: or `author`; Atom: `author` > `name`)    |
 | category    | array         | Category names (RSS 2.0: `category`; RSS 1.0: `dc:subject`; Atom: the `term` of `category`) |
 | tag         | array         | Always an empty array (not implemented)                         |
-
-:::note
-
-Posts whose title contains `PR:` (advertisements of some blog services) are kept. Pass `array('skip_pr' => true)` to the constructor to leave them out, as Fegg 4 always did.
-
-:::
 
 ## Methods
 

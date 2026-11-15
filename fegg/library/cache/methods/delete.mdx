@@ -1,0 +1,35 @@
+---
+sidebar_position: 5
+---
+
+# Cache::delete
+
+> Remove one value
+
+## Description
+
+```php
+public static void Cache::delete( string $key )
+```
+
+Removes the file of `$key`. Nothing happens when there is none.
+
+## Arguments
+
+| Name | Data type | Default | Remarks |
+| ---- | --------- | ------- | ------- |
+| $key | string    |         | Name of the value |
+
+## Example
+
+```php title="CMS controller"
+use Fegg\Tool\Cache;
+
+public function update($id)
+{
+    $this->requirePost();
+    // ... save the post
+    Cache::delete('news-latest');   // the top page shows the new post at once
+    $this->redirect($this->page['prefix'] . '/index/UPDATED');
+}
+```

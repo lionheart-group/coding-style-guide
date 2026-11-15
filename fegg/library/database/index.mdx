@@ -42,13 +42,13 @@ Queries built with the build methods get the automatic parts of `database_regula
 ## Values and placeholders
 
 - Values are always bound to `?` placeholders. Integers and booleans are bound as integers, `null` as NULL, everything else as strings (so `count(*) > ?` works on SQLite).
-- In [setWhere](./methods/setwhere.mdx), [setHaving](./methods/sethaving.mdx) and [setOn](./methods/seton.mdx), an array bound to one placeholder expands it: `id = ?` and `id IN (?)` become `id IN (?, ?, ...)`, `<>` / `!=` / `NOT IN` become `NOT IN`, `LIKE ?` becomes `(... LIKE ? OR ... LIKE ?)` and `NOT LIKE ?` becomes `(... NOT LIKE ? AND ...)`. An empty array matches no row (`=`, `IN`, `LIKE`) or every row (`<>`, `NOT IN`, `NOT LIKE`). An array on any other operator throws `InvalidArgumentException`.
+- In [setWhere](./methods/setwhere.mdx), [setHaving](./methods/sethaving.mdx) and [setOn](./methods/seton.mdx), an array bound to one placeholder expands it: `id = ?` and `id IN (?)` become `id IN (?, ?, ...)`, `<>` / `!=` / `NOT IN` become `NOT IN`, `LIKE ?` becomes `(... LIKE ? OR ... LIKE ?)` and `NOT LIKE ?` becomes `(... NOT LIKE ? AND ...)`. An empty array matches no row (`=`, `IN`, `LIKE`) or every row (`<>`, `NOT IN`, `NOT LIKE`). An array on any other operator (`<`, `BETWEEN` ...) throws `InvalidArgumentException`.
 - A `?` inside a quoted string literal (`'?'`) is not a placeholder.
 - Table, column and ORDER BY text given to the `set*` methods is written into the SQL as it is: never put user input in it.
 
 ## Errors
 
-A failed connection or query throws `Fegg\Database\QueryException` (a `RuntimeException`). Its message ends with the SQL with its values filled in, for example `no such column: nope (SQL: SELECT nope FROM cms_news WHERE title = 'it''s')`. `getSql()` returns the SQL with its `?` placeholders and `getParameters()` the values. Uncaught, it becomes an HTTP 500 and is written to the PHP error log and the [application log](../../basic/logging.mdx). Fegg 4 printed the error (to developer IPs only) and called `exit` instead.
+A failed connection or query throws `Fegg\Database\QueryException` (a `RuntimeException`). Its message ends with the SQL with its values filled in, for example `no such column: nope (SQL: SELECT nope FROM cms_news WHERE title = 'it''s')`. `getSql()` returns the SQL with its `?` placeholders and `getParameters()` the values. Uncaught, it becomes an HTTP 500 and is written to the PHP error log and the [application log](../../basic/logging.mdx).
 
 ```php title="Controller"
 use Fegg\Database\QueryException;

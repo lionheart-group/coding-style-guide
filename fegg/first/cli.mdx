@@ -10,7 +10,7 @@ sidebar_position: 3
 ./fegg-cli <command> [arguments]
 ```
 
-Like `htdocs/index.php`, the file itself only defines the paths (`FEGG_HTML_DIR`, `FEGG_CORE_DIR`, `FEGG_SITE_DIR`). The commands are in `htdocs/_fegg/core/bin/`. Commands exit with code `1` when they find a problem, so they can be used in CI.
+The file only defines the paths (see [Directory structure](./cont.mdx#entry-files-and-layout)); the commands are in `htdocs/_fegg/core/bin/`. Commands exit with code `1` when they find a problem, so they can be used in CI.
 
 | Command                                         | What it does |
 | :---------------------------------------------- | :----------- |
@@ -18,6 +18,8 @@ Like `htdocs/index.php`, the file itself only defines the paths (`FEGG_HTML_DIR`
 | `migration:db2schema <file>`                    | Write the structure of the current database to a YAML file |
 | `db:schema [table] [--json]`                    | List tables and columns from the YAML schema files |
 | `template:lint [file ...]`                      | Check templates without running them |
+| `site:create NAME PATH`                         | Add a site (its folder and its lines in `sites.php` and `route.php`) |
+| `site:list`                                     | List the sites, their paths and folders |
 | `user:create LOGIN [NAME]`                      | Add a CMS user |
 | `user:password LOGIN`                           | Set a new password for a CMS user |
 | `user:list`                                     | List the CMS users |
@@ -26,7 +28,7 @@ Like `htdocs/index.php`, the file itself only defines the paths (`FEGG_HTML_DIR`
 | `core:update [vX.Y.Z] [--dry-run] [--force]`    | Update the core from the skeleton repository |
 | `doctor [URL]`                                  | Check that `_fegg/` cannot be read from the web |
 
-Running a command group without a sub command prints its help: `./fegg-cli core`, `./fegg-cli db`, `./fegg-cli template`, `./fegg-cli user`, `./fegg-cli migration:help`, `./fegg-cli doctor:help`.
+Running a command group without a sub command prints its help: `./fegg-cli core`, `./fegg-cli db`, `./fegg-cli template`, `./fegg-cli site`, `./fegg-cli user`, `./fegg-cli migration:help`, `./fegg-cli doctor:help`.
 
 ## migration
 
@@ -36,7 +38,7 @@ Running a command group without a sub command prints its help: `./fegg-cli core`
 
 Compares the table definitions in the YAML files with the database (SQLite, or MySQL / MariaDB) and applies the difference (adds tables, columns and indexes).
 
-- The core's files (`core/config/database/`: `cms_user`, `cms_file`, `cms_image`, `cms_login_attempt`) are read first, then the project's (`site/config/database/`). A project file with the same name replaces the core's file.
+- The core's files (`core/config/database/`: `cms_user`, `cms_file`, `cms_image`, `rate_limit`) are read first, then the project's (`site/config/database/`). A project file with the same name replaces the core's file. With the CMS turned off (`$settings['cms'] = false`, see [Settings](./config.mdx#a-site-without-the-cms)) `cms_user`, `cms_file` and `cms_image` are neither created nor dropped, and no first CMS user is created.
 - Starts with one line naming the environment, its file and the database, e.g. `Environment: staging (site/config/env/staging.php, /var/www/vhosts/*/p[0-9]*) / DB: sqlite:...` (see [Environments and secrets](./config.mdx#test-servers-deployed-with-git-pull)).
 - Prints `Fegg-cli migration diff : Not changed` when the database already matches, `Fegg-cli migration diff : Finished migration` after applying changes.
 - Then creates the first CMS user when `FEGG_CMS_INITIAL_LOGIN` is set and `cms_user` has no users at all, with `FEGG_CMS_INITIAL_PASSWORD_HASH` (or `FEGG_CMS_INITIAL_PASSWORD`) and `FEGG_CMS_INITIAL_NAME`. An existing user is never changed and a deleted one is not created again, so this is safe on every deploy. Without a usable password it exits with 1 after the migration.
@@ -50,7 +52,7 @@ The YAML files are the single source of truth. A table that exists in the databa
 
 :::
 
-To create a YAML file from an existing database (for example when you start writing schema files for an old project):
+To create a YAML file from an existing database:
 
 ```bash
 ./fegg-cli migration:db2schema htdocs/_fegg/site/config/database/dump.yaml
@@ -86,18 +88,27 @@ cms_news  (htdocs/_fegg/site/config/database/cms_news.yaml)
 
 ```bash
 ./fegg-cli template:lint                                         # every template in site/template and core/template
-./fegg-cli template:lint htdocs/_fegg/site/template/news/detail.tpl
+./fegg-cli template:lint htdocs/_fegg/site/template/main/tpl/news/detail.tpl
 ```
 
 Checks templates without running them and reports each problem with the `.tpl` file and line: unknown tags, unclosed blocks or extra `{{ end }}`, missing `include` / `transclude` targets, undefined modifiers, and output in URL attributes, `<script>` or event attributes that is not escaped for that context.
 
 ```text title="Output (example)"
-htdocs/_fegg/site/template/news/detail.tpl:12: unknown modifier "nosuch" (define it in site/functions/*.php)
-htdocs/_fegg/site/template/news/detail.tpl:20: {{ $page.data.url }} starts a URL: write {{ $value|feggUrl }} so javascript: URLs are refused
+htdocs/_fegg/site/template/main/tpl/news/detail.tpl:12: unknown modifier "nosuch" (define it in site/functions/*.php)
+htdocs/_fegg/site/template/main/tpl/news/detail.tpl:20: {{ $page.data.url }} starts a URL: write {{ $value|feggUrl }} so javascript: URLs are refused
 NG: 2 problem(s) in 1 template(s)
 ```
 
 Prints `OK: <n> template(s)` when there is nothing to fix. Run it after every template change.
+
+## site:create / site:list {#site-create}
+
+```bash
+./fegg-cli site:create recruit /recruit/   # NAME PATH
+./fegg-cli site:list
+```
+
+`site:create` copies the starting folder `core/dist/site/` (`tpl/` with `index.tpl`, `not_found.tpl` and `template/siteframe.tpl`, a FLOCSS `scss/`, `js/`, `img/` and the `.htaccess`) to `site/template/recruit/`, and adds `$sites['recruit'] = array('path' => '/recruit/');` to `site/config/sites.php` and `$route['recruit/'] = 'page/render/index';` to `site/config/route.php`. It refuses a name or a path that is already used. `site:list` prints each site's name, path and folder. See [Sites](../basic/templates/index.mdx#sites).
 
 ## CMS users
 
@@ -107,47 +118,25 @@ Prints `OK: <n> template(s)` when there is nothing to fix. Run it after every te
 ./fegg-cli user:list                                # user_id, login and name of every CMS user
 ```
 
-Manage the CMS users (table `cms_user`). `user:create` and `user:password` ask for the password twice without showing it. It must not be empty (there is no length rule), and it is stored with `password_hash()`.
-
-The password is never an argument (it would stay in the shell history). To pass it from a script, or where there is no terminal, give it on standard input with `--password-stdin`:
+Manage the CMS users (table `cms_user`). Passwords are asked twice without echo (never as an argument, which would stay in the shell history), must not be empty (there is no length rule), and are stored with `password_hash()`. From a script, or where there is no terminal, use `--password-stdin`:
 
 ```bash
 printf '%s\n' "$CMS_PASSWORD" | ./fegg-cli user:create admin --password-stdin
 ```
 
-`user:create` refuses a login that already exists; use `user:password` for it.
+`user:create` refuses a login that already exists; use `user:password` for it. With the CMS turned off, every `user:*` command refuses to run.
 
 `user:hash` prints `password_hash()` of a password (asked without echo, or `--password-stdin`) for `FEGG_CMS_INITIAL_PASSWORD_HASH` in a committed environment file.
 
 :::note
 
-Fegg 4 created users with the URL `/cms/login/create/<name>/<login>/<password>`. It is gone in Fegg 5. `/cms/register/` still exists in the CMS, but it now needs a CMS login as well as [developer mode](./config.mdx#developer-mode) (a `developer_ip` address on a server that is not production), so on a production server use `fegg-cli`.
+`/cms/register/` needs a CMS login and [developer mode](./config.mdx#developer-mode); on a production server use `fegg-cli`.
 
 :::
 
-## core:status
+## core:status / core:update
 
-```bash
-./fegg-cli core:status
-```
-
-Prints the core version and compares the core files with `core/manifest.json`. `No changes to core files.` means the core is untouched and can be updated. Otherwise it lists the changed files; move those changes to overrides in `site/` (see [Directory structure](./cont.mdx#overriding-the-core)).
-
-## core:update
-
-```bash
-./fegg-cli core:update --dry-run    # show the difference only
-./fegg-cli core:update              # update to the latest release tag
-./fegg-cli core:update v5.1.0       # update to a given version
-```
-
-Replaces the core with a release of the skeleton repository. See [Updating the core](./update.mdx) for details.
-
-| Option      | Remarks |
-| :---------- | :------ |
-| `vX.Y.Z`    | Version to install. The latest tag when omitted |
-| `--dry-run` | Show what would change without changing anything |
-| `--force`   | Overwrite core files that were changed in the project |
+`core:status` / `core:update [vX.Y.Z] [--dry-run] [--force]`: see [Updating the core](./update.mdx).
 
 `core:manifest` also exists, but it is for skeleton maintainers only (it rebuilds `core/manifest.json`).
 
@@ -161,10 +150,10 @@ Replaces the core with a release of the skeleton repository. See [Updating the c
 Without a URL, it checks the files on disk:
 
 - `htdocs/_fegg/.htaccess` denies access,
-- `htdocs/.htaccess` has the rule for `_fegg/`,
-- the upload directory `htdocs/up_dir/` has its `.htaccess` that stops uploaded scripts from running (see [Security](../basic/security.mdx#uploads)).
+- `htdocs/.htaccess` has the rule for `_fegg/` and lets through the files of `_fegg/assets/`, of the site folders' `css/` `js/` `img/` `font/` and of `_fegg/site/up_dir/`,
+- `_fegg/assets/`, each site folder (`site/template/<site>/`) and the upload directory `site/up_dir/` have their `.htaccess`, which serve only their file types (see [Upload](../library/upload/index.mdx#protecting-the-upload-directory)).
 
-With a URL, it also requests files under `_fegg/` and the SQLite database (when it is under the document root) on the live site and reports any that can be read.
+With a URL, it also requests files under `_fegg/` (a site's SCSS sources and the upload directory's `.htaccess` included) and the SQLite database (when it is under the document root) on the live site and reports any that can be read, and checks that `/_fegg/assets/js/base.js` is served.
 
 Prints `OK: https://example.com does not expose _fegg/`, or `NG` with the list of problems (exit code `1`). You can run it from your local machine against the production URL, which is the easiest check after an FTP upload.
 

@@ -12,7 +12,7 @@ sidebar_position: 6
 public void Trim::resizeTrim( int $w, int $h, string $cp )
 ```
 
-The output is exactly `$w` x `$h`. The image is scaled to cover the whole area, keeping its aspect ratio, and the overflow is cut off. `$cp` decides which part of the image is kept. `0` means the original width or height.
+The output is exactly `$w` x `$h`. The image is scaled to cover the whole area, keeping its aspect ratio, and the overflow is cut off. `$cp` decides which part of the image is kept.
 
 ## Arguments
 
@@ -39,12 +39,6 @@ The positions are listed in `Trim::POSITIONS`.
 | `rb` | Bottom right    |
 
 Any other value is `lt`.
-
-:::note
-
-In Fegg 4, `lb` kept the middle left and `rb` the bottom center. Images of the CMS saved by Fegg 4 with these positions (`/up_dir/image/{id}/lb-...`) keep the old crop until they are deleted and made again.
-
-:::
 
 ## Example
 

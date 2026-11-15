@@ -14,8 +14,6 @@ public boolean Validation::time( string $name, mixed $value, [ mixed $code = '' 
 
 The separator `:` is removed, then the value must be 4 digits `HHMM` in 24-hour format (`00:00` to `23:59`). `9:30` is not valid: write `09:30`.
 
-An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
-
 ## Arguments
 
 | Name   | Data type | Default | Remarks                                                                                                      |

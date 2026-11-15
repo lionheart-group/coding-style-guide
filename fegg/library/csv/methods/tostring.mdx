@@ -1,0 +1,49 @@
+---
+sidebar_position: 1
+---
+
+# Csv::toString
+
+> Return rows as CSV text
+
+## Description
+
+```php
+public static string Csv::toString( iterable $rows [, array $options = array() ] )
+```
+
+Returns the CSV text of `$rows`, with a BOM first for `'utf-8-bom'` (see [Writing](../index.mdx#writing)).
+
+## Arguments
+
+| Name     | Data type | Default   | Remarks |
+| -------- | --------- | --------- | ------- |
+| $rows    | iterable  |           | Rows: arrays (lists or associative; only the values are written), or a generator |
+| $options | array     | `array()` | See below |
+
+### Options
+
+| Key             | Default       | Remarks |
+| --------------- | ------------- | ------- |
+| header          | `array()`     | Titles written as the first row |
+| encoding        | `'utf-8-bom'` | `'utf-8-bom'`, `'utf-8'` or `'sjis'` |
+| escape_formulas | `true`        | `false` writes text starting with `=` `+` `-` `@` as it is (see [Formulas](../index.mdx#formulas)) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Csv;
+
+$csv = Csv::toString(array(
+    array('Hello, world', 3, true, null),
+    array('=SUM(A1:A2)', -5, false, new \DateTime('2026-11-15 10:00')),
+), array('header' => array('Text', 'Number', 'Flag', 'Date'), 'encoding' => 'utf-8'));
+```
+
+```text title="$csv"
+Text,Number,Flag,Date
+"Hello, world",3,1,
+'=SUM(A1:A2),-5,0,2026-11-15 10:00:00
+```
+
+Use it to attach a CSV to a mail or save it to a file; [download()](./download.mdx) sends it to the browser.

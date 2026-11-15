@@ -14,8 +14,6 @@ public boolean Validation::maxbyte( string $name, mixed $value, numeric $byte, [
 
 Valid when the byte length (`strlen()`) of the value is `$byte` or less. A Japanese character is 3 bytes in UTF-8.
 
-An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
-
 ## Arguments
 
 | Name   | Data type | Default | Remarks                                                                                                      |

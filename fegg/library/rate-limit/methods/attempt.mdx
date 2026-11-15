@@ -1,0 +1,38 @@
+---
+sidebar_position: 2
+---
+
+# RateLimit::attempt
+
+> Record an attempt and check the limit
+
+## Description
+
+```php
+public bool RateLimit::attempt( string $key )
+```
+
+Stores an attempt for `$key`, then counts the attempts of the window including it. Returns `true` when there are more than `$max`: the attempt is **refused** and its row removed again. Returns `false` when it is allowed; the attempt then counts until the window has passed, unless [undo()](./undo.mdx) takes it back.
+
+Without the table `rate_limit` it always returns `false` (see [The table](../index.mdx#the-table)).
+
+## Arguments
+
+| Name | Data type | Default | Remarks |
+| ---- | --------- | ------- | ------- |
+| $key | string    |         | Who is counted: an IP address, a login ID ... |
+
+## Example
+
+```php title="Controller"
+use Fegg\Log;
+use Fegg\Tool\RateLimit;
+
+$ip = isset($_SERVER['REMOTE_ADDR']) ? (string) $_SERVER['REMOTE_ADDR'] : '';
+if ((new RateLimit('contact', 5, 3600))->attempt($ip)) {
+    Log::warning('Contact form: more than 5 mails an hour from {ip}', array('ip' => $ip));
+    $this->redirect('/contact/error.html');
+}
+```
+
+Call it where the work is done (just before sending the mail, when checking the password), not when the form is shown.

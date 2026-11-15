@@ -1,0 +1,94 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Writing an RSS 2.0 feed of the site's posts
+
+`Fegg\Tool\Feed` writes an RSS 2.0 feed, so feed readers and other sites can follow the site's posts. ([RSS](../rss/index.mdx) reads feeds; `Feed` writes them.)
+
+## How to use
+
+The skeleton serves the latest news posts at `/news/feed.xml` with `News::feed()`:
+
+```php title="htdocs/_fegg/site/controller/News.php"
+use Fegg\Tool\Feed;
+
+public function feed()
+{
+    $siteName = $this->config['site_info']['name'];
+    $feed = new Feed('ニュース | ' . $siteName, '/news/', $siteName . 'のニュース', '/news/feed.xml');
+
+    $rows = $this->_model
+        ->order('post_date', 'desc')
+        ->order('news_id', 'desc')
+        ->limit(20)
+        ->all();
+    foreach ($rows as $row) {
+        $feed->add(array(
+            'title'    => $row['title'],
+            'link'     => '/news/post_' . $row['news_id'] . '.html',
+            'date'     => $row['post_date'],
+            'category' => feggCategoryLabel($row['category'], 'news'),
+            // Saved through HtmlSanitizer::clean(); the description is made from it
+            'content'  => $row['content'],
+        ));
+    }
+
+    $feed->display();
+}
+```
+
+```php title="htdocs/_fegg/site/config/route.php"
+$route['news/feed.xml'] = 'news/feed';
+```
+
+The model of the news controller is a public one (`new Model(false, ...)`), so hidden posts are left out. The siteframe tells browsers and feed readers where the feed is:
+
+```html title="htdocs/_fegg/site/template/main/tpl/template/siteframe.tpl"
+<link rel="alternate" type="application/rss+xml" title="{{ $site.name }}" href="{{ base_url }}/news/feed.xml">
+```
+
+## What is written
+
+```xml title="Output"
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>ニュース | Example</title>
+    <link>https://www.example.com/news/</link>
+    <description>Exampleのニュース</description>
+    <language>ja</language>
+    <lastBuildDate>Sun, 15 Nov 2026 10:00:00 +0900</lastBuildDate>
+    <atom:link href="https://www.example.com/news/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>New shop</title>
+      <link>https://www.example.com/news/post_12.html</link>
+      <guid isPermaLink="true">https://www.example.com/news/post_12.html</guid>
+      <pubDate>Sun, 15 Nov 2026 10:00:00 +0900</pubDate>
+      <category>お知らせ</category>
+      <description>We open a new shop in Osaka.</description>
+      <content:encoded><![CDATA[<p>We open a <a href="https://www.example.com/shops/">new shop</a> in Osaka.</p>]]></content:encoded>
+    </item>
+  </channel>
+</rss>
+```
+
+- **Description from the content**: without a `description`, the content's text is used: tags (and `<script>` / `<style>` with their content) removed, entities decoded, spaces joined, shortened to 240 columns (a full-width character counts 2) with `…`.
+- **Absolute URLs**: paths (`link`, the feed's link and URL) become absolute with `feggAbsoluteUrl()` (see [Absolute URLs](../sitemap/index.mdx#absolute-urls)). In the content, `src="/…"` and `href="/…"` get the scheme and host, since feed readers cannot resolve them. These paths already contain the base path (the editor writes them so), so only the domain is added.
+- **CDATA**: the content is written in `<content:encoded>` as HTML inside a CDATA section; a `]]>` in it is split between two sections. Other text is escaped.
+- Control characters that XML does not allow are removed.
+- `lastBuildDate` is the date of the newest post. The language is `ja`.
+
+Pass content that is safe to show: CMS rich text saved through `HtmlSanitizer::clean()`.
+
+## Errors
+
+- An item without a title and without a link, a path when there is no request (in a command, `FEGG_CURRENT_URL` is not set: pass full URLs), or a date that cannot be read throws `\InvalidArgumentException`.
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

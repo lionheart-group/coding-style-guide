@@ -22,24 +22,24 @@ sidebar_position: 7
 
 All three are HTML-escaped.
 
-Start every link and asset path with `{{ base }}/`, so the site keeps working when it is installed in a subdirectory. Use `{{ base_url }}` and `{{ current_url }}` where an absolute URL is required (canonical, OGP).
+Start every link with `{{ base }}/`, so the site keeps working when it is installed in a subdirectory. Write the site's CSS, JS and images with `{{ $site.assets }}/`, which already contains `{{ base }}` (see [Sites](../index.mdx#sites)). Use `{{ base_url }}` and `{{ current_url }}` where an absolute URL is required (canonical, OGP).
 
 ## Example
 
 ```html title="Template"
-<link rel="stylesheet" href="{{ base }}/data/css/style.css">
+<link rel="stylesheet" href="{{ $site.assets }}/css/style.css">
 <a href="{{ base }}/news/">News</a>
-<img src="{{ base }}/data/img/common/pc/logo.png" alt="">
+<img src="{{ $site.assets }}/img/common/pc/logo.png" alt="">
 
 <link rel="canonical" href="{{ current_url }}">
-<meta property="og:image" content="{{ base_url }}/data/img/ogp.png">
+<meta property="og:image" content="{{ base_url }}/_fegg/site/template/main/img/ogp.png">
 ```
 
 ```html title="Output (site at https://example.com/, page /news/?p=2)"
-<link rel="stylesheet" href="/data/css/style.css">
+<link rel="stylesheet" href="/_fegg/site/template/main/css/style.css">
 <a href="/news/">News</a>
-<img src="/data/img/common/pc/logo.png" alt="">
+<img src="/_fegg/site/template/main/img/common/pc/logo.png" alt="">
 
 <link rel="canonical" href="https://example.com/news/?p=2">
-<meta property="og:image" content="https://example.com/data/img/ogp.png">
+<meta property="og:image" content="https://example.com/_fegg/site/template/main/img/ogp.png">
 ```

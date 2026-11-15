@@ -1,0 +1,49 @@
+---
+sidebar_position: 2
+---
+
+# Feed::add
+
+> Add a post
+
+## Description
+
+```php
+public Feed Feed::add( array $item )
+```
+
+Adds a post and returns the feed, so calls can be chained. Posts are written in the order they are added: add the newest first.
+
+Throws `\InvalidArgumentException` when the item has neither a title nor a link, or a date cannot be read.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks |
+| ----- | --------- | ------- | ------- |
+| $item | array     |         | See below |
+
+### Item
+
+| Key         | Remarks |
+| ----------- | ------- |
+| title       | Title of the post |
+| link        | Path or URL of the post |
+| date        | `'Y-m-d H:i:s'` from the database, a Unix time or a date object. Empty or `'0000-00-00 00:00:00'`: no date |
+| content     | HTML of the post, written in `<content:encoded>`. `src="/…"` and `href="/…"` get the domain |
+| description | Plain text. When missing, made from `content` (see [What is written](../index.mdx#what-is-written)) |
+| category    | A name, or a list of names |
+| guid        | ID of the post. Default: the link (`isPermaLink="true"`) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Feed;
+
+$feed->add(array(
+    'title'    => $row['title'],
+    'link'     => '/news/post_' . $row['news_id'] . '.html',
+    'date'     => $row['post_date'],
+    'category' => array('お知らせ', 'イベント'),
+    'content'  => $row['content'],
+));
+```

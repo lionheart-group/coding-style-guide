@@ -6,9 +6,7 @@ sidebar_position: 2
 
 The error messages of [Upload](./index.mdx) are defined in `htdocs/_fegg/core/config/file_error_message.php`.
 
-To change them, do not edit the core: copy the file to `htdocs/_fegg/site/config/file_error_message.php` and edit the copy. The file in `site/config/` is used instead of the core's one (the whole file is replaced, so keep every key).
-
-`@content` was added in Fegg 5. A copy made from an older core file works without it (a built-in Japanese text is used), but add the key to translate or change it.
+To change them, copy the file to `site/config/` (see [Overriding the core](../../first/cont.mdx#overriding-the-core)). The whole file is replaced, so keep every key.
 
 ```php title="htdocs/_fegg/core/config/file_error_message.php"
 <?php
@@ -37,7 +35,7 @@ $file_error_message['@empty']  = '<strong>%s</strong> が選択されていま�
 | `@empty`  | No file was selected (only when the file is required)                 |
 | `@size`   | The file is larger than the maximum size, or than the php.ini / form limit |
 | `@type`   | The extension is not one of the allowed file types, or is a script extension |
-| `@content` | The content does not match the extension (checked with `finfo` and `getimagesize()`) |
+| `@content` | The content does not match the extension (see [What is checked](./index.mdx#what-is-checked)) |
 | `@failed` | Any other upload error, or the file could not be moved to the upload directory |
 
 ## Other languages

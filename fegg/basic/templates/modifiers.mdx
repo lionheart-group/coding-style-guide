@@ -25,21 +25,7 @@ A modifier follows the variable after a pipe (`|`). Arguments follow the modifie
 
 ### noescape
 
-Outputs the value without HTML escaping. Use it only for trusted HTML (CMS rich text written by administrators, messages from your own config). See [Security](./security.mdx).
-
-```php title="Controller"
-$this->page['foo'] = '<p>bar</p>';
-```
-
-```html title="Template"
-{{ $page.foo }}
-{{ $page.foo|noescape }}
-```
-
-```html title="Output"
-&lt;p&gt;bar&lt;/p&gt;
-<p>bar</p>
-```
+Outputs the value without HTML escaping. Use it only for trusted HTML (CMS rich text written by administrators, messages from your own config). See [Security](./security.mdx#noescape) and the example in [Variable](./rules/variable.mdx#escaping-and-noescape).
 
 ### br
 
@@ -82,7 +68,7 @@ Defined in `htdocs/_fegg/core/functions/modifier.php`.
 | `feggUrl` | A URL safe for `href` / `src`: any scheme other than `http`, `https`, `mailto` and `tel` (`javascript:`, `data:` …) becomes `#` |
 | `feggJs` | The value as a JavaScript literal (string, number, array, object, null) with `<`, `>`, `&`, `'` and `"` encoded. Do not put quotes around it. See [Security](./security.mdx) |
 | `feggYoutube` | A YouTube video as the editor embeds it (`<div data-youtube-video class="fegg-video"><iframe src="https://www.youtube-nocookie.com/embed/…">`), nothing for another value. Arguments: ratio (`'16-9'`, `'9-16'`), alignment (`'center'`, `'right'`), width in %. Print it with `noescape`. See [Embed](../../library/embed/index.mdx) |
-| `feggMap` | A Google map as the editor embeds it, from the `<iframe>` Google Maps gives or its URL; nothing for another value. Arguments: ratio (`'4-3'`, `'16-9'`, `'1-1'`), alignment, width in %. Print it with `noescape` |
+| `feggMap` | A Google map as the editor embeds it, from the `<iframe>` Google Maps gives or its URL; nothing for another value. Arguments: ratio (`'4-3'`, `'16-9'`, `'1-1'`), alignment, width in %. Print it with `noescape`. See [Embed](../../library/embed/index.mdx) |
 
 ```php title="Controller"
 $this->page['post_date'] = '2025-04-01 10:00:00';
@@ -104,16 +90,6 @@ $this->setSiteinfo('prefix', '/news/');
 <li class="c-tab is-active">
 <a href="#">Link</a>
 <a href="/news/?category=2&amp;p=3">Search</a>
-```
-
-### YouTube videos and maps
-
-For a CMS field that holds a YouTube URL or a Google map (not rich text), print the same block as the editor. The modifier checks the URL and escapes it, so `noescape` is safe here.
-
-```html title="Template"
-{{ $page.data.youtube_url|feggYoutube|noescape }}
-{{ $page.data.youtube_url|feggYoutube:'9-16':'center':50|noescape }}
-{{ $page.data.map|feggMap|noescape }}
 ```
 
 ### Joining an array

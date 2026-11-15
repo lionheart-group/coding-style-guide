@@ -1,0 +1,26 @@
+---
+sidebar_position: 3
+---
+
+# Sitemap::count
+
+> Number of URLs added
+
+## Description
+
+```php
+public int Sitemap::count()
+```
+
+Returns the number of URLs in the sitemap (a URL added twice counts once).
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Sitemap;
+
+$sitemap = new Sitemap();
+$sitemap->add('/')->add('/news/')->add('/');
+
+$sitemap->count();   // 2
+```

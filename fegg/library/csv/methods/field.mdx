@@ -1,0 +1,40 @@
+---
+sidebar_position: 7
+---
+
+# Csv::field
+
+> One value as a CSV field
+
+## Description
+
+```php
+public static string Csv::field( mixed $value [, bool $escapeFormulas = true ] )
+```
+
+Returns `$value` as [toString()](./tostring.mdx) writes it: converted to text, with a `'` before a formula, then quoted when needed (see [Writing](../index.mdx#writing)). Use it to write CSV of your own, a line at a time.
+
+Throws `\InvalidArgumentException` when `$value` is an array.
+
+## Arguments
+
+| Name            | Data type | Default | Remarks |
+| --------------- | --------- | ------- | ------- |
+| $value          | mixed     |         | String, number, bool, `null` or date |
+| $escapeFormulas | bool      | `true`  | `false`: no `'` before text starting with `=` `+` `-` `@` |
+
+## Example
+
+```php
+use Fegg\Tool\Csv;
+
+Csv::field('Hello');           // Hello
+Csv::field('a,b');             // "a,b"
+Csv::field('say "hi"');        // "say ""hi"""
+Csv::field('=1+2');            // '=1+2
+Csv::field('-5');              // -5 (numeric text is not escaped)
+Csv::field(-5);                // -5
+Csv::field(null);              // (empty)
+Csv::field(true);              // 1
+Csv::field(new \DateTime('2026-11-15 10:00'));   // 2026-11-15 10:00:00
+```

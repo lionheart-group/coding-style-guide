@@ -1,0 +1,45 @@
+---
+sidebar_position: 2
+---
+
+# JsonLd::organization
+
+> The company or organization of the site
+
+## Description
+
+```php
+public static array JsonLd::organization( string $name [, string $url = '/' [, string $logo = '' [, array $sameAs = array() ] ] ] )
+```
+
+Returns an `Organization` item. `$url` and `$logo` become absolute URLs; an empty `$logo` or `$sameAs` is left out.
+
+## Arguments
+
+| Name    | Data type | Default   | Remarks |
+| ------- | --------- | --------- | ------- |
+| $name   | string    |           | Name of the company or organization |
+| $url    | string    | `'/'`     | Path or URL of its site |
+| $logo   | string    | `''`      | Path or URL of the logo image |
+| $sameAs | string[]  | `array()` | URLs of its other profiles (social accounts) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\JsonLd;
+
+JsonLd::organization('Example Inc.', '/', '/data/img/common/logo.png', array(
+    'https://www.instagram.com/example/',
+));
+```
+
+```json title="Output"
+{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Example Inc.",
+    "url": "https://www.example.com/",
+    "logo": "https://www.example.com/data/img/common/logo.png",
+    "sameAs": ["https://www.instagram.com/example/"]
+}
+```

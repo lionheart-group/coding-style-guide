@@ -18,10 +18,10 @@ The command compiles the templates without running them and prints one line per 
 Run it after every template change. `composer test` runs it too, on every template of the repository.
 
 ```text title="Example output"
-htdocs/_fegg/site/template/news/detail.tpl:2: text outside {{ section }} in a template with {{ transclude }}: it is output before the parent template
-htdocs/_fegg/site/template/news/detail.tpl:6: unknown tag {{ endif }} (it is output as text)
-htdocs/_fegg/site/template/news/detail.tpl:8: include target not found: ./missing
-htdocs/_fegg/site/template/news/detail.tpl:9: unknown modifier "fegDate" (define it in site/functions/*.php)
+htdocs/_fegg/site/template/main/tpl/news/detail.tpl:2: text outside {{ section }} in a template with {{ transclude }}: it is output before the parent template
+htdocs/_fegg/site/template/main/tpl/news/detail.tpl:6: unknown tag {{ endif }} (it is output as text)
+htdocs/_fegg/site/template/main/tpl/news/detail.tpl:8: include target not found: ./missing
+htdocs/_fegg/site/template/main/tpl/news/detail.tpl:9: unknown modifier "fegDate" (define it in site/functions/*.php)
 NG: 4 problem(s) in 1 template(s)
 ```
 
@@ -55,7 +55,7 @@ These problems throw `Fegg\Template\TemplateException`:
 - blocks are unbalanced (an unclosed block, an extra `{{ end }}`, an `{{ else }}` outside an `{{ if }}`);
 - the cache file cannot be written (check that `htdocs/_fegg/site/data/cache/template/` is writable).
 
-Uncaught, the exception becomes an HTTP 500 and is written to the PHP error log. Nothing of the half-rendered page is sent. The message names the template and the line, for example `{{ if }} is never closed (htdocs/_fegg/site/template/news/detail.tpl:4)`.
+Uncaught, the exception becomes an HTTP 500 and is written to the PHP error log. Nothing of the half-rendered page is sent. The message names the template and the line, for example `{{ if }} is never closed (htdocs/_fegg/site/template/main/tpl/news/detail.tpl:4)`.
 
 Catch it when a missing template is a normal case:
 
@@ -73,17 +73,17 @@ A template runs as PHP compiled into the cache (`htdocs/_fegg/site/data/cache/te
 
 ```text title="PHP error log"
 Fegg: Uncaught ErrorException: Undefined array key "x" in /path/to/htdocs/_fegg/site/data/cache/template/@news@detail.1a2b3c4d.cache.php:12
-Template: htdocs/_fegg/site/template/news/detail.tpl:12
+Template: htdocs/_fegg/site/template/main/tpl/news/detail.tpl:12
 Stack trace:
 ...
 ```
 
-In [developer mode](../../first/config.mdx#developer-mode) (a `developer_ip` address on a server whose `FEGG_ENV` is not `production`) the browser also shows the error, the `Template:` line and the stack trace. Everyone else gets the error page (see [Logging and errors](../logging.mdx)).
+In [developer mode](../../first/config.mdx#developer-mode) the browser also shows the error, the `Template:` line and the stack trace. Everyone else gets the error page (see [Logging and errors](../logging.mdx)).
 
 ## Pitfalls
 
 - **Closing tags**: `{{ endif }}`, `{{ /if }}` and `{{ endforeach }}` are not tags; they are output as text. Use `{{ end }}` (any block), `{{ end foreach }}` or `{{ end section name }}`.
-- **Inside `{{ section }}`**, `{{ assign }}`, `{{ include head }}` and `{{ include foot }}` only affect the section, because it runs as a function. Write them at the top level of the template.
+- **Inside `{{ section }}`**, `{{ assign }}`, `{{ include head }}` and `{{ include foot }}` only affect the section: write them at the top level (see [Transclude](./rules/transclude.mdx)).
 - **Text outside sections**: in a template that uses `{{ transclude }}`, everything outside `{{ section }}` blocks is output before the parent layout.
 - **Loop variables** share the namespace of `$page`, `$site` …: `{{ foreach $list as $page }}` overwrites `$page`.
 - **Concatenation**: in tags, `$a.b` is always array access. Write `$a . $b`, with spaces, to concatenate.

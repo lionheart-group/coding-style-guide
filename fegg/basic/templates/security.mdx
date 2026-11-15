@@ -22,6 +22,8 @@ sidebar_position: 6
 
 Always quote attribute values (`class="{{ $x }}"`, not `class={{ $x }}`).
 
+`./fegg-cli template:lint` reports outputs in `<script>`, event attributes and URLs that lack the right modifier (see [Lint and errors](./lint.mdx#what-it-checks)).
+
 ### URLs: `feggUrl`
 
 HTML escaping does not stop a `javascript:` URL. `feggUrl` returns `#` for any URL whose scheme is not `http`, `https`, `mailto` or `tel` (also when the scheme is disguised with spaces or control characters). Relative URLs are kept.
@@ -71,20 +73,4 @@ Arrays and objects work too, so a whole data set can go to a script in one line:
 
 - Only developers may edit templates. Never let site users upload or edit `.tpl` files.
 - Never build a template name, an `include` path or a modifier name from user input.
-- A controller that picks the template from its URL arguments must only be reachable through `site/config/route.php`. Implement `Fegg\Http\RouteOnly`, as the skeleton's `Site\Controller\Page` does:
-
-```php title="htdocs/_fegg/site/config/route.php"
-$route['about/'] = 'page/render/about';   // site/template/about.tpl
-```
-
-`/page/render/...` typed in the browser is then a 404.
-
-## What lint checks
-
-`./fegg-cli template:lint` reports outputs that lack the right modifier:
-
-- an output in `<script>` without `feggJs` and `noescape` (scripts with a non-JavaScript `type`, such as `text/template`, are skipped);
-- an output in an `on...` attribute without `feggJs`, or with `noescape`;
-- an output at the start of an `href`, `src`, `action` or `formaction` value without `feggUrl` (or a CMS URL modifier).
-
-Outputs of `$site` values are exempt from these checks. See [Lint and errors](./lint.mdx).
+- A controller that picks the template from its URL arguments implements `Fegg\Http\RouteOnly`, so only `site/config/route.php` reaches it (see [Route-only controllers](../url.mdx#route-only-controllers)).

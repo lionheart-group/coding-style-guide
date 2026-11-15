@@ -12,12 +12,10 @@ sidebar_position: 1
 public void Application::redirect( string $url )
 ```
 
-Send a `Location` header (HTTP 302) and end the response. Code after `redirect()` is not run.
-
-`redirect()` does not call `exit`: it throws `Fegg\Http\Halt`, which the dispatcher catches before it writes the session and sends the response. There is no need to write `exit` after it. A `catch (\Throwable $e)` around `redirect()` must rethrow `Fegg\Http\Halt` (see [Ending a response](../../controller.mdx#ending-a-response)); `catch (\Exception $e)` is not affected.
+Send a `Location` header (HTTP 302) and end the response by throwing `Fegg\Http\Halt` (see [Ending a response](../../controller.mdx#ending-a-response)). Code after `redirect()` does not run.
 
 - A URL starting with `http://` or `https://` is used as is.
-- Any other URL is a path inside the site. A `/` is added at the start if missing, a trailing `/` is added when the path has no extension (to avoid a second redirect, see [URL](../../url.mdx#trailing-slash)), and the base path is added in front, so it also works when the site is installed in a subdirectory. It is sent as a path (`Location: /news/`), without protocol and domain: the browser stays on the scheme and host of the current page, so an HTTPS page always redirects to HTTPS, even behind a proxy that does not say it is HTTPS (see [Security](../../security.mdx#https)).
+- Any other URL is a site path: Fegg adds the leading `/`, a trailing `/` (no extension, see [URL](../../url.mdx#trailing-slash)) and the base path, and sends it without scheme or host, so the scheme of the page is kept (see [Security](../../security.mdx#https)).
 
 ## Arguments
 
@@ -45,17 +43,3 @@ $this->redirect('https://www.example.org/');
 ```
 
 Do not pass a URL taken from the request (for example `$this->in('return_to')`) without checking it, or the site becomes an open redirect.
-
-### Inside try / catch
-
-```php title="Controller"
-try {
-    $this->_save($data);
-    $this->redirect('/entry/done/');
-} catch (\Fegg\Http\Halt $halt) {
-    throw $halt;
-} catch (\Throwable $e) {
-    \Fegg\Log::error('Entry could not be saved', array('exception' => $e));
-    $this->redirect('/entry/error/');
-}
-```

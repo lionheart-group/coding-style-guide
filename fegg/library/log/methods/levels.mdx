@@ -1,0 +1,48 @@
+---
+sidebar_position: 1
+---
+
+# Log::error and the other levels
+
+> Write an entry at a level
+
+## Description
+
+```php
+public static bool Log::debug( string $message [, array $context = array() ] )
+public static bool Log::info( string $message [, array $context = array() ] )
+public static bool Log::notice( string $message [, array $context = array() ] )
+public static bool Log::warning( string $message [, array $context = array() ] )
+public static bool Log::error( string $message [, array $context = array() ] )
+public static bool Log::critical( string $message [, array $context = array() ] )
+public static bool Log::alert( string $message [, array $context = array() ] )
+public static bool Log::emergency( string $message [, array $context = array() ] )
+```
+
+Writes one line at the level of the method's name (see [Levels](../index.mdx#levels)). Returns `true` when the entry was written, `false` when it is below `$settings['log_level']` or could not be written (it then goes to the PHP error log).
+
+## Arguments
+
+| Name     | Data type | Default   | Remarks |
+| -------- | --------- | --------- | ------- |
+| $message | string    |           | Message. `{key}` is replaced with `$context['key']` |
+| $context | array     | `array()` | Values added to the line as JSON. Put an exception under `'exception'` |
+
+## Example
+
+```php title="Controller"
+use Fegg\Log;
+
+Log::info('{count} entries imported from {file}', array('count' => $count, 'file' => $name));
+
+try {
+    $mail->send($to);
+} catch (\Exception $e) {
+    Log::error('Mail not sent to {to}', array('to' => $to, 'exception' => $e));
+    $this->page['error'] = true;
+}
+```
+
+```text title="site/data/log/fegg-2026-11-14.log"
+[2026-11-14 10:12:30 +09:00] INFO 120 entries imported from news.csv {"count":120,"file":"news.csv"} | POST /cms/import/ 203.0.113.5
+```

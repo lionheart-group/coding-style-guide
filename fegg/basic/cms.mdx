@@ -10,16 +10,17 @@ The controller side of a CMS screen (login check, `requirePost()`, the CSRF toke
 
 ## The CMS's files
 
-The core's CMS files (CSS, JavaScript, images, icons, libraries and the editor) are in `htdocs/_fegg/assets/`. It is the only part of `_fegg/` the web server serves, and only for CSS, JS, images and fonts (see [Directory structure](../first/cont.mdx#protecting-_fegg)). Templates load them from `{{ $site.cms_assets }}` (`/_fegg/assets`):
+The core's CMS files (CSS, JavaScript, images, icons, libraries and the editor) are in `htdocs/_fegg/assets/`. The web server serves only its CSS, JS, images and fonts, as for the site folders (see [Directory structure](../first/cont.mdx#protecting-_fegg)). Templates load them from `{{ $site.cms_assets }}` (`/_fegg/assets`):
 
-```html title="site/template/cms/event/html_head.tpl"
+```html title="site/template/cms/tpl/event/html_head.tpl"
 <script type="text/javascript" src="{{ $site.cms_assets }}/js/modal.js"></script>
 ```
 
-`{{ $site.cms_dir }}` (`/cms`) is still the URL of the CMS screens, for links and form actions.
+`{{ $site.cms_dir }}` (`/cms`) is the URL of the CMS screens, for links and form actions.
 
 - Do not edit `_fegg/assets/`: it is part of the core and `fegg-cli core:update` replaces it. Its files come built, so a project never builds them.
-- The project's own CMS styles go in `htdocs/data/cms/scss/unique.scss`. `npm run build:scss` builds it into `htdocs/data/cms/css/unique.css` together with the public site's CSS, and the CMS loads it after the core's CSS.
+- The project's own CMS styles go in `htdocs/_fegg/site/template/cms/scss/unique.scss`. `npm run build:scss` builds it into `site/template/cms/css/unique.css` together with the sites' CSS, and the CMS loads it after the core's CSS.
+- The project's CMS templates (post types, and copies of core templates) are in `site/template/cms/tpl/` (see [Where templates live](./templates/index.mdx#where-templates-live)).
 
 ## Scripts
 
@@ -32,7 +33,7 @@ The CMS does not load jQuery. The core's scripts are plain JavaScript, and `_feg
 | `FeggCms.show(el)` / `FeggCms.hide(el)` | `display: block` / `none` |
 | `FeggCms.csrfToken()` | The session's CSRF token, for a POST sent with `fetch()` |
 
-```html title="site/template/cms/event/html_head.tpl"
+```html title="site/template/cms/tpl/event/html_head.tpl"
 <script>
 FeggCms.ready(function () {
     FeggCms.on("change", ".js-event-type", function () {
@@ -49,7 +50,7 @@ A project that really needs jQuery loads its own copy in its `html_head.tpl`.
 
 Date fields are `<input type="datetime-local">`: the browser shows its own picker. Print the value in the format the field expects, check it with `datetime()` and convert it before saving:
 
-```html title="site/template/cms/news/form.tpl"
+```html title="site/template/cms/tpl/news/form.tpl"
 {{ assign $format = "Y-m-d\TH:i" }}
 <input type="datetime-local" name="post_date" value="{{ $page.data.post_date|feggDate:$format }}" required>
 ```
@@ -63,7 +64,7 @@ $data['post_date'] = Validation::toDatetime($data['post_date']);
 
 ### Drag and drop ordering
 
-Add `data-sortable` to the list and load SortableJS and `js/sortable.js` (see `site/template/cms/lab/`):
+Add `data-sortable` to the list and load SortableJS and `js/sortable.js` (see `site/template/cms/tpl/lab/`):
 
 ```html
 <script type="text/javascript" src="{{ $site.cms_assets }}/vendor/sortablejs/Sortable.min.js"></script>
@@ -87,7 +88,7 @@ The core's `_fegg/assets/vendor/tabler-icons/icons.css` contains only the icons 
 - Write the names whole (`ti-h-2`, not `'ti-h-' + n` in a script).
 - An icon the core does not use shows nothing. Add it to the project's `unique.scss`, with its SVG from tabler.io as a data URL (black strokes, `#` written `%23`):
 
-```scss title="htdocs/data/cms/scss/unique.scss"
+```scss title="htdocs/_fegg/site/template/cms/scss/unique.scss"
 .ti-star { --ti: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z'/%3E%3C/svg%3E"); }
 ```
 
@@ -95,18 +96,18 @@ In SCSS, draw an icon with its variable as a mask: `background-color: currentcol
 
 ## Rich text (FeggEditor)
 
-Rich text fields use FeggEditor, an editor built on [Tiptap](https://tiptap.dev/) (MIT). It replaces CKEditor 4. Text written with CKEditor opens in it as it is (images, YouTube videos, tables).
+Rich text fields use FeggEditor, an editor built on [Tiptap](https://tiptap.dev/) (MIT). Existing rich text opens in it as it is (images, YouTube videos, tables).
 
 ### Using it in a CMS screen
 
 Mark the textarea with `data-fegg-editor` and load the editor in the screen's `html_head.tpl`. Every `textarea[data-fegg-editor]` becomes an editor when the page is ready; no script of your own is needed.
 
-```html title="site/template/cms/news/form.tpl"
+```html title="site/template/cms/tpl/news/form.tpl"
 <textarea name="content" data-fegg-editor="full">{{ $page.data.content }}</textarea>
 <textarea name="summary" data-fegg-editor="simple">{{ $page.data.summary }}</textarea>
 ```
 
-```html title="site/template/cms/news/html_head.tpl"
+```html title="site/template/cms/tpl/news/html_head.tpl"
 <link rel="stylesheet" type="text/css" href="{{ $site.cms_assets }}/js/editor.css" />
 <script type="text/javascript" src="{{ $site.cms_assets }}/js/modal.js"></script>
 <script type="text/javascript" src="{{ $site.cms_assets }}/js/modal/image.js"></script>
@@ -131,7 +132,7 @@ $data['content'] = HtmlSanitizer::clean($this->in('content'));
 
 `HtmlSanitizer::clean()` keeps only the tags, attributes, classes and URLs the editor writes (below). Everything else is removed: scripts, event handlers, `javascript:` URLs, other iframes, other classes. The saved HTML can then be printed as it is, inside `.c-entry-block`:
 
-```html title="site/template/news/detail.tpl"
+```html title="site/template/main/tpl/news/detail.tpl"
 <div class="c-entry-block">
     {{ $page.data.content|noescape }}
 </div>
@@ -160,20 +161,18 @@ Plus paragraphs, headings (h2–h4, `text-align`), lists, quotes, lines, bold, i
 
 ### YouTube and maps outside the text
 
-A CMS field of its own that holds a YouTube URL or a Google map (the `<iframe>` of "Share" > "Embed a map", or its URL) is printed with the same block as the editor:
+A CMS field of its own that holds a YouTube URL or a Google map is printed with the same block as the editor (arguments and `Fegg\Tool\Embed` in PHP: see [Embed](../library/embed/index.mdx)):
 
-```html title="site/template/news/detail.tpl"
+```html title="site/template/main/tpl/news/detail.tpl"
 <div class="c-entry-block">
     {{ $page.data.youtube_url|feggYoutube|noescape }}
     {{ $page.data.map|feggMap|noescape }}
 </div>
 ```
 
-The modifiers write nothing for another value, and nothing is asked of YouTube or Google. See [Embed](../library/embed/index.mdx) for the arguments and `Fegg\Tool\Embed` in PHP.
-
 ### Its look on the public site
 
-The public styles are in `htdocs/data/scss/object/component/_wysiwyg.scss` (`.c-entry-block`). Change them there for a project.
+The public styles are in the site's `scss/object/component/_wysiwyg.scss` (`htdocs/_fegg/site/template/main/scss/...`, `.c-entry-block`). Change them there for a project. Sites share no SCSS: another site that shows rich text copies it.
 
-- In a narrow body, blocks change by the **body's own width** (container queries on `.c-entry-block`), not by the project's breakpoints: under 600px columns are stacked, under 480px images lose their width and float, and galleries have 2 columns. The editor uses the same values, so what editors see matches the site.
-- Images and galleries with `is-zoom` open the image large in a modal (`<dialog class="c-lightbox">`) on a click or Enter, with its caption, and arrows in a gallery. The script is `htdocs/data/js/common/lightbox.js` (loaded by `siteframe.tpl`), the styles `htdocs/data/scss/object/component/_lightbox.scss`. Keep both when the project replaces the skeleton's frame.
+- Blocks respond to the **body's own width** (container queries on `.c-entry-block`), not to the project's breakpoints: columns stack under 600px; under 480px images go full width and galleries use 2 columns. The editor uses the same values.
+- Images and galleries with `is-zoom` open the image large in a modal (`<dialog class="c-lightbox">`) on a click or Enter, with its caption, and arrows in a gallery. The script is `site/template/main/js/common/lightbox.js` (loaded by `siteframe.tpl`), the styles `site/template/main/scss/object/component/_lightbox.scss`. Keep both when the project replaces the skeleton's frame; another site copies both if it shows galleries.

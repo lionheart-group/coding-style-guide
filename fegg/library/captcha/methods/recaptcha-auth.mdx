@@ -19,7 +19,7 @@ Sends the token to `https://www.google.com/recaptcha/api/siteverify` and returns
 | success | boolean   | `true` when the API returned success, the score is not below the threshold and there is no error |
 | errors  | array     | Error messages (English for the API error codes; a Japanese message when the score is below the threshold) |
 
-When the service cannot be reached or does not answer with HTTP 200 JSON, `success` is `false` and `errors` has one message asking the visitor to try again later. A warning is written to the application log.
+When the service cannot be reached, `success` is `false` (see [When the service cannot be reached](../index.mdx#when-the-service-cannot-be-reached)).
 
 ## Arguments
 

@@ -16,7 +16,7 @@ Find the skeleton version the project started from (`version` in `package.json`,
 
 - **Changes to the core**: Fegg 5 rewrote most of the core, so decide for each whether the project still needs it. What is still needed is written again as an override in `site/` (see [Controller](../basic/controller.mdx#extending-a-core-controller)).
 - **The project's own code**: controllers (public pages and post types), project libraries in `code/lib/`, `code/lib/Modifire.php`, processing added to `MyApplication`.
-- **The project's own files**: templates, `htdocs/data/`, table definitions, config values, `code/data/`, uploads.
+- **The project's own files**: templates, `htdocs/data/` (SCSS, JS, images), table definitions, config values, `code/data/`, uploads.
 
 ## 2. Start from the Fegg 5 skeleton
 
@@ -29,18 +29,27 @@ Find the skeleton version the project started from (`version` in `package.json`,
 
 | v3 / v4                                                          | Fegg 5                                                     |
 | :--------------------------------------------------------------- | :--------------------------------------------------------- |
-| `htdocs/data/` (SCSS, JS, images)                                | `htdocs/data/` (`npm run build:scss`)                      |
-| `htdocs/cms/scss/unique.scss` (the project's CMS styles)         | `htdocs/data/cms/scss/unique.scss`                         |
-| `code/template/` except the core's CMS templates                 | `htdocs/_fegg/site/template/` (check with `./fegg-cli template:lint`) |
+| `htdocs/data/` (SCSS, JS, images)                                | `htdocs/_fegg/site/template/main/` (`scss/`, `js/`, `img/`; `npm run build:scss`) |
+| `htdocs/cms/scss/unique.scss` (the project's CMS styles)         | `htdocs/_fegg/site/template/cms/scss/unique.scss`          |
+| `code/template/` except `cms/`                                  | `htdocs/_fegg/site/template/main/tpl/` (check with `./fegg-cli template:lint`) |
+| `code/template/cms/<post type>/`                                 | `htdocs/_fegg/site/template/cms/tpl/<post type>/`          |
 | `code/config/database/` (project tables)                         | `htdocs/_fegg/site/config/database/`                       |
 | Project values in `code/config/`                                 | Merged into the skeleton's files in `htdocs/_fegg/site/config/` |
 | `code/data/`                                                     | `htdocs/_fegg/site/data/`                                  |
-| `htdocs/up_dir/`                                                 | `htdocs/up_dir/`                                           |
+| `htdocs/up_dir/`                                                 | `htdocs/_fegg/site/up_dir/` (served at `/_fegg/site/up_dir/`) |
 | The post types in the old CMS menu                               | `htdocs/_fegg/site/config/cms_menu.php`, one block each    |
 
 `fegg/`, the core's libraries in `code/lib/`, the core's CMS screens and templates, `bin/` and `htdocs/cms/` are not brought over: the skeleton has their Fegg 5 versions.
 
-The database is used as it is: point the project at a copy of the production database and run `./fegg-cli migration`, which only adds the new core tables.
+Template paths are relative to `main/tpl/` (see [Sites](../basic/templates/index.mdx#sites)). In the templates, replace `{{ base }}/data/` with `{{ $site.assets }}/` (`{{ $site.assets }}/css/style.css`, `{{ $site.assets }}/img/...`).
+
+The uploaded files' URL becomes `/_fegg/site/up_dir/...`. Rich text saved in the database still links to `/up_dir/`: replace it in every column that holds rich text, for example:
+
+```sql
+UPDATE cms_news SET content = REPLACE(content, '/up_dir/', '/_fegg/site/up_dir/');
+```
+
+The database is used as it is: point the project at a copy of the production database and run `./fegg-cli migration`, which only adds the new core tables (such as `rate_limit`).
 
 ## 4. Rewrite the PHP
 
@@ -91,7 +100,7 @@ class News extends Controller              // Site\Controller\Cms\Controller: th
 }
 ```
 
-CMS screens extend `Site\Controller\Cms\Controller`, public pages `Site\Controller\Controller`. The CMS base checks the login and the CSRF token of every POST. Delete links in CMS list templates become POST forms (see [Controller](../basic/controller.mdx#cms-screens)). Processing that was added to `MyApplication` goes into `__init()` or a `protected` method of `site/controller/Controller.php`.
+CMS screens extend `Site\Controller\Cms\Controller`, public pages `Site\Controller\Controller`. The CMS base checks the login and the CSRF token of every POST. Edit and delete forms in the project's CMS templates use `method="post"`: delete links in list templates become POST forms (see [Controller](../basic/controller.mdx#cms-screens)). Processing that was added to `MyApplication` goes into `__init()` or a `protected` method of `site/controller/Controller.php`.
 
 :::danger Required: `requirePost()` in every action that changes data
 
@@ -108,8 +117,8 @@ Fegg 4 had no such check. Add `$this->requirePost()` as the first line of every 
 | `$this->getClass('Validation')`            | `new \Fegg\Tool\Validation()`                       |
 | `$this->getClass('Tool/Upload')`, `Tool/File`, `Tool/Mail`, `Tool/RSS`, `Tool/Trim` | `new \Fegg\Tool\Upload()` etc.  |
 | `ReCAPTCHA`, `Turnstile`                   | `Fegg\Tool\Captcha\ReCAPTCHA`, `Fegg\Tool\Captcha\Turnstile` |
-| `Tool/Date`                                | Removed: PHP's `DateTimeImmutable` (see [Dates and time zone](../basic/controller.mdx#dates-and-time-zone)) |
-| `Tool/OEmbed`                              | Removed: `Fegg\Tool\Embed` (see [Embed](../library/embed/index.mdx)) |
+| `Tool/Date`                                | Removed: PHP's `DateTimeImmutable` (see below)      |
+| `Tool/OEmbed`, `core/config/oembed_schemes.php` | Removed: `Fegg\Tool\Embed` (see below)       |
 | `$this->getClass('MyLib/Foo')` (`code/lib/`) | `new \Site\MyLib\Foo()` in `site/src/MyLib/Foo.php` |
 | `code/lib/Modifire.php`                    | `htdocs/_fegg/site/functions/modifier.php`          |
 | `FEGG_CODE_DIR . '/config/...'`, `'/data/...'` | `FEGG_SITE_DIR . '/config/...'`, `'/data/...'`  |
@@ -117,6 +126,9 @@ Fegg 4 had no such check. Add `$this->requirePost()` as the first line of every 
 | `FEGG_TEST_ENVIRONMENT`                    | `FEGG_ENV !== 'production'`                         |
 
 Every file starts with `namespace`, `defined('FEGG_CORE_DIR') || exit;` and `use`. Inside a namespace, prefix PHP's own classes with `\` (`new \Exception`, `new \DateTime`, `\PDO::PARAM_INT`).
+
+- **`Tool/Date`**: `addDay($d, 3)` is `(new \DateTimeImmutable($d))->modify('+3 day')->format('Y-m-d H:i:s')`, `addMinute($d, 30)` is `->modify('+30 minute')`, `getDiff()` is `->diff()`, `getTheLastday()` is `->format('t')`, and a format in a template is `feggDate` (see [Dates and time zone](../basic/controller.mdx#dates-and-time-zone)). A project that needs `addMonth()` (kept at the end of the month) or `getSocialTime()` copies the Fegg 4 class into `site/src/`.
+- **`Tool/OEmbed`**: `(new OEmbed($url))->media` (asked of YouTube) becomes `Fegg\Tool\Embed::youtubeUrl($url)` (a `youtube-nocookie.com` URL, no request), and an `<iframe>` written in a template becomes `{{ $page.data.youtube_url|feggYoutube|noescape }}` / `|feggMap|noescape`, which write the whole block (see [Embed](../library/embed/index.mdx)). Other oEmbed services: ask them with `Fegg\Http\Client` in the project.
 
 `grep -rn "getClass\|MyApplication\|FEGG_DIR\|FEGG_CODE_DIR\|FEGG_TEST_ENVIRONMENT" htdocs/_fegg/site` must find nothing.
 
@@ -131,37 +143,31 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 - `updateWhere()`, `deleteWhere()` and `eraseWhere()` with an **empty condition** throw instead of affecting every row. Pass `'1 = 1'` where every row was really meant.
 - `Model::order()`, `join()` and the `table` / `id` / `visible` options accept **only plain names**. Move expressions to `orderRaw()`.
 - `{{ options }}` escapes labels and values, and `{{ hidden }}` escapes values.
-- **`OR` in conditions** is put in brackets before the model adds the visible flag and `valid = 1`. In Fegg 4, `where('a = ?', 1)->where('b = ?', 2, 'OR')` also returned unpublished and deleted rows matching `b`; such lists can get shorter.
+- **`OR` in conditions** is bracketed: `where('category = ?', 1)->where('a = ? OR b = ?', ...)` is `category = 1 AND (a = ? OR b = ?)`, and the visible flag and `valid = 1` are added outside the brackets. In Fegg 4 such conditions matched rows of every category, and `where('a = ?', 1)->where('b = ?', 2, 'OR')` also returned unpublished and deleted rows matching `b`; such lists can get shorter.
 - **Arrays reach modifiers**: `{{ $tags|feggImplode:', ' }}` now prints the joined tags (it printed nothing).
-- **`where()` fragments with `OR`** are bracketed: `where('category = ?', 1)->where('a = ? OR b = ?', ...)` is `category = 1 AND (a = ? OR b = ?)`. Fegg 4 matched rows of every category.
 - **Actions**: only a controller's own public methods can be called from a URL (see [Controller](../basic/controller.mdx#which-methods-are-actions)). An action defined in `MyApplication` or a base controller is a 404: write it in each controller that uses it. An action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) is a 404: rename it, or map the old URL with a route.
-- **CMS saving actions** with `requirePost()` answer 405 to a GET (see above). Edit and delete forms in the project's CMS templates must use `method="post"`.
 - **Basic authentication** with `basic_auth_scope = 1` is checked before the controller's `__init()` and action, so redirects, downloads and direct output are protected too.
 - **CMS sessions** need the session's user to still exist in `cms_user`: deleting a user ends their sessions.
-- **No more `exit`**: `displayPage()`, `redirect()`, `requirePost()` and the CMS login check throw `Fegg\Http\Halt`. A `catch (\Throwable $e)` around them must rethrow it (see [Controller](../basic/controller.mdx#ending-a-response)). Replace your own `exit` in controllers with `$this->halt()`.
-- **Environment**: error details need a `developer_ip` address **and** `FEGG_ENV` other than `production` (`site/config/env.php`). `FEGG_TEST_ENVIRONMENT` is gone.
-- **Sessions and cookies**: a session starts only when something is written to it. `setCookie()` takes SameSite as its own argument (not `'/; SameSite=Lax'` in the path), and `unsetCookie()` really deletes the cookie (see [Parameters](../basic/parameters/index.mdx)).
-- **Security headers** (`X-Frame-Options: SAMEORIGIN`, `nosniff`, `Referrer-Policy`) are sent with every response. A page meant to be framed by another site calls `$this->allowFraming()` (see [Security](../basic/security.mdx)).
-- **CMS login**: logout is a POST. Copied CMS frame templates in `site/template/cms/` add the class `js-cms-logout` to the logout link. Run `fegg-cli migration` for the login throttling table `cms_login_attempt`. `/cms/login/create/...` is gone: use `fegg-cli user:create` (see [fegg-cli](./cli.mdx#cms-users)).
+- **No more `exit`**: Fegg ends responses by throwing `Fegg\Http\Halt`; rethrow it from a `catch (\Throwable $e)` and replace your own `exit` with `$this->halt()` (see [Ending a response](../basic/controller.mdx#ending-a-response)).
+- **Sessions and cookies**: a session starts only when something is written to it (see [Session](../basic/parameters/index.mdx#session)). `setCookie()` takes SameSite as its own argument (not `'/; SameSite=Lax'` in the path), and `unsetCookie()` really deletes the cookie (Fegg 4 set an empty cookie for 7 days; see [setCookie](../basic/parameters/cookie/setcookie.mdx)).
+- **Security headers** are sent with every response; a page framed by another site calls `$this->allowFraming()` (see [Security](../basic/security.mdx#security-headers)).
+- **CMS login**: logout is a POST. Copied CMS frame templates in `site/template/cms/tpl/` add the class `js-cms-logout` to the logout link. Run `fegg-cli migration` for the login throttling table `rate_limit`. `/cms/login/create/...` is gone: use `fegg-cli user:create` (see [fegg-cli](./cli.mdx#cms-users)).
 - **Uploads** check the content against the extension; add the `@content` message to a copied `site/config/file_error_message.php` (see [Upload](../library/upload/configuration.mdx)).
-- **`htdocs/.htaccess`**: remove the `<IfModule mod_php5.c>` block and the Apache 2.2 `Order` / `Deny from all` lines (500 on Apache 2.4), and add the dotfile rules of `core/dist/htaccess.dist`. `fegg-cli doctor` warns about the old lines.
+- **`htdocs/.htaccess`**: remove the `<IfModule mod_php5.c>` block and the Apache 2.2 `Order` / `Deny from all` lines (500 on Apache 2.4), and add the dotfile rules and the `_fegg` exceptions (the CMS's files, the site folders, the uploads) of `core/dist/htaccess.dist`. On nginx, use the rules of [Directory structure](./cont.mdx#protecting-_fegg). `fegg-cli doctor` warns about the old lines.
 - **Captcha keys and the database DSN** move to `env.php`: the skeleton's `database_config.php` and `contact/contact_config.php` read them with `feggEnv()`. Put the project's keys there, not in committed files.
-- **The CMS's files** are in `htdocs/_fegg/assets/`, read at `/_fegg/assets/`. Copies of CMS templates in `site/template/cms/` load them with `{{ $site.cms_assets }}` instead of `{{ $site.cms_dir }}` (`css/`, `js/`, `img/`, `vendor/`). `_fegg/` can no longer be outside the document root. See [CMS screens and the editor](../basic/cms.mdx).
-- **No jQuery in the CMS** (nor jQuery UI, Select2 or the datetimepicker). Rewrite `$(...)` in the project's CMS templates (`site/template/cms/*/html_head.tpl`) with plain JavaScript and the `FeggCms` helpers, or load a jQuery of your own there.
-  - Date fields: `<input type="datetime-local">` with `feggDate:"Y-m-d\TH:i"`; the controller checks them with `$validation->datetime()` and saves `Fegg\Tool\Validation::toDatetime($value)`.
-  - Drag & drop ordering: `data-sortable` on the list, with `vendor/sortablejs/Sortable.min.js` and `js/sortable.js`.
+- **The CMS's files** are in `htdocs/_fegg/assets/`, read at `/_fegg/assets/`. Copies of CMS templates in `site/template/cms/tpl/` load them with `{{ $site.cms_assets }}` instead of `{{ $site.cms_dir }}` (`css/`, `js/`, `img/`, `vendor/`). `_fegg/` can no longer be outside the document root. See [CMS screens and the editor](../basic/cms.mdx).
+- **No jQuery in the CMS** (nor jQuery UI, Select2 or the datetimepicker). Rewrite `$(...)` in the project's CMS templates (`site/template/cms/tpl/*/html_head.tpl`) with plain JavaScript and the `FeggCms` helpers, or load a jQuery of your own there. Date fields become `datetime-local` inputs and drag & drop ordering uses SortableJS (see [Dates](../basic/cms.mdx#dates) and [Drag and drop ordering](../basic/cms.mdx#drag-and-drop-ordering)).
 - **CKEditor 4 is removed.** Rich text fields use FeggEditor: replace `CKEDITOR.replace(...)` and `ckeditor/ckeditor.js` with `data-fegg-editor="full"` on the textarea and `js/editor.js`, and clean the saved HTML with `Fegg\Cms\HtmlSanitizer::clean()`. Text written with CKEditor opens in FeggEditor. Copied `cms/image/` and `cms/media/` templates use the new picker scripts (`js/modal/image_picker.js`, `file_picker.js`; parameters `from=wysiwyg&picker=<id>`).
 - **Font Awesome 4.3 is removed.** Icons are Tabler Icons: replace `fa fa-…` with `ti ti-…`: `search` → `search`, `angle-right` → `chevron-right`, `image` / `picture-o` → `photo`, `times` → `x`, `cog` → `settings` (`pencil`, `trash`, `plus`, `link`, `check`, `download`, `upload` keep their names; others: tabler.io/icons). An icon the core does not use needs a line in `unique.scss` (see [Icons](../basic/cms.mdx#icons)). Copies of `cms/frame/sitewire.tpl` and `popframe.tpl` load `vendor/tabler-icons/icons.css` instead of `fonts/font-awesome.min.css`.
-- **Spyc is removed.** YAML is read by `Fegg\Tool\Yaml` (see [YAML](../library/index.mdx#yaml)): replace `spyc_load_file()` / `Spyc::YAMLLoad()` in project code with `Fegg\Tool\Yaml::parseFile()`. Table definitions read as before; `yes` / `no` and numbers with a leading zero are now text, and anchors or tags are refused with the file and the line.
-- **`Fegg\Tool\Date` is removed.** Use PHP's `DateTimeImmutable`: `addDay($d, 3)` is `(new \DateTimeImmutable($d))->modify('+3 day')->format('Y-m-d H:i:s')`, `getDiff()` is `->diff()`, `getTheLastday()` is `->format('t')`, and a format in a template is `feggDate`. A project that needs `addMonth()` or `getSocialTime()` copies the Fegg 4 class into `site/src/`.
-- **`Fegg\Tool\OEmbed` is removed**, with `core/config/oembed_schemes.php`. `Fegg\Tool\Embed::youtubeUrl($url)` gives the player URL without asking YouTube (`https://www.youtube-nocookie.com/embed/<id>`), and `{{ $page.data.youtube_url|feggYoutube|noescape }}` / `|feggMap|noescape` write the whole block (see [Embed](../library/embed/index.mdx)). Other oEmbed services: ask them with `Fegg\Http\Client` in the project.
-- **Images in other sizes** (`/up_dir/image/<id>/i-300_200.jpg`, `getImageUrl`): a width or height over `$upload_dir['image_max']` (2000) is a 404, and past `$upload_dir['image_cache_max']` (50) sizes of one image, new sizes are made for each request instead of being saved. Both are in the skeleton's `site/config/upload_dir.php`. The positions `lb` and `rb` now keep the bottom left and the bottom right (see [Trim](../library/trim/index.mdx#images-of-the-cms-in-other-sizes)).
+- **Spyc is removed.** YAML is read by `Fegg\Tool\Yaml` (see [Yaml](../library/yaml/index.mdx)): replace `spyc_load_file()` / `Spyc::YAMLLoad()` in project code with `Fegg\Tool\Yaml::parseFile()`. Table definitions read as before; `yes` / `no` and numbers with a leading zero are now text, and anchors or tags are refused with the file and the line.
+- **`getDatetime()` / `convertDatetime()`** no longer change the process-wide time zone, and `convertDatetime()` returns `''` for a date it cannot read (it returned `1970-01-01 ...`).
+- **Images in other sizes** (`getImageUrl`) are limited by `image_max` and `image_cache_max` in `site/config/upload_dir.php`, and the positions `lb` and `rb` now keep the bottom left and the bottom right (see [Trim](../library/trim/index.mdx#images-of-the-cms-in-other-sizes)).
 - **`Fegg\Tool\Trim`** throws a `\RuntimeException` for a missing file, a file that is not a JPEG, PNG or GIF, or another output type (it called `exit`).
 - **`Fegg\Tool\File`** methods return `true` / `false`. `removeDirectory()` removes symbolic links, never what they point to.
 - **`Fegg\Tool\Upload::upload()`** for a field the form does not have is `@empty` (or OK when not required), and several files (`name="file[]"`) are `@failed`, without PHP warnings.
 - **`Fegg\Tool\Mail`**: the debug log is `mail.log` in the log directory (it was `/tmp/sendmaillog`). `send()` without a sender uses `$settings['mail']['from']` / `['from_name']`, or throws an `\InvalidArgumentException`.
 - **`Fegg\Tool\RSS`** throws a `\RuntimeException` for a feed it cannot fetch or read, and keeps posts whose title contains "PR:": pass `array('skip_pr' => true)` to leave them out as before.
-- **HTTPS** is detected from more server variables and proxy headers, and `redirect()` within the site sends a path, so HTTPS pages are no longer redirected to HTTP when the detection fails (see [Security](../basic/security.mdx#https)).
+- **HTTPS** is detected from more server variables and proxy headers, and `redirect()` no longer sends HTTPS pages to HTTP when the detection fails (see [Security](../basic/security.mdx#https)).
 - **Route-only controllers**: controllers that implement `Fegg\Http\RouteOnly` (such as the skeleton's `Site\Controller\Page`) are only reached through `site/config/route.php`. Add a route such as `$route['about/'] = 'page/render/about';` for each static page that was reached as `/page/render/...` (see [URL](../basic/url.mdx#static-pages)).
 
 ### Additional work for v3 projects
@@ -174,7 +180,7 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 
 - [ ] `./fegg-cli template:lint` prints OK
 - [ ] `php -l` reports no syntax errors for the PHP files under `htdocs/_fegg` (excluding `vendor/` and `data/`)
-- [ ] `./fegg-cli migration` against a copy of the production database only adds new core tables such as `cms_login_attempt` (no project table definition is missing, and every YAML file is read: an error names the file and the line)
+- [ ] `./fegg-cli migration` against a copy of the production database only adds new core tables such as `rate_limit` (no project table definition is missing, and every YAML file is read: an error names the file and the line)
 - [ ] `./fegg-cli core:status` prints `No changes to core files.`
 - [ ] The browser console of every CMS screen shows no errors (`$ is not defined` means a template still uses jQuery), and dates (with the time), rich text and gallery ordering are saved
 - [ ] Public pages, the contact form (through to sending), CMS login, create / edit / delete for each post type, and media and image uploads work, with the data and uploads of the old site
@@ -182,6 +188,6 @@ Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 secti
 - [ ] Every saving action in `site/controller/Cms/` calls `$this->requirePost()`: opening its URL in the browser (a GET, e.g. `/cms/news/update/`) answers 405
 - [ ] No page links to an action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) or defined only in a base controller (both are 404 now)
 - [ ] The PHP error log has no warnings
-- [ ] After deploying, `./fegg-cli doctor https://<production URL>` prints OK (`/_fegg/assets/js/base.js` is served, the rest of `/_fegg/` is not) and the CMS dashboard shows no protection warnings
+- [ ] After deploying, `./fegg-cli doctor https://<production URL>` prints OK (`/_fegg/assets/js/base.js` is served; the rest of `/_fegg/`, the sites' SCSS sources included, is not) and the CMS dashboard shows no protection warnings
 
 To roll back, redeploy the old branch. The table definitions are compatible, so the same database works with both.

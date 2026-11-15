@@ -6,7 +6,7 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # Introduction
 
-> Providing some functions for uploading/validating files
+> Uploads and file checks
 
 ## How to use
 
@@ -41,14 +41,20 @@ class Entry extends Controller
 }
 ```
 
-`$this->loadConfig('upload_dir')` reads `site/config/upload_dir.php` (`path` and `url` of `htdocs/up_dir`) into `$this->config['upload_dir']`. The CMS screens (`Fegg\Controller\Cms\Image`, `Media`, `Multi`) use this class in the same way.
+`$this->loadConfig('upload_dir')` reads `site/config/upload_dir.php` (`path` `htdocs/_fegg/site/up_dir` and `url` `/_fegg/site/up_dir`) into `$this->config['upload_dir']`. The CMS screens (`Fegg\Controller\Cms\Image`, `Media`, `Multi`) use this class in the same way.
 
 Error messages are defined in `file_error_message.php`, see [Configuration](./configuration.mdx).
 
 ## What is checked
 
-- The extension must be allowed by [setFileType](./methods/setfiletype.mdx). Script extensions (`php`, `phtml`, `phar`, `cgi` ...) are refused even when listed.
-- The content must match the extension: `getimagesize()` for images, the `finfo` MIME type for the extensions of `Upload::MIME_TYPES`. A mismatch is the error `@content`.
+[Upload::upload](./methods/upload.mdx) checks, in order:
+
+1. Upload errors and the size (`@empty`, `@size`, `@failed`).
+2. The extension must be allowed by [setFileType](./methods/setfiletype.mdx). Script extensions (`php`, `phtml`, `phar`, `cgi` ...) are refused even when listed (`@type`).
+3. The content must match the extension (`@content`): images (`jpg`, `jpeg`, `png`, `gif`, `webp`) must be readable by `getimagesize()`, and for the extensions of [Upload::MIME_TYPES](#mime-types) the MIME type reported by `finfo` must be one of the types listed for the extension. A PHP file renamed to `.jpg`, or a text file named `.pdf`, is refused.
+
+When the file is saved:
+
 - Files are saved under the name you give (`uniqid('f_')`, ...), never under the visitor's file name. Keep the original name (`org_name`) in the database only.
 - Directories are created with mode `0755` and files saved with `0644`.
 
@@ -68,17 +74,13 @@ An extension that is not in the table is checked by its extension only, and sent
 
 ## Protecting the upload directory
 
-When the upload directory is below the document root, [setUploadDir](./methods/setuploaddir.mdx) writes an `.htaccess` into it that denies and disables scripts (`.php`, `.phtml`, `.phar`, `.cgi` ...), so an uploaded file can never run as code. The CMS dashboard also writes `htdocs/up_dir/.htaccess` when it opens, and the skeleton ships the file.
+The upload directory `htdocs/_fegg/site/up_dir/` is inside `_fegg/`, which is denied; the root `.htaccess` lets `/_fegg/site/up_dir/` through and sends a file that is not there (an image size not made yet, `/file/<id>/`) to PHP. When the upload directory is below the document root, [setUploadDir](./methods/setuploaddir.mdx) writes an `.htaccess` into it (`Upload::HTACCESS`, an existing file is left alone) that serves only the file types that can be uploaded and runs no script, so an uploaded file can never run as code. The CMS dashboard also writes it when it opens, and the skeleton ships the file.
 
-`fegg-cli doctor` and the CMS dashboard report a missing `htdocs/up_dir/.htaccess` (see [fegg-cli](../../first/cli.mdx#doctor)). Remember it when you upload over FTP: many FTP clients skip dotfiles. On nginx, `.htaccess` is ignored: deny scripts under the upload URL yourself.
-
-```nginx
-location ~* ^/up_dir/.*\.(php\d?|phtml|phar|pht|cgi|pl|py|sh)$ { deny all; }
-```
+`fegg-cli doctor` and the CMS dashboard report a missing `site/up_dir/.htaccess` or a missing root rule (see [fegg-cli](../../first/cli.mdx#doctor)). Remember it when you upload over FTP: many FTP clients skip dotfiles. On nginx, `.htaccess` is ignored: use the `location ^~ /_fegg/site/up_dir/` block of [Directory structure](../../first/cont.mdx#protecting-_fegg).
 
 ## Sending stored files
 
-The CMS sends stored files (`/up_dir/file/<id>/`, the media and image screens) with `Fegg\Http\Download::sendHeaders()`. It sends `X-Content-Type-Options: nosniff`, a valid `Cache-Control`, and an RFC 6266 `Content-Disposition` with the original name escaped (an ASCII fallback plus the UTF-8 name). HTML, SVG, XML and JavaScript files are always sent as attachments, never shown inline. Use it when your own controller sends a stored file:
+The CMS sends stored files (`/_fegg/site/up_dir/file/<id>/`, the media and image screens) with `Fegg\Http\Download::sendHeaders()`. It sends `X-Content-Type-Options: nosniff`, a valid `Cache-Control`, and an RFC 6266 `Content-Disposition` with the original name escaped (an ASCII fallback plus the UTF-8 name). HTML, SVG, XML and JavaScript files are always sent as attachments, never shown inline. Use it when your own controller sends a stored file:
 
 ```php title="Controller"
 use Fegg\Http\Download;

@@ -37,8 +37,6 @@ echo $this->getSession('foo'); // -> ''
 
 ### Remove all session data
 
-If you omit the argument, `unsetSession` removes all SESSION data, destroys the session and deletes the session cookie.
-
 ```php title="Controller - First request"
 $this->setSession('foo', 'bar');
 $this->setSession('baz', 'qux');

@@ -15,7 +15,7 @@ public RSS::__construct( string $url, [ array $options = array() ] )
 
 Loads and parses an RSS 1.0, RSS 2.0 or Atom feed. The entries can then be read with [RSS::fetch](./fetch.mdx) or [RSS::fetchAll](./fetchall.mdx).
 
-An `http://` or `https://` URL is fetched with `Fegg\Http\Client`; any other value is read as a local file.
+An `http://` or `https://` URL is fetched with [Fegg\Http\Client](../../http-client/index.mdx); any other value is read as a local file.
 
 Throws a `\RuntimeException` when:
 
@@ -32,7 +32,7 @@ Throws a `\RuntimeException` when:
 
 | Key     | Data type | Default | Remarks                                                         |
 | ------- | --------- | ------- | --------------------------------------------------------------- |
-| skip_pr | boolean   | false   | `true`: leave out the posts whose title contains `PR:`         |
+| skip_pr | boolean   | false   | `true`: leave out the posts whose title contains `PR:` (advertisements of some blog services) |
 | timeout | int       | 10      | Seconds for the whole request (the connection: 3 seconds)       |
 
 ## Example

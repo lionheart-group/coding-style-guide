@@ -1,0 +1,53 @@
+---
+sidebar_position: 3
+---
+
+# Yaml::dump
+
+> Write an array as YAML
+
+## Description
+
+```php
+public static string Yaml::dump( array $data )
+```
+
+Returns YAML that [parse()](./parse.mdx) reads back as the same array:
+
+- indentation of 2 spaces;
+- an item of a list that is itself a mapping or a list starts on the line after its `-`;
+- text with line breaks is written as a `|` block;
+- text that would be read as something else (`true`, `null`, `3`, text with `:` or `#` ...) is quoted;
+- an empty array inside the data is `[]`; an empty `$data` is `{}`.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks          |
+| ----- | --------- | ------- | ---------------- |
+| $data | array     |         | Data to write    |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Yaml;
+
+echo Yaml::dump(array(
+    'title' => 'News',
+    'count' => 3,
+    'draft' => false,
+    'tags'  => array('event', 'press'),
+    'body'  => "line 1\nline 2",
+));
+```
+
+```yaml title="Output"
+title: News
+count: 3
+draft: false
+tags:
+  - event
+  - press
+body: |-
+  line 1
+  line 2
+```

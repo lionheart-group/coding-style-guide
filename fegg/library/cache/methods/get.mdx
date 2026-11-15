@@ -1,0 +1,32 @@
+---
+sidebar_position: 2
+---
+
+# Cache::get
+
+> Read a kept value
+
+## Description
+
+```php
+public static mixed Cache::get( string $key [, mixed $default = null ] )
+```
+
+Returns the value of `$key`, or `$default` when there is none or it has expired.
+
+## Arguments
+
+| Name     | Data type | Default | Remarks |
+| -------- | --------- | ------- | ------- |
+| $key     | string    |         | Name of the value |
+| $default | mixed     | `null`  | Returned when there is no value |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Cache;
+
+$ranking = Cache::get('ranking', array());
+```
+
+A kept `null` cannot be told apart from a missing value: use [has()](./has.mdx) for that.

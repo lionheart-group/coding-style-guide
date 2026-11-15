@@ -1,0 +1,39 @@
+---
+sidebar_position: 4
+---
+
+# Sitemap::toXml
+
+> Return the sitemap XML
+
+## Description
+
+```php
+public string Sitemap::toXml()
+```
+
+Returns the sitemap as XML text, in the order the URLs were added. [display()](./display.mdx) sends the same text.
+
+## Example
+
+```php
+use Fegg\Tool\Sitemap;
+
+$sitemap = new Sitemap('https://www.example.com');
+$sitemap->add('/')->add('/news/post_12.html', '2026-11-15 10:00:00');
+
+file_put_contents(FEGG_HTML_DIR . '/sitemap.xml', $sitemap->toXml());
+```
+
+```xml title="Output"
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.example.com/</loc>
+  </url>
+  <url>
+    <loc>https://www.example.com/news/post_12.html</loc>
+    <lastmod>2026-11-15T10:00:00+09:00</lastmod>
+  </url>
+</urlset>
+```

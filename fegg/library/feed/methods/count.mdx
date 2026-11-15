@@ -1,0 +1,28 @@
+---
+sidebar_position: 3
+---
+
+# Feed::count
+
+> Number of posts added
+
+## Description
+
+```php
+public int Feed::count()
+```
+
+Returns the number of posts added.
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Feed;
+
+$feed = new Feed('News', '/news/');
+foreach ($rows as $row) {
+    $feed->add(array('title' => $row['title'], 'link' => '/news/post_' . $row['news_id'] . '.html'));
+}
+
+$feed->count();   // count($rows)
+```

@@ -6,7 +6,7 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # Introduction
 
-> Providing some functions for processing image (especially image crop)
+> Resizing and cropping images
 
 `Fegg\Tool\Trim` resizes and crops JPEG, GIF and PNG images with the GD extension. JPEG images are rotated according to their Exif orientation.
 
@@ -44,23 +44,17 @@ class Thumbnail extends Controller
 }
 ```
 
-:::note
-
-[Trim::setImage](./methods/setimage.mdx) throws a `\RuntimeException` when the source file is missing, is not a JPEG, PNG or GIF image, or the output path does not end with `.jpg`, `.jpeg`, `.png` or `.gif`. (Fegg 4 stopped the script with `exit`.)
-
-:::
-
 ## Images of the CMS in other sizes
 
-The images uploaded in the CMS are shown in other sizes through URLs such as `/up_dir/image/12/i-300_200.jpg`, built by the `getImageUrl` modifier (`{{ $page.data.image_id|getImageUrl:300:200 }}`).
+The images uploaded in the CMS are shown in other sizes through URLs such as `/_fegg/site/up_dir/image/12/i-300_200.jpg`, built by the `getImageUrl` modifier (`{{ $page.data.image_id|getImageUrl:300:200 }}`).
 
 ```
-/up_dir/image/{id}/{type}-{width}_{height}.{jpg|png|gif}
-/up_dir/image/{id}/{type}-{width}.{jpg|png|gif}
-/up_dir/image/{id}/{type}.{jpg|png|gif}
+/_fegg/site/up_dir/image/{id}/{type}-{width}_{height}.{jpg|png|gif}
+/_fegg/site/up_dir/image/{id}/{type}-{width}.{jpg|png|gif}
+/_fegg/site/up_dir/image/{id}/{type}.{jpg|png|gif}
 ```
 
-The first time a size is asked for, there is no such file, so the request reaches `Fegg\Controller\Up_dir::image()`, which makes it with this class and saves it at that path. From then on the web server sends the saved file.
+`Fegg\Controller\Up_dir::image()` makes a missing size with this class and saves it at that path; later requests get the saved file.
 
 | type | Method | Result |
 | --- | --- | --- |
@@ -82,8 +76,6 @@ Two settings of `htdocs/_fegg/site/config/upload_dir.php` keep anyone from filli
 $upload_dir['image_max']       = 2000;
 $upload_dir['image_cache_max'] = 50;
 ```
-
-A project whose `upload_dir.php` does not have them uses these defaults.
 
 ## Methods
 

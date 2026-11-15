@@ -14,7 +14,7 @@ public boolean Mail::send( mixed $to, [ string $from_name = null, string $from_a
 
 Sends the email with its attachments and returns `true` on success. A failed send (including an invalid address) throws `PHPMailer\PHPMailer\Exception`.
 
-When `$from_ad` is not given (`null` or `''`), the sender is `$settings['mail']['from']` and its name `$settings['mail']['from_name']` (`site/config/settings.php`, see [Sender](../index.mdx#sender)). When there is no sender address either way, it throws an `\InvalidArgumentException`.
+No sender (`$from_ad` `null` or `''`): `$settings['mail']` (see [Sender](../index.mdx#sender)); none there throws `\InvalidArgumentException`.
 
 When the debug flag is enabled with [Mail::setDebugFlag](./setdebugflag.mdx), the email is not sent: the whole message is written to the log file with [Mail::log](./log.mdx) instead.
 

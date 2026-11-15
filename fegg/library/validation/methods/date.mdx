@@ -14,8 +14,6 @@ public boolean Validation::date( string $name, mixed $value, [ mixed $code = '' 
 
 The separators `/` and `-` are removed, then the value must be digits only: `YYYY` (a year), `YYYYMM` (a year and a month from 01 to 12) or `YYYYMMDD` (an existing date, checked with `checkdate()`). So `2024`, `2024/04`, `2024-04-01` and `20240401` are valid; `2024/4/1` is not (8 digits are required for a day).
 
-An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
-
 ## Arguments
 
 | Name   | Data type | Default | Remarks                                                                                                      |

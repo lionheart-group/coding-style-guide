@@ -14,8 +14,6 @@ public self Mail::setDebugFlag( boolean $is_debug, [ string $log_name = null ] )
 
 When `$is_debug` is `true`, [Mail::send](./send.mdx) does not send the email but writes the whole message to the log file: `$log_name`, or `mail.log` in the log directory when it is not given (`htdocs/_fegg/site/data/log/mail.log`, or the directory of `FEGG_LOG_DIR`). [Mail::logFile](./logfile.mdx) returns the file used.
 
-The log is no longer written to `/tmp` (Fegg 4 used `/tmp/sendmaillog`, readable by the other users of the server).
-
 ## Arguments
 
 | Name      | Data type | Default | Remarks                    |
