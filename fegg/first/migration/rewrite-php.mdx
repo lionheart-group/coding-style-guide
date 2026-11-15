@@ -1,0 +1,84 @@
+---
+sidebar_position: 1
+---
+
+# Rewriting the PHP
+
+Write each controller again as a namespaced class in `htdocs/_fegg/site/controller/` (`cms/` becomes `Cms/`). The skeleton's `Cms/News.php` and `Cms/Lab.php` are the models for post types.
+
+```php title="Fegg 4: code/application/cms/News.php"
+<?php
+class News extends MyApplication
+{
+    public function __init()
+    {
+        parent::__init();
+        $this->_lh = $this->getClass('LH_FW', 'news');
+        $this->_model = new Model(true, array('table' => 'cms_news', 'id' => 'news_id'));
+    }
+}
+```
+
+```php title="Fegg 5: htdocs/_fegg/site/controller/Cms/News.php"
+<?php
+namespace Site\Controller\Cms;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Model;
+
+class News extends Controller              // Site\Controller\Cms\Controller: the CMS base
+{
+    protected $_cmsSection = 'news';       // replaces new Helper('news') and the isAuth() check
+
+    public function __init()
+    {
+        parent::__init();
+        $this->_model = new Model(true, array('table' => 'cms_news', 'id' => 'news_id'));
+    }
+
+    public function update()
+    {
+        $this->requirePost();              // required: every action that changes data
+        // ...
+    }
+
+    public function delete($id)
+    {
+        $this->requirePost();              // deletes are POST forms with the CSRF token
+        // ...
+    }
+}
+```
+
+CMS screens extend `Site\Controller\Cms\Controller`, public pages `Site\Controller\Controller`. The CMS base checks the login and the CSRF token of every POST. Edit and delete forms in the project's CMS templates use `method="post"`: delete links in list templates become POST forms (see [Controller](../../basic/cms/controllers.mdx)). Processing that was added to `MyApplication` goes into `__init()` or a `protected` method of `site/controller/Controller.php`.
+
+:::danger Required: `requirePost()` in every action that changes data
+
+Fegg 4 had no such check. Add `$this->requirePost()` as the first line of every action that saves, deletes, sorts or otherwise writes (`update`, `create`, `delete` ...). The CSRF token is only checked on POST: an action without `requirePost()` still runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET answers 405. Check every action with `grep -n "public function" htdocs/_fegg/site/controller/Cms/*.php`.
+
+:::
+
+| v3 / v4                                    | Fegg 5                                              |
+| :----------------------------------------- | :-------------------------------------------------- |
+| `MyApplication`                            | `Site\Controller\Controller` (public pages), `Site\Controller\Cms\Controller` (CMS screens) |
+| `Model`, `ModelWhere`, `ModelOrder`, ...   | `Fegg\Model`, `Fegg\Model\Where`, `Fegg\Model\Order`, ... |
+| `DB_pdo`                                   | `Fegg\Database\Pdo`                                 |
+| `$this->getClass('LH_FW', 'news')`         | `new \Fegg\Cms\Helper('news')` (CMS screens get it as `$this->_lh`) |
+| `$this->getClass('Validation')`            | `new \Fegg\Tool\Validation()`                       |
+| `$this->getClass('Tool/Upload')`, `Tool/File`, `Tool/Mail`, `Tool/RSS`, `Tool/Trim` | `new \Fegg\Tool\Upload()` etc.  |
+| `ReCAPTCHA`, `Turnstile`                   | `Fegg\Tool\Captcha\ReCAPTCHA`, `Fegg\Tool\Captcha\Turnstile` |
+| `Tool/Date`                                | Removed: PHP's `DateTimeImmutable` (see below)      |
+| `Tool/OEmbed`, `core/config/oembed_schemes.php` | Removed: `Fegg\Tool\Embed` (see below)       |
+| `$this->getClass('MyLib/Foo')` (`code/lib/`) | `new \Site\MyLib\Foo()` in `site/src/MyLib/Foo.php` |
+| `code/lib/Modifire.php`                    | `htdocs/_fegg/site/functions/modifier.php`          |
+| `FEGG_CODE_DIR . '/config/...'`, `'/data/...'` | `FEGG_SITE_DIR . '/config/...'`, `'/data/...'`  |
+| `FEGG_DIR . '/...'`                        | Not needed (autoloaded)                             |
+| `FEGG_TEST_ENVIRONMENT`                    | `FEGG_ENV !== 'production'`                         |
+
+Every file starts with `namespace`, `defined('FEGG_CORE_DIR') || exit;` and `use`. Inside a namespace, prefix PHP's own classes with `\` (`new \Exception`, `new \DateTime`, `\PDO::PARAM_INT`).
+
+- **`Tool/Date`**: `addDay($d, 3)` is `(new \DateTimeImmutable($d))->modify('+3 day')->format('Y-m-d H:i:s')`, `addMinute($d, 30)` is `->modify('+30 minute')`, `getDiff()` is `->diff()`, `getTheLastday()` is `->format('t')`, and a format in a template is `feggDate` (see [Dates and time zone](../../basic/controller.mdx#dates-and-time-zone)). A project that needs `addMonth()` (kept at the end of the month) or `getSocialTime()` copies the Fegg 4 class into `site/src/`.
+- **`Tool/OEmbed`**: `(new OEmbed($url))->media` (asked of YouTube) becomes `Fegg\Tool\Embed::youtubeUrl($url)` (a `youtube-nocookie.com` URL, no request), and an `<iframe>` written in a template becomes `{{ $page.data.youtube_url|feggYoutube|noescape }}` / `|feggMap|noescape`, which write the whole block (see [Embed](../../library/embed/index.mdx)). Other oEmbed services: ask them with `Fegg\Http\Client` in the project.
+
+`grep -rn "getClass\|MyApplication\|FEGG_DIR\|FEGG_CODE_DIR\|FEGG_TEST_ENVIRONMENT" htdocs/_fegg/site` must find nothing.

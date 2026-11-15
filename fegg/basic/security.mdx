@@ -10,9 +10,9 @@ Most protections are on by default. This page lists them and the settings that c
 
 ## Secrets and environments
 
-- Passwords, API keys and anything else that differs per server are **not committed**: they go in `site/config/env.php` (in `.gitignore`) or in environment variables, read with `feggEnv('NAME', $default)`. See [Settings](../first/config.mdx#environments-and-secrets).
+- Passwords, API keys and anything else that differs per server are **not committed**: they go in `site/config/env.php` (in `.gitignore`) or in environment variables, read with `feggEnv('NAME', $default)`. See [Settings](../first/config/environments.mdx).
 - A site without `env.php` runs as **production**. Test servers matched by `site/config/env/paths.php` use the committed `site/config/env/staging.php`, which holds only test values. Environments are chosen by the server's path, never by the request's host name, which the client controls.
-- Error details are shown only in [developer mode](../first/config.mdx#developer-mode): a `developer_ip` address **and** `FEGG_ENV` other than `production`.
+- Error details are shown only in [developer mode](../first/config/environments.mdx#developer-mode): a `developer_ip` address **and** `FEGG_ENV` other than `production`.
 
 ## Security headers
 
@@ -64,7 +64,7 @@ Behind a proxy that sends none of these, configure it to send one (usually `X-Fo
 
 - **Output escaping**: `{{ $x }}` escapes HTML. In URLs and JavaScript use `feggUrl` and `feggJs`; `./fegg-cli template:lint` reports outputs without them. See [Template security](./templates/security.mdx).
 - **Double submission**: public forms use [tickets](./others/tickets/setticket.mdx) (`setTicket()` / `useTicket()`). The skeleton's contact form revokes the ticket when a confirmation fails, and sends the auto-reply to exactly one address.
-- **CSRF in the CMS**: every POST must carry the session's token, and every action that changes data calls `requirePost()`. See [Controller](./controller.mdx#cms-screens).
+- **CSRF in the CMS**: every POST must carry the session's token, and every action that changes data calls `requirePost()`. See [Controller](./cms/controllers.mdx).
 - **Actions**: the framework's methods (`setSession()`, `mail()` ...) are never reachable from a URL. See [Which methods are actions](./controller.mdx#which-methods-are-actions).
 - **Database**: values always go through `?` placeholders. Table, column and order names are checked by `Fegg\Model` and must never come from user input.
 - **Spam**: the contact form supports reCAPTCHA and Turnstile. When the service cannot be reached the check fails, it is never skipped (see [Captcha](../library/captcha/index.mdx)).
@@ -74,8 +74,8 @@ Behind a proxy that sends none of these, configure it to send one (usually `X-Fo
 
 - Every login attempt is recorded before the password is checked. After **5 failed logins** for one login ID from one address, or **20** from one address, logins from that address are refused for **15 minutes**. The attempts are counted by [Fegg\Tool\RateLimit](../library/rate-limit/index.mdx) in the core table `rate_limit`: run `fegg-cli migration` after updating the core. Without the table the login works unthrottled and a warning is logged.
 - `/cms/login/auth` is POST only. Deleted users (`valid = 0`) cannot log in. Every CMS request checks that the session's user still exists in `cms_user`, so deleting a user ends their sessions at once. Old password hashes are upgraded at login. An unknown login ID takes as long to check as a wrong password.
-- Logout is a POST with the CSRF token, so another site cannot log a user out (see [Controller](./controller.mdx#login-and-logout)).
-- Users are created and their passwords changed with [`fegg-cli user:create` / `user:password`](../first/cli.mdx#cms-users), which never take the password on the command line. `/cms/register/` needs a CMS login and [developer mode](../first/config.mdx#developer-mode).
+- Logout is a POST with the CSRF token, so another site cannot log a user out (see [Controller](./cms/controllers.mdx#login-and-logout)).
+- Users are created and their passwords changed with [`fegg-cli user:create` / `user:password`](../first/cli.mdx#cms-users), which never take the password on the command line. `/cms/register/` needs a CMS login and [developer mode](../first/config/environments.mdx#developer-mode).
 - Basic authentication compares the user and password with `hash_equals()`. With `basic_auth_scope = 1` it is checked before the controller's `__init()` and action, so redirects, downloads and direct output are protected too.
 
 ## Uploads

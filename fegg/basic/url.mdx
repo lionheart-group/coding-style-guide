@@ -28,7 +28,7 @@ Sub directories of `site/controller/` are part of the URL and of the namespace:
 | `/cms/news/edit/3/`     | `site/controller/Cms/News.php`             | `Site\Controller\Cms\News::edit('3')`    |
 | `/cms/media/`           | `core/controller/Cms/Media.php` (no site class) | `Fegg\Controller\Cms\Media::index()` |
 
-- The site (`Site\Controller\...`) is searched first, then the core (`Fegg\Controller\...`). A site class with the same name replaces the core's CMS screen (see [Controller](./controller.mdx#extending-a-core-controller)).
+- The site (`Site\Controller\...`) is searched first, then the core (`Fegg\Controller\...`). A site class with the same name replaces the core's CMS screen (see [Controller](./cms/controllers.mdx#extending-a-core-controller)).
 - Segments are walked from the left; the first one that names a controller file wins over a directory with the same name.
 - Controller and directory names must be valid PHP class names (letters, digits, `_`). For URLs like `/about-us/`, use a [route](#routing).
 - Abstract classes (the base `Controller` classes) are never called from a URL.

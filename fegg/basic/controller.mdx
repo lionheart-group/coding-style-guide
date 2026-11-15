@@ -74,7 +74,7 @@ Fegg\Application                                  core/src/Application.php
 - `Fegg\Application` provides the methods you call with `$this->...`: [request parameters](./parameters/index.mdx), templates (`displayPage()`, ...), `redirect()`, `loadConfig()`, ...
 - `Fegg\Controller\Controller` (core) loads `site/config/category_info.php` and `site/config/site_info.php` in its `__init()`, and declares the properties `$_model` and `$_lh` used by the CMS.
 - `Site\Controller\Controller` (site) is yours: the base of the **public pages**. Put what every public page needs here (shared assigns, ...).
-- `Fegg\Controller\Cms\Controller` (core) and `Site\Controller\Cms\Controller` (site) are the bases of the **CMS screens**: see [CMS screens](#cms-screens). Put what every CMS screen of the project needs in `Site\Controller\Cms\Controller`.
+- `Fegg\Controller\Cms\Controller` (core) and `Site\Controller\Cms\Controller` (site) are the bases of the **CMS screens**: see [CMS screens](./cms/controllers.mdx). Put what every CMS screen of the project needs in `Site\Controller\Cms\Controller`.
 
 ```php title="htdocs/_fegg/site/controller/Controller.php"
 <?php
@@ -238,101 +238,9 @@ echo $this->convertDatetime('2026-04-01 09:00:00', 'Asia/Tokyo', 'Europe/London'
 echo $this->convertDatetime('not a date', 'Asia/Tokyo', 'UTC');                     // ''
 ```
 
-## Extending a core controller
-
-The CMS screens provided by the core (`/cms/login/`, `/cms/media/`, `/cms/image/`, ...) are in `htdocs/_fegg/core/controller/Cms/`. Do not edit them. To change one, put a class with the same name in `site/controller/Cms/` that extends the core class, and write only the methods you change. The site class is found first, so it replaces the core one for its URL.
-
-```php title="htdocs/_fegg/site/controller/Cms/Media.php"
-<?php
-namespace Site\Controller\Cms;
-
-defined('FEGG_CORE_DIR') || exit;
-
-// Changes only the /cms/media/ list
-class Media extends \Fegg\Controller\Cms\Media
-{
-    public function index($message = null)
-    {
-        // project-specific processing
-        parent::index($message);
-    }
-}
-```
-
-Keep the parent method's signature (the same arguments with the same defaults).
-
 ## CMS screens
 
-A CMS screen extends `Site\Controller\Cms\Controller` (in `site/controller/Cms/`, where `Controller` is that class without a `use`). Before your method runs, the base class:
-
-- sends a visitor who is not logged in to the login page,
-- creates `$this->_lh` (`Fegg\Cms\Helper`) for the section set in `$_cmsSection`, and sets `$this->page['prefix']` and `$this->page['prev_num']`,
-- sends `Cache-Control: no-store` and `X-Robots-Tag: noindex`,
-- checks the CSRF token of every POST request: a POST without the session's token gets a 403 page.
-
-:::danger Every action that changes data calls `requirePost()` first
-
-The CSRF token is only checked on POST. An action that saves, deletes or sorts must start with `$this->requirePost()`: without it, the action also runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET gets a 405.
-
-:::
-
-```php title="htdocs/_fegg/site/controller/Cms/Event.php"
-<?php
-namespace Site\Controller\Cms;
-
-defined('FEGG_CORE_DIR') || exit;
-
-use Fegg\Model;
-
-class Event extends Controller
-{
-    // The URL segment under /cms/ (/cms/event/...)
-    protected $_cmsSection = 'event';
-
-    public function __init()
-    {
-        parent::__init();
-        $this->_model = new Model(true, array('table' => 'cms_event', 'id' => 'event_id'));
-    }
-
-    public function update()
-    {
-        $this->requirePost();
-        // validate $this->in('title', 'POST') ..., then insertRow() / updateRow()
-    }
-
-    public function delete($internalId)
-    {
-        $this->requirePost();
-        $this->_model->delete($internalId);
-        $this->redirect($this->_lh->getBackPath('index/DELETED'));
-    }
-}
-```
-
-The scripts, icons and rich text fields of a CMS screen's templates: see [CMS screens and the editor](./cms.mdx).
-
-### Forms and the CSRF token
-
-- A form that prints `{{ hidden }}` sends the token already (the base class adds it to the hidden values).
-- Any other POST form adds it with `{{ include '/cms/parts/csrf' }}`.
-- Delete buttons are small POST forms, not links. `link-alert` asks for confirmation before sending:
-
-```html title="htdocs/_fegg/site/template/cms/tpl/event/lists.tpl"
-<form class="link-alert" action="{{ $site.prefix }}/delete/{{ $post[$page.this_id] }}" method="post" data-message="削除してもよろしいですか？" style="display: inline;">
-    {{ include '/cms/parts/csrf' }}
-    <button type="submit" class="c-button is-micro is-danger">削除</button>
-</form>
-```
-
-- JavaScript can read the token from `<meta name="csrf-token">` and send it as the `cms_csrf` POST field.
-- The token is the same for the whole session (several tabs work) and changes when you log in.
-
-### Login and logout
-
-The login screens are core controllers (`Fegg\Controller\Cms\Login`, `Logout`). Login throttling, deleted users and creating users: see [Security](./security.mdx#cms-login).
-
-Logout is a POST with the CSRF token. `/cms/logout/` opened as a link shows a logout button; links with the class `js-cms-logout` post directly (`_fegg/assets/js/base.js`). If you copied the CMS frame templates to `site/template/cms/tpl/`, add that class to the logout link.
+A CMS screen extends `Site\Controller\Cms\Controller`, which checks the login and the CSRF token of every POST; every action that changes data calls `$this->requirePost()` first. See [CMS controllers](./cms/controllers.mdx), which also covers changing the core's CMS screens.
 
 ## Template of Controller class
 

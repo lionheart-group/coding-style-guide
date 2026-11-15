@@ -19,7 +19,7 @@ The file must define a variable with the same name as the file (`sample.php` def
 1. `htdocs/_fegg/site/config/{$name}.php`
 2. `htdocs/_fegg/core/config/{$name}.php`
 
-So a site file replaces the core file with the same name (for example `validation_error_message.php`). If `global_config_dir` is set in the [settings](../../../first/config.mdx), the file in that directory is loaded first and the file above can overwrite its values.
+So a site file replaces the core file with the same name (for example `validation_error_message.php`). If `global_config_dir` is set in the [settings](../../../first/config/index.mdx), the file in that directory is loaded first and the file above can overwrite its values.
 
 On a multilingual site (`default_language` and `support_language` are set), `config/{language code}/{$name}.php` is loaded afterwards and can overwrite values for that language.
 
