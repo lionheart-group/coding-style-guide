@@ -38,8 +38,8 @@ Running a command group without a sub command prints its help: `./fegg-cli core`
 
 Compares the table definitions in the YAML files with the database (SQLite, or MySQL / MariaDB) and applies the difference (adds tables, columns and indexes).
 
-- The core's files (`core/config/database/`: `cms_user`, `cms_file`, `cms_image`, `rate_limit`) are read first, then the project's (`site/config/database/`). A project file with the same name replaces the core's file. With the CMS turned off (`$settings['cms'] = false`, see [Settings](./config.mdx#a-site-without-the-cms)) `cms_user`, `cms_file` and `cms_image` are neither created nor dropped, and no first CMS user is created.
-- Starts with one line naming the environment, its file and the database, e.g. `Environment: staging (site/config/env/staging.php, /var/www/vhosts/*/p[0-9]*) / DB: sqlite:...` (see [Environments and secrets](./config.mdx#test-servers-deployed-with-git-pull)).
+- The core's files (`core/config/database/`: `cms_user`, `cms_file`, `cms_image`, `rate_limit`) are read first, then the project's (`site/config/database/`). A project file with the same name replaces the core's file. With the CMS turned off (`$settings['cms'] = false`, see [Settings](./config/index.mdx#a-site-without-the-cms)) `cms_user`, `cms_file` and `cms_image` are neither created nor dropped, and no first CMS user is created.
+- Starts with one line naming the environment, its file and the database, e.g. `Environment: staging (site/config/env/staging.php, /var/www/vhosts/*/p[0-9]*) / DB: sqlite:...` (see [Environments and secrets](./config/environments.mdx#test-servers-deployed-with-git-pull)).
 - Prints `Fegg-cli migration diff : Not changed` when the database already matches, `Fegg-cli migration diff : Finished migration` after applying changes.
 - Then creates the first CMS user when `FEGG_CMS_INITIAL_LOGIN` is set and `cms_user` has no users at all, with `FEGG_CMS_INITIAL_PASSWORD_HASH` (or `FEGG_CMS_INITIAL_PASSWORD`) and `FEGG_CMS_INITIAL_NAME`. An existing user is never changed and a deleted one is not created again, so this is safe on every deploy. Without a usable password it exits with 1 after the migration.
 - `fegg-cli core:update` runs it automatically after updating the core.
@@ -130,7 +130,7 @@ printf '%s\n' "$CMS_PASSWORD" | ./fegg-cli user:create admin --password-stdin
 
 :::note
 
-`/cms/register/` needs a CMS login and [developer mode](./config.mdx#developer-mode); on a production server use `fegg-cli`.
+`/cms/register/` needs a CMS login and [developer mode](./config/environments.mdx#developer-mode); on a production server use `fegg-cli`.
 
 :::
 

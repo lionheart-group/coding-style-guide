@@ -78,7 +78,7 @@ The site is searched first, then the core. This works like a WordPress child the
 | Templates     | Put a file in `site/template/cms/tpl/` at the path it has under `core/template/cms/`        | `site/template/cms/tpl/login.tpl` is used instead of `core/template/cms/login.tpl` |
 | Config files  | Put a file with the same name in `site/config/`                                             | `site/config/validation_error_message.php` replaces the core's messages     |
 | Settings      | Write only the keys you want to change in `site/config/settings.php`                        | `$settings['developer_ip'] = array(...);`                                   |
-| CMS screens   | Put a class that extends the core controller in `site/controller/`, with only the methods you change | See [Controller](../basic/controller.mdx#extending-a-core-controller) |
+| CMS screens   | Put a class that extends the core controller in `site/controller/`, with only the methods you change | See [Controller](../basic/cms/controllers.mdx#extending-a-core-controller) |
 | CMS menu      | Add one block to `site/config/cms_menu.php`                                                 | When you add a post type                                                    |
 | DB tables     | Put a YAML file in `site/config/database/` (a file with the same name wins over the core's) | `cms_news.yaml`                                                             |
 
@@ -111,7 +111,7 @@ In the standard layout `_fegg/` is inside the document root. It is protected in 
 2. `htdocs/.htaccess` returns 403 for `/_fegg/` (except the CSS, JS, images and fonts of `_fegg/assets/` and of each site folder's `css/` `js/` `img/` `font/`, and the files of `_fegg/site/up_dir/`), dotfiles and hidden directories (`.git/`; `.well-known/` stays reachable), and denies `.db`, `.sqlite`, `.yaml`, `.tpl`, `.log`, `.md`, `.json` and `.dist` files.
 3. Every PHP file under `_fegg/` and every compiled template starts with the guard line (see [Namespaces](#namespaces)).
 4. `fegg-cli doctor https://example.com` checks over HTTP that nothing under `_fegg/` (a site's SCSS sources included) and no database file can be read (see [fegg-cli](./cli.mdx#doctor)). Run it from your local machine after every upload: many FTP clients skip `.htaccess`. The CMS dashboard also warns about problems it can detect from the files, such as a missing `.htaccess`.
-5. If the server allows it, put the SQLite database outside the document root (see [Settings](./config.mdx#database)).
+5. If the server allows it, put the SQLite database outside the document root (see [Settings](./config/index.mdx#database)).
 
 On nginx, where `.htaccess` is not used, add equivalent rules:
 

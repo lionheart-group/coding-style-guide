@@ -1,0 +1,97 @@
+---
+sidebar_position: 1
+---
+
+import { SiblingDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# CMS screens and the editor
+
+> The CMS's files, scripts and icons. The controllers of CMS screens and rich text fields have pages of their own:
+
+<SiblingDocCardList ids={["controllers", "editor"]} />
+
+## The CMS's files
+
+The core's CMS files (CSS, JavaScript, images, icons, libraries and the editor) are in `htdocs/_fegg/assets/`. The web server serves only its CSS, JS, images and fonts, as for the site folders (see [Directory structure](../../first/cont.mdx#protecting-_fegg)). Templates load them from `{{ $site.cms_assets }}` (`/_fegg/assets`):
+
+```html title="site/template/cms/tpl/event/html_head.tpl"
+<script type="text/javascript" src="{{ $site.cms_assets }}/js/modal.js"></script>
+```
+
+`{{ $site.cms_dir }}` (`/cms`) is the URL of the CMS screens, for links and form actions.
+
+- Do not edit `_fegg/assets/`: it is part of the core and `fegg-cli core:update` replaces it. Its files come built, so a project never builds them.
+- The project's own CMS styles go in `htdocs/_fegg/site/template/cms/scss/unique.scss`. `npm run build:scss` builds it into `site/template/cms/css/unique.css` together with the sites' CSS, and the CMS loads it after the core's CSS.
+- The project's CMS templates (post types, and copies of core templates) are in `site/template/cms/tpl/` (see [Where templates live](../templates/index.mdx#where-templates-live)).
+
+## Scripts
+
+The CMS does not load jQuery. The core's scripts are plain JavaScript, and `_fegg/assets/js/base.js` (loaded by every CMS frame) gives a few helpers. Write the scripts of the project's CMS templates with these and the DOM APIs:
+
+| Helper | What it does |
+| :----- | :----------- |
+| `FeggCms.ready(fn)` | Runs `fn` once the DOM is ready |
+| `FeggCms.on(event, selector, handler)` | Delegated listener on `document`; `this` is the element that matches `selector` |
+| `FeggCms.show(el)` / `FeggCms.hide(el)` | `display: block` / `none` |
+| `FeggCms.csrfToken()` | The session's CSRF token, for a POST sent with `fetch()` |
+
+```html title="site/template/cms/tpl/event/html_head.tpl"
+<script>
+FeggCms.ready(function () {
+    FeggCms.on("change", ".js-event-type", function () {
+        var place = document.querySelector(".js-event-place");
+        this.value === "online" ? FeggCms.hide(place) : FeggCms.show(place);
+    });
+});
+</script>
+```
+
+A project that really needs jQuery loads its own copy in its `html_head.tpl`.
+
+### Dates
+
+Date fields are `<input type="datetime-local">`: the browser shows its own picker. Print the value in the format the field expects, check it with `datetime()` and convert it before saving:
+
+```html title="site/template/cms/tpl/news/form.tpl"
+{{ assign $format = "Y-m-d\TH:i" }}
+<input type="datetime-local" name="post_date" value="{{ $page.data.post_date|feggDate:$format }}" required>
+```
+
+```php title="site/controller/Cms/News.php"
+$validation->datetime('post_date', $this->in('post_date'), array('@date', '投稿日'));
+// ...
+// "2026-11-10T10:00" -> "2026-11-10 10:00:00"
+$data['post_date'] = Validation::toDatetime($data['post_date']);
+```
+
+### Drag and drop ordering
+
+Add `data-sortable` to the list and load SortableJS and `js/sortable.js` (see `site/template/cms/tpl/lab/`):
+
+```html
+<script type="text/javascript" src="{{ $site.cms_assets }}/vendor/sortablejs/Sortable.min.js"></script>
+<script type="text/javascript" src="{{ $site.cms_assets }}/js/sortable.js"></script>
+
+<div class="c-uploader-list" data-sortable> ... </div>
+```
+
+The CMS's third-party libraries are in `_fegg/assets/vendor/`.
+
+## Icons
+
+The CMS's icons are [Tabler Icons](https://tabler.io/icons) (MIT, outline):
+
+```html
+<i class="ti ti-search"></i>
+```
+
+The core's `_fegg/assets/vendor/tabler-icons/icons.css` contains only the icons the core uses, collected from their names when the core is built. So:
+
+- Write the names whole (`ti-h-2`, not `'ti-h-' + n` in a script).
+- An icon the core does not use shows nothing. Add it to the project's `unique.scss`, with its SVG from tabler.io as a data URL (black strokes, `#` written `%23`):
+
+```scss title="htdocs/_fegg/site/template/cms/scss/unique.scss"
+.ti-star { --ti: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z'/%3E%3C/svg%3E"); }
+```
+
+In SCSS, draw an icon with its variable as a mask: `background-color: currentcolor; mask: var(--ti-link) center / contain no-repeat;`.
