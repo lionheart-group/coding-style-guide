@@ -4,15 +4,25 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Mon, 16 Nov 2026 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 16 Nov 2026 10:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <item>
+            <title><![CDATA[v0.5.3]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/16/v0.5.3</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/16/v0.5.3</guid>
+            <pubDate>Mon, 16 Nov 2026 10:00:00 GMT</pubDate>
+            <description><![CDATA[- Fegg 5.x docs (/docs/fegg/next/): long pages split into shorter ones. Moving a Fegg 3 / 4 project now has its own pages for rewriting the PHP and for the behaviour changes (grouped by area); Settings has a page for environments and secrets; CMS screens has pages for the CMS controllers and the editor. The pages keep their URLs]]></description>
+            <content:encoded><![CDATA[<ul>
+<li class="">Fegg 5.x docs (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next">/docs/fegg/next/</a>): long pages split into shorter ones. Moving a Fegg 3 / 4 project now has its own pages for rewriting the PHP and for the behaviour changes (grouped by area); Settings has a page for environments and secrets; CMS screens has pages for the CMS controllers and the editor. The pages keep their URLs</li>
+</ul>]]></content:encoded>
+        </item>
+        <item>
             <title><![CDATA[v0.5.2]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/16/v0.5.2</link>
             <guid>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/16/v0.5.2</guid>
-            <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+            <pubDate>Mon, 16 Nov 2026 09:00:00 GMT</pubDate>
             <description><![CDATA[- Fegg 5.x docs (/docs/fegg/next/)create; $settings['cms'] = false for a site without the CMS; uploaded files moved to fegg/site/updir/]]></description>
             <content:encoded><![CDATA[<ul>
 <li class="">Fegg 5.x docs (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next">/docs/fegg/next/</a>): several sites in one project (the corporate site at <code>/</code>, a recruiting site at <code>/recruit/</code>, landing pages), each with its own folder <code>site/template/&lt;site&gt;/</code> holding its templates, SCSS, JS and images; <code>fegg-cli site:create</code>; <code>$settings['cms'] = false</code> for a site without the CMS; uploaded files moved to <code>_fegg/site/up_dir/</code></li>
@@ -21,35 +31,25 @@
 </ul>]]></content:encoded>
         </item>
         <item>
-            <title><![CDATA[v0.5.3]]></title>
-            <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/16/v0.5.3</link>
-            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/16/v0.5.3</guid>
-            <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
-            <description><![CDATA[- Fegg 5.x docs (/docs/fegg/next/): long pages split into shorter ones. Moving a Fegg 3 / 4 project now has its own pages for rewriting the PHP and for the behaviour changes (grouped by area); Settings has a page for environments and secrets; CMS screens has pages for the CMS controllers and the editor. The pages keep their URLs]]></description>
+            <title><![CDATA[v0.5.1]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.1</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.1</guid>
+            <pubDate>Tue, 10 Nov 2026 10:00:00 GMT</pubDate>
+            <description><![CDATA[- Fegg 5.x docs (/docs/fegg/next/): every CMS action that changes data must call requirePost() first; this is new in Fegg 5, so CMS controllers copied from Fegg 4 need it added (see the migration guide)]]></description>
             <content:encoded><![CDATA[<ul>
-<li class="">Fegg 5.x docs (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next">/docs/fegg/next/</a>): long pages split into shorter ones. Moving a Fegg 3 / 4 project now has its own pages for rewriting the PHP and for the behaviour changes (grouped by area); Settings has a page for environments and secrets; CMS screens has pages for the CMS controllers and the editor. The pages keep their URLs</li>
+<li class="">Fegg 5.x docs (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next">/docs/fegg/next/</a>): every CMS action that changes data must call <code>requirePost()</code> first; this is new in Fegg 5, so CMS controllers copied from Fegg 4 need it added (see the migration guide)</li>
+<li class="">Fegg 5.x docs: which controller methods can be called from a URL, Basic authentication checked before the controller runs, CMS sessions of deleted users, and the first CMS user created only while <code>cms_user</code> is empty</li>
 </ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v0.5.0]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.0</link>
             <guid>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.0</guid>
-            <pubDate>Tue, 10 Nov 2026 00:00:00 GMT</pubDate>
+            <pubDate>Tue, 10 Nov 2026 09:00:00 GMT</pubDate>
             <description><![CDATA[- The Fegg docs are now versioned. Fegg 4.x stays the default; switch versions with the version menu in the navigation bar]]></description>
             <content:encoded><![CDATA[<ul>
 <li class="">The <a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg">Fegg</a> docs are now versioned. Fegg 4.x stays the default; switch versions with the version menu in the navigation bar</li>
 <li class="">Added the Fegg 5.x docs as the version in development (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next">/docs/fegg/next/</a>, English only for now): directory layout and the separated core, base controllers for public pages and the CMS, security (env.php, test server settings, security headers), MySQL, logging and the command line</li>
-</ul>]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[v0.5.1]]></title>
-            <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.1</link>
-            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.1</guid>
-            <pubDate>Tue, 10 Nov 2026 00:00:00 GMT</pubDate>
-            <description><![CDATA[- Fegg 5.x docs (/docs/fegg/next/): every CMS action that changes data must call requirePost() first; this is new in Fegg 5, so CMS controllers copied from Fegg 4 need it added (see the migration guide)]]></description>
-            <content:encoded><![CDATA[<ul>
-<li class="">Fegg 5.x docs (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next">/docs/fegg/next/</a>): every CMS action that changes data must call <code>requirePost()</code> first; this is new in Fegg 5, so CMS controllers copied from Fegg 4 need it added (see the migration guide)</li>
-<li class="">Fegg 5.x docs: which controller methods can be called from a URL, Basic authentication checked before the controller runs, CMS sessions of deleted users, and the first CMS user created only while <code>cms_user</code> is empty</li>
 </ul>]]></content:encoded>
         </item>
         <item>
