@@ -32,7 +32,7 @@ Sub directories of `site/controller/` are part of the URL and of the namespace:
 - Segments are walked from the left; the first one that names a controller file wins over a directory with the same name.
 - Controller and directory names must be valid PHP class names (letters, digits, `_`). For URLs like `/about-us/`, use a [route](#routing).
 - Abstract classes (the base `Controller` classes) are never called from a URL.
-- Only the controller's own public methods are actions: methods of the base classes, methods named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...), static methods and names starting with `_` are 404 (see [Controller](./controller.mdx#which-methods-are-actions)).
+- Only the controller's own actions can be called; any other method is a 404 (see [Which methods are actions](./controller.mdx#which-methods-are-actions)).
 - If no controller or no method matches, the `NotFound` controller renders the 404 page.
 
 Arguments are always strings.
@@ -60,7 +60,7 @@ class Post extends Controller
 
 ## Trailing slash
 
-URLs without an extension are normalised to end with `/`. A `GET` or `HEAD` request to `/news/detail/1` is redirected (301) to `/news/detail/1/`, keeping the query string. Other methods (`POST`, ...) are handled in place without a redirect. URLs with an extension (`/news/post_1.html`) are not changed.
+URLs without an extension are normalised to end with `/`. A `GET` or `HEAD` request to `/news/detail/1` is redirected (301) to `/news/detail/1/`, keeping the query string (`/news?p=2` → `/news/?p=2`). Other methods (`POST`, ...) are handled in place without a redirect. URLs with an extension (`/news/post_1.html`) are not changed.
 
 Write links in templates with the trailing slash to avoid the extra redirect.
 
@@ -113,9 +113,12 @@ $route['contact/confirm.html'] = 'contact/confirm';
 Pages that have no data of their own do not need a controller. Route them to the skeleton's `Site\Controller\Page`, which renders the template named in the route:
 
 ```php title="htdocs/_fegg/site/config/route.php"
-$route['about/']          = 'page/render/about';      // site/template/about.tpl
-$route['guide/:any.html'] = 'page/render/guide/$1';   // site/template/guide/*.tpl
+$route['about/']          = 'page/render/about';      // site/template/main/tpl/about.tpl
+$route['guide/:any.html'] = 'page/render/guide/$1';   // site/template/main/tpl/guide/*.tpl
+$route['recruit/jobs/']   = 'page/render/jobs';       // site/template/recruit/tpl/jobs.tpl
 ```
+
+The template is read from the `tpl/` of the site the URL belongs to (see [Sites](./templates/index.mdx#sites)).
 
 `Page::render()` joins its arguments into the template path. If the template does not exist, it redirects to the top page.
 

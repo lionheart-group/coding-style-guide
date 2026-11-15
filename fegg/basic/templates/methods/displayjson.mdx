@@ -1,0 +1,63 @@
+---
+sidebar_position: 5
+---
+
+# Application::displayJson
+
+> Send data as JSON and end the response
+
+## Description
+
+```php
+public void Application::displayJson( mixed $data [, int $status = 200 ] )
+```
+
+Encodes `$data` as JSON, sends it with `Content-Type: application/json; charset=utf-8` and `Cache-Control: no-store`, and ends the response like [Application::displayPage](./displaypage.mdx) (see [Ending a response](../../controller.mdx#ending-a-response)). Code after `displayJson()` does not run.
+
+Use it for actions called with `fetch()` from a page, instead of `echo json_encode(...)`.
+
+- Japanese text and `/` are written as they are; `<`, `>` and `&` are written as `<`, `>` and `&`, so the response cannot be read as HTML.
+- No template is used: `$this->page` is not sent, only `$data`.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks |
+| ------- | --------- | ------- | ------- |
+| $data   | mixed     |         | Arrays, strings, numbers, booleans, `null`, objects implementing `JsonSerializable` |
+| $status | int       | 200     | HTTP status |
+
+## Example
+
+```php title="htdocs/_fegg/site/controller/Shop.php"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Model;
+
+class Shop extends Controller
+{
+    public function search()
+    {
+        $model = new Model(false, array('table' => 'cms_shop', 'id' => 'shop_id', 'visible' => 'visible'));
+        $rows = $model->select('shop_id, name, area')
+                      ->whereLike('name', (string) $this->in('q'))
+                      ->order('name', 'asc')->limit(20)->all();
+
+        if (!$rows) {
+            $this->displayJson(array('error' => 'Not found'), 404);
+        }
+        $this->displayJson(array('items' => $rows));
+    }
+}
+```
+
+```js title="Script"
+const response = await fetch('/shop/search/?q=' + encodeURIComponent(query));
+const data = await response.json();   // {"items": [{"shop_id": ..., "name": "Tokyo", "area": ...}, ...]}
+```
+
+## Errors
+
+Data that cannot be encoded (text that is not valid UTF-8, `INF`, `NAN` ...) throws `\JsonException`; nothing is sent.

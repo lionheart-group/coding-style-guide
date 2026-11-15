@@ -1,0 +1,46 @@
+---
+sidebar_position: 1
+---
+
+# Cache::remember
+
+> Return the kept value, or make it and keep it
+
+## Description
+
+```php
+public static mixed Cache::remember( string $key, int $ttl, callable $callback )
+```
+
+Returns the value of `$key` when it has not expired. Otherwise calls `$callback`, keeps its result for `$ttl` seconds and returns it.
+
+When `$callback` throws and an expired value is still there, that value is returned and a warning is logged; without one, the exception is thrown (see [When the function fails](../index.mdx#when-the-function-fails)).
+
+A result with an object other than a date throws `\InvalidArgumentException` (see [Values](../index.mdx#values)).
+
+## Arguments
+
+| Name      | Data type | Default | Remarks |
+| --------- | --------- | ------- | ------- |
+| $key      | string    |         | Name of the value |
+| $ttl      | int       |         | Seconds to keep it (at least 1) |
+| $callback | callable  |         | Returns the value |
+
+## Example
+
+```php title="Controller"
+use Fegg\Http\Client;
+use Fegg\Tool\Cache;
+
+$category = (int) $this->in('category');
+
+$items = Cache::remember('items-' . $category, 300, function () use ($category) {
+    $response = (new Client(5))->get('https://api.example.com/items?category=' . $category);
+    if ($response['status'] !== 200) {
+        throw new \RuntimeException('Items API answered ' . $response['status']);
+    }
+    return json_decode($response['body'], true);
+});
+```
+
+Throw when the result is not usable: an error status returned as a value would be kept.

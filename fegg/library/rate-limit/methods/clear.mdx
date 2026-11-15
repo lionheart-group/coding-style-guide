@@ -1,0 +1,37 @@
+---
+sidebar_position: 6
+---
+
+# RateLimit::clear
+
+> Forget the attempts of a key
+
+## Description
+
+```php
+public void RateLimit::clear( string $key )
+```
+
+Removes every attempt of `$key` in this bucket, for example after a successful login, so earlier failures do not count any more.
+
+## Arguments
+
+| Name | Data type | Default | Remarks |
+| ---- | --------- | ------- | ------- |
+| $key | string    |         | Who is counted |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\RateLimit;
+
+$limit = new RateLimit('member-login', 5, 900);
+if ($limit->attempt($loginId)) {
+    $this->redirect('/member/login/?locked=1');
+}
+
+if ($this->_checkPassword($loginId, $password)) {
+    $limit->clear($loginId);
+    // ... log in
+}
+```

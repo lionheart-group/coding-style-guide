@@ -1,0 +1,30 @@
+---
+sidebar_position: 4
+---
+
+# RateLimit::remaining
+
+> Attempts left in the window
+
+## Description
+
+```php
+public int RateLimit::remaining( string $key )
+```
+
+Returns how many attempts `$key` has left in the current window (`0` when it is limited). Nothing is recorded. Without the table `rate_limit` it returns `$max`.
+
+## Arguments
+
+| Name | Data type | Default | Remarks |
+| ---- | --------- | ------- | ------- |
+| $key | string    |         | Who is counted |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\RateLimit;
+
+$limit = new RateLimit('download', 10, 86400);
+$this->page['downloads_left'] = $limit->remaining((string) $this->getSession('member_id'));
+```

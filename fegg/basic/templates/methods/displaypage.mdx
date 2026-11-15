@@ -12,11 +12,9 @@ sidebar_position: 1
 public void Application::displayPage( string $template )
 ```
 
-Renders the template with [Application::fetchPage](./fetchpage.mdx) (so `$page`, `$site`, `$in` … are available), outputs the page and ends the response by throwing `Fegg\Http\Halt` (not `exit`; see [Ending a response](../../controller.mdx#ending-a-response)). Code after `displayPage()` does not run. A `catch (\Throwable $e)` around it must rethrow `Fegg\Http\Halt`.
+Renders the template with [Application::fetchPage](./fetchpage.mdx) (so `$page`, `$site`, `$in` … are available), outputs the page and ends the response (see [Ending a response](../../controller.mdx#ending-a-response)). Code after `displayPage()` does not run.
 
-The security headers (`X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `Referrer-Policy` ...) are sent for every response before the controller runs, not by `displayPage()` (see [Security](../../security.mdx#security-headers)). To let other sites show one page in a frame, call `$this->allowFraming()` before `displayPage()`.
-
-This is the method to use for every page. The site-wide Basic authentication (`basic_auth_scope = 1`) is checked earlier, before the controller runs.
+This is the method to use for every page.
 
 ## Arguments
 
@@ -42,7 +40,7 @@ class News extends Controller
 }
 ```
 
-```html title="htdocs/_fegg/site/template/news/detail.tpl"
+```html title="htdocs/_fegg/site/template/main/tpl/news/detail.tpl"
 <h1>{{ $page.title }}</h1>
 ```
 
@@ -52,18 +50,4 @@ class News extends Controller
 
 ## Errors
 
-When the template does not exist, `Fegg\Template\TemplateException` is thrown. Uncaught, it becomes an HTTP 500 that is written to the PHP error log; nothing of the half-rendered page is sent. Catch it when a missing template is expected:
-
-```php
-try {
-    $this->displayPage('campaign/current');
-} catch (\Fegg\Template\TemplateException $e) {
-    $this->displayPage('not_found');
-}
-```
-
-:::warning
-
-Never build the template name from user input without checking it. A controller that chooses a template from its URL arguments should only be reachable through `site/config/route.php` (implement `Fegg\Http\RouteOnly`, like the skeleton's `Site\Controller\Page`).
-
-:::
+A missing template throws `Fegg\Template\TemplateException` (see [Lint and errors](../lint.mdx#templateexception)).

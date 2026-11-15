@@ -1,0 +1,25 @@
+---
+sidebar_position: 12
+---
+
+# Mail::logFile
+
+> Get the path of the debug log file
+
+## Description
+
+```php
+public string Mail::logFile()
+```
+
+Returns the file [Mail::log](./log.mdx) writes to: the file given to [Mail::setDebugFlag](./setdebugflag.mdx), or `mail.log` in the log directory (`htdocs/_fegg/site/data/log`, or `FEGG_LOG_DIR` when it is set).
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Mail;
+
+$mail = new Mail();
+$mail->setDebugFlag(true);
+echo $mail->logFile(); // -> ".../htdocs/_fegg/site/data/log/mail.log"
+```

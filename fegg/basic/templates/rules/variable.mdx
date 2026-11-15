@@ -62,8 +62,4 @@ $this->page['foo'] = '<p>bar</p>';
 <p>bar</p>
 ```
 
-:::warning
-
-Use `noescape` only for HTML you trust (CMS rich text written by administrators, messages from your own config). Never use it on request parameters (`$in`) or other user input.
-
-:::
+Use `noescape` only for HTML you trust (see [Security](../security.mdx#noescape)).

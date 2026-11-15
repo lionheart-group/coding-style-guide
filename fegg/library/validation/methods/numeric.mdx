@@ -14,8 +14,6 @@ public boolean Validation::numeric( string $name, mixed $value, [ mixed $code = 
 
 Valid when the value contains only the digits `0-9`. `$decimalPointFlag` also allows a decimal part (`12.5`) and `$minusFlag` a leading `-`. Use the error codes `@numeric_decimalpoint` and `@numeric_minus` for the messages of those cases.
 
-An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
-
 ## Arguments
 
 | Name              | Data type | Default | Remarks                                                                                                      |
@@ -29,7 +27,7 @@ An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns
 ## Example
 
 ```php title="Controller"
-use Fegg\Validation;
+use Fegg\Tool\Validation;
 
 $validation = new Validation();
 

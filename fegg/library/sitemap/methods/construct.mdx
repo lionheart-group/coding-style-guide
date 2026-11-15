@@ -1,0 +1,32 @@
+---
+sidebar_position: 1
+---
+
+# Sitemap::__construct
+
+> Create an empty sitemap
+
+## Description
+
+```php
+public Sitemap::__construct( [ string $baseUrl = '' ] )
+```
+
+`$baseUrl` is the root URL that paths are added to. `''` uses the URL of the current request (`FEGG_CURRENT_URL`: the scheme, the host and the base path).
+
+## Arguments
+
+| Name     | Data type | Default | Remarks |
+| -------- | --------- | ------- | ------- |
+| $baseUrl | string    | `''`    | Root URL of the site, with the base path. `''`: the current request |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Sitemap;
+
+$sitemap = new Sitemap();                              // URLs of the current host
+$sitemap = new Sitemap('https://www.example.com');     // always the production host
+```
+
+Pass the root URL when the sitemap is written outside a request (a command that saves it as a file).

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Trim::resizeTrim
@@ -12,7 +12,7 @@ sidebar_position: 5
 public void Trim::resizeTrim( int $w, int $h, string $cp )
 ```
 
-The output is exactly `$w` x `$h`. The image is scaled to cover the whole area, keeping its aspect ratio, and the overflow is cut off. `$cp` decides which part of the image is kept. `0` means the original width or height.
+The output is exactly `$w` x `$h`. The image is scaled to cover the whole area, keeping its aspect ratio, and the overflow is cut off. `$cp` decides which part of the image is kept.
 
 ## Arguments
 
@@ -24,23 +24,21 @@ The output is exactly `$w` x `$h`. The image is scaled to cover the whole area, 
 
 ### Crop position
 
-| $cp  | Kept part                       |
-| ---- | ------------------------------- |
-| `t`  | Top center                      |
-| `rt` | Top right                       |
-| `l`  | Middle left                     |
-| `m`  | Center                          |
-| `r`  | Middle right                    |
-| `b`  | Bottom center                   |
-| `lb` | Middle left (same as `l`)       |
-| `rb` | Bottom center (same as `b`)     |
-| `lt` or any other value | Top left |
+The positions are listed in `Trim::POSITIONS`.
 
-:::note
+| $cp  | Kept part       |
+| ---- | --------------- |
+| `lt` | Top left        |
+| `t`  | Top center      |
+| `rt` | Top right       |
+| `l`  | Middle left     |
+| `m`  | Center          |
+| `r`  | Middle right    |
+| `lb` | Bottom left     |
+| `b`  | Bottom center   |
+| `rb` | Bottom right    |
 
-In the current implementation `lb` and `rb` do not crop at the bottom corners: they behave like `l` and `b`.
-
-:::
+Any other value is `lt`.
 
 ## Example
 

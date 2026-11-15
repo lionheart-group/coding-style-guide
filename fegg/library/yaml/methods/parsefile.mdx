@@ -1,0 +1,35 @@
+---
+sidebar_position: 1
+---
+
+# Yaml::parseFile
+
+> Read a YAML file
+
+## Description
+
+```php
+public static array Yaml::parseFile( string $file )
+```
+
+Reads the file and returns its content as an array (see [What it reads](../index.mdx#what-it-reads)).
+
+Throws `Fegg\Tool\YamlException` when the file cannot be read or is YAML that `Yaml` does not read; the message starts with the file and the line (see [Errors](../index.mdx#errors)).
+
+## Arguments
+
+| Name  | Data type | Default | Remarks          |
+| ----- | --------- | ------- | ---------------- |
+| $file | string    |         | Path of the file |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Yaml;
+
+$data = Yaml::parseFile(FEGG_SITE_DIR . '/config/shops.yaml');
+
+foreach ($data['shops'] as $shop) {
+    // $shop['name'], $shop['zip'] ...
+}
+```

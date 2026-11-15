@@ -1,0 +1,37 @@
+---
+sidebar_position: 6
+---
+
+# File::output
+
+> Send a file to the browser
+
+## Description
+
+```php
+public bool File::output( string $fileName )
+```
+
+Prints the contents of `$fileName` with `readfile()`, a piece at a time, so a file of any size can be sent ([File::readFile](./readfile.mdx) reads it all into memory). Headers are not sent: send them before. Returns `false` when `$fileName` is not a file or cannot be read.
+
+For files uploaded through the CMS, use `Fegg\Http\Download`, which also sends the headers.
+
+## Arguments
+
+| Name      | Data type | Default | Remarks      |
+| --------- | --------- | ------- | ------------ |
+| $fileName | string    |         | File to send |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\File;
+
+$path = FEGG_SITE_DIR . '/data/export/list.csv';
+
+header('Content-Type: text/csv; charset=UTF-8');
+header('Content-Length: ' . filesize($path));
+
+$file = new File();
+$file->output($path);
+```

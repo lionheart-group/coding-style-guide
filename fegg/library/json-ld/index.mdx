@@ -1,0 +1,98 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Structured data (schema.org JSON-LD) for search engines
+
+`Fegg\Tool\JsonLd` builds [schema.org](https://schema.org/) structured data: the site's name and organization, breadcrumbs and articles, which search engines can show in their results. The methods return arrays; the template writes them as JSON in a `<script type="application/ld+json">` element.
+
+## How to use
+
+The methods are static. A controller sets the data as the site information `json_ld` with [setSiteinfo](../../basic/templates/helpers/setsiteinfo.mdx), usually several items in one [graph()](./methods/graph.mdx):
+
+```php title="htdocs/_fegg/site/controller/News.php"
+use Fegg\Tool\JsonLd;
+
+public function detail($id = '')
+{
+    // ... $this->page['data'] is the post
+    $data = $this->page['data'];
+    $siteName = $this->config['site_info']['name'];
+
+    $this->setSiteinfo('json_ld', JsonLd::graph(
+        JsonLd::article(array(
+            'headline'      => $data['title'],
+            'datePublished' => $data['post_date'],
+            'dateModified'  => $data['modified'],
+            // getImageUrl() includes the base path: only the domain is added
+            'image'         => $data['image_id'] ? FEGG_CURRENT_DOMAIN . getImageUrl($data['image_id']) : '',
+            'url'           => '/news/post_' . $data['news_id'] . '.html',
+            'author'        => $siteName,
+            'publisher'     => $siteName,
+        )),
+        JsonLd::breadcrumb(array(
+            'ホーム'       => '/',
+            'ニュース'     => '/news/',
+            $data['title'] => '',
+        ))
+    ));
+
+    $this->displayPage('news/detail');
+}
+```
+
+The skeleton's siteframe writes it in the `<head>` of every page that sets it:
+
+```html title="htdocs/_fegg/site/template/main/tpl/template/siteframe.tpl"
+{{ if $site.json_ld }}
+<script type="application/ld+json">{{ $site.json_ld|feggJs|noescape }}</script>
+{{ end }}
+```
+
+[feggJs](../../basic/templates/security.mdx#javascript-feggjs) writes the array as JSON and encodes `<`, `>` and `&`, so a title containing `</script>` cannot end the element. Use exactly this line: `noescape` is required inside `<script>`, and the normal escaping would break the JSON.
+
+In the skeleton, the top page (`Index.php`) sets the site and its organization, and the news detail page sets the article and its breadcrumbs.
+
+## The data
+
+- Empty values (`null`, `''`, `array()`) are left out, so optional fields can be passed as they come from the database.
+- Paths (`url`, `item`, `image`, `logo`) become absolute URLs with `feggAbsoluteUrl()`: a path of the site without the base path (see [Absolute URLs](../sitemap/index.mdx#absolute-urls)).
+- Dates (`'Y-m-d H:i:s'` from the database, a Unix time or a date object) are written in ISO 8601 with the time zone: `2026-11-15T10:00:00+09:00`.
+
+```json title="Output (the article above, shortened)"
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "NewsArticle",
+            "headline": "New shop",
+            "datePublished": "2026-11-15T10:00:00+09:00",
+            "url": "https://www.example.com/news/post_12.html",
+            "author": { "@type": "Organization", "name": "Example Inc." },
+            "publisher": { "@type": "Organization", "name": "Example Inc." }
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://www.example.com/" },
+                { "@type": "ListItem", "position": 2, "name": "ニュース", "item": "https://www.example.com/news/" },
+                { "@type": "ListItem", "position": 3, "name": "New shop" }
+            ]
+        }
+    ]
+}
+```
+
+Check a page with Google's [Rich Results Test](https://search.google.com/test/rich-results) after changing its data.
+
+## Errors
+
+- A date that cannot be read throws `\InvalidArgumentException`.
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

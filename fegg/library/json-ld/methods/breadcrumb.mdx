@@ -1,0 +1,47 @@
+---
+sidebar_position: 4
+---
+
+# JsonLd::breadcrumb
+
+> Breadcrumbs of a page
+
+## Description
+
+```php
+public static array JsonLd::breadcrumb( array $items )
+```
+
+Returns a `BreadcrumbList` item. `$items` is `name => path`, from the top page to the current page; the positions are numbered from 1. Paths become absolute URLs. The current page can have `''` as its path: it is then written without a URL.
+
+## Arguments
+
+| Name   | Data type | Default | Remarks |
+| ------ | --------- | ------- | ------- |
+| $items | array     |         | `array('Name' => '/path/', ...)` in order |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\JsonLd;
+
+JsonLd::breadcrumb(array(
+    'ホーム'       => '/',
+    'ニュース'     => '/news/',
+    $data['title'] => '',
+));
+```
+
+```json title="Output"
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://www.example.com/" },
+        { "@type": "ListItem", "position": 2, "name": "ニュース", "item": "https://www.example.com/news/" },
+        { "@type": "ListItem", "position": 3, "name": "New shop" }
+    ]
+}
+```
+
+The names are array keys, so two items cannot have the same name. Write the same breadcrumbs as the page shows.

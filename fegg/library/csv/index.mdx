@@ -1,0 +1,145 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Writing and reading CSV for Excel
+
+`Fegg\Tool\Csv` writes CSV that Excel opens without garbled text (a download from the CMS) and reads CSV back (an import), including files saved by Excel in Shift_JIS.
+
+## How to use
+
+The methods are static: import `Fegg\Tool\Csv` and call them. A CMS action that downloads a list:
+
+```php title="htdocs/_fegg/site/controller/Cms/Entry.php"
+<?php
+namespace Site\Controller\Cms;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Model;
+use Fegg\Tool\Csv;
+
+class Entry extends Controller
+{
+    protected $_cmsSection = 'entry';
+
+    public function __init()
+    {
+        parent::__init();
+        $this->_model = new Model(true, array('table' => 'cms_entry', 'id' => 'entry_id'));
+    }
+
+    public function export()
+    {
+        // Rows are written one at a time
+        $rows = function () {
+            foreach ($this->_model->order('created', 'desc')->all() as $row) {
+                yield array($row['name'], $row['mail'], $row['created']);
+            }
+        };
+        Csv::download('entries.csv', $rows(), array('header' => array('名前', 'メール', '日時')));
+    }
+}
+```
+
+[download()](./methods/download.mdx) sends the file and ends the response, like `displayPage()`. [toString()](./methods/tostring.mdx) returns the same text instead.
+
+## Writing
+
+Lines end with CRLF, and a field is quoted when it contains `,`, `"` or a line break.
+
+| `'encoding'` | Written as |
+| :----------- | :--------- |
+| `'utf-8-bom'` (default) | UTF-8 with a BOM: Excel opens it without garbled text |
+| `'utf-8'` | UTF-8 without a BOM, for other programs |
+| `'sjis'` | Shift_JIS (Windows characters included), for older tools |
+
+Values are written as text: `null` is empty, `true` / `false` are `1` / `0`, dates (`\DateTimeInterface`) are `Y-m-d H:i:s`. An array as a field throws `\InvalidArgumentException`. Only the values of a row are written, in their order: the keys are ignored.
+
+### Formulas
+
+Text that starts with `=`, `+`, `-`, `@`, a tab or a CR gets a leading `'`, so a spreadsheet shows what a visitor typed instead of running it as a formula ("CSV injection"). Numbers are not changed: `-5` (an int, or the string `"-5"` read from the database) is written as `-5`.
+
+```text title="Written"
+'=1+2
+-5
+"'=HYPERLINK(""http://example.com"",""Click"")"
+```
+
+`'escape_formulas' => false` writes the text as it is; use it only for data no visitor can type.
+
+## Reading
+
+[parse()](./methods/parse.mdx) reads CSV text, [parseFile()](./methods/parsefile.mdx) a file and [parseUpload()](./methods/parseupload.mdx) a file sent with a form.
+
+- UTF-8 (with or without a BOM) and Shift_JIS are detected: the text is UTF-8 when it is valid UTF-8, otherwise Shift_JIS. `'encoding' => 'utf-8'` or `'sjis'` sets it.
+- Values are strings and are not trimmed. A field in quotes can span several lines.
+- Empty lines are skipped.
+
+**Rows are keyed by their row number, as a spreadsheet shows it**: the header is row 1, and a field over several lines is one row. An error message can name the row the user sees. Since empty lines are skipped, the keys can jump: `array_values($rows)` makes a list.
+
+### Header and columns
+
+| Option | Rows |
+| :----- | :--- |
+| none | Lists of fields: `array(2 => array('Hello', 'news'), ...)` |
+| `'header' => true` | Keyed by the titles of the first row: `array(2 => array('タイトル' => 'Hello', 'カテゴリー' => 'news'), ...)` |
+| `'header' => true, 'columns' => array('タイトル' => 'title', ...)` | Keyed by your names (`array(2 => array('title' => 'Hello'), ...)`). Other columns are left out, the order of the columns does not matter, and a missing title is an error |
+
+With `'header' => true`, a row with another number of fields than the header throws `\RuntimeException` naming the row (`entries.csv: row 5 has 3 fields, the header has 4`).
+
+## Importing a file
+
+A CMS form sends the file (`<form method="post" enctype="multipart/form-data">` with `<input type="file" name="csv">` and the CSRF token). Check every row first, and save only when all rows are right:
+
+```php title="htdocs/_fegg/site/controller/Cms/News.php"
+use Fegg\Tool\Csv;
+use Fegg\Tool\Validation;
+
+public function import()
+{
+    $this->requirePost();
+
+    // The titles the export writes, and the columns they go to
+    $columns = array('タイトル' => 'title', 'カテゴリー' => 'category', '投稿日' => 'post_date');
+    try {
+        $rows = Csv::parseUpload('csv', array('header' => true, 'columns' => $columns));
+    } catch (\RuntimeException $e) {
+        $this->page['error'] = array($e->getMessage());   // no file, too large, a missing column ...
+        $this->displayPage($this->page['prefix'] . '/import');
+    }
+
+    $errors = Csv::rowErrors($rows, function (array $row) {
+        $validation = new Validation();
+        $validation->required('title', $row['title'], array('@required', 'タイトル'));
+        $validation->datetime('post_date', $row['post_date'], array('@date', '投稿日'));
+        return $validation->getErrorMessage();
+    });
+    if ($errors) {
+        // "3行目: ...": nothing is saved until every row is right
+        $this->page['error'] = array();
+        foreach ($errors as $line => $messages) {
+            $this->page['error'][] = $line . '行目: ' . implode(' ', $messages);
+        }
+        $this->displayPage($this->page['prefix'] . '/import');
+    }
+
+    $this->_model->insertRows(array_values($rows));   // one transaction: all rows or none
+    $this->redirect($this->page['prefix'] . '/index/IMPORTED');
+}
+```
+
+A file that was exported keeps the `'` added before formulas: remove it (`ltrim($value, "'")`) in columns that can never start with `'`. Rich text columns go through `HtmlSanitizer::clean()` as in the edit form.
+
+## Errors
+
+- A file that cannot be read, a broken row, a missing column, or an upload that is missing, failed, too large or not `.csv` / `.txt` throws `\RuntimeException`. The message names the file and, for a row, its number: it can be shown to the CMS user.
+- An unknown encoding, `'columns'` without `'header' => true` or an array as a field throws `\InvalidArgumentException` (a mistake in the code).
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

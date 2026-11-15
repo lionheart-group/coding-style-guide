@@ -26,8 +26,6 @@ Set COOKIE data. The cookie is always **`HttpOnly`** (JavaScript cannot read it)
 
 ## Example
 
-If you omit the third argument, the cookie expires **after 1 week**.
-
 ```php title="Controller"
 $this->setCookie('foo', 'bar');
 ```
@@ -48,9 +46,3 @@ $this->setCookie('foo', 'bar', 0, '/test/');
 // Sent back when the visitor follows a link from another site (SameSite=Lax)
 $this->setCookie('campaign', 'spring', 86400 * 30, '/', 'Lax');
 ```
-
-:::note
-
-Fegg 4 passed SameSite inside the path (`'/test/; SameSite=Lax'`). That form still works: the attribute is taken out of the path and used as `$sameSite`.
-
-:::

@@ -31,7 +31,7 @@ Things to know:
 
 ## Example
 
-```html title="site/template/template/siteframe.tpl"
+```html title="site/template/main/tpl/template/siteframe.tpl"
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -48,7 +48,7 @@ Things to know:
 </html>
 ```
 
-```html title="site/template/index.tpl"
+```html title="site/template/main/tpl/index.tpl"
 {{ transclude '/template/siteframe' }}
 
 {{ section contents }}
@@ -73,7 +73,7 @@ Things to know:
 
 ### Multiple levels
 
-```html title="site/template/base.tpl"
+```html title="site/template/main/tpl/base.tpl"
 <html>
 <body>
     {{ section header }}<header>Default header</header>{{ end section header }}
@@ -82,7 +82,7 @@ Things to know:
 </html>
 ```
 
-```html title="site/template/layout/two_columns.tpl"
+```html title="site/template/main/tpl/layout/two_columns.tpl"
 {{ transclude '/base' }}
 
 {{ section body }}
@@ -95,7 +95,7 @@ Things to know:
 {{ end section body }}
 ```
 
-```html title="site/template/news/detail.tpl"
+```html title="site/template/main/tpl/news/detail.tpl"
 {{ transclude '/layout/two_columns' }}
 
 {{ section header }}<header>News</header>{{ end section header }}

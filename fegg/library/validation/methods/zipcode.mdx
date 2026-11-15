@@ -14,8 +14,6 @@ public boolean Validation::zipcode( string $name, mixed $value, [ mixed $code = 
 
 Valid when the value is 3 digits and 4 digits, with or without `-` between them (`123-4567` or `1234567`).
 
-An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
-
 ## Arguments
 
 | Name   | Data type | Default | Remarks                                                                                                      |
@@ -27,7 +25,7 @@ An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns
 ## Example
 
 ```php title="Controller"
-use Fegg\Validation;
+use Fegg\Tool\Validation;
 
 $validation = new Validation();
 

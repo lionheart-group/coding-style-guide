@@ -1,0 +1,112 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Reading and writing YAML files
+
+`Fegg\Tool\Yaml` reads and writes YAML without a library. The table definitions (`config/database/*.yaml`, read by `fegg-cli migration` and `fegg-cli db:schema`) use it, and project settings files can too.
+
+## How to use
+
+The methods are static: import `Fegg\Tool\Yaml` and call them.
+
+```yaml title="htdocs/_fegg/site/config/shops.yaml"
+# Shops shown on /shops/
+shops:
+  - name: Tokyo
+    zip: 0140001
+    open: yes
+    tags: [cafe, wifi]
+  - name: Osaka
+    note: |
+      Closed on Mondays.
+      Parking available.
+```
+
+```php title="Controller"
+use Fegg\Tool\Yaml;
+
+$data = Yaml::parseFile(FEGG_SITE_DIR . '/config/shops.yaml');
+
+$data['shops'][0]['name'];   // "Tokyo"
+$data['shops'][0]['zip'];    // "0140001" (text: a leading zero)
+$data['shops'][0]['open'];   // "yes" (text in YAML 1.2)
+$data['shops'][0]['tags'];   // array("cafe", "wifi")
+$data['shops'][1]['note'];   // "Closed on Mondays.\nParking available.\n"
+```
+
+[Yaml::dump()](./methods/dump.mdx) writes an array back as YAML that reads back as the same array.
+
+## What it reads
+
+It reads YAML written by hand:
+
+- block mappings and lists, with lists also at the indentation of their key (`- key: value` items too);
+- `[a, b]` lists and `{a: 1}` mappings, also over several lines;
+- `|` and `>` text, with `-` / `+` and an indentation indicator;
+- single and double quoted text with every escape, plain text over several lines, comments;
+- a `---` first and a `...` last.
+
+The document is a mapping or a list. An empty document is an empty array; a document that is a single value (`just text`) is an error.
+
+### Values
+
+Values follow the YAML 1.2 core schema:
+
+| YAML | PHP |
+| :--- | :-- |
+| `null`, `~`, nothing | `null` |
+| `true`, `false` | `true`, `false` |
+| `3`, `0x1F`, `0o17` | `int` |
+| `1.5`, `1e3`, `.inf`, `.nan` | `float` |
+| `yes`, `no`, `on`, `off` | Text (YAML 1.1 reads them as `true` / `false`) |
+| `014`, `0140001` | Text (a leading zero: zip codes and phone numbers keep it) |
+| `2026-11-14` | Text |
+
+## Errors
+
+Anything it does not read is refused with `Fegg\Tool\YamlException`, never read differently:
+
+- anchors and aliases (`&name`, `*name`) and merge keys (`<<`);
+- tags (`!foo`) and directives (`%YAML`);
+- complex keys (`?`);
+- several documents in one file;
+- tabs as indentation;
+- broken YAML (an unclosed `[`, a wrong indentation ...).
+
+The message names the file (or the `$source` given to [parse()](./methods/parse.mdx)), the line and, when known, the column:
+
+```text
+site/config/shops.yaml:1:7: anchors (&name) are not supported
+site/config/shops.yaml:2:1: tabs are not allowed for indentation
+site/config/shops.yaml:1: the document must be a mapping or a list, not a single value
+/path/to/missing.yaml: the file cannot be read
+```
+
+`YamlException` extends `\RuntimeException` and also gives the parts on their own:
+
+| Method | Returns |
+| :----- | :------ |
+| `getSource()` | The file, or the name given to `parse()` (`''` when none) |
+| `getYamlLine()` | Line, from 1 (`0` when the file cannot be read) |
+| `getYamlColumn()` | Column, from 1 (`0` when unknown) |
+
+```php title="Controller"
+use Fegg\Tool\Yaml;
+use Fegg\Tool\YamlException;
+
+try {
+    $shops = Yaml::parseFile(FEGG_SITE_DIR . '/config/shops.yaml');
+} catch (YamlException $e) {
+    \Fegg\Log::error('Shops not read: {message}', array('message' => $e->getMessage()));
+    $shops = array();
+}
+```
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

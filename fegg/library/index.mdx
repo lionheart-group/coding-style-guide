@@ -17,7 +17,7 @@ namespace Site\Controller;
 defined('FEGG_CORE_DIR') || exit;
 
 use Fegg\Tool\Mail;
-use Fegg\Validation;
+use Fegg\Tool\Validation;
 
 class Contact extends Controller
 {
@@ -34,37 +34,31 @@ class Contact extends Controller
 }
 ```
 
-:::note
-
-Fegg 4 code such as `$this->getClass('Tool/Mail')` still works in Fegg 5 through `Fegg\Legacy`, but every use is written to the PHP error log as `Fegg deprecated: ...` and it will be removed in Fegg 6. Replace it with `new`.
-
-| Fegg 4 | Fegg 5 |
-| --- | --- |
-| `$this->getClass('Validation')` | `new \Fegg\Validation()` |
-| `$this->getClass('Tool/Mail', $subject, $body)` | `new \Fegg\Tool\Mail($subject, $body)` |
-| `$this->getClass('Tool/Upload')` | `new \Fegg\Tool\Upload()` |
-| `$this->getClass('ReCAPTCHA', $secret)` | `new \Fegg\Captcha\ReCAPTCHA($secret)` |
-| `$this->getClass('DB_pdo')` | `new \Fegg\Database\Pdo()` |
-
-The same applies to the other `Tool/...` classes (`Tool/Date`, `Tool/File`, `Tool/OEmbed`, `Tool/RSS`, `Tool/Trim`), which became `Fegg\Tool\Date` and so on.
-
-:::
-
 ## Extension Libraries
+
+The libraries are in the `Fegg\Tool\` namespace. `Fegg\Model`, `Fegg\Database\Pdo`, `Fegg\Http\Client` and `Fegg\Log` are framework classes, not in `Fegg\Tool\`.
 
 | Library | Class | Description |
 | --- | --- | --- |
-| [Validation](./validation/index.mdx) | `Fegg\Validation` | Providing some functions for validation |
-| [Database](./database/index.mdx) | `Fegg\Database\Pdo` | Providing necessary functions for using database |
-| [Model](./model/index.mdx) | `Fegg\Model` | Extended Database Library for LH project |
-| [File](./file/index.mdx) | `Fegg\Tool\File` | Providing some functions for managing files/directories |
-| [Upload](./upload/index.mdx) | `Fegg\Tool\Upload` | Providing some functions for uploading/validating files |
-| [Mail](./mail/index.mdx) | `Fegg\Tool\Mail` | Providing some functions for sending email (PHPMailer wrapper) |
-| [RSS](./rss/index.mdx) | `Fegg\Tool\RSS` | Providing some functions for analyzing RSS document |
-| [Trim](./trim/index.mdx) | `Fegg\Tool\Trim` | Providing some functions for processing image (especially image crop) |
-| [Date](./date/index.mdx) | `Fegg\Tool\Date` | Providing some functions for calculating dates |
-| [OEmbed](./oembed/index.mdx) | `Fegg\Tool\OEmbed` | Getting the embed URL of a YouTube video etc. through oEmbed |
-| [Captcha](./captcha/index.mdx) | `Fegg\Captcha\ReCAPTCHA`, `Fegg\Captcha\Turnstile` | Verifying Google reCAPTCHA / Cloudflare Turnstile responses |
+| [Validation](./validation/index.mdx) | `Fegg\Tool\Validation` | Form validation |
+| [Database](./database/index.mdx) | `Fegg\Database\Pdo` | Database access (PDO) |
+| [Model](./model/index.mdx) | `Fegg\Model` | Models: queries and rows |
+| [File](./file/index.mdx) | `Fegg\Tool\File` | File and directory operations |
+| [Upload](./upload/index.mdx) | `Fegg\Tool\Upload` | Uploads and file checks |
+| [Mail](./mail/index.mdx) | `Fegg\Tool\Mail` | Sending mail (PHPMailer) |
+| [RSS](./rss/index.mdx) | `Fegg\Tool\RSS` | Reading RSS / Atom feeds |
+| [Trim](./trim/index.mdx) | `Fegg\Tool\Trim` | Resizing and cropping images |
+| [Embed](./embed/index.mdx) | `Fegg\Tool\Embed` | Embedding YouTube videos and Google Maps the way the editor does |
+| [Captcha](./captcha/index.mdx) | `Fegg\Tool\Captcha\ReCAPTCHA`, `Fegg\Tool\Captcha\Turnstile` | Verifying Google reCAPTCHA / Cloudflare Turnstile responses |
+| [Yaml](./yaml/index.mdx) | `Fegg\Tool\Yaml` | Reading and writing YAML files |
+| [HTTP client](./http-client/index.mdx) | `Fegg\Http\Client` | Requests to other services over HTTP |
+| [Log](./log/index.mdx) | `Fegg\Log` | Writing to the application log |
+| [Cache](./cache/index.mdx) | `Fegg\Tool\Cache` | Keeping values in files for a while |
+| [CSV](./csv/index.mdx) | `Fegg\Tool\Csv` | Writing and reading CSV for Excel |
+| [Rate limit](./rate-limit/index.mdx) | `Fegg\Tool\RateLimit` | Limiting how often one visitor can do something |
+| [Sitemap](./sitemap/index.mdx) | `Fegg\Tool\Sitemap` | Writing sitemap.xml |
+| [JSON-LD](./json-ld/index.mdx) | `Fegg\Tool\JsonLd` | Structured data for search engines |
+| [Feed](./feed/index.mdx) | `Fegg\Tool\Feed` | Writing an RSS 2.0 feed of the site's posts |
 
 ## Project libraries
 
@@ -91,11 +85,8 @@ $foo = new Foo();
 
 These libraries are bundled in `htdocs/_fegg/core/vendor/` and autoloaded.
 
-- [PHPMailer](https://github.com/PHPMailer/PHPMailer) (7.0)
+- [PHPMailer](https://github.com/PHPMailer/PHPMailer) (7.2)
   - Used by [Mail](./mail/index.mdx). Namespace `PHPMailer\PHPMailer`
   - A failed send throws `PHPMailer\PHPMailer\Exception`
-- [Spyc](https://github.com/mustangostang/spyc)
-  - YAML document loader (global class `Spyc`)
-  - Used by the database migration (`fegg-cli migration`)
 
-JSON documents are handled with PHP's own `json_encode` and `json_decode`.
+JSON documents are handled with PHP's own `json_encode` and `json_decode`, YAML with [Yaml](./yaml/index.mdx).

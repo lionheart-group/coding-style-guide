@@ -1,0 +1,43 @@
+---
+sidebar_position: 3
+---
+
+# Client::post
+
+> Send a POST request
+
+## Description
+
+```php
+public array Client::post( string $url, array|string $body [, array $headers = array() ] )
+```
+
+An array `$body` is sent as a form (`application/x-www-form-urlencoded`, the `Content-Type` is added). A string is sent as it is: add its `Content-Type` yourself, for JSON for example.
+
+Returns `array('status' => int, 'body' => string)`. A transport failure throws `Fegg\Http\ClientException` (see [Errors](../index.mdx#errors)).
+
+## Arguments
+
+| Name     | Data type     | Default   | Remarks |
+| -------- | ------------- | --------- | ------- |
+| $url     | string        |           | `http://` or `https://` URL |
+| $body    | array\|string |           | Form fields, or the body as it is |
+| $headers | array         | `array()` | Request headers, each as `'Name: value'` |
+
+## Example
+
+```php title="Controller"
+use Fegg\Http\Client;
+
+$client = new Client();
+
+// A form
+$response = $client->post('https://example.com/api/entries', array('name' => $name, 'mail' => $mail));
+
+// JSON
+$response = $client->post(
+    'https://hooks.example.com/notify',
+    json_encode(array('text' => 'New entry from ' . $name)),
+    array('Content-Type: application/json')
+);
+```

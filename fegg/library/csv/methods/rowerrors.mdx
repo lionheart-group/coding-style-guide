@@ -1,0 +1,44 @@
+---
+sidebar_position: 6
+---
+
+# Csv::rowErrors
+
+> Check every row and collect the messages by row number
+
+## Description
+
+```php
+public static array Csv::rowErrors( array $rows, callable $validate )
+```
+
+Calls `$validate` for each row and returns the messages of the rows that fail, keyed by row number: `array(3 => array('...', '...'), 7 => array('...'))`. Returns an empty array when every row is fine.
+
+`$validate` takes a row and returns its messages as an array, or `false`, `null` or an empty array when the row is fine. The return value of `Validation::getErrorMessage()` fits directly.
+
+## Arguments
+
+| Name      | Data type | Default | Remarks |
+| --------- | --------- | ------- | ------- |
+| $rows     | array     |         | Rows from [parse()](./parse.mdx), [parseFile()](./parsefile.mdx) or [parseUpload()](./parseupload.mdx), keyed by row number |
+| $validate | callable  |         | `function (array $row)`: returns the messages of the row |
+
+## Example
+
+```php title="CMS controller"
+use Fegg\Tool\Csv;
+use Fegg\Tool\Validation;
+
+$errors = Csv::rowErrors($rows, function (array $row) {
+    $validation = new Validation();
+    $validation->required('title', $row['title'], array('@required', 'タイトル'));
+    $validation->maxlength('title', $row['title'], 100, array('@maxlength', 'タイトル', 100));
+    return $validation->getErrorMessage();
+});
+
+foreach ($errors as $line => $messages) {
+    $this->page['error'][] = $line . '行目: ' . implode(' ', $messages);
+}
+```
+
+Create a new `Validation` for each row, so the messages of one row do not carry over to the next.

@@ -14,7 +14,7 @@ public int Model::updateWhere( string $item, array $data, string $where, mixed $
 
 Updates every row matching `$where` and returns the number of updated rows. For new code, use [updateRowsWhere](./updaterowswhere.mdx): `updateWhere()` writes `''` for every column listed in `$item` that is missing from `$data`, and cannot store NULL.
 
-`$wh_data` is one value, or an array with one value per placeholder. The condition is required: an empty `$where` throws `InvalidArgumentException` (Fegg 4 updated every row). Pass `'1 = 1'` to really update every row.
+`$wh_data` is one value, or an array with one value per placeholder. The condition is required: an empty `$where` throws `InvalidArgumentException`. Pass `'1 = 1'` to really update every row.
 
 ## Arguments
 

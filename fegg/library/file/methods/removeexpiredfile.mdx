@@ -1,5 +1,5 @@
 ---
-sidebar_position: 8
+sidebar_position: 9
 ---
 
 # File::removeExpiredFile
@@ -9,10 +9,12 @@ sidebar_position: 8
 ## Description
 
 ```php
-public boolean File::removeExpiredFile( string $path, int $min )
+public bool File::removeExpiredFile( string $path, int $min )
 ```
 
-Deletes the files directly under `$path` whose modification time is `$min` minutes ago or older. Subdirectories are not touched. The return value is always `false`.
+Deletes the files directly under `$path` whose modification time is `$min` minutes ago or older. Subdirectories are not touched.
+
+Returns `true` when every expired file was removed (also when there was none), `false` when `$path` is not a directory or a file could not be removed.
 
 ## Arguments
 

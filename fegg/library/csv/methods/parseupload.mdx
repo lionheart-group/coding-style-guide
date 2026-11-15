@@ -1,0 +1,59 @@
+---
+sidebar_position: 5
+---
+
+# Csv::parseUpload
+
+> Read a CSV file sent with a form
+
+## Description
+
+```php
+public static array Csv::parseUpload( string $field [, array $options = array() ] )
+```
+
+Reads the file sent in the file input `$field` from PHP's temporary file and returns its rows as [parse()](./parse.mdx) does. Nothing is stored. Error messages start with the name of the sent file.
+
+Only a file that PHP received as an upload in this request is read (`is_uploaded_file()`), with a name ending in `.csv` or `.txt`, of at most `max_size` bytes.
+
+Throws `\RuntimeException` when:
+
+- no file was sent, or more than one in the field;
+- the file is larger than PHP accepts (`upload_max_filesize`) or than `max_size`;
+- the upload failed;
+- the name does not end in `.csv` or `.txt`;
+- a row is broken or a title of `columns` is missing.
+
+## Arguments
+
+| Name     | Data type | Default   | Remarks |
+| -------- | --------- | --------- | ------- |
+| $field   | string    |           | Name of the file input |
+| $options | array     | `array()` | `max_size` (bytes, default `5 * 1024 * 1024`: 5 MB), and `header`, `columns`, `encoding` of [parse()](./parse.mdx#options) |
+
+## Example
+
+```html title="Template"
+<form action="{{ $site.prefix }}/import" method="post" enctype="multipart/form-data">
+    {{ include '/cms/parts/csrf' }}
+    <input type="file" name="csv" accept=".csv">
+    <button type="submit">Import</button>
+</form>
+```
+
+```php title="CMS controller"
+use Fegg\Tool\Csv;
+
+try {
+    $rows = Csv::parseUpload('csv', array(
+        'header'   => true,
+        'columns'  => array('タイトル' => 'title', '投稿日' => 'post_date'),
+        'max_size' => 1024 * 1024,
+    ));
+} catch (\RuntimeException $e) {
+    $this->page['error'] = array($e->getMessage());
+    $this->displayPage($this->page['prefix'] . '/import');
+}
+```
+
+The whole import, with the check of every row: [Importing a file](../index.mdx#importing-a-file).

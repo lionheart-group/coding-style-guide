@@ -14,7 +14,7 @@ public void Application::unsetCookie( string $name )
 
 Delete the cookie: it is sent again with an expiry date in the past (path `/`), so the browser drops it. It is also removed from `getCookie()` for the rest of the current request. From the next request on, the browser no longer sends it.
 
-Only cookies with the path `/` are deleted. Fegg 4 set an empty cookie for seven days instead.
+Only cookies with the path `/` are deleted.
 
 ## Arguments
 

@@ -1,0 +1,54 @@
+---
+sidebar_position: 5
+---
+
+# JsonLd::article
+
+> An article: a news post, a blog post
+
+## Description
+
+```php
+public static array JsonLd::article( array $data [, string $type = 'NewsArticle' ] )
+```
+
+Returns an article item. The keys below are converted; any other key is kept as it is. Empty values are left out.
+
+Throws `\InvalidArgumentException` when a date cannot be read.
+
+## Arguments
+
+| Name  | Data type | Default         | Remarks |
+| ----- | --------- | --------------- | ------- |
+| $data | array     |                 | See below |
+| $type | string    | `'NewsArticle'` | `'NewsArticle'`, `'BlogPosting'` or `'Article'` |
+
+### Data
+
+| Key           | Value | Written as |
+| ------------- | ----- | ---------- |
+| headline      | The title | As it is |
+| datePublished | `'Y-m-d H:i:s'` from the database, a Unix time or a date object | ISO 8601 with the time zone |
+| dateModified  | The same | ISO 8601 with the time zone |
+| image         | A path or URL, or a list of them | A list of absolute URLs |
+| url           | Path of the page | An absolute URL |
+| author        | A name | `{"@type": "Organization", "name": ...}` (an array is kept as it is) |
+| publisher     | A name | The same |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\JsonLd;
+
+JsonLd::article(array(
+    'headline'      => $data['title'],
+    'datePublished' => $data['post_date'],
+    'dateModified'  => $data['modified'],
+    'image'         => $data['image_id'] ? FEGG_CURRENT_DOMAIN . getImageUrl($data['image_id']) : '',
+    'url'           => '/blog/' . $data['blog_id'] . '/',
+    'author'        => array('@type' => 'Person', 'name' => $data['writer']),
+    'publisher'     => 'Example Inc.',
+), 'BlogPosting');
+```
+
+`getImageUrl()` returns a path that already contains the base path, so only the domain is added (see [Absolute URLs](../../sitemap/index.mdx#absolute-urls)).

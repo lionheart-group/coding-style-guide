@@ -1,0 +1,45 @@
+---
+sidebar_position: 2
+---
+
+# Csv::download
+
+> Send rows as a CSV download and end the response
+
+## Description
+
+```php
+public static void Csv::download( string $fileName, iterable $rows [, array $options = array() ] )
+```
+
+Sends `$rows` as a CSV file to save and ends the response (it throws `Fegg\Http\Halt`, like `displayPage()`). Code after it does not run.
+
+Rows are written one at a time and the output is not buffered: pass a generator to send many rows without holding them all in memory. The response is sent with `Content-Type: text/csv` (charset `UTF-8` or `Shift_JIS`) and `Cache-Control: private, no-store`.
+
+## Arguments
+
+| Name      | Data type | Default   | Remarks |
+| --------- | --------- | --------- | ------- |
+| $fileName | string    |           | Name in the browser's save dialog (Japanese is fine) |
+| $rows     | iterable  |           | Rows, as for [toString()](./tostring.mdx) |
+| $options  | array     | `array()` | `header`, `encoding`, `escape_formulas`: see [toString()](./tostring.mdx#options) |
+
+## Example
+
+```php title="CMS controller"
+use Fegg\Tool\Csv;
+
+public function export()
+{
+    $rows = function () {
+        foreach ($this->_model->order('post_date', 'desc')->all() as $row) {
+            yield array($row['title'], $row['category'], $row['post_date']);
+        }
+    };
+    Csv::download('ニュース_' . date('Ymd') . '.csv', $rows(), array(
+        'header' => array('タイトル', 'カテゴリー', '投稿日'),
+    ));
+}
+```
+
+Write the same titles that the import expects in `'columns'`, so an exported file can be edited and sent back (see [Importing a file](../index.mdx#importing-a-file)).

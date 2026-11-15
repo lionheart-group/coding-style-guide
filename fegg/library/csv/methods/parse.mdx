@@ -1,0 +1,49 @@
+---
+sidebar_position: 3
+---
+
+# Csv::parse
+
+> Read CSV text
+
+## Description
+
+```php
+public static array Csv::parse( string $text [, array $options = array() [, string $source = 'CSV' ] ] )
+```
+
+Returns the rows of `$text`, keyed by their row number (see [Reading](../index.mdx#reading)). Values are strings.
+
+Throws `\RuntimeException` when, with `'header'`, a row has another number of fields than the header or a title of `'columns'` is missing. The message starts with `$source`.
+
+## Arguments
+
+| Name     | Data type | Default   | Remarks |
+| -------- | --------- | --------- | ------- |
+| $text    | string    |           | CSV text |
+| $options | array     | `array()` | See below |
+| $source  | string    | `'CSV'`   | Name shown in error messages (a file name) |
+
+### Options
+
+| Key      | Default   | Remarks |
+| -------- | --------- | ------- |
+| header   | `false`   | `true`: the first row holds the titles, and each row is keyed by them |
+| columns  | `array()` | With `header`: `array('Title in the file' => 'key', ...)`. Rows are keyed by these keys, other columns are left out, a missing title is an error. Titles are compared trimmed |
+| encoding | `'auto'`  | `'auto'` (UTF-8 when the text is valid UTF-8, otherwise Shift_JIS), `'utf-8'` or `'sjis'`. A BOM always means UTF-8 |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Csv;
+
+$text = "タイトル,メモ,投稿日\r\nHello,,2026-11-15\r\n\r\n\"Two\r\nlines\",x,2026-11-16\r\n";
+
+$rows = Csv::parse($text, array('header' => true, 'columns' => array('投稿日' => 'post_date', 'タイトル' => 'title')));
+// array(
+//     2 => array('post_date' => '2026-11-15', 'title' => 'Hello'),
+//     4 => array('post_date' => '2026-11-16', 'title' => "Two\r\nlines"),
+// )
+```
+
+Row 3 is empty and skipped, so the keys jump from 2 to 4.

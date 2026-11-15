@@ -12,7 +12,7 @@ sidebar_position: 3
 public void Application::displayTemplate( string $template, [ array $assignedValue = array() ] )
 ```
 
-Finds the template (`site/template/` first, then `core/template/`), compiles it when the cache is missing or out of date, and outputs it. Only the variables in `$assignedValue` are available: `$page`, `$site`, `$in` … are **not** set. Use [Application::displayPage](./displaypage.mdx) for pages.
+Finds the template (the site's `tpl/` first, then `core/template/`), compiles it when the cache is missing or out of date, and outputs it. Only the variables in `$assignedValue` are available: `$page`, `$site`, `$in` … are **not** set. Use [Application::displayPage](./displaypage.mdx) for pages.
 
 The template engine itself uses this method for `{{ include }}` and `{{ transclude }}`. Inside a template, a name not starting with `/` is relative to the directory of the current template; from a controller, names are relative to the template root.
 
@@ -43,7 +43,7 @@ class Foo extends Controller
 }
 ```
 
-```html title="htdocs/_fegg/site/template/foo/bar.tpl"
+```html title="htdocs/_fegg/site/template/main/tpl/foo/bar.tpl"
 <h1>{{ $title }}</h1>
 {{ foreach $items as $item }}<p>{{ $item }}</p>{{ end foreach }}
 {{ if $page.baz }}not shown: $page is not set{{ end }}

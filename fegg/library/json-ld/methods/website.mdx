@@ -1,0 +1,39 @@
+---
+sidebar_position: 3
+---
+
+# JsonLd::website
+
+> The site itself
+
+## Description
+
+```php
+public static array JsonLd::website( string $name [, string $url = '/' ] )
+```
+
+Returns a `WebSite` item: the name search engines show for the site. Set it on the top page. `$url` becomes an absolute URL.
+
+## Arguments
+
+| Name  | Data type | Default | Remarks |
+| ----- | --------- | ------- | ------- |
+| $name | string    |         | Name of the site |
+| $url  | string    | `'/'`   | Path or URL of the top page |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\JsonLd;
+
+JsonLd::website('Example Inc.');
+```
+
+```json title="Output"
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Example Inc.",
+    "url": "https://www.example.com/"
+}
+```

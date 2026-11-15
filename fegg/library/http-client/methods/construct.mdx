@@ -1,0 +1,32 @@
+---
+sidebar_position: 1
+---
+
+# Client::__construct
+
+> Create a client with its timeouts
+
+## Description
+
+```php
+public Client::__construct( [ float $timeout = 10 [, float $connectTimeout = 3 [, ?string $transport = null ] ] ] )
+```
+
+The timeouts apply to every request made with this client.
+
+## Arguments
+
+| Name            | Data type    | Default | Remarks |
+| --------------- | ------------ | ------- | ------- |
+| $timeout        | float        | 10      | Seconds for the whole request |
+| $connectTimeout | float        | 3       | Seconds to connect (cURL only; the stream wrapper has the whole `$timeout`) |
+| $transport      | string\|null | `null`  | `'curl'` or `'stream'`. `null`: cURL when the extension is installed, otherwise the stream wrapper. Set it only in tests |
+
+## Example
+
+```php title="Controller"
+use Fegg\Http\Client;
+
+$client = new Client();       // 10 seconds, 3 to connect
+$quick  = new Client(3, 1);   // while a visitor waits for the page
+```

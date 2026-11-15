@@ -9,10 +9,12 @@ sidebar_position: 1
 ## Description
 
 ```php
-public void File::copyAll( string $fromDirectory, string $toDirectory )
+public bool File::copyAll( string $fromDirectory, string $toDirectory )
 ```
 
-Copies every file directly under `$fromDirectory` to `$toDirectory` and sets the permission of the copied files to `0666`. Both directories must exist; otherwise nothing happens. Subdirectories are not copied, use [File::copyDirectory](./copydirectory.mdx) for them.
+Copies every file directly under `$fromDirectory` to `$toDirectory` with [File::copyFile](./copyfile.mdx) (permission `0644`). Subdirectories and symbolic links are not copied, use [File::copyDirectory](./copydirectory.mdx) for subdirectories.
+
+Returns `false` when one of the directories does not exist or a file could not be copied.
 
 ## Arguments
 

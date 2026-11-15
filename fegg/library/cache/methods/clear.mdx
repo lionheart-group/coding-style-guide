@@ -1,0 +1,28 @@
+---
+sidebar_position: 6
+---
+
+# Cache::clear
+
+> Remove every value
+
+## Description
+
+```php
+public static int Cache::clear()
+```
+
+Removes every cache file of the [directory](./directory.mdx) and returns how many were removed. `fegg-cli cache:clear` calls it.
+
+## Example
+
+```php
+use Fegg\Tool\Cache;
+
+$count = Cache::clear();
+```
+
+```bash title="The same from the command line"
+./fegg-cli cache:clear
+# OK: 3 value(s) removed from /path/to/htdocs/_fegg/site/data/cache/data
+```
