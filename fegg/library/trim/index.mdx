@@ -6,13 +6,13 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # Introduction
 
-> Providing some functions for processing image (especially image crop)
+> Resizing and cropping images
 
 `Fegg\Tool\Trim` resizes and crops JPEG, GIF and PNG images with the GD extension. JPEG images are rotated according to their Exif orientation.
 
 ## How to use
 
-Import `Fegg\Tool\Trim` and create it with `new`. Set the source image and the output path with [Trim::setImage](./methods/setimage.mdx), resize it with one of the `resize*` methods, then save it with [Trim::create](./methods/create.mdx).
+Import `Fegg\Tool\Trim` and create it with `new`. Set the source image and the output path with [Trim::setImage](./methods/setimage.mdx), resize it with one of the `resize*` methods, then save it with [Trim::create](./methods/create.mdx) or send it without saving with [Trim::output](./methods/output.mdx).
 
 ```php title="Controller"
 <?php
@@ -27,18 +27,55 @@ class Thumbnail extends Controller
     public function index()
     {
         $trim = new Trim();
-        $trim->setImage('path/to/image.jpg', 'path/to/thumbnail/300_300.jpg');
+        try {
+            $trim->setImage('path/to/image.jpg', 'path/to/thumbnail/300_300.jpg');
+        } catch (\RuntimeException $e) {
+            http_response_code(404);
+            $this->halt('Not Found');
+        }
 
         $trim->resizeTrim(300, 300, 'm');
-        $trim->create();
-
-        // Output the saved image to the browser
-        $trim->view();
+        if ($trim->create()) {
+            // Output the saved image to the browser
+            $trim->view();
+        }
+        $this->halt();
     }
 }
 ```
 
-The thumbnails of CMS images (`Fegg\Controller\Up_dir::image()`) are generated with this class.
+## Images of the CMS in other sizes
+
+The images uploaded in the CMS are shown in other sizes through URLs such as `/_fegg/site/up_dir/image/12/i-300_200.jpg`, built by the `getImageUrl` modifier (`{{ $page.data.image_id|getImageUrl:300:200 }}`).
+
+```
+/_fegg/site/up_dir/image/{id}/{type}-{width}_{height}.{jpg|png|gif}
+/_fegg/site/up_dir/image/{id}/{type}-{width}.{jpg|png|gif}
+/_fegg/site/up_dir/image/{id}/{type}.{jpg|png|gif}
+```
+
+`Fegg\Controller\Up_dir::image()` makes a missing size with this class and saves it at that path; later requests get the saved file.
+
+| type | Method | Result |
+| --- | --- | --- |
+| `i` | [Trim::resize](./methods/resize.mdx) | Within the size, keeping the ratio |
+| `c` | [Trim::resizeFill](./methods/resizefill.mdx) | Exactly the size, the empty area white or transparent |
+| `f` | [Trim::resizeForce](./methods/resizeforce.mdx) | Stretched to the size |
+| `lt` `t` `rt` `l` `m` `r` `lb` `b` `rb` | [Trim::resizeTrim](./methods/resizetrim.mdx) | Fills the size, keeping that part of the image |
+
+A missing width or height is the original one. A name that is not one of these (`x-10.jpg`, `I-10.JPG`), an unknown image ID or a file that is not an image is a 404.
+
+Two settings of `htdocs/_fegg/site/config/upload_dir.php` keep anyone from filling the disk or the memory with sizes:
+
+| Key | Default | Remarks |
+| --- | --- | --- |
+| `image_max` | 2000 | Largest width or height that can be asked for. A larger one is a 404 |
+| `image_cache_max` | 50 | How many sizes of one image are saved. Past that, new sizes are made for each request ([Trim::output](./methods/output.mdx)) and not saved |
+
+```php title="htdocs/_fegg/site/config/upload_dir.php"
+$upload_dir['image_max']       = 2000;
+$upload_dir['image_cache_max'] = 50;
+```
 
 ## Methods
 

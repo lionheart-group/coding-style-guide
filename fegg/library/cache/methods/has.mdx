@@ -1,0 +1,31 @@
+---
+sidebar_position: 3
+---
+
+# Cache::has
+
+> Check for a kept value
+
+## Description
+
+```php
+public static bool Cache::has( string $key )
+```
+
+Returns `true` when `$key` has a value that has not expired.
+
+## Arguments
+
+| Name | Data type | Default | Remarks |
+| ---- | --------- | ------- | ------- |
+| $key | string    |         | Name of the value |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Cache;
+
+if (!Cache::has('ranking')) {
+    Cache::set('ranking', $this->_buildRanking(), 3600);
+}
+```

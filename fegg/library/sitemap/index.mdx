@@ -1,0 +1,120 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Writing sitemap.xml
+
+`Fegg\Tool\Sitemap` writes a [sitemap](https://www.sitemaps.org/protocol.html): the list of pages that search engines should know about. Paths are made absolute URLs, and dates are written in the format sitemaps use.
+
+## How to use
+
+The skeleton serves `/sitemap.xml` with `Site\Controller\Sitemap`: the pages listed in `site/config/sitemap.php`, then every published news post.
+
+```php title="htdocs/_fegg/site/controller/Sitemap.php"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Model;
+use Fegg\Tool\Sitemap as SitemapXml;
+
+class Sitemap extends Controller implements \Fegg\Http\RouteOnly
+{
+    public function index()
+    {
+        $sitemap = new SitemapXml();
+        foreach ($this->loadConfig('sitemap') as $path) {
+            $sitemap->add($path);
+        }
+
+        // Published posts only: new Model(false, ...) leaves out the hidden ones
+        $news = new Model(false, array(
+            'table'   => 'cms_news',
+            'id'      => 'news_id',
+            'visible' => 'visible',
+        ));
+        foreach ($news->select('news_id, modified')->order('post_date', 'desc')->all() as $row) {
+            $sitemap->add('/news/post_' . $row['news_id'] . '.html', $row['modified']);
+        }
+
+        $sitemap->display();
+    }
+}
+```
+
+```php title="htdocs/_fegg/site/config/sitemap.php"
+$sitemap = array(
+    '/',
+    '/news/',
+    '/contact/',
+);
+```
+
+```php title="htdocs/_fegg/site/config/route.php"
+$route['sitemap.xml'] = 'sitemap/index';
+```
+
+The controller is [route-only](../../basic/url.mdx#route-only-controllers): it answers `/sitemap.xml` and nothing else.
+
+For a new project:
+
+- Add the project's pages to `site/config/sitemap.php`, and add the posts of other CMS sections in the controller as for the news.
+- Leave out pages that are not for search results: form steps, thank-you pages, the CMS.
+- Give no date to the pages of `sitemap.php`: the dates of their files change on every deploy. Give the posts their `modified` date.
+
+Tell search engines where the sitemap is with a line in `htdocs/robots.txt` (an absolute URL):
+
+```text title="htdocs/robots.txt"
+Sitemap: https://www.example.com/sitemap.xml
+```
+
+```xml title="Output"
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.example.com/</loc>
+  </url>
+  <url>
+    <loc>https://www.example.com/news/post_12.html</loc>
+    <lastmod>2026-11-15T10:00:00+09:00</lastmod>
+  </url>
+</urlset>
+```
+
+Only `<loc>` and `<lastmod>` are written: search engines ignore `<changefreq>` and `<priority>`. A sitemap lists at most 50,000 URLs.
+
+## Absolute URLs
+
+Paths are made absolute with `feggAbsoluteUrl()`, a function you can also call yourself (it is used by [JSON-LD](../json-ld/index.mdx) and [Feed](../feed/index.mdx) too):
+
+```php
+feggAbsoluteUrl('/news/');                       // https://www.example.com/news/
+feggAbsoluteUrl('https://other.example.com/');   // returned as it is
+feggAbsoluteUrl('/x/', 'https://example.org');   // https://example.org/x/
+```
+
+```php
+string feggAbsoluteUrl( string $path [, string $baseUrl = '' ] )
+```
+
+- `$path` is a path of the site **without the base path**: `FEGG_CURRENT_URL` (the scheme, the host and the base path, like `{{ base_url }}`) is put before it. When the site is installed in `/sub/`, `'/news/'` becomes `https://example.com/sub/news/`.
+- `http://` and `https://` URLs are returned as they are; `//host/...` gets the scheme of the request.
+- `$baseUrl` replaces `FEGG_CURRENT_URL`, for example in a command, where there is no request.
+
+The URLs use the host of the request: on a test server, the sitemap lists the test server's URLs.
+
+A URL that already contains the base path, such as the result of `getImageUrl()`, only needs the domain: `FEGG_CURRENT_DOMAIN . getImageUrl($id)`.
+
+## Errors
+
+- A URL that is not `http` or `https`, or contains spaces or control characters, throws `\InvalidArgumentException`. So does a date that cannot be read.
+- A 50,001st URL throws `\LengthException`.
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

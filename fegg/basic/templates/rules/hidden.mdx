@@ -12,11 +12,9 @@ sidebar_position: 10
 {{ hidden }}
 ```
 
-Prints an `<input type="hidden">` for every value set with `$this->setHidden()` in the controller. Names and values are HTML-escaped. Array values become one input per element (`tags[0]`, `tags[1]` …).
+Prints an `<input type="hidden">` for every value set with [setHidden()](../helpers/sethidden.mdx) in the controller.
 
 Put it inside the `<form>`. It is typically used to carry an ID or a one-time ticket from the input screen to the confirmation and save steps.
-
-See also [Application::setHidden](../helpers/sethidden.mdx).
 
 ## Example
 

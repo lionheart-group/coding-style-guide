@@ -1,0 +1,41 @@
+---
+sidebar_position: 2
+---
+
+# Yaml::parse
+
+> Read YAML text
+
+## Description
+
+```php
+public static array Yaml::parse( string $yaml [, string $source = '' ] )
+```
+
+Reads YAML text and returns it as an array (see [What it reads](../index.mdx#what-it-reads)).
+
+Throws `Fegg\Tool\YamlException` for YAML that `Yaml` does not read. `$source` names the text in the message, like a file name; without it the message starts with `YAML`.
+
+## Arguments
+
+| Name    | Data type | Default | Remarks                                      |
+| ------- | --------- | ------- | -------------------------------------------- |
+| $yaml   | string    |         | YAML text                                     |
+| $source | string    | `''`    | Name shown in error messages (a file name, a field name ...) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Yaml;
+use Fegg\Tool\YamlException;
+
+$data = Yaml::parse("title: News\ntags: [event, press]\n");
+// array('title' => 'News', 'tags' => array('event', 'press'))
+
+try {
+    Yaml::parse("items: [1, 2\n", 'items field');
+} catch (YamlException $e) {
+    echo $e->getMessage();
+    // -> items field:1:8: "[" is not closed
+}
+```

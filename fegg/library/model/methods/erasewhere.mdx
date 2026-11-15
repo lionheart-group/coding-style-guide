@@ -14,7 +14,7 @@ public int Model::eraseWhere( string $where, mixed $data )
 
 Removes every row matching `$where` from the table (`DELETE`) and returns the number of deleted rows. `$data` is one value, or an array with one value per placeholder.
 
-The condition is required: an empty `$where` throws `InvalidArgumentException` (Fegg 4 deleted every row). Pass `'1 = 1'` to really delete every row.
+The condition is required: an empty `$where` throws `InvalidArgumentException`. Pass `'1 = 1'` to really delete every row.
 
 ## Arguments
 

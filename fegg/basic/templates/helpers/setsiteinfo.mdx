@@ -14,7 +14,7 @@ public void Application::setSiteinfo( string $id, mixed $value )
 
 Sets one entry of the site information. Templates read it as `$site` (set by [Application::fetchPage](../methods/fetchpage.mdx)).
 
-The base controller (`Fegg\Controller\Controller::__init()`) already loads every entry of `htdocs/_fegg/site/config/site_info.php` this way, so `$site.title`, `$site.description` … have their default values on every page. Call `setSiteinfo()` in a controller to change a value for one page. A template can also change it with `{{ assign }}` before its `{{ transclude }}` (see [Assign](../rules/assign.mdx)).
+The base controller (`Fegg\Controller\Controller::__init()`) already loads every entry of `htdocs/_fegg/site/config/site_info.php` this way, so `$site.title`, `$site.description` … have their default values on every page. A site's `'info'` in `site/config/sites.php` overrides them for that site, and `$site.key`, `$site.home` and `$site.assets` are set for the site of the URL (see [Sites](../index.mdx#sites)). Call `setSiteinfo()` in a controller to change a value for one page. A template can also change it with `{{ assign }}` before its `{{ transclude }}` (see [Assign](../rules/assign.mdx)).
 
 ## Arguments
 

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 6
+sidebar_position: 7
 ---
 
 # Trim::create
@@ -9,10 +9,12 @@ sidebar_position: 6
 ## Description
 
 ```php
-public void Trim::create()
+public bool Trim::create()
 ```
 
 Saves the resized image to the output path given to [Trim::setImage](./setimage.mdx). Missing directories are created. JPEG images are saved with quality 90.
+
+The image is written next to the output path first and then renamed, so a request at the same time never reads half a file. Returns `false` when it could not be saved.
 
 ## Example
 
@@ -23,5 +25,7 @@ $trim = new Trim();
 $trim->setImage('path/to/image.jpg', 'path/to/converted.jpg');
 
 $trim->resizeTrim(300, 300, 'm');
-$trim->create();
+if (!$trim->create()) {
+    // could not be saved
+}
 ```

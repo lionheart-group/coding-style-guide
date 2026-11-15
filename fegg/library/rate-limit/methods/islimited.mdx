@@ -1,0 +1,32 @@
+---
+sidebar_position: 3
+---
+
+# RateLimit::isLimited
+
+> Check whether the next attempt would be refused
+
+## Description
+
+```php
+public bool RateLimit::isLimited( string $key )
+```
+
+Returns `true` when `$key` already has `$max` attempts in the window. Nothing is recorded.
+
+Use it to show a message before the visitor fills in a form. To enforce the limit, use [attempt()](./attempt.mdx): two requests can both see `isLimited()` return `false`.
+
+## Arguments
+
+| Name | Data type | Default | Remarks |
+| ---- | --------- | ------- | ------- |
+| $key | string    |         | Who is counted |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\RateLimit;
+
+$this->page['limited'] = (new RateLimit('contact', 5, 3600))->isLimited((string) $_SERVER['REMOTE_ADDR']);
+$this->displayPage('contact/index');
+```

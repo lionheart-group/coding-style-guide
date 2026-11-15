@@ -1,0 +1,35 @@
+---
+sidebar_position: 5
+---
+
+# RateLimit::undo
+
+> Take back the last allowed attempt
+
+## Description
+
+```php
+public void RateLimit::undo()
+```
+
+Removes the attempt stored by the last allowed [attempt()](./attempt.mdx) of this object, when it turned out not to count. Nothing happens when the last attempt was refused or `undo()` was already called.
+
+## Example
+
+The CMS login checks two limits. When the second refuses, the attempt of the first is taken back, and a successful login does not count against the address:
+
+```php title="htdocs/_fegg/core/controller/Cms/Login.php"
+$perAddress = new RateLimit('cms-login-address', 20, 900);
+$perLogin   = new RateLimit('cms-login', 5, 900);
+if ($perAddress->attempt($ip)) {
+    $this->redirect($this->page['prefix'] . 'login/index/LOCKED');
+}
+if ($perLogin->attempt($loginKey)) {
+    $perAddress->undo();
+    $this->redirect($this->page['prefix'] . 'login/index/LOCKED');
+}
+
+// ... password checked
+$perLogin->clear($loginKey);
+$perAddress->undo();
+```

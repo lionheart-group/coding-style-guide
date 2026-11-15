@@ -15,8 +15,7 @@ public self Pdo::setWhere( string $query, [ mixed ...$parameters ] )
 Adds to the WHERE clause. Give one argument per `?` placeholder, after the query.
 
 - Another call appends its text after a space: write the `AND` / `OR` yourself (`setWhere('AND title = ?', $title)`).
-- An array bound to one placeholder expands it: `id = ?` and `id IN (?)` become `id IN (?, ?, ...)`, `<>` / `!=` / `NOT IN` become `NOT IN`, `LIKE ?` becomes `(... LIKE ? OR ... LIKE ?)` and `NOT LIKE ?` becomes `(... NOT LIKE ? AND ...)`. An empty array matches no row (`=`, `IN`, `LIKE`) or every row (`<>`, `NOT IN`, `NOT LIKE`). An array on any other operator (`<`, `BETWEEN` ...) throws `InvalidArgumentException`.
-- A `?` inside a quoted string literal (`'?'`) is not a placeholder.
+- An array bound to one placeholder expands it (`id IN (?, ?, ...)`), see [Values and placeholders](../index.mdx#values-and-placeholders).
 
 ## Arguments
 

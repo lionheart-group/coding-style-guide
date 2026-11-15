@@ -1,0 +1,49 @@
+---
+sidebar_position: 1
+---
+
+# JsonLd::graph
+
+> Put several items in one script
+
+## Description
+
+```php
+public static array JsonLd::graph( array ...$items )
+```
+
+Returns `array('@context' => 'https://schema.org', '@graph' => array(...))` with the items in their order. The `@context` of each item is removed (the graph has it once), and empty items are left out.
+
+## Arguments
+
+| Name      | Data type | Default | Remarks |
+| --------- | --------- | ------- | ------- |
+| ...$items | array     |         | Results of the other methods, or arrays of your own with an `@type` |
+
+## Example
+
+```php title="htdocs/_fegg/site/controller/Index.php"
+use Fegg\Tool\JsonLd;
+
+$siteName = $this->config['site_info']['name'];
+$this->setSiteinfo('json_ld', JsonLd::graph(
+    JsonLd::website($siteName, '/'),
+    JsonLd::organization($siteName, '/')
+));
+```
+
+An item of your own is a schema.org type as an array:
+
+```php title="Controller"
+$this->setSiteinfo('json_ld', JsonLd::graph(
+    JsonLd::breadcrumb(array('ホーム' => '/', '店舗' => '/shops/', $shop['name'] => '')),
+    array(
+        '@type'     => 'Store',
+        'name'      => $shop['name'],
+        'telephone' => $shop['tel'],
+        'url'       => feggAbsoluteUrl('/shops/' . $shop['shop_id'] . '/'),
+    )
+));
+```
+
+Arrays of your own are written as they are: make URLs absolute with `feggAbsoluteUrl()` yourself.

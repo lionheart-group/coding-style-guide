@@ -1,0 +1,37 @@
+---
+sidebar_position: 5
+---
+
+# Feed::display
+
+> Send the feed and end the response
+
+## Description
+
+```php
+public void Feed::display()
+```
+
+Sends the feed with `Content-Type: application/rss+xml; charset=UTF-8` and ends the response (it throws `Fegg\Http\Halt`, like `displayPage()`). Code after it does not run.
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Feed;
+
+public function feed()
+{
+    $feed = new Feed('News', '/news/', '', '/news/feed.xml');
+    foreach ($this->_model->order('post_date', 'desc')->limit(20)->all() as $row) {
+        $feed->add(array(
+            'title'   => $row['title'],
+            'link'    => '/news/post_' . $row['news_id'] . '.html',
+            'date'    => $row['post_date'],
+            'content' => $row['content'],
+        ));
+    }
+    $feed->display();
+}
+```
+
+Route the feed's URL to the action (`$route['news/feed.xml'] = 'news/feed';`) and link it from the `<head>` with `<link rel="alternate" type="application/rss+xml">` (see [How to use](../index.mdx#how-to-use)).

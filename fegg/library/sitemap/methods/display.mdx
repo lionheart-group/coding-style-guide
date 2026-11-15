@@ -1,0 +1,32 @@
+---
+sidebar_position: 5
+---
+
+# Sitemap::display
+
+> Send the sitemap and end the response
+
+## Description
+
+```php
+public void Sitemap::display()
+```
+
+Sends the sitemap with `Content-Type: application/xml; charset=UTF-8` and ends the response (it throws `Fegg\Http\Halt`, like `displayPage()`). Code after it does not run.
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Sitemap as SitemapXml;
+
+public function index()
+{
+    $sitemap = new SitemapXml();
+    foreach ($this->loadConfig('sitemap') as $path) {
+        $sitemap->add($path);
+    }
+    $sitemap->display();
+}
+```
+
+Inside a controller named `Sitemap`, import the library under another name (`as SitemapXml`), as the skeleton does.

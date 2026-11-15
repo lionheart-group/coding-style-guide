@@ -1,5 +1,5 @@
 ---
-sidebar_position: 9
+sidebar_position: 10
 ---
 
 # File::removeFile
@@ -9,10 +9,12 @@ sidebar_position: 9
 ## Description
 
 ```php
-public void File::removeFile( string $file )
+public bool File::removeFile( string $file )
 ```
 
-Deletes the files matching `$file`. The path is passed to `glob()`, so wildcards such as `*` can be used. Directories are not removed.
+Deletes the file `$file`. When there is no file of that exact name, `$file` is used as a `glob()` pattern (`*`, `?`, `[...]`) and every matching file is deleted, so a file whose name contains `[` or `*` is removed itself, not the files the pattern would match. Directories are not removed.
+
+Returns `false` when a file could not be removed. A pattern that matches nothing returns `true`.
 
 ## Arguments
 

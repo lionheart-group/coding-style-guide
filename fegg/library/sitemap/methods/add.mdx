@@ -1,0 +1,37 @@
+---
+sidebar_position: 2
+---
+
+# Sitemap::add
+
+> Add a page
+
+## Description
+
+```php
+public Sitemap Sitemap::add( string $loc [, string|int|\DateTimeInterface|null $lastmod = null ] )
+```
+
+Adds a page and returns the sitemap, so calls can be chained. A path is made absolute (see [Absolute URLs](../index.mdx#absolute-urls)). A URL added twice is listed once, with the date of the last call.
+
+`$lastmod` is written as a W3C date with the time zone (`2026-11-15T10:00:00+09:00`). `null`, `''` and `'0000-00-00 00:00:00'` write no date.
+
+Throws `\InvalidArgumentException` for a URL that is not `http` or `https` or a date that cannot be read, and `\LengthException` for more than 50,000 URLs.
+
+## Arguments
+
+| Name     | Data type | Default | Remarks |
+| -------- | --------- | ------- | ------- |
+| $loc     | string    |         | Path of the site without the base path (`'/news/'`), or an `http(s)` URL |
+| $lastmod | string\|int\|DateTimeInterface\|null | `null` | When the page last changed: `'Y-m-d H:i:s'` from the database, a Unix time or a date object |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Sitemap;
+
+$sitemap = new Sitemap();
+$sitemap->add('/')
+        ->add('/about/')
+        ->add('/news/post_12.html', '2026-11-15 10:00:00');
+```

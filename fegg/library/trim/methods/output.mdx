@@ -1,0 +1,28 @@
+---
+sidebar_position: 8
+---
+
+# Trim::output
+
+> Output the image to the browser without saving it
+
+## Description
+
+```php
+public void Trim::output()
+```
+
+Sends the `Content-Type` header of the output type and the resized image, without saving it. Use [Trim::create](./create.mdx) and [Trim::view](./view.mdx) to save it as well.
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Trim;
+
+$trim = new Trim();
+$trim->setImage('path/to/image.jpg', 'path/to/preview.jpg');
+
+$trim->resize(600, 0);
+$trim->output();
+$this->halt();
+```

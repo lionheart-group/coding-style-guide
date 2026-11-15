@@ -1,0 +1,38 @@
+---
+sidebar_position: 4
+---
+
+# Csv::parseFile
+
+> Read a CSV file
+
+## Description
+
+```php
+public static array Csv::parseFile( string $path [, array $options = array() ] )
+```
+
+Reads the file and returns its rows as [parse()](./parse.mdx) does; error messages start with the path.
+
+Throws `\RuntimeException` when the file cannot be read or a row is broken.
+
+## Arguments
+
+| Name     | Data type | Default   | Remarks |
+| -------- | --------- | --------- | ------- |
+| $path    | string    |           | Path of the file |
+| $options | array     | `array()` | `header`, `columns`, `encoding`: see [parse()](./parse.mdx#options) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Csv;
+
+$shops = Csv::parseFile(FEGG_SITE_DIR . '/config/shops.csv', array('header' => true));
+
+foreach ($shops as $line => $shop) {
+    // $shop['店名'], $shop['住所'] ...
+}
+```
+
+For a file sent from a form, use [parseUpload()](./parseupload.mdx).

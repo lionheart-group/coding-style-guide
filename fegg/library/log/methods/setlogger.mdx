@@ -1,0 +1,40 @@
+---
+sidebar_position: 3
+---
+
+# Log::logger / Log::setLogger
+
+> The logger in use, and replacing it in tests
+
+## Description
+
+```php
+public static Fegg\Log\FileLogger Log::logger()
+public static void Log::setLogger( ?Fegg\Log\FileLogger $logger )
+```
+
+`logger()` returns the `Fegg\Log\FileLogger` that writes the entries. It is created on first use from the [settings](../index.mdx#settings); its `file()` method returns the path of today's file.
+
+`setLogger()` replaces it, for tests that read what was logged. `null` makes the next entry create it from the settings again.
+
+## Arguments
+
+| Name    | Data type                    | Default | Remarks |
+| ------- | ---------------------------- | ------- | ------- |
+| $logger | Fegg\Log\FileLogger\|null    |         | `new FileLogger($directory, $lowestLevel = 'debug', $retentionDays = 30)`, or `null` |
+
+## Example
+
+```php title="Test"
+use Fegg\Log;
+use Fegg\Log\FileLogger;
+
+$dir = sys_get_temp_dir() . '/fegg-log-test';
+Log::setLogger(new FileLogger($dir, 'debug', 0));
+
+$this->importer->run($file);
+
+$this->assertStringContainsString('ERROR Import failed', file_get_contents(Log::logger()->file()));
+
+Log::setLogger(null);
+```

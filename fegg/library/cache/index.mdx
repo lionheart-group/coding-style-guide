@@ -1,0 +1,92 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Keeping values in files for a while
+
+`Fegg\Tool\Cache` keeps a value for a number of seconds, so the next requests do not compute it again: the result of another service (a feed, an API) or of a slow query. Each key is one file in `$settings['cache_dir']`.
+
+## How to use
+
+The methods are static: import `Fegg\Tool\Cache` and call [remember()](./methods/remember.mdx) with a key, the seconds to keep the value and a function that returns it.
+
+```php title="Controller"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Tool\Cache;
+use Fegg\Tool\RSS;
+
+class Index extends Controller
+{
+    public function index()
+    {
+        try {
+            // Fetched at most once every 10 minutes
+            $this->page['posts'] = Cache::remember('blog-feed', 600, function () {
+                return (new RSS('https://blog.example.com/feed'))->fetchAll(5);
+            });
+        } catch (\RuntimeException $e) {
+            $this->page['posts'] = array();
+        }
+
+        $this->displayPage('index');
+    }
+}
+```
+
+Put everything the value depends on in the key: `'items-' . $category`. Keys are any text; the file name is made from a hash of the key.
+
+## When the function fails
+
+When the value has expired and the function throws, `remember()` returns the **expired value** if it is still there and writes a warning with the key and the exception to the [log](../log/index.mdx) (`Cache: expired value of blog-feed used, the new one failed: ...`). The page keeps working while the other service is down. Without an expired value, the exception is thrown.
+
+The value is kept again only when the function succeeds, so the next request tries again. `Fegg\Http\Halt` (a redirect inside the function) is never caught.
+
+## Values
+
+A value can contain:
+
+- arrays, strings, numbers, booleans and `null`;
+- dates: `\DateTime` and `\DateTimeImmutable` (the posts of [RSS](../rss/index.mdx) have them).
+
+Any other object throws `\InvalidArgumentException`, also inside an array: a cache file can then never create an object when it is read. Keep model rows (arrays) or convert objects to arrays first.
+
+## Files
+
+| Setting | Default | Remarks |
+| :------ | :------ | :------ |
+| `$settings['cache_dir']` | `site/data/cache/data` | Directory of the files (created when missing) |
+
+- A file is written to a temporary name and then renamed, so a request never reads a half-written file.
+- An expired file stays until it is written again or removed with `fegg-cli cache:clear`; it is treated as missing (except by the fallback above).
+- A file that cannot be read is treated as missing.
+- When the directory or the file cannot be written, a warning goes to the log and the value is not kept: `remember()` still returns it.
+- `site/data/` is not tracked by git.
+
+## Clearing
+
+`fegg-cli cache:clear` removes every value, for example after a deploy that changes what a value contains:
+
+```bash
+./fegg-cli cache:clear
+# OK: 3 value(s) removed from /path/to/htdocs/_fegg/site/data/cache/data
+```
+
+[Cache::delete()](./methods/delete.mdx) removes one key, for example when the CMS saves the data the value was made from.
+
+## Errors
+
+- A ttl below 1 second, or a value with an object other than a date, throws `\InvalidArgumentException`.
+- What the function of `remember()` throws is thrown again when there is no expired value (see [When the function fails](#when-the-function-fails)).
+- A directory or file that cannot be written does not throw (see [Files](#files)).
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

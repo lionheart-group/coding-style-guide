@@ -1,0 +1,40 @@
+---
+sidebar_position: 2
+---
+
+# Client::get
+
+> Send a GET request
+
+## Description
+
+```php
+public array Client::get( string $url [, array $headers = array() ] )
+```
+
+Returns `array('status' => int, 'body' => string)`. A response with an error status is returned normally; a transport failure throws `Fegg\Http\ClientException` (see [Errors](../index.mdx#errors)).
+
+## Arguments
+
+| Name     | Data type | Default   | Remarks |
+| -------- | --------- | --------- | ------- |
+| $url     | string    |           | `http://` or `https://` URL, with its query string |
+| $headers | array     | `array()` | Request headers, each as `'Name: value'` |
+
+## Example
+
+```php title="Controller"
+use Fegg\Http\Client;
+
+$query = http_build_query(array('category' => 2, 'q' => $this->in('q')));
+$response = (new Client())->get('https://api.example.com/items?' . $query, array(
+    'Accept: application/json',
+    'Authorization: Bearer ' . feggEnv('ITEMS_API_TOKEN'),
+));
+
+if ($response['status'] === 200) {
+    $items = json_decode($response['body'], true);
+}
+```
+
+Keep tokens out of the code: read them with `feggEnv()` from `env.php` (see [Settings](../../../first/config.mdx#environments-and-secrets)).

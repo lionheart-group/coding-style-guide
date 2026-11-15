@@ -1,0 +1,38 @@
+---
+sidebar_position: 4
+---
+
+# Cache::set
+
+> Keep a value
+
+## Description
+
+```php
+public static bool Cache::set( string $key, mixed $value, int $ttl )
+```
+
+Keeps `$value` for `$ttl` seconds, replacing the value of `$key`. The file is written to a temporary name and then renamed.
+
+Returns `false` when the directory or the file cannot be written (a warning is logged).
+
+Throws `\InvalidArgumentException` when `$ttl` is below 1 or `$value` contains an object other than `\DateTime` / `\DateTimeImmutable` (see [Values](../index.mdx#values)).
+
+## Arguments
+
+| Name   | Data type | Default | Remarks |
+| ------ | --------- | ------- | ------- |
+| $key   | string    |         | Name of the value |
+| $value | mixed     |         | Arrays, scalars, `null` and dates |
+| $ttl   | int       |         | Seconds to keep it (at least 1) |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Cache;
+
+Cache::set('ranking', array(
+    'items'   => $items,
+    'updated' => new \DateTimeImmutable(),
+), 3600);
+```

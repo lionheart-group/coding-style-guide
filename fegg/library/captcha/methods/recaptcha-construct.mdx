@@ -23,7 +23,7 @@ public ReCAPTCHA::__construct( string $secret, [ float $threshold = 0.5 ] )
 ## Example
 
 ```php title="Controller"
-use Fegg\Captcha\ReCAPTCHA;
+use Fegg\Tool\Captcha\ReCAPTCHA;
 
 $recaptcha = new ReCAPTCHA(feggEnv('FEGG_RECAPTCHA_SECRET', ''), 0.5);
 ```

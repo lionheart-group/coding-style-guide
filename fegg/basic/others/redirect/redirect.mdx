@@ -12,12 +12,10 @@ sidebar_position: 1
 public void Application::redirect( string $url )
 ```
 
-Send a `Location` header (HTTP 302) and end the response. Code after `redirect()` is not run.
-
-`redirect()` does not call `exit`: it throws `Fegg\Http\Halt`, which the dispatcher catches before it writes the session and sends the response. There is no need to write `exit` after it. A `catch (\Throwable $e)` around `redirect()` must rethrow `Fegg\Http\Halt` (see [Ending a response](../../controller.mdx#ending-a-response)); `catch (\Exception $e)` is not affected.
+Send a `Location` header (HTTP 302) and end the response by throwing `Fegg\Http\Halt` (see [Ending a response](../../controller.mdx#ending-a-response)). Code after `redirect()` does not run.
 
 - A URL starting with `http://` or `https://` is used as is.
-- Any other URL is a path inside the site. A `/` is added at the start if missing, a trailing `/` is added when the path has no extension (to avoid a second redirect, see [URL](../../url.mdx#trailing-slash)), and the current protocol, domain and base path are added in front. This also works when the site is installed in a subdirectory.
+- Any other URL is a site path: Fegg adds the leading `/`, a trailing `/` (no extension, see [URL](../../url.mdx#trailing-slash)) and the base path, and sends it without scheme or host, so the scheme of the page is kept (see [Security](../../security.mdx#https)).
 
 ## Arguments
 
@@ -28,31 +26,20 @@ Send a `Location` header (HTTP 302) and end the response. Code after `redirect()
 ## Example
 
 ```php title="Controller"
-// -> https://example.com/news/
+// Location: /news/
 $this->redirect('/news/');
 
-// -> https://example.com/news/ (slashes added)
+// Location: /news/ (slashes added)
 $this->redirect('news');
 
-// -> https://example.com/contact/result.html
+// Location: /contact/result.html
 $this->redirect('/contact/result.html');
 
-// -> https://www.example.org/
+// Location: /sub/news/ (site installed in /sub/)
+$this->redirect('/news/');
+
+// Location: https://www.example.org/
 $this->redirect('https://www.example.org/');
 ```
 
 Do not pass a URL taken from the request (for example `$this->in('return_to')`) without checking it, or the site becomes an open redirect.
-
-### Inside try / catch
-
-```php title="Controller"
-try {
-    $this->_save($data);
-    $this->redirect('/entry/done/');
-} catch (\Fegg\Http\Halt $halt) {
-    throw $halt;
-} catch (\Throwable $e) {
-    \Fegg\Log::error('Entry could not be saved', array('exception' => $e));
-    $this->redirect('/entry/error/');
-}
-```

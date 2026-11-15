@@ -1,0 +1,69 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Requests to other services over HTTP
+
+`Fegg\Http\Client` is a small HTTP client for calling other services: an API, a webhook, a feed. Fegg itself uses it for the [captcha](../captcha/index.mdx) checks, [RSS](../rss/index.mdx) and `fegg-cli doctor`.
+
+- Every request has a timeout (10 seconds for the whole request and 3 to connect, by default).
+- Only `http://` and `https://` URLs are requested.
+- Redirects are not followed: a `301` or `302` comes back as it is.
+- It uses cURL when the extension is installed, otherwise PHP's http stream wrapper. Nothing needs to be configured.
+
+## How to use
+
+Import `Fegg\Http\Client`, create it with `new` and call [get()](./methods/get.mdx), [post()](./methods/post.mdx) or [request()](./methods/request.mdx). Each returns an array:
+
+| Key    | Data type | Remarks |
+| :----- | :-------- | :------ |
+| status | int       | HTTP status (`200`, `404` ...) |
+| body   | string    | Response body |
+
+```php title="Controller"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Http\Client;
+use Fegg\Http\ClientException;
+use Fegg\Log;
+
+class Items extends Controller
+{
+    public function index()
+    {
+        $items = array();
+        try {
+            $response = (new Client(5))->get('https://api.example.com/items?category=2', array('Accept: application/json'));
+            if ($response['status'] === 200) {
+                $items = json_decode($response['body'], true) ?: array();
+            } else {
+                Log::warning('Items API answered {status}', array('status' => $response['status']));
+            }
+        } catch (ClientException $e) {
+            Log::warning('Items API not reachable: {message}', array('message' => $e->getMessage()));
+        }
+
+        $this->page['items'] = $items;
+        $this->displayPage('items');
+    }
+}
+```
+
+## Errors
+
+- A response with an error status (`404`, `500` ...) is returned normally: check `status`.
+- Only a transport failure (no connection, DNS, TLS, timeout) throws `Fegg\Http\ClientException` (a `\RuntimeException`). The message names the method, the URL and the cause.
+- A URL that is not `http` or `https` throws `\InvalidArgumentException` before anything is sent.
+
+The page should still work when the other service does not: catch `ClientException`, write it to the [log](../log/index.mdx) and show the page without that part. Keep the timeout short for a call made while a visitor waits.
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

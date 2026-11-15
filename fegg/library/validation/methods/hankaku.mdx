@@ -14,8 +14,6 @@ public boolean Validation::hankaku( string $name, mixed $value, [ mixed $code = 
 
 Valid when the value contains no multi-byte character (the byte length equals the character length).
 
-An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
-
 ## Arguments
 
 | Name   | Data type | Default | Remarks                                                                                                      |
@@ -27,7 +25,7 @@ An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns
 ## Example
 
 ```php title="Controller"
-use Fegg\Validation;
+use Fegg\Tool\Validation;
 
 $validation = new Validation();
 

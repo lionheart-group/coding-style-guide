@@ -1,0 +1,37 @@
+---
+sidebar_position: 1
+---
+
+# Feed::__construct
+
+> Create a feed
+
+## Description
+
+```php
+public Feed::__construct( string $title, string $link [, string $description = '' [, string $feedUrl = '' ] ] )
+```
+
+Creates an empty feed. `$link` and `$feedUrl` become absolute URLs.
+
+Throws `\InvalidArgumentException` when a path cannot be made an `http(s)` URL (outside a request).
+
+## Arguments
+
+| Name         | Data type | Default | Remarks |
+| ------------ | --------- | ------- | ------- |
+| $title       | string    |         | Name of the feed |
+| $link        | string    |         | Path or URL of the page the feed belongs to (`'/news/'`) |
+| $description | string    | `''`    | Description of the feed. `''`: the title |
+| $feedUrl     | string    | `''`    | Path or URL of the feed itself (`'/news/feed.xml'`), written as `atom:link`. `''`: none |
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Feed;
+
+$siteName = $this->config['site_info']['name'];
+$feed = new Feed('ニュース | ' . $siteName, '/news/', $siteName . 'のニュース', '/news/feed.xml');
+```
+
+Give `$feedUrl`: feed validators expect the feed to name its own URL.

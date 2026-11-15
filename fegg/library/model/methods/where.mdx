@@ -14,14 +14,11 @@ public self Model::where( string $query, [ mixed $data = [], string $andOr = 'AN
 
 Adds a condition with `?` placeholders. Values are always bound, never written into the SQL. Several calls are joined with `AND` (or `OR` with `$andOr`).
 
-- `$data` is one value, or an array of values in placeholder order. A query without placeholders (`'note IS NULL'`) needs none.
-- An array bound to a single placeholder expands it: `id = ?` and `id IN (?)` become `id IN (?, ?, ...)`, `id <> ?` / `id != ?` / `id NOT IN (?)` become `NOT IN`, `title LIKE ?` becomes `(title LIKE ? OR title LIKE ? ...)` and `title NOT LIKE ?` becomes `(title NOT LIKE ? AND ...)`. An empty array matches no row (`=`, `IN`, `LIKE`) or every row (`<>`, `NOT IN`, `NOT LIKE`). An array on any other operator (`<`, `BETWEEN` ...) throws `InvalidArgumentException` when the query runs.
-- A `?` inside a quoted string literal (`'?'`) is not a placeholder.
+- A query without placeholders (`'note IS NULL'`) needs no `$data`.
+- An array bound to one placeholder expands it (`id IN (?, ?, ...)`), see [Values and placeholders](../../database/index.mdx#values-and-placeholders). An array that cannot be expanded throws when the query runs.
 - An empty `$query` (`''`) adds nothing, which is handy for optional search conditions.
 
-A query with its own `OR` outside brackets is put in brackets when it is joined to other conditions: `where('category = ?', 1)->where('title = ? OR summary = ?', array($q, $q))` is `category = 1 AND (title = ? OR summary = ?)`. Fegg 4 wrote `category = 1 AND title = ? OR summary = ?`, which matched rows of every category. [having](./having.mdx) works the same way.
-
-The conditions the model adds by itself (the visible flag and `valid = 1`) are joined with `AND` after yours. When your conditions have an `OR` outside brackets, the model puts them in brackets first (`Where (a = ? OR b = ?) AND ...`), so hidden and deleted rows never match. To group conditions inside your own, use [whereOpen](./whereopen.mdx) and [whereClose](./whereclose.mdx).
+A query with its own `OR` outside brackets is put in brackets when it is joined to other conditions: `where('category = ?', 1)->where('title = ? OR summary = ?', array($q, $q))` is `category = 1 AND (title = ? OR summary = ?)`. The conditions the model adds by itself (the visible flag and `valid = 1`) are joined with `AND` after yours, with yours in brackets when they have an `OR` (`Where (a = ? OR b = ?) AND ...`), so hidden and deleted rows never match. [having](./having.mdx) works the same way. To group conditions inside your own, use [whereOpen](./whereopen.mdx) and [whereClose](./whereclose.mdx).
 
 For common cases there are helpers that also check the column name: [whereIn](./wherein.mdx), [whereNotIn](./wherenotin.mdx), [whereLike](./wherelike.mdx), [whereNull](./wherenull.mdx), [whereNotNull](./wherenotnull.mdx) and [whereBetween](./wherebetween.mdx).
 

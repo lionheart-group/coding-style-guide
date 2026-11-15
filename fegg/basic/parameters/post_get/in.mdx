@@ -45,8 +45,6 @@ echo $this->in('foo', 'get');  // -> ''
 echo $this->in('foo', 'post'); // -> post
 ```
 
-If POST and GET have a parameter with the same name, POST wins.
-
 ```php title="Controller - GET and POST"
 // https://example.com/?foo=get : POST('foo' => 'post')
 

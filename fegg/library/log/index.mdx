@@ -1,0 +1,77 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Writing to the application log
+
+`Fegg\Log` writes one line per entry to the application log, **`htdocs/_fegg/site/data/log/fegg-YYYY-MM-DD.log`** (one file a day). Call it from anywhere: controllers, your classes in `site/src/`, commands. Fegg writes uncaught errors there too (see [Logging and errors](../../basic/logging.mdx)).
+
+## How to use
+
+The methods are static: import `Fegg\Log` and call the method of the [level](#levels).
+
+```php title="Controller"
+use Fegg\Log;
+
+Log::info('Import finished', array('rows' => $count));
+Log::warning('Unknown category {id}', array('id' => $id));
+
+try {
+    $mail->send($to);
+} catch (\Exception $e) {
+    Log::error('Mail not sent to {to}', array('to' => $to, 'exception' => $e));
+}
+```
+
+```text title="site/data/log/fegg-2026-11-14.log"
+[2026-11-14 13:44:54 +09:00] INFO Import finished {"rows":120} | POST /cms/import/ 203.0.113.5
+[2026-11-14 13:44:54 +09:00] WARNING Unknown category 7 {"id":7} | GET /news/?category=7 198.51.100.20
+[2026-11-14 13:44:54 +09:00] ERROR Mail not sent to info@example.com {"to":"info@example.com","exception":"RuntimeException: SMTP connect() failed at /path/Contact.php:88"} | POST /contact/post/ 203.0.113.5
+```
+
+Each line is: the date and time, the level, the message, the context as JSON, and for web requests the method, the URL and the visitor's address.
+
+- `{key}` in the message is replaced with `$context['key']` (text, numbers, `true` / `false` and objects with `__toString()`).
+- The whole context is added as JSON. An exception (`\Throwable`) is written as its class, message, file and line; another object as its class name.
+- Line breaks in the message become spaces, so one entry is always one line.
+- Never log passwords, tokens or full personal data.
+
+## Levels
+
+The levels are those of PSR-3, from lowest to highest:
+
+| Level       | Use for |
+| :---------- | :------ |
+| `debug`     | Details while developing |
+| `info`      | Something worth knowing happened (an import finished) |
+| `notice`    | Normal but significant |
+| `warning`   | Something unexpected that the page could handle (another service did not answer) |
+| `error`     | Something failed (a mail was not sent, a save failed) |
+| `critical`  | A part of the site does not work |
+| `alert`     | Someone must act now |
+| `emergency` | The site is unusable |
+
+Entries below `$settings['log_level']` are not written (see [Settings](#settings)).
+
+## Settings
+
+| Setting | Default | Remarks |
+| :------ | :------ | :------ |
+| `$settings['log_level']` | `''` | Lowest level written. `''`: `warning` in production, `debug` elsewhere |
+| `$settings['log_retention_days']` | `30` | Files older than this are removed (checked once a day). `0`: keep all |
+| `FEGG_LOG_DIR` (`env.php` or environment variable) | `site/data/log` | Directory of the log files (created when missing) |
+
+```php title="htdocs/_fegg/site/config/settings.php"
+$settings['log_level'] = 'info';
+$settings['log_retention_days'] = 90;
+```
+
+`site/data/` is not tracked by git and is denied to the web by `htdocs/_fegg/.htaccess`. When the directory or the file cannot be written, the entry goes to the PHP error log instead.
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

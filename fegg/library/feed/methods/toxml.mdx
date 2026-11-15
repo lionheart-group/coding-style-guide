@@ -1,0 +1,30 @@
+---
+sidebar_position: 4
+---
+
+# Feed::toXml
+
+> Return the RSS 2.0 XML
+
+## Description
+
+```php
+public string Feed::toXml()
+```
+
+Returns the feed as XML text (see [What is written](../index.mdx#what-is-written)). [display()](./display.mdx) sends the same text.
+
+## Example
+
+```php title="Controller"
+use Fegg\Tool\Feed;
+
+$feed = new Feed('News', '/news/', '', '/news/feed.xml');
+$feed->add(array(
+    'title' => 'New shop',
+    'link'  => '/news/post_12.html',
+    'date'  => '2026-11-15 10:00:00',
+));
+
+$xml = $feed->toXml();
+```

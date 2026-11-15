@@ -1,0 +1,94 @@
+---
+sidebar_position: 1
+---
+
+import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Introduction
+
+> Limiting how often one visitor can do something
+
+`Fegg\Tool\RateLimit` allows at most `$max` attempts in `$window` seconds for one key: an IP address, a login ID. Use it for forms that send mail, logins, and anything a bot could repeat. The attempts are counted in the core table `rate_limit`.
+
+## How to use
+
+Import `Fegg\Tool\RateLimit`, create it with a bucket name, the attempts allowed and the window, and call [attempt()](./methods/attempt.mdx). It returns `true` when the attempt is **refused**.
+
+```php title="Controller"
+<?php
+namespace Site\Controller;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Tool\RateLimit;
+
+class Entry extends Controller
+{
+    public function post()
+    {
+        $this->requirePost();
+
+        // 5 entries an hour from one address
+        $limit = new RateLimit('entry', 5, 3600);
+        if ($limit->attempt((string) $_SERVER['REMOTE_ADDR'])) {
+            $this->redirect('/entry/error.html');
+        }
+
+        // ... check and save the entry
+    }
+}
+```
+
+The bucket names the limit: the same key is counted apart in each bucket.
+
+## How attempts are counted
+
+- An attempt counts for `$window` seconds from the moment it was made (a sliding window, not fixed hours).
+- [attempt()](./methods/attempt.mdx) stores the attempt **first**, then counts. Requests sent in parallel cannot all pass the check before any of them is stored.
+- A refused attempt removes its own row, so a client that keeps trying does not extend its lock: it can try again once its oldest counted attempt is older than the window.
+- The key itself is not stored: each row holds the bucket and a sha256 hash of the bucket and the key, so the table holds no addresses or login IDs.
+- Now and then (on about one allowed attempt in 20), rows older than one day, or than the window when it is longer, are removed.
+
+## The table
+
+`rate_limit` is a core table (`core/config/database/rate_limit.yaml`), created by `fegg-cli migration` (see [fegg-cli](../../first/cli.mdx#migration)).
+
+**Without the table nothing is limited**: every attempt is allowed, so the page keeps working, and one line per request goes to the PHP error log:
+
+```text
+Fegg: rate limiting is off (...). Run `fegg-cli migration` to create the table rate_limit.
+```
+
+Run `fegg-cli migration` after deploying a project that uses `RateLimit` for the first time.
+
+## In the skeleton
+
+| Where | Bucket | Key | Limit |
+| :---- | :----- | :-- | :---- |
+| CMS login (`core/controller/Cms/Login.php`) | `cms-login` | Login ID + address | 5 in 15 minutes |
+| CMS login | `cms-login-address` | Address | 20 in 15 minutes |
+| Contact form (`site/controller/Contact.php`) | `contact:<template>` | Address | `rate_limit_per_hour` an hour |
+
+The CMS login takes back the attempt of the address when the per-login limit refuses ([undo()](./methods/undo.mdx)), and after a successful login forgets the failures of that login ([clear()](./methods/clear.mdx)) and takes back the attempt of the address. A locked login shows a message on the login page.
+
+The contact form counts sent mails, checked just before sending. Its limit is `$_RATE_LIMIT_PER_HOUR` in `site/config/contact/contact_config.php` (5 by default; `0` turns it off):
+
+```php title="htdocs/_fegg/site/config/contact/contact_config.php"
+// Mails one visitor (IP address) can send per hour (Fegg\Tool\RateLimit); 0 = no limit
+$_RATE_LIMIT_PER_HOUR = 5;
+```
+
+:::note
+
+The skeleton uses `$_SERVER['REMOTE_ADDR']` as the address. Behind a reverse proxy or a CDN that does not pass the visitor's address to PHP there, every visitor has the proxy's address and shares one limit.
+
+:::
+
+## Errors
+
+- A bucket name that is empty or longer than 64 characters, or `$max` / `$window` below 1, throws `\InvalidArgumentException`.
+- A missing table does not throw (see [The table](#the-table)).
+
+## Methods
+
+<CategoryDocCardList label="Methods" />

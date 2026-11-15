@@ -14,8 +14,6 @@ public boolean Validation::maxlength( string $name, mixed $value, numeric $lengt
 
 Valid when the number of characters (`mb_strlen()` in UTF-8) is `$length` or less. The `@maxlength` message takes the label and the length as parameters.
 
-An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns `true`: combine with [Validation::required](./required.mdx) when the field is required. When `$name` already has an error, the check is skipped and returns `false`, so only the first error of each field is kept.
-
 ## Arguments
 
 | Name    | Data type | Default | Remarks                                                                                                      |
@@ -28,7 +26,7 @@ An empty value (`''`, `null`, `'0'`, whitespace only) is not checked and returns
 ## Example
 
 ```php title="Controller"
-use Fegg\Validation;
+use Fegg\Tool\Validation;
 
 $validation = new Validation();
 

@@ -21,7 +21,7 @@ A common use is to change site information (`$site`) before `{{ transclude }}`, 
 
 ## Example
 
-```html title="htdocs/_fegg/site/template/about.tpl"
+```html title="htdocs/_fegg/site/template/main/tpl/about.tpl"
 {{ assign $site.title = 'About | ' . $site.title }}
 {{ transclude '/template/siteframe' }}
 
@@ -31,7 +31,7 @@ A common use is to change site information (`$site`) before `{{ transclude }}`, 
 {{ end section contents }}
 ```
 
-```html title="htdocs/_fegg/site/template/template/siteframe.tpl"
+```html title="htdocs/_fegg/site/template/main/tpl/template/siteframe.tpl"
 <title>{{ $site.title }}</title>
 ```
 
@@ -41,6 +41,6 @@ A common use is to change site information (`$site`) before `{{ transclude }}`, 
 
 :::note
 
-Inside a `{{ section }}`, `assign` only changes the variable for that section: a section runs as a function. To change a value the layout reads (such as `$site.title`), assign it at the top level of the template, outside every section.
+Assign a value the layout reads (such as `$site.title`) at the top level of the template: inside a `{{ section }}` it only changes that section (see [Transclude](./transclude.mdx)).
 
 :::

@@ -1,0 +1,41 @@
+---
+sidebar_position: 7
+---
+
+# Cache::directory / Cache::setDirectory
+
+> The directory of the files, and replacing it in tests
+
+## Description
+
+```php
+public static string Cache::directory()
+public static void Cache::setDirectory( ?string $directory )
+```
+
+`directory()` returns the directory of the cache files: `$settings['cache_dir']`, or `site/data/cache/data` when the setting is empty.
+
+`setDirectory()` uses another directory for the rest of the request, for tests. `null` reads the setting again.
+
+## Arguments
+
+| Name       | Data type    | Default | Remarks |
+| ---------- | ------------ | ------- | ------- |
+| $directory | string\|null |         | Directory (a trailing `/` is removed), or `null` for the setting |
+
+## Example
+
+```php title="Test"
+use Fegg\Tool\Cache;
+
+protected function setUp(): void
+{
+    Cache::setDirectory(sys_get_temp_dir() . '/fegg-cache-test');
+}
+
+protected function tearDown(): void
+{
+    Cache::clear();
+    Cache::setDirectory(null);
+}
+```

@@ -14,7 +14,7 @@ public string Application::fetchPage( string $template )
 
 Collects the standard template variables (below), renders the template with [Application::fetchTemplate](./fetchtemplate.mdx) and returns the result instead of outputting it. [Application::displayPage](./displaypage.mdx) uses it.
 
-Use it when you need the page as a string: to post-process it, or as the body of a mail. Unlike `displayPage()`, it does not end the response. The security headers do not depend on which method you use (see [Security](../../security.mdx#security-headers)).
+Use it when you need the page as a string: to post-process it, or as the body of a mail. Unlike `displayPage()`, it does not end the response.
 
 ## Arguments
 
@@ -56,7 +56,7 @@ class Foo extends Controller
 }
 ```
 
-```html title="htdocs/_fegg/site/template/foo/bar.tpl"
+```html title="htdocs/_fegg/site/template/main/tpl/foo/bar.tpl"
 Baz param : {{ $page.baz }}
 $_GET[get] param : {{ $in.get }}
 Controller name : {{ $className }}
@@ -67,9 +67,3 @@ Baz param : qux
 $_GET[get] param : param
 Controller name : Foo
 ```
-
-:::note
-
-The site-wide Basic authentication (`basic_auth_scope = 1`) is checked before the controller runs, so it also protects actions that only call `fetchPage()`.
-
-:::
