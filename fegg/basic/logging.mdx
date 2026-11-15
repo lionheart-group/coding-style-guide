@@ -23,7 +23,7 @@ See [Log](../library/log/index.mdx) for the line format, the levels, the setting
 An exception or error that no code catches (a `Fegg\Database\QueryException`, a missing template, a PHP error ...) ends the request with **HTTP 500**:
 
 - It is written to the PHP error log and to the application log, with the stack trace and, for errors raised by a template, the `.tpl` file and line (`Template: news/detail.tpl:12`).
-- In [developer mode](../first/config.mdx#developer-mode) the details are shown in the browser.
+- In [developer mode](../first/config/environments.mdx#developer-mode) the details are shown in the browser.
 - Everyone else gets the error page `core/template/error/500.html`. What a half-rendered page already printed is discarded.
 
 To use your own design, put a file at **`htdocs/_fegg/site/template/error/500.html`**. It is plain HTML, not a template (no `{{ }}` tags, no includes), so it still works when the templates or the database are what broke. Inline its CSS or link to files of a site folder (`/_fegg/site/template/main/css/...`).

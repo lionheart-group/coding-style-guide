@@ -1,0 +1,61 @@
+---
+sidebar_position: 2
+---
+
+# Behaviour changes
+
+Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 section of `htdocs/_fegg/core/UPGRADE.md`. The ones most likely to affect code brought over:
+
+## Database and models
+
+- **Database errors** throw `Fegg\Database\QueryException` (the message includes the SQL and its parameters) instead of printing and calling `exit`. Uncaught, it is a logged HTTP 500.
+- `updateWhere()`, `deleteWhere()` and `eraseWhere()` with an **empty condition** throw instead of affecting every row. Pass `'1 = 1'` where every row was really meant.
+- `Model::order()`, `join()` and the `table` / `id` / `visible` options accept **only plain names**. Move expressions to `orderRaw()`.
+- **`OR` in conditions** is bracketed: `where('category = ?', 1)->where('a = ? OR b = ?', ...)` is `category = 1 AND (a = ? OR b = ?)`, and the visible flag and `valid = 1` are added outside the brackets. In Fegg 4 such conditions matched rows of every category, and `where('a = ?', 1)->where('b = ?', 2, 'OR')` also returned unpublished and deleted rows matching `b`; such lists can get shorter.
+
+## Templates
+
+- **Missing templates**, `include` targets and `transclude` parents throw `Fegg\Template\TemplateException` (HTTP 500) instead of printing "Can't Read" into the page. `./fegg-cli template:lint` lists them all.
+- **Template blocks are checked**: an unclosed block or an extra `{{ end }}` throws with the line number.
+- **Sections** are passed to the parent template as closures. Code that called the global `section_<name>()` functions directly must be rewritten.
+- `{{ options }}` escapes labels and values, and `{{ hidden }}` escapes values.
+- **Arrays reach modifiers**: `{{ $tags|feggImplode:', ' }}` now prints the joined tags (it printed nothing).
+
+## Requests, sessions and security
+
+- **Actions**: only a controller's own public methods can be called from a URL (see [Controller](../../basic/controller.mdx#which-methods-are-actions)). An action defined in `MyApplication` or a base controller is a 404: write it in each controller that uses it. An action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) is a 404: rename it, or map the old URL with a route.
+- **Basic authentication** with `basic_auth_scope = 1` is checked before the controller's `__init()` and action, so redirects, downloads and direct output are protected too.
+- **No more `exit`**: Fegg ends responses by throwing `Fegg\Http\Halt`; rethrow it from a `catch (\Throwable $e)` and replace your own `exit` with `$this->halt()` (see [Ending a response](../../basic/controller.mdx#ending-a-response)).
+- **Sessions and cookies**: a session starts only when something is written to it (see [Session](../../basic/parameters/index.mdx#session)). `setCookie()` takes SameSite as its own argument (not `'/; SameSite=Lax'` in the path), and `unsetCookie()` really deletes the cookie (Fegg 4 set an empty cookie for 7 days; see [setCookie](../../basic/parameters/cookie/setcookie.mdx)).
+- **Security headers** are sent with every response; a page framed by another site calls `$this->allowFraming()` (see [Security](../../basic/security.mdx#security-headers)).
+- **HTTPS** is detected from more server variables and proxy headers, and `redirect()` no longer sends HTTPS pages to HTTP when the detection fails (see [Security](../../basic/security.mdx#https)).
+- **Route-only controllers**: controllers that implement `Fegg\Http\RouteOnly` (such as the skeleton's `Site\Controller\Page`) are only reached through `site/config/route.php`. Add a route such as `$route['about/'] = 'page/render/about';` for each static page that was reached as `/page/render/...` (see [URL](../../basic/url.mdx#static-pages)).
+- **`htdocs/.htaccess`**: remove the `<IfModule mod_php5.c>` block and the Apache 2.2 `Order` / `Deny from all` lines (500 on Apache 2.4), and add the dotfile rules and the `_fegg` exceptions (the CMS's files, the site folders, the uploads) of `core/dist/htaccess.dist`. On nginx, use the rules of [Directory structure](../cont.mdx#protecting-_fegg). `fegg-cli doctor` warns about the old lines.
+- **Captcha keys and the database DSN** move to `env.php`: the skeleton's `database_config.php` and `contact/contact_config.php` read them with `feggEnv()`. Put the project's keys there, not in committed files.
+
+## CMS
+
+- **CMS sessions** need the session's user to still exist in `cms_user`: deleting a user ends their sessions.
+- **CMS login**: logout is a POST. Copied CMS frame templates in `site/template/cms/tpl/` add the class `js-cms-logout` to the logout link. Run `fegg-cli migration` for the login throttling table `rate_limit`. `/cms/login/create/...` is gone: use `fegg-cli user:create` (see [fegg-cli](../cli.mdx#cms-users)).
+- **The CMS's files** are in `htdocs/_fegg/assets/`, read at `/_fegg/assets/`. Copies of CMS templates in `site/template/cms/tpl/` load them with `{{ $site.cms_assets }}` instead of `{{ $site.cms_dir }}` (`css/`, `js/`, `img/`, `vendor/`). `_fegg/` can no longer be outside the document root. See [CMS screens and the editor](../../basic/cms/index.mdx).
+- **No jQuery in the CMS** (nor jQuery UI, Select2 or the datetimepicker). Rewrite `$(...)` in the project's CMS templates (`site/template/cms/tpl/*/html_head.tpl`) with plain JavaScript and the `FeggCms` helpers, or load a jQuery of your own there. Date fields become `datetime-local` inputs and drag & drop ordering uses SortableJS (see [Dates](../../basic/cms/index.mdx#dates) and [Drag and drop ordering](../../basic/cms/index.mdx#drag-and-drop-ordering)).
+- **CKEditor 4 is removed.** Rich text fields use FeggEditor: replace `CKEDITOR.replace(...)` and `ckeditor/ckeditor.js` with `data-fegg-editor="full"` on the textarea and `js/editor.js`, and clean the saved HTML with `Fegg\Cms\HtmlSanitizer::clean()`. Text written with CKEditor opens in FeggEditor. Copied `cms/image/` and `cms/media/` templates use the new picker scripts (`js/modal/image_picker.js`, `file_picker.js`; parameters `from=wysiwyg&picker=<id>`).
+- **Font Awesome 4.3 is removed.** Icons are Tabler Icons: replace `fa fa-…` with `ti ti-…`: `search` → `search`, `angle-right` → `chevron-right`, `image` / `picture-o` → `photo`, `times` → `x`, `cog` → `settings` (`pencil`, `trash`, `plus`, `link`, `check`, `download`, `upload` keep their names; others: tabler.io/icons). An icon the core does not use needs a line in `unique.scss` (see [Icons](../../basic/cms/index.mdx#icons)). Copies of `cms/frame/sitewire.tpl` and `popframe.tpl` load `vendor/tabler-icons/icons.css` instead of `fonts/font-awesome.min.css`.
+
+## Libraries
+
+- **Uploads** check the content against the extension; add the `@content` message to a copied `site/config/file_error_message.php` (see [Upload](../../library/upload/configuration.mdx)).
+- **Spyc is removed.** YAML is read by `Fegg\Tool\Yaml` (see [Yaml](../../library/yaml/index.mdx)): replace `spyc_load_file()` / `Spyc::YAMLLoad()` in project code with `Fegg\Tool\Yaml::parseFile()`. Table definitions read as before; `yes` / `no` and numbers with a leading zero are now text, and anchors or tags are refused with the file and the line.
+- **`getDatetime()` / `convertDatetime()`** no longer change the process-wide time zone, and `convertDatetime()` returns `''` for a date it cannot read (it returned `1970-01-01 ...`).
+- **Images in other sizes** (`getImageUrl`) are limited by `image_max` and `image_cache_max` in `site/config/upload_dir.php`, and the positions `lb` and `rb` now keep the bottom left and the bottom right (see [Trim](../../library/trim/index.mdx#images-of-the-cms-in-other-sizes)).
+- **`Fegg\Tool\Trim`** throws a `\RuntimeException` for a missing file, a file that is not a JPEG, PNG or GIF, or another output type (it called `exit`).
+- **`Fegg\Tool\File`** methods return `true` / `false`. `removeDirectory()` removes symbolic links, never what they point to.
+- **`Fegg\Tool\Upload::upload()`** for a field the form does not have is `@empty` (or OK when not required), and several files (`name="file[]"`) are `@failed`, without PHP warnings.
+- **`Fegg\Tool\Mail`**: the debug log is `mail.log` in the log directory (it was `/tmp/sendmaillog`). `send()` without a sender uses `$settings['mail']['from']` / `['from_name']`, or throws an `\InvalidArgumentException`.
+- **`Fegg\Tool\RSS`** throws a `\RuntimeException` for a feed it cannot fetch or read, and keeps posts whose title contains "PR:": pass `array('skip_pr' => true)` to leave them out as before.
+
+## Additional work for v3 projects
+
+- **Mail** (`Fegg\Tool\Mail`) uses PHPMailer. `sendWithFile()`, `setInputCharset()` and `setSendCharset()` were removed: add attachments with `pushAttached()` and call `send()`. A failed send throws `PHPMailer\PHPMailer\Exception`.
+- **Trailing slash**: URLs without an extension are redirected (301) to the same URL with a trailing `/`. Check the keys in `route.php` and the links in templates.
+- **PHP 8**: fix deprecation warnings in the project code (for example passing `null` to string functions).
