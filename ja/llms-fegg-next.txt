@@ -28,21 +28,21 @@ LionHeart projects start from the skeleton repository [lionheart-group/lh-fegg-s
 - **Per-server settings and secrets** come from `site/config/env.php` (not committed) or environment variables, read with `feggEnv()`. `FEGG_ENV` (`production` unless set) decides whether developers see error details.
 - **Secure by default.** Security headers on every response, sessions only when needed (`HttpOnly`, `SameSite=Lax`, strict mode), CSRF tokens in the CMS, login throttling, upload content checks.
 - **SQLite or MySQL.** `fegg-cli migration` works on both.
-- **A modern CMS.** The CMS's scripts are plain JavaScript. Rich text fields use FeggEditor (Tiptap), with columns, galleries, buttons, maps and links to files, and the saved HTML is cleaned on the server. The icons are Tabler Icons. See [CMS screens and the editor](./basic/cms.mdx).
+- **A modern CMS.** The CMS's scripts are plain JavaScript. Rich text fields use FeggEditor (Tiptap), with columns, galleries, buttons, maps and links to files, and the saved HTML is cleaned on the server. The icons are Tabler Icons. See [CMS screens and the editor](./basic/cms/index.mdx).
 - **Command line tools.** `fegg-cli` checks templates (`template:lint`), lists the database schema (`db:schema`), adds sites (`site:create`), manages CMS users (`user:create`), updates the core (`core:update`) and checks that `_fegg/` cannot be read from the web (`doctor`).
 
-Fegg 3 / 4 projects are rebuilt from the skeleton: see [Moving a Fegg 3 / 4 project](./first/migration.mdx).
+Fegg 3 / 4 projects are rebuilt from the skeleton: see [Moving a Fegg 3 / 4 project](./first/migration/index.mdx).
 
 ## Where to start
 
 - [Directory structure](./first/cont.mdx): what lives in `core/` and `site/`
-- [Settings](./first/config.mdx): `site/config/settings.php`, `env.php` and the database connection
+- [Settings](./first/config/index.mdx): `site/config/settings.php`, `env.php` and the database connection
 - [fegg-cli](./first/cli.mdx): command line tools
 - [Updating the core](./first/update.mdx)
-- [Moving a Fegg 3 / 4 project](./first/migration.mdx)
+- [Moving a Fegg 3 / 4 project](./first/migration/index.mdx)
 - [URL](./basic/url.mdx) and [Controller](./basic/controller.mdx): how a request reaches your code
 - [Security](./basic/security.mdx) and [Logging and errors](./basic/logging.mdx)
-- [CMS screens and the editor](./basic/cms.mdx): the CMS's scripts, icons and rich text fields
+- [CMS screens and the editor](./basic/cms/index.mdx): the CMS's scripts, icons and rich text fields
 
 
 --- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/url ---
@@ -74,7 +74,7 @@ Sub directories of `site/controller/` are part of the URL and of the namespace:
 | `/cms/news/edit/3/`     | `site/controller/Cms/News.php`             | `Site\Controller\Cms\News::edit('3')`    |
 | `/cms/media/`           | `core/controller/Cms/Media.php` (no site class) | `Fegg\Controller\Cms\Media::index()` |
 
-- The site (`Site\Controller\...`) is searched first, then the core (`Fegg\Controller\...`). A site class with the same name replaces the core's CMS screen (see [Controller](./controller.mdx#extending-a-core-controller)).
+- The site (`Site\Controller\...`) is searched first, then the core (`Fegg\Controller\...`). A site class with the same name replaces the core's CMS screen (see [Controller](./cms/controllers.mdx#extending-a-core-controller)).
 - Segments are walked from the left; the first one that names a controller file wins over a directory with the same name.
 - Controller and directory names must be valid PHP class names (letters, digits, `_`). For URLs like `/about-us/`, use a [route](#routing).
 - Abstract classes (the base `Controller` classes) are never called from a URL.
@@ -272,7 +272,7 @@ Fegg\Application                                  core/src/Application.php
 - `Fegg\Application` provides the methods you call with `$this->...`: [request parameters](./parameters/index.mdx), templates (`displayPage()`, ...), `redirect()`, `loadConfig()`, ...
 - `Fegg\Controller\Controller` (core) loads `site/config/category_info.php` and `site/config/site_info.php` in its `__init()`, and declares the properties `$_model` and `$_lh` used by the CMS.
 - `Site\Controller\Controller` (site) is yours: the base of the **public pages**. Put what every public page needs here (shared assigns, ...).
-- `Fegg\Controller\Cms\Controller` (core) and `Site\Controller\Cms\Controller` (site) are the bases of the **CMS screens**: see [CMS screens](#cms-screens). Put what every CMS screen of the project needs in `Site\Controller\Cms\Controller`.
+- `Fegg\Controller\Cms\Controller` (core) and `Site\Controller\Cms\Controller` (site) are the bases of the **CMS screens**: see [CMS screens](./cms/controllers.mdx). Put what every CMS screen of the project needs in `Site\Controller\Cms\Controller`.
 
 ```php title="htdocs/_fegg/site/controller/Controller.php"
 <?php
@@ -436,101 +436,9 @@ echo $this->convertDatetime('2026-04-01 09:00:00', 'Asia/Tokyo', 'Europe/London'
 echo $this->convertDatetime('not a date', 'Asia/Tokyo', 'UTC');                     // ''
 ```
 
-## Extending a core controller
-
-The CMS screens provided by the core (`/cms/login/`, `/cms/media/`, `/cms/image/`, ...) are in `htdocs/_fegg/core/controller/Cms/`. Do not edit them. To change one, put a class with the same name in `site/controller/Cms/` that extends the core class, and write only the methods you change. The site class is found first, so it replaces the core one for its URL.
-
-```php title="htdocs/_fegg/site/controller/Cms/Media.php"
-<?php
-namespace Site\Controller\Cms;
-
-defined('FEGG_CORE_DIR') || exit;
-
-// Changes only the /cms/media/ list
-class Media extends \Fegg\Controller\Cms\Media
-{
-    public function index($message = null)
-    {
-        // project-specific processing
-        parent::index($message);
-    }
-}
-```
-
-Keep the parent method's signature (the same arguments with the same defaults).
-
 ## CMS screens
 
-A CMS screen extends `Site\Controller\Cms\Controller` (in `site/controller/Cms/`, where `Controller` is that class without a `use`). Before your method runs, the base class:
-
-- sends a visitor who is not logged in to the login page,
-- creates `$this->_lh` (`Fegg\Cms\Helper`) for the section set in `$_cmsSection`, and sets `$this->page['prefix']` and `$this->page['prev_num']`,
-- sends `Cache-Control: no-store` and `X-Robots-Tag: noindex`,
-- checks the CSRF token of every POST request: a POST without the session's token gets a 403 page.
-
-:::danger Every action that changes data calls `requirePost()` first
-
-The CSRF token is only checked on POST. An action that saves, deletes or sorts must start with `$this->requirePost()`: without it, the action also runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET gets a 405.
-
-:::
-
-```php title="htdocs/_fegg/site/controller/Cms/Event.php"
-<?php
-namespace Site\Controller\Cms;
-
-defined('FEGG_CORE_DIR') || exit;
-
-use Fegg\Model;
-
-class Event extends Controller
-{
-    // The URL segment under /cms/ (/cms/event/...)
-    protected $_cmsSection = 'event';
-
-    public function __init()
-    {
-        parent::__init();
-        $this->_model = new Model(true, array('table' => 'cms_event', 'id' => 'event_id'));
-    }
-
-    public function update()
-    {
-        $this->requirePost();
-        // validate $this->in('title', 'POST') ..., then insertRow() / updateRow()
-    }
-
-    public function delete($internalId)
-    {
-        $this->requirePost();
-        $this->_model->delete($internalId);
-        $this->redirect($this->_lh->getBackPath('index/DELETED'));
-    }
-}
-```
-
-The scripts, icons and rich text fields of a CMS screen's templates: see [CMS screens and the editor](./cms.mdx).
-
-### Forms and the CSRF token
-
-- A form that prints `{{ hidden }}` sends the token already (the base class adds it to the hidden values).
-- Any other POST form adds it with `{{ include '/cms/parts/csrf' }}`.
-- Delete buttons are small POST forms, not links. `link-alert` asks for confirmation before sending:
-
-```html title="htdocs/_fegg/site/template/cms/tpl/event/lists.tpl"
-<form class="link-alert" action="{{ $site.prefix }}/delete/{{ $post[$page.this_id] }}" method="post" data-message="削除してもよろしいですか？" style="display: inline;">
-    {{ include '/cms/parts/csrf' }}
-    <button type="submit" class="c-button is-micro is-danger">削除</button>
-</form>
-```
-
-- JavaScript can read the token from `<meta name="csrf-token">` and send it as the `cms_csrf` POST field.
-- The token is the same for the whole session (several tabs work) and changes when you log in.
-
-### Login and logout
-
-The login screens are core controllers (`Fegg\Controller\Cms\Login`, `Logout`). Login throttling, deleted users and creating users: see [Security](./security.mdx#cms-login).
-
-Logout is a POST with the CSRF token. `/cms/logout/` opened as a link shows a logout button; links with the class `js-cms-logout` post directly (`_fegg/assets/js/base.js`). If you copied the CMS frame templates to `site/template/cms/tpl/`, add that class to the logout link.
+A CMS screen extends `Site\Controller\Cms\Controller`, which checks the login and the CSRF token of every POST; every action that changes data calls `$this->requirePost()` first. See [CMS controllers](./cms/controllers.mdx), which also covers changing the core's CMS screens.
 
 ## Template of Controller class
 
@@ -589,9 +497,9 @@ Most protections are on by default. This page lists them and the settings that c
 
 ## Secrets and environments
 
-- Passwords, API keys and anything else that differs per server are **not committed**: they go in `site/config/env.php` (in `.gitignore`) or in environment variables, read with `feggEnv('NAME', $default)`. See [Settings](../first/config.mdx#environments-and-secrets).
+- Passwords, API keys and anything else that differs per server are **not committed**: they go in `site/config/env.php` (in `.gitignore`) or in environment variables, read with `feggEnv('NAME', $default)`. See [Settings](../first/config/environments.mdx).
 - A site without `env.php` runs as **production**. Test servers matched by `site/config/env/paths.php` use the committed `site/config/env/staging.php`, which holds only test values. Environments are chosen by the server's path, never by the request's host name, which the client controls.
-- Error details are shown only in [developer mode](../first/config.mdx#developer-mode): a `developer_ip` address **and** `FEGG_ENV` other than `production`.
+- Error details are shown only in [developer mode](../first/config/environments.mdx#developer-mode): a `developer_ip` address **and** `FEGG_ENV` other than `production`.
 
 ## Security headers
 
@@ -643,7 +551,7 @@ Behind a proxy that sends none of these, configure it to send one (usually `X-Fo
 
 - **Output escaping**: `{{ $x }}` escapes HTML. In URLs and JavaScript use `feggUrl` and `feggJs`; `./fegg-cli template:lint` reports outputs without them. See [Template security](./templates/security.mdx).
 - **Double submission**: public forms use [tickets](./others/tickets/setticket.mdx) (`setTicket()` / `useTicket()`). The skeleton's contact form revokes the ticket when a confirmation fails, and sends the auto-reply to exactly one address.
-- **CSRF in the CMS**: every POST must carry the session's token, and every action that changes data calls `requirePost()`. See [Controller](./controller.mdx#cms-screens).
+- **CSRF in the CMS**: every POST must carry the session's token, and every action that changes data calls `requirePost()`. See [Controller](./cms/controllers.mdx).
 - **Actions**: the framework's methods (`setSession()`, `mail()` ...) are never reachable from a URL. See [Which methods are actions](./controller.mdx#which-methods-are-actions).
 - **Database**: values always go through `?` placeholders. Table, column and order names are checked by `Fegg\Model` and must never come from user input.
 - **Spam**: the contact form supports reCAPTCHA and Turnstile. When the service cannot be reached the check fails, it is never skipped (see [Captcha](../library/captcha/index.mdx)).
@@ -653,8 +561,8 @@ Behind a proxy that sends none of these, configure it to send one (usually `X-Fo
 
 - Every login attempt is recorded before the password is checked. After **5 failed logins** for one login ID from one address, or **20** from one address, logins from that address are refused for **15 minutes**. The attempts are counted by [Fegg\Tool\RateLimit](../library/rate-limit/index.mdx) in the core table `rate_limit`: run `fegg-cli migration` after updating the core. Without the table the login works unthrottled and a warning is logged.
 - `/cms/login/auth` is POST only. Deleted users (`valid = 0`) cannot log in. Every CMS request checks that the session's user still exists in `cms_user`, so deleting a user ends their sessions at once. Old password hashes are upgraded at login. An unknown login ID takes as long to check as a wrong password.
-- Logout is a POST with the CSRF token, so another site cannot log a user out (see [Controller](./controller.mdx#login-and-logout)).
-- Users are created and their passwords changed with [`fegg-cli user:create` / `user:password`](../first/cli.mdx#cms-users), which never take the password on the command line. `/cms/register/` needs a CMS login and [developer mode](../first/config.mdx#developer-mode).
+- Logout is a POST with the CSRF token, so another site cannot log a user out (see [Controller](./cms/controllers.mdx#login-and-logout)).
+- Users are created and their passwords changed with [`fegg-cli user:create` / `user:password`](../first/cli.mdx#cms-users), which never take the password on the command line. `/cms/register/` needs a CMS login and [developer mode](../first/config/environments.mdx#developer-mode).
 - Basic authentication compares the user and password with `hash_equals()`. With `basic_auth_scope = 1` it is checked before the controller's `__init()` and action, so redirects, downloads and direct output are protected too.
 
 ## Uploads
@@ -690,7 +598,7 @@ See [Log](../library/log/index.mdx) for the line format, the levels, the setting
 An exception or error that no code catches (a `Fegg\Database\QueryException`, a missing template, a PHP error ...) ends the request with **HTTP 500**:
 
 - It is written to the PHP error log and to the application log, with the stack trace and, for errors raised by a template, the `.tpl` file and line (`Template: news/detail.tpl:12`).
-- In [developer mode](../first/config.mdx#developer-mode) the details are shown in the browser.
+- In [developer mode](../first/config/environments.mdx#developer-mode) the details are shown in the browser.
 - Everyone else gets the error page `core/template/error/500.html`. What a half-rendered page already printed is discarded.
 
 To use your own design, put a file at **`htdocs/_fegg/site/template/error/500.html`**. It is plain HTML, not a template (no `{{ }}` tags, no includes), so it still works when the templates or the database are what broke. Inline its CSS or link to files of a site folder (`/_fegg/site/template/main/css/...`).
@@ -702,18 +610,122 @@ Catch an exception only when the page can do something useful with it; otherwise
 Call other services (an API, a webhook) with `Fegg\Http\Client`, which has timeouts. Catch its `Fegg\Http\ClientException`, log it and show the page without that part: see [HTTP client](../library/http-client/index.mdx#errors).
 
 
+--- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/cms/controllers ---
+
+
+# CMS controllers
+
+> The controller side of a CMS screen: the base class, `requirePost()`, the CSRF token, logging in, and changing the core's CMS screens
+
+A CMS screen extends `Site\Controller\Cms\Controller` (in `site/controller/Cms/`, where `Controller` is that class without a `use`). Before your method runs, the base class:
+
+- sends a visitor who is not logged in to the login page,
+- creates `$this->_lh` (`Fegg\Cms\Helper`) for the section set in `$_cmsSection`, and sets `$this->page['prefix']` and `$this->page['prev_num']`,
+- sends `Cache-Control: no-store` and `X-Robots-Tag: noindex`,
+- checks the CSRF token of every POST request: a POST without the session's token gets a 403 page.
+
+:::danger Every action that changes data calls `requirePost()` first
+
+The CSRF token is only checked on POST. An action that saves, deletes or sorts must start with `$this->requirePost()`: without it, the action also runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET gets a 405.
+
+:::
+
+```php title="htdocs/_fegg/site/controller/Cms/Event.php"
+<?php
+namespace Site\Controller\Cms;
+
+defined('FEGG_CORE_DIR') || exit;
+
+use Fegg\Model;
+
+class Event extends Controller
+{
+    // The URL segment under /cms/ (/cms/event/...)
+    protected $_cmsSection = 'event';
+
+    public function __init()
+    {
+        parent::__init();
+        $this->_model = new Model(true, array('table' => 'cms_event', 'id' => 'event_id'));
+    }
+
+    public function update()
+    {
+        $this->requirePost();
+        // validate $this->in('title', 'POST') ..., then insertRow() / updateRow()
+    }
+
+    public function delete($internalId)
+    {
+        $this->requirePost();
+        $this->_model->delete($internalId);
+        $this->redirect($this->_lh->getBackPath('index/DELETED'));
+    }
+}
+```
+
+The scripts, icons and rich text fields of a CMS screen's templates: see [CMS screens and the editor](./index.mdx).
+
+## Forms and the CSRF token
+
+- A form that prints `{{ hidden }}` sends the token already (the base class adds it to the hidden values).
+- Any other POST form adds it with `{{ include '/cms/parts/csrf' }}`.
+- Delete buttons are small POST forms, not links. `link-alert` asks for confirmation before sending:
+
+```html title="htdocs/_fegg/site/template/cms/tpl/event/lists.tpl"
+<form class="link-alert" action="{{ $site.prefix }}/delete/{{ $post[$page.this_id] }}" method="post" data-message="削除してもよろしいですか？" style="display: inline;">
+    {{ include '/cms/parts/csrf' }}
+    <button type="submit" class="c-button is-micro is-danger">削除</button>
+</form>
+```
+
+- JavaScript can read the token from `<meta name="csrf-token">` and send it as the `cms_csrf` POST field.
+- The token is the same for the whole session (several tabs work) and changes when you log in.
+
+## Login and logout
+
+The login screens are core controllers (`Fegg\Controller\Cms\Login`, `Logout`). Login throttling, deleted users and creating users: see [Security](../security.mdx#cms-login).
+
+Logout is a POST with the CSRF token. `/cms/logout/` opened as a link shows a logout button; links with the class `js-cms-logout` post directly (`_fegg/assets/js/base.js`). If you copied the CMS frame templates to `site/template/cms/tpl/`, add that class to the logout link.
+
+## Extending a core controller
+
+The CMS screens provided by the core (`/cms/login/`, `/cms/media/`, `/cms/image/`, ...) are in `htdocs/_fegg/core/controller/Cms/`. Do not edit them. To change one, put a class with the same name in `site/controller/Cms/` that extends the core class, and write only the methods you change. The site class is found first, so it replaces the core one for its URL.
+
+```php title="htdocs/_fegg/site/controller/Cms/Media.php"
+<?php
+namespace Site\Controller\Cms;
+
+defined('FEGG_CORE_DIR') || exit;
+
+// Changes only the /cms/media/ list
+class Media extends \Fegg\Controller\Cms\Media
+{
+    public function index($message = null)
+    {
+        // project-specific processing
+        parent::index($message);
+    }
+}
+```
+
+Keep the parent method's signature (the same arguments with the same defaults).
+
+
 --- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/cms ---
 
 
+import { SiblingDocCardList } from '@site/src/components/CategoryDocCardList';
+
 # CMS screens and the editor
 
-> The CMS's files, scripts and icons, and rich text fields with FeggEditor
+> The CMS's files, scripts and icons. The controllers of CMS screens and rich text fields have pages of their own:
 
-The controller side of a CMS screen (login check, `requirePost()`, the CSRF token) is described in [Controller](./controller.mdx#cms-screens). This page covers its templates.
+<SiblingDocCardList ids={["controllers", "editor"]} />
 
 ## The CMS's files
 
-The core's CMS files (CSS, JavaScript, images, icons, libraries and the editor) are in `htdocs/_fegg/assets/`. The web server serves only its CSS, JS, images and fonts, as for the site folders (see [Directory structure](../first/cont.mdx#protecting-_fegg)). Templates load them from `{{ $site.cms_assets }}` (`/_fegg/assets`):
+The core's CMS files (CSS, JavaScript, images, icons, libraries and the editor) are in `htdocs/_fegg/assets/`. The web server serves only its CSS, JS, images and fonts, as for the site folders (see [Directory structure](../../first/cont.mdx#protecting-_fegg)). Templates load them from `{{ $site.cms_assets }}` (`/_fegg/assets`):
 
 ```html title="site/template/cms/tpl/event/html_head.tpl"
 <script type="text/javascript" src="{{ $site.cms_assets }}/js/modal.js"></script>
@@ -723,7 +735,7 @@ The core's CMS files (CSS, JavaScript, images, icons, libraries and the editor) 
 
 - Do not edit `_fegg/assets/`: it is part of the core and `fegg-cli core:update` replaces it. Its files come built, so a project never builds them.
 - The project's own CMS styles go in `htdocs/_fegg/site/template/cms/scss/unique.scss`. `npm run build:scss` builds it into `site/template/cms/css/unique.css` together with the sites' CSS, and the CMS loads it after the core's CSS.
-- The project's CMS templates (post types, and copies of core templates) are in `site/template/cms/tpl/` (see [Where templates live](./templates/index.mdx#where-templates-live)).
+- The project's CMS templates (post types, and copies of core templates) are in `site/template/cms/tpl/` (see [Where templates live](../templates/index.mdx#where-templates-live)).
 
 ## Scripts
 
@@ -797,11 +809,15 @@ The core's `_fegg/assets/vendor/tabler-icons/icons.css` contains only the icons 
 
 In SCSS, draw an icon with its variable as a mask: `background-color: currentcolor; mask: var(--ti-link) center / contain no-repeat;`.
 
-## Rich text (FeggEditor)
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/cms/editor ---
+
+
+# Rich text (FeggEditor)
 
 Rich text fields use FeggEditor, an editor built on [Tiptap](https://tiptap.dev/) (MIT). Existing rich text opens in it as it is (images, YouTube videos, tables).
 
-### Using it in a CMS screen
+## Using it in a CMS screen
 
 Mark the textarea with `data-fegg-editor` and load the editor in the screen's `html_head.tpl`. Every `textarea[data-fegg-editor]` becomes an editor when the page is ready; no script of your own is needed.
 
@@ -823,7 +839,7 @@ Mark the textarea with `data-fegg-editor` and load the editor in the screen's `h
 - For a textarea added to the page later, call `FeggEditor.attach(textarea, { toolbar: 'full' })`.
 - While text is typed, a draft is kept in the browser. When the page opens with a draft different from the saved text, the editor offers to restore it.
 
-### Saving and showing it
+## Saving and showing it
 
 The textarea receives the HTML when the form is sent. **Always clean each field on the server before saving it:**
 
@@ -847,7 +863,7 @@ Never print a rich text field with `noescape` unless it was saved through `HtmlS
 
 :::
 
-### What the editor writes
+## What the editor writes
 
 | Block | HTML | Classes |
 | :---- | :--- | :------ |
@@ -862,9 +878,9 @@ Never print a rich text field with `noescape` unless it was saved through `HtmlS
 
 Plus paragraphs, headings (h2–h4, `text-align`), lists, quotes, lines, bold, italic, underline, strike, mark and links. The class names are written by the editor, so they are not FLOCSS names.
 
-### YouTube and maps outside the text
+## YouTube and maps outside the text
 
-A CMS field of its own that holds a YouTube URL or a Google map is printed with the same block as the editor (arguments and `Fegg\Tool\Embed` in PHP: see [Embed](../library/embed/index.mdx)):
+A CMS field of its own that holds a YouTube URL or a Google map is printed with the same block as the editor (arguments and `Fegg\Tool\Embed` in PHP: see [Embed](../../library/embed/index.mdx)):
 
 ```html title="site/template/main/tpl/news/detail.tpl"
 <div class="c-entry-block">
@@ -873,7 +889,7 @@ A CMS field of its own that holds a YouTube URL or a Google map is printed with 
 </div>
 ```
 
-### Its look on the public site
+## Its look on the public site
 
 The public styles are in the site's `scss/object/component/_wysiwyg.scss` (`htdocs/_fegg/site/template/main/scss/...`, `.c-entry-block`). Change them there for a project. Sites share no SCSS: another site that shows rich text copies it.
 
@@ -929,7 +945,7 @@ The file must define a variable with the same name as the file (`sample.php` def
 1. `htdocs/_fegg/site/config/{$name}.php`
 2. `htdocs/_fegg/core/config/{$name}.php`
 
-So a site file replaces the core file with the same name (for example `validation_error_message.php`). If `global_config_dir` is set in the [settings](../../../first/config.mdx), the file in that directory is loaded first and the file above can overwrite its values.
+So a site file replaces the core file with the same name (for example `validation_error_message.php`). If `global_config_dir` is set in the [settings](../../../first/config/index.mdx), the file in that directory is loaded first and the file above can overwrite its values.
 
 On a multilingual site (`default_language` and `support_language` are set), `config/{language code}/{$name}.php` is loaded afterwards and can overwrite values for that language.
 
@@ -988,7 +1004,7 @@ echo $sample['foo']; // -> bar
 public mixed Application::getSetting( string $name )
 ```
 
-Get a value of `$settings`: the defaults in `core/config/settings.php`, overridden by `site/config/settings.php` (see [Settings](../../../first/config.mdx)). Returns `''` when the key does not exist.
+Get a value of `$settings`: the defaults in `core/config/settings.php`, overridden by `site/config/settings.php` (see [Settings](../../../first/config/index.mdx)). Returns `''` when the key does not exist.
 
 Project-specific keys work too: add them to `site/config/settings.php` and read them with `getSetting()`.
 
@@ -1902,7 +1918,7 @@ Arrays and objects work too, so a whole data set can go to a script in one line:
 
 ### `noescape`
 
-`noescape` outputs the value as it is. Use it only for HTML you trust: CMS rich text written by administrators and cleaned with `Fegg\Cms\HtmlSanitizer::clean()` when it was saved (see [CMS screens and the editor](../cms.mdx#rich-text-feggeditor)), validation messages from your config, the result of `feggJs` inside `<script>`, or the result of `feggYoutube` / `feggMap`. Never use it on `$in` (request parameters) or anything a visitor can type.
+`noescape` outputs the value as it is. Use it only for HTML you trust: CMS rich text written by administrators and cleaned with `Fegg\Cms\HtmlSanitizer::clean()` when it was saved (see [CMS screens and the editor](../cms/editor.mdx)), validation messages from your config, the result of `feggJs` inside `<script>`, or the result of `feggYoutube` / `feggMap`. Never use it on `$in` (request parameters) or anything a visitor can type.
 
 ## Templates are code
 
@@ -1992,7 +2008,7 @@ Stack trace:
 ...
 ```
 
-In [developer mode](../../first/config.mdx#developer-mode) the browser also shows the error, the `Template:` line and the stack trace. Everyone else gets the error page (see [Logging and errors](../logging.mdx)).
+In [developer mode](../../first/config/environments.mdx#developer-mode) the browser also shows the error, the `Template:` line and the stack trace. Everyone else gets the error page (see [Logging and errors](../logging.mdx)).
 
 ## Pitfalls
 
@@ -3429,7 +3445,7 @@ The site is searched first, then the core. This works like a WordPress child the
 | Templates     | Put a file in `site/template/cms/tpl/` at the path it has under `core/template/cms/`        | `site/template/cms/tpl/login.tpl` is used instead of `core/template/cms/login.tpl` |
 | Config files  | Put a file with the same name in `site/config/`                                             | `site/config/validation_error_message.php` replaces the core's messages     |
 | Settings      | Write only the keys you want to change in `site/config/settings.php`                        | `$settings['developer_ip'] = array(...);`                                   |
-| CMS screens   | Put a class that extends the core controller in `site/controller/`, with only the methods you change | See [Controller](../basic/controller.mdx#extending-a-core-controller) |
+| CMS screens   | Put a class that extends the core controller in `site/controller/`, with only the methods you change | See [Controller](../basic/cms/controllers.mdx#extending-a-core-controller) |
 | CMS menu      | Add one block to `site/config/cms_menu.php`                                                 | When you add a post type                                                    |
 | DB tables     | Put a YAML file in `site/config/database/` (a file with the same name wins over the core's) | `cms_news.yaml`                                                             |
 
@@ -3462,7 +3478,7 @@ In the standard layout `_fegg/` is inside the document root. It is protected in 
 2. `htdocs/.htaccess` returns 403 for `/_fegg/` (except the CSS, JS, images and fonts of `_fegg/assets/` and of each site folder's `css/` `js/` `img/` `font/`, and the files of `_fegg/site/up_dir/`), dotfiles and hidden directories (`.git/`; `.well-known/` stays reachable), and denies `.db`, `.sqlite`, `.yaml`, `.tpl`, `.log`, `.md`, `.json` and `.dist` files.
 3. Every PHP file under `_fegg/` and every compiled template starts with the guard line (see [Namespaces](#namespaces)).
 4. `fegg-cli doctor https://example.com` checks over HTTP that nothing under `_fegg/` (a site's SCSS sources included) and no database file can be read (see [fegg-cli](./cli.mdx#doctor)). Run it from your local machine after every upload: many FTP clients skip `.htaccess`. The CMS dashboard also warns about problems it can detect from the files, such as a missing `.htaccess`.
-5. If the server allows it, put the SQLite database outside the document root (see [Settings](./config.mdx#database)).
+5. If the server allows it, put the SQLite database outside the document root (see [Settings](./config/index.mdx#database)).
 
 On nginx, where `.htaccess` is not used, add equivalent rules:
 
@@ -3482,223 +3498,6 @@ location ~ (^|/)_fegg(/|$) { deny all; }
 location ~ /\.(?!well-known/) { deny all; }
 location ~* \.(tpl|db|sqlite|ya?ml|log|md|json|dist)$ { deny all; }
 ```
-
-
---- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/first/config ---
-
-
-# Settings
-
-## Basic settings
-
-The defaults are in `htdocs/_fegg/core/config/settings.php`. Do not edit that file (it is replaced on update). Put the values for your project in **`htdocs/_fegg/site/config/settings.php`**.
-
-The core file is loaded first, then the site file. Only the keys the site file sets are changed, so write one key per line and never reassign the whole array (`$settings = array(...)` would drop the defaults).
-
-```php title="htdocs/_fegg/site/config/settings.php"
-<?php
-defined('FEGG_CORE_DIR') || exit;
-
-// Run mode  1: running, empty: under maintenance
-$settings['run_mode'] = '1';
-
-// Maintenance page URL
-$settings['maintenance_page_url'] = '';
-
-// Developer IP addresses (multiple allowed). Error details only outside production (FEGG_ENV)
-$settings['developer_ip'] = array('192.168.65.1', '203.0.113.10');
-
-// Basic authentication scope (0: none, 1: whole site, 2: partial)
-#$settings['basic_auth_scope'] = 0;
-#$settings['basic_auth_user'] = '';
-#$settings['basic_auth_password'] = '';
-
-// HSTS, once the whole site is served over HTTPS
-#$settings['hsts'] = 'max-age=31536000';
-```
-
-| Key                    | Default                         | Remarks |
-| :--------------------- | :------------------------------ | :------ |
-| `cms`                  | `true`                          | `false` for a site without the CMS (see [A site without the CMS](#a-site-without-the-cms)) |
-| `run_mode`             | `'1'`                           | `'1'`: running. Empty: under maintenance. During maintenance every request that does not come from `developer_ip` is redirected to `maintenance_page_url`, or gets a short maintenance message when it is empty. |
-| `maintenance_page_url` | `''`                            | Redirect target during maintenance |
-| `developer_ip`         | `array()`                       | Addresses that can see error details outside production (see [Developer mode](#developer-mode)) and that bypass maintenance |
-| `timezone`             | `''`                            | Time zone of the application, set once at startup. `''`: `FEGG_DEFAULT_TIMEZONE` (`Asia/Tokyo`) |
-| `log_level`            | `''`                            | Lowest level written to the application log (`debug`, `info`, `notice`, `warning`, `error` ...). `''`: `warning` in production, `debug` elsewhere. See [Log](../library/log/index.mdx#settings) |
-| `log_retention_days`   | `30`                            | Days to keep the application log files (`0`: keep all) |
-| `mail`                 | `array('transport' => 'sendmail', 'from' => '', 'from_name' => '')` | Outgoing mail of `Fegg\Tool\Mail`, and the sender when `send()` is given none (see [Sender](../library/mail/index.mdx#sender)). For SMTP see [Mail](../library/mail/index.mdx#smtp) |
-| `security_headers`     | `array()`                       | Changes the default security headers: `'Header-Name' => 'value'`, `''` removes one. See [Security](../basic/security.mdx#security-headers) |
-| `hsts`                 | `''`                            | `Strict-Transport-Security` value sent on HTTPS responses, e.g. `'max-age=31536000'`. `''`: not sent |
-| `csp`                  | `''`                            | `Content-Security-Policy` value. `''`: not sent |
-| `csp_report_only`      | `false`                         | `true`: send the policy as `Content-Security-Policy-Report-Only` (reports only, blocks nothing) |
-| `default_language`     | not set                         | Language code used when none is detected, e.g. `'ja'`. Only for multilingual sites |
-| `support_language`     | not set                         | Supported language codes, e.g. `array('ja', 'en')`. Only for multilingual sites |
-| `basic_auth_scope`     | `0`                             | `0`: no Basic authentication. `1`: every request handled by Fegg, checked before the controller runs. `2`: only where the controller calls `$this->basicAuth()` |
-| `basic_auth_user`      | `''`                            | Basic authentication user |
-| `basic_auth_password`  | `''`                            | Basic authentication password (compared with `hash_equals()`) |
-| `basic_auth_message`   | not set                         | Realm shown in the browser's login dialog |
-| `basic_auth_error_message` | not set                     | Text sent with the 401 response when the login fails (default `Authorization Required`) |
-| `template_dir`         | `site/template`, `core/template` | Template directories, searched in this order. The `tpl/` of the site the URL belongs to is put first (see [Sites](../basic/templates/index.mdx#sites)) |
-| `template_ext`         | `'tpl'`                         | Template file extension |
-| `template_cache_dir`   | `site/data/cache/template`      | Compiled template cache |
-| `global_config_dir`    | `''`                            | Optional directory searched by `loadConfig()` before `site/config/`. End it with `/` |
-
-Read a setting from a controller with [`$this->getSetting()`](../basic/others/config/getsetting.mdx).
-
-### A site without the CMS
-
-```php title="htdocs/_fegg/site/config/settings.php"
-$settings['cms'] = false;
-```
-
-With the CMS turned off (`Fegg\Cms\Setting`):
-
-- `/cms/...` (the core's and the project's CMS screens) and the uploads' controller (image sizes and `/file/<id>/` under `/_fegg/site/up_dir/`) answer 404,
-- [`fegg-cli migration`](./cli.mdx#migration) neither creates nor drops `cms_user`, `cms_file` and `cms_image` (their rows are kept) and creates no first CMS user; `fegg-cli db:schema` leaves them out,
-- `fegg-cli user:*` refuses to run.
-
-Remove what the project itself has for the CMS: `site/config/database/cms_news.yaml` and the other post types (migration then drops those tables), `site/controller/Cms/`, `site/template/cms/`, the news pages if they show CMS posts, and `site/config/cms_menu.php`.
-
-## Environments and secrets
-
-Per-server values and secrets (the environment, the database, API keys, passwords) are never committed, not even in `settings.php`. Read them with `feggEnv()`:
-
-```php
-$secret = feggEnv('FEGG_RECAPTCHA_SECRET', '');   // feggEnv(string $name, mixed $default = null)
-```
-
-`feggEnv()` returns the first of:
-
-1. the environment variable with that name (`SetEnv` in Apache, `fastcgi_param` in nginx, Docker `environment` ...),
-2. the key in **`htdocs/_fegg/site/config/env.php`**,
-3. the key in the committed environment file **`htdocs/_fegg/site/config/env/<name>.php`** chosen for this server by its path (see [Test servers deployed with git pull](#test-servers-deployed-with-git-pull)),
-4. `$default`.
-
-`SetEnv` reaches only the web. `fegg-cli` (and a `fegg-cli migration` run after a deploy) sees only its own shell's environment and the files, so keep database settings in a file when the server runs `fegg-cli`.
-
-`env.php` returns a PHP array. It is in `.gitignore` and is created on each server by copying `site/config/env.php.dist`:
-
-```php title="htdocs/_fegg/site/config/env.php"
-<?php
-defined('FEGG_CORE_DIR') || exit;
-
-return array(
-    // production | staging | development
-    'FEGG_ENV' => 'development',
-
-    // Database. Default: SQLite file in site/data/db/db.db
-    // 'FEGG_DB_DSN'      => 'mysql:host=127.0.0.1;port=3306;dbname=example;charset=utf8mb4',
-    // 'FEGG_DB_USER'     => '',
-    // 'FEGG_DB_PASSWORD' => '',
-
-    // Contact form spam protection
-    'FEGG_RECAPTCHA_SITE_KEY' => '',
-    'FEGG_RECAPTCHA_SECRET'   => '',
-    'FEGG_TURNSTILE_SITE_KEY' => '',
-    'FEGG_TURNSTILE_SECRET'   => '',
-);
-```
-
-| Name | Used for |
-| :--- | :------- |
-| `FEGG_ENV` | `production` (default; also for unknown values) / `staging` / `development`. Available as the constant `FEGG_ENV` |
-| `FEGG_DB_DSN`, `FEGG_DB_USER`, `FEGG_DB_PASSWORD`, `FEGG_DB_SLAVE_DSN` | Database connection (see [Database](#database)) |
-| `FEGG_DB_PATH` | SQLite file path, when `FEGG_DB_DSN` is not set |
-| `FEGG_RECAPTCHA_SITE_KEY`, `FEGG_RECAPTCHA_SECRET`, `FEGG_TURNSTILE_SITE_KEY`, `FEGG_TURNSTILE_SECRET` | Contact form spam protection (see [Captcha](../library/captcha/index.mdx)) |
-| `FEGG_SMTP_PASSWORD` (`FEGG_SMTP_HOST`, `FEGG_SMTP_USERNAME`) | SMTP sending (see [Mail](../library/mail/index.mdx#smtp)) |
-| `FEGG_LOG_DIR` | Directory of the application log instead of `site/data/log` |
-| `FEGG_UPLOAD_DIR` | Another directory for CMS uploads (default `htdocs/_fegg/site/up_dir`, see `site/config/upload_dir.php`). The web server must serve it at `/_fegg/site/up_dir/` |
-| `FEGG_RECAPTCHA_SCORE_THRESHOLD` | reCAPTCHA score needed (default `0.5`; `1.0` rejects every form, to check the error message) |
-| `FEGG_CMS_INITIAL_LOGIN`, `FEGG_CMS_INITIAL_NAME`, `FEGG_CMS_INITIAL_PASSWORD_HASH` (or `FEGG_CMS_INITIAL_PASSWORD`) | First CMS user, created by [`fegg-cli migration`](./cli.mdx#migration) |
-| `FEGG_ENV_NAME` | Environment variable only: chooses `site/config/env/<name>.php` instead of `paths.php` |
-
-Add your own keys the same way and read them with `feggEnv('NAME', $default)`.
-
-:::warning
-
-**A site without `env.php` and without a matching environment file runs as production.** On your machine, create `env.php` with `'FEGG_ENV' => 'development'`. Otherwise developers do not see error details there. Test servers on the LionHeart develop server run as `staging` without any file of their own (next section).
-
-:::
-
-`FEGG_ENV` decides:
-
-- whether [developer mode](#developer-mode) is possible (not in production),
-- whether the contact form sends the administrator mail to the test address (outside production),
-- the default `log_level` (`warning` in production, `debug` elsewhere).
-
-### Test servers deployed with git pull
-
-On the LionHeart develop server (`http://p83.<project>.develop.lionheart.co.jp/`, project directory `/var/www/vhosts/<project>/p83`) a deploy is `git pull` followed by `fegg-cli migration`. Nothing can be placed on the server by hand, so the test server's settings are committed:
-
-```php title="htdocs/_fegg/site/config/env/paths.php"
-return array(
-    // project root pattern (fnmatch; * and ? do not cross /) => environment file name
-    '/var/www/vhosts/*/p[0-9]*' => 'staging',
-);
-```
-
-```php title="htdocs/_fegg/site/config/env/staging.php"
-return array(
-    'FEGG_ENV' => 'staging',
-    // first CMS user, created by fegg-cli migration (see below)
-    'FEGG_CMS_INITIAL_LOGIN'         => 'admin',
-    'FEGG_CMS_INITIAL_PASSWORD_HASH' => '$2y$10$...',   // ./fegg-cli user:hash
-    // Turnstile test keys (no host name registration needed): always pass (2x00000000000000000000AB / 2x0000000000000000000000000000000AA always fail)
-    'FEGG_TURNSTILE_SITE_KEY' => '1x00000000000000000000AA',
-    'FEGG_TURNSTILE_SECRET'   => '1x0000000000000000000000000000000AA',
-);
-```
-
-Both files come with the skeleton. The project root (the directory of `fegg-cli`) is matched against `paths.php`; the first match chooses `site/config/env/<name>.php`. Other paths (production, your machine) are unaffected.
-
-- **Why the path:** the host name of a request is chosen by the client. Matching it would let a request to production with `Host: x.develop.lionheart.co.jp` switch production to the test settings (test captcha keys that always pass, the test administrator). The path is set by the server, and `fegg-cli` sees the same path as the web.
-- **Check it:** the first line of `fegg-cli migration` in the deploy log names the environment and its file (see [fegg-cli](./cli.mdx#migration)).
-- **First CMS user:** `fegg-cli migration` creates it once, while `cms_user` is empty (see [fegg-cli](./cli.mdx#migration)). Commit the hash (`./fegg-cli user:hash`), not the password, and change the password after the first login.
-
-:::warning
-
-Everyone who can read the repository can read these files. Put only values made for the test server there, never production keys or passwords. `env.php` on a server and environment variables still win over them.
-
-:::
-
-### Developer mode
-
-Fegg runs in developer mode (the constant `FEGG_DEVELOPER` is `'1'`) only when **both** are true:
-
-- the request comes from an address in `developer_ip`, and
-- `FEGG_ENV` is not `production`.
-
-In developer mode:
-
-- PHP errors are displayed.
-- An uncaught exception shows the message, the file and line, the template line (`Template: <file>.tpl:<line>`), the stack trace and `$this->page`. Other visitors get the error page (see [Logging and errors](../basic/logging.mdx)). In both cases the error is written to the PHP error log and the application log.
-- The 404 page shows which controller file Fegg tried to load.
-
-`developer_ip` alone is not a security boundary: behind a proxy or load balancer every request may come from the same address.
-
-## Database
-
-The connection is set in **`htdocs/_fegg/site/config/database_config.php`**, which reads `FEGG_DB_DSN`, `FEGG_DB_USER`, `FEGG_DB_PASSWORD`, `FEGG_DB_SLAVE_DSN` and `FEGG_DB_PATH` with `feggEnv()`, so the file is the same on every server. Without settings it is the SQLite file `htdocs/_fegg/site/data/db/db.db`; if the server allows it, move it **outside the document root** with `FEGG_DB_PATH`. For MySQL / MariaDB and master / slave, see [Database configuration](../library/database/configuration.mdx).
-
-Tables are defined in YAML files (`core/config/database/` for the CMS tables, `site/config/database/` for the project's tables) and created or changed with `./fegg-cli migration` (see [fegg-cli](./cli.mdx#migration)). Every table needs the columns `valid`, `created` and `modified`. The files are read by [Fegg\Tool\Yaml](../library/yaml/index.mdx), which says what it reads.
-
-## Other files in `site/config/`
-
-| File                  | Remarks |
-| :-------------------- | :------ |
-| `route.php`           | URL routing (see [URL](../basic/url.mdx#routing)) |
-| `sites.php`           | The project's sites, one line each (see [Sites](../basic/templates/index.mdx#sites)) |
-| `site_info.php`       | Site title, description, OGP image, `picture` breakpoints, ... Loaded by the base controller and available in templates as `$site`. A site's `'info'` in `sites.php` overrides it for that site |
-| `category_info.php`   | Labels for categories and the CMS visibility states. Loaded by the base controller into `$this->config['category_info']` |
-| `cms_menu.php`        | CMS side menu. Add one block per post type |
-| `env.php`             | Per-server settings and secrets, read with `feggEnv()`. Not committed; copy `env.php.dist` (see [Environments and secrets](#environments-and-secrets)) |
-| `database_config.php` | Database connection, from `feggEnv()` (see [Database](#database)) |
-| `upload_dir.php`      | Path and URL of the CMS upload directory (`htdocs/_fegg/site/up_dir`, `/_fegg/site/up_dir`), and the limits of images in other sizes (`image_max`, `image_cache_max`, see [Trim](../library/trim/index.mdx#images-of-the-cms-in-other-sizes)) |
-| `database/*.yaml`     | Table definitions for `fegg-cli migration` |
-| `define.php`          | Optional. Project constants, loaded right after the core starts (web and CLI) |
-| `fegg_update.php`     | Optional. Repository used by `fegg-cli core:update` (see [Updating the core](./update.mdx)) |
-
-Any other file in `site/config/` can be loaded with [`$this->loadConfig()`](../basic/others/config/loadconfig.mdx). A file with the same name as one in `core/config/` (for example `validation_error_message.php`) replaces the core's file.
 
 
 --- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/first/cli ---
@@ -3740,8 +3539,8 @@ Running a command group without a sub command prints its help: `./fegg-cli core`
 
 Compares the table definitions in the YAML files with the database (SQLite, or MySQL / MariaDB) and applies the difference (adds tables, columns and indexes).
 
-- The core's files (`core/config/database/`: `cms_user`, `cms_file`, `cms_image`, `rate_limit`) are read first, then the project's (`site/config/database/`). A project file with the same name replaces the core's file. With the CMS turned off (`$settings['cms'] = false`, see [Settings](./config.mdx#a-site-without-the-cms)) `cms_user`, `cms_file` and `cms_image` are neither created nor dropped, and no first CMS user is created.
-- Starts with one line naming the environment, its file and the database, e.g. `Environment: staging (site/config/env/staging.php, /var/www/vhosts/*/p[0-9]*) / DB: sqlite:...` (see [Environments and secrets](./config.mdx#test-servers-deployed-with-git-pull)).
+- The core's files (`core/config/database/`: `cms_user`, `cms_file`, `cms_image`, `rate_limit`) are read first, then the project's (`site/config/database/`). A project file with the same name replaces the core's file. With the CMS turned off (`$settings['cms'] = false`, see [Settings](./config/index.mdx#a-site-without-the-cms)) `cms_user`, `cms_file` and `cms_image` are neither created nor dropped, and no first CMS user is created.
+- Starts with one line naming the environment, its file and the database, e.g. `Environment: staging (site/config/env/staging.php, /var/www/vhosts/*/p[0-9]*) / DB: sqlite:...` (see [Environments and secrets](./config/environments.mdx#test-servers-deployed-with-git-pull)).
 - Prints `Fegg-cli migration diff : Not changed` when the database already matches, `Fegg-cli migration diff : Finished migration` after applying changes.
 - Then creates the first CMS user when `FEGG_CMS_INITIAL_LOGIN` is set and `cms_user` has no users at all, with `FEGG_CMS_INITIAL_PASSWORD_HASH` (or `FEGG_CMS_INITIAL_PASSWORD`) and `FEGG_CMS_INITIAL_NAME`. An existing user is never changed and a deleted one is not created again, so this is safe on every deploy. Without a usable password it exits with 1 after the migration.
 - `fegg-cli core:update` runs it automatically after updating the core.
@@ -3832,7 +3631,7 @@ printf '%s\n' "$CMS_PASSWORD" | ./fegg-cli user:create admin --password-stdin
 
 :::note
 
-`/cms/register/` needs a CMS login and [developer mode](./config.mdx#developer-mode); on a production server use `fegg-cli`.
+`/cms/register/` needs a CMS login and [developer mode](./config/environments.mdx#developer-mode); on a production server use `fegg-cli`.
 
 :::
 
@@ -3960,8 +3759,237 @@ If the project only edited `site/`, there are no conflicts in the core. The skel
 The full text, including the release procedure for skeleton maintainers, is in [docs/updating.md](https://github.com/lionheart-group/lh-fegg-skelton/blob/master/docs/updating.md) of the skeleton repository.
 
 
+--- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/first/config/environments ---
+
+
+# Environments and secrets
+
+Per-server values and secrets (the environment, the database, API keys, passwords) are never committed, not even in `settings.php`. Read them with `feggEnv()`:
+
+```php
+$secret = feggEnv('FEGG_RECAPTCHA_SECRET', '');   // feggEnv(string $name, mixed $default = null)
+```
+
+`feggEnv()` returns the first of:
+
+1. the environment variable with that name (`SetEnv` in Apache, `fastcgi_param` in nginx, Docker `environment` ...),
+2. the key in **`htdocs/_fegg/site/config/env.php`**,
+3. the key in the committed environment file **`htdocs/_fegg/site/config/env/<name>.php`** chosen for this server by its path (see [Test servers deployed with git pull](#test-servers-deployed-with-git-pull)),
+4. `$default`.
+
+`SetEnv` reaches only the web. `fegg-cli` (and a `fegg-cli migration` run after a deploy) sees only its own shell's environment and the files, so keep database settings in a file when the server runs `fegg-cli`.
+
+`env.php` returns a PHP array. It is in `.gitignore` and is created on each server by copying `site/config/env.php.dist`:
+
+```php title="htdocs/_fegg/site/config/env.php"
+<?php
+defined('FEGG_CORE_DIR') || exit;
+
+return array(
+    // production | staging | development
+    'FEGG_ENV' => 'development',
+
+    // Database. Default: SQLite file in site/data/db/db.db
+    // 'FEGG_DB_DSN'      => 'mysql:host=127.0.0.1;port=3306;dbname=example;charset=utf8mb4',
+    // 'FEGG_DB_USER'     => '',
+    // 'FEGG_DB_PASSWORD' => '',
+
+    // Contact form spam protection
+    'FEGG_RECAPTCHA_SITE_KEY' => '',
+    'FEGG_RECAPTCHA_SECRET'   => '',
+    'FEGG_TURNSTILE_SITE_KEY' => '',
+    'FEGG_TURNSTILE_SECRET'   => '',
+);
+```
+
+| Name | Used for |
+| :--- | :------- |
+| `FEGG_ENV` | `production` (default; also for unknown values) / `staging` / `development`. Available as the constant `FEGG_ENV` |
+| `FEGG_DB_DSN`, `FEGG_DB_USER`, `FEGG_DB_PASSWORD`, `FEGG_DB_SLAVE_DSN` | Database connection (see [Database](./index.mdx#database)) |
+| `FEGG_DB_PATH` | SQLite file path, when `FEGG_DB_DSN` is not set |
+| `FEGG_RECAPTCHA_SITE_KEY`, `FEGG_RECAPTCHA_SECRET`, `FEGG_TURNSTILE_SITE_KEY`, `FEGG_TURNSTILE_SECRET` | Contact form spam protection (see [Captcha](../../library/captcha/index.mdx)) |
+| `FEGG_SMTP_PASSWORD` (`FEGG_SMTP_HOST`, `FEGG_SMTP_USERNAME`) | SMTP sending (see [Mail](../../library/mail/index.mdx#smtp)) |
+| `FEGG_LOG_DIR` | Directory of the application log instead of `site/data/log` |
+| `FEGG_UPLOAD_DIR` | Another directory for CMS uploads (default `htdocs/_fegg/site/up_dir`, see `site/config/upload_dir.php`). The web server must serve it at `/_fegg/site/up_dir/` |
+| `FEGG_RECAPTCHA_SCORE_THRESHOLD` | reCAPTCHA score needed (default `0.5`; `1.0` rejects every form, to check the error message) |
+| `FEGG_CMS_INITIAL_LOGIN`, `FEGG_CMS_INITIAL_NAME`, `FEGG_CMS_INITIAL_PASSWORD_HASH` (or `FEGG_CMS_INITIAL_PASSWORD`) | First CMS user, created by [`fegg-cli migration`](../cli.mdx#migration) |
+| `FEGG_ENV_NAME` | Environment variable only: chooses `site/config/env/<name>.php` instead of `paths.php` |
+
+Add your own keys the same way and read them with `feggEnv('NAME', $default)`.
+
+:::warning
+
+**A site without `env.php` and without a matching environment file runs as production.** On your machine, create `env.php` with `'FEGG_ENV' => 'development'`. Otherwise developers do not see error details there. Test servers on the LionHeart develop server run as `staging` without any file of their own (next section).
+
+:::
+
+`FEGG_ENV` decides:
+
+- whether [developer mode](#developer-mode) is possible (not in production),
+- whether the contact form sends the administrator mail to the test address (outside production),
+- the default `log_level` (`warning` in production, `debug` elsewhere).
+
+## Test servers deployed with git pull
+
+On the LionHeart develop server (`http://p83.<project>.develop.lionheart.co.jp/`, project directory `/var/www/vhosts/<project>/p83`) a deploy is `git pull` followed by `fegg-cli migration`. Nothing can be placed on the server by hand, so the test server's settings are committed:
+
+```php title="htdocs/_fegg/site/config/env/paths.php"
+return array(
+    // project root pattern (fnmatch; * and ? do not cross /) => environment file name
+    '/var/www/vhosts/*/p[0-9]*' => 'staging',
+);
+```
+
+```php title="htdocs/_fegg/site/config/env/staging.php"
+return array(
+    'FEGG_ENV' => 'staging',
+    // first CMS user, created by fegg-cli migration (see below)
+    'FEGG_CMS_INITIAL_LOGIN'         => 'admin',
+    'FEGG_CMS_INITIAL_PASSWORD_HASH' => '$2y$10$...',   // ./fegg-cli user:hash
+    // Turnstile test keys (no host name registration needed): always pass (2x00000000000000000000AB / 2x0000000000000000000000000000000AA always fail)
+    'FEGG_TURNSTILE_SITE_KEY' => '1x00000000000000000000AA',
+    'FEGG_TURNSTILE_SECRET'   => '1x0000000000000000000000000000000AA',
+);
+```
+
+Both files come with the skeleton. The project root (the directory of `fegg-cli`) is matched against `paths.php`; the first match chooses `site/config/env/<name>.php`. Other paths (production, your machine) are unaffected.
+
+- **Why the path:** the host name of a request is chosen by the client. Matching it would let a request to production with `Host: x.develop.lionheart.co.jp` switch production to the test settings (test captcha keys that always pass, the test administrator). The path is set by the server, and `fegg-cli` sees the same path as the web.
+- **Check it:** the first line of `fegg-cli migration` in the deploy log names the environment and its file (see [fegg-cli](../cli.mdx#migration)).
+- **First CMS user:** `fegg-cli migration` creates it once, while `cms_user` is empty (see [fegg-cli](../cli.mdx#migration)). Commit the hash (`./fegg-cli user:hash`), not the password, and change the password after the first login.
+
+:::warning
+
+Everyone who can read the repository can read these files. Put only values made for the test server there, never production keys or passwords. `env.php` on a server and environment variables still win over them.
+
+:::
+
+## Developer mode
+
+Fegg runs in developer mode (the constant `FEGG_DEVELOPER` is `'1'`) only when **both** are true:
+
+- the request comes from an address in `developer_ip`, and
+- `FEGG_ENV` is not `production`.
+
+In developer mode:
+
+- PHP errors are displayed.
+- An uncaught exception shows the message, the file and line, the template line (`Template: <file>.tpl:<line>`), the stack trace and `$this->page`. Other visitors get the error page (see [Logging and errors](../../basic/logging.mdx)). In both cases the error is written to the PHP error log and the application log.
+- The 404 page shows which controller file Fegg tried to load.
+
+`developer_ip` alone is not a security boundary: behind a proxy or load balancer every request may come from the same address.
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/first/config ---
+
+
+import { SiblingDocCardList } from '@site/src/components/CategoryDocCardList';
+
+# Settings
+
+> The project's settings in `site/config/`. Per-server values and secrets (`env.php`, the test servers' settings, developer mode) are on their own page:
+
+<SiblingDocCardList ids={["environments"]} />
+
+## Basic settings
+
+The defaults are in `htdocs/_fegg/core/config/settings.php`. Do not edit that file (it is replaced on update). Put the values for your project in **`htdocs/_fegg/site/config/settings.php`**.
+
+The core file is loaded first, then the site file. Only the keys the site file sets are changed, so write one key per line and never reassign the whole array (`$settings = array(...)` would drop the defaults).
+
+```php title="htdocs/_fegg/site/config/settings.php"
+<?php
+defined('FEGG_CORE_DIR') || exit;
+
+// Run mode  1: running, empty: under maintenance
+$settings['run_mode'] = '1';
+
+// Maintenance page URL
+$settings['maintenance_page_url'] = '';
+
+// Developer IP addresses (multiple allowed). Error details only outside production (FEGG_ENV)
+$settings['developer_ip'] = array('192.168.65.1', '203.0.113.10');
+
+// Basic authentication scope (0: none, 1: whole site, 2: partial)
+#$settings['basic_auth_scope'] = 0;
+#$settings['basic_auth_user'] = '';
+#$settings['basic_auth_password'] = '';
+
+// HSTS, once the whole site is served over HTTPS
+#$settings['hsts'] = 'max-age=31536000';
+```
+
+| Key                    | Default                         | Remarks |
+| :--------------------- | :------------------------------ | :------ |
+| `cms`                  | `true`                          | `false` for a site without the CMS (see [A site without the CMS](#a-site-without-the-cms)) |
+| `run_mode`             | `'1'`                           | `'1'`: running. Empty: under maintenance. During maintenance every request that does not come from `developer_ip` is redirected to `maintenance_page_url`, or gets a short maintenance message when it is empty. |
+| `maintenance_page_url` | `''`                            | Redirect target during maintenance |
+| `developer_ip`         | `array()`                       | Addresses that can see error details outside production (see [Developer mode](./environments.mdx#developer-mode)) and that bypass maintenance |
+| `timezone`             | `''`                            | Time zone of the application, set once at startup. `''`: `FEGG_DEFAULT_TIMEZONE` (`Asia/Tokyo`) |
+| `log_level`            | `''`                            | Lowest level written to the application log (`debug`, `info`, `notice`, `warning`, `error` ...). `''`: `warning` in production, `debug` elsewhere. See [Log](../../library/log/index.mdx#settings) |
+| `log_retention_days`   | `30`                            | Days to keep the application log files (`0`: keep all) |
+| `mail`                 | `array('transport' => 'sendmail', 'from' => '', 'from_name' => '')` | Outgoing mail of `Fegg\Tool\Mail`, and the sender when `send()` is given none (see [Sender](../../library/mail/index.mdx#sender)). For SMTP see [Mail](../../library/mail/index.mdx#smtp) |
+| `security_headers`     | `array()`                       | Changes the default security headers: `'Header-Name' => 'value'`, `''` removes one. See [Security](../../basic/security.mdx#security-headers) |
+| `hsts`                 | `''`                            | `Strict-Transport-Security` value sent on HTTPS responses, e.g. `'max-age=31536000'`. `''`: not sent |
+| `csp`                  | `''`                            | `Content-Security-Policy` value. `''`: not sent |
+| `csp_report_only`      | `false`                         | `true`: send the policy as `Content-Security-Policy-Report-Only` (reports only, blocks nothing) |
+| `default_language`     | not set                         | Language code used when none is detected, e.g. `'ja'`. Only for multilingual sites |
+| `support_language`     | not set                         | Supported language codes, e.g. `array('ja', 'en')`. Only for multilingual sites |
+| `basic_auth_scope`     | `0`                             | `0`: no Basic authentication. `1`: every request handled by Fegg, checked before the controller runs. `2`: only where the controller calls `$this->basicAuth()` |
+| `basic_auth_user`      | `''`                            | Basic authentication user |
+| `basic_auth_password`  | `''`                            | Basic authentication password (compared with `hash_equals()`) |
+| `basic_auth_message`   | not set                         | Realm shown in the browser's login dialog |
+| `basic_auth_error_message` | not set                     | Text sent with the 401 response when the login fails (default `Authorization Required`) |
+| `template_dir`         | `site/template`, `core/template` | Template directories, searched in this order. The `tpl/` of the site the URL belongs to is put first (see [Sites](../../basic/templates/index.mdx#sites)) |
+| `template_ext`         | `'tpl'`                         | Template file extension |
+| `template_cache_dir`   | `site/data/cache/template`      | Compiled template cache |
+| `global_config_dir`    | `''`                            | Optional directory searched by `loadConfig()` before `site/config/`. End it with `/` |
+
+Read a setting from a controller with [`$this->getSetting()`](../../basic/others/config/getsetting.mdx).
+
+### A site without the CMS
+
+```php title="htdocs/_fegg/site/config/settings.php"
+$settings['cms'] = false;
+```
+
+With the CMS turned off (`Fegg\Cms\Setting`):
+
+- `/cms/...` (the core's and the project's CMS screens) and the uploads' controller (image sizes and `/file/<id>/` under `/_fegg/site/up_dir/`) answer 404,
+- [`fegg-cli migration`](../cli.mdx#migration) neither creates nor drops `cms_user`, `cms_file` and `cms_image` (their rows are kept) and creates no first CMS user; `fegg-cli db:schema` leaves them out,
+- `fegg-cli user:*` refuses to run.
+
+Remove what the project itself has for the CMS: `site/config/database/cms_news.yaml` and the other post types (migration then drops those tables), `site/controller/Cms/`, `site/template/cms/`, the news pages if they show CMS posts, and `site/config/cms_menu.php`.
+
+## Database
+
+The connection is set in **`htdocs/_fegg/site/config/database_config.php`**, which reads `FEGG_DB_DSN`, `FEGG_DB_USER`, `FEGG_DB_PASSWORD`, `FEGG_DB_SLAVE_DSN` and `FEGG_DB_PATH` with `feggEnv()`, so the file is the same on every server. Without settings it is the SQLite file `htdocs/_fegg/site/data/db/db.db`; if the server allows it, move it **outside the document root** with `FEGG_DB_PATH`. For MySQL / MariaDB and master / slave, see [Database configuration](../../library/database/configuration.mdx).
+
+Tables are defined in YAML files (`core/config/database/` for the CMS tables, `site/config/database/` for the project's tables) and created or changed with `./fegg-cli migration` (see [fegg-cli](../cli.mdx#migration)). Every table needs the columns `valid`, `created` and `modified`. The files are read by [Fegg\Tool\Yaml](../../library/yaml/index.mdx), which says what it reads.
+
+## Other files in `site/config/`
+
+| File                  | Remarks |
+| :-------------------- | :------ |
+| `route.php`           | URL routing (see [URL](../../basic/url.mdx#routing)) |
+| `sites.php`           | The project's sites, one line each (see [Sites](../../basic/templates/index.mdx#sites)) |
+| `site_info.php`       | Site title, description, OGP image, `picture` breakpoints, ... Loaded by the base controller and available in templates as `$site`. A site's `'info'` in `sites.php` overrides it for that site |
+| `category_info.php`   | Labels for categories and the CMS visibility states. Loaded by the base controller into `$this->config['category_info']` |
+| `cms_menu.php`        | CMS side menu. Add one block per post type |
+| `env.php`             | Per-server settings and secrets, read with `feggEnv()`. Not committed; copy `env.php.dist` (see [Environments and secrets](./environments.mdx)) |
+| `database_config.php` | Database connection, from `feggEnv()` (see [Database](#database)) |
+| `upload_dir.php`      | Path and URL of the CMS upload directory (`htdocs/_fegg/site/up_dir`, `/_fegg/site/up_dir`), and the limits of images in other sizes (`image_max`, `image_cache_max`, see [Trim](../../library/trim/index.mdx#images-of-the-cms-in-other-sizes)) |
+| `database/*.yaml`     | Table definitions for `fegg-cli migration` |
+| `define.php`          | Optional. Project constants, loaded right after the core starts (web and CLI) |
+| `fegg_update.php`     | Optional. Repository used by `fegg-cli core:update` (see [Updating the core](../update.mdx)) |
+
+Any other file in `site/config/` can be loaded with [`$this->loadConfig()`](../../basic/others/config/loadconfig.mdx). A file with the same name as one in `core/config/` (for example `validation_error_message.php`) replaces the core's file.
+
+
 --- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/first/migration ---
 
+
+import { SiblingDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # Moving a Fegg 3 / 4 project
 
@@ -3975,16 +4003,16 @@ Work on a new branch of the project repository (the old code stays on the old br
 
 Find the skeleton version the project started from (`version` in `package.json`, or `@version` in `fegg/Application.php`). Check out the skeleton at that tag, copy the project's core files over it (`fegg/`, `code/lib/`, `code/application/cms/`, `code/template/cms/`, `htdocs/cms/`, `htdocs/index.php`, `htdocs/.htaccess`) and look at `git diff`. Write down:
 
-- **Changes to the core**: Fegg 5 rewrote most of the core, so decide for each whether the project still needs it. What is still needed is written again as an override in `site/` (see [Controller](../basic/controller.mdx#extending-a-core-controller)).
+- **Changes to the core**: Fegg 5 rewrote most of the core, so decide for each whether the project still needs it. What is still needed is written again as an override in `site/` (see [Controller](../../basic/cms/controllers.mdx#extending-a-core-controller)).
 - **The project's own code**: controllers (public pages and post types), project libraries in `code/lib/`, `code/lib/Modifire.php`, processing added to `MyApplication`.
 - **The project's own files**: templates, `htdocs/data/` (SCSS, JS, images), table definitions, config values, `code/data/`, uploads.
 
 ## 2. Start from the Fegg 5 skeleton
 
 1. Replace the branch's contents with the Fegg 5 skeleton (everything except `.git`) and rename it as for any new project (the package name in `package.json`, the local URL in `e2e/playwright.config.ts`).
-2. Copy `site/config/env.php.dist` to `site/config/env.php` on each development or staging server and set `'FEGG_ENV' => 'development'`: without it the site runs as production and shows no error details (see [Settings](./config.mdx#environments-and-secrets)).
+2. Copy `site/config/env.php.dist` to `site/config/env.php` on each development or staging server and set `'FEGG_ENV' => 'development'`: without it the site runs as production and shows no error details (see [Settings](../config/environments.mdx)).
 3. Set the values the project changed in the old `fegg/settings.php` (`developer_ip`, `run_mode`, `maintenance_page_url`, Basic authentication, languages) in `site/config/settings.php`.
-4. Add the project's own rules of the old `htdocs/.htaccess` (redirects, headers) to the new one. If the project changed the paths in `index.php`, set the three constants (`FEGG_HTML_DIR`, `FEGG_CORE_DIR`, `FEGG_SITE_DIR`) to match (see [Directory structure](./cont.mdx#entry-files-and-layout)).
+4. Add the project's own rules of the old `htdocs/.htaccess` (redirects, headers) to the new one. If the project changed the paths in `index.php`, set the three constants (`FEGG_HTML_DIR`, `FEGG_CORE_DIR`, `FEGG_SITE_DIR`) to match (see [Directory structure](../cont.mdx#entry-files-and-layout)).
 
 ## 3. Bring over the files that carry over
 
@@ -4002,7 +4030,7 @@ Find the skeleton version the project started from (`version` in `package.json`,
 
 `fegg/`, the core's libraries in `code/lib/`, the core's CMS screens and templates, `bin/` and `htdocs/cms/` are not brought over: the skeleton has their Fegg 5 versions.
 
-Template paths are relative to `main/tpl/` (see [Sites](../basic/templates/index.mdx#sites)). In the templates, replace `{{ base }}/data/` with `{{ $site.assets }}/` (`{{ $site.assets }}/css/style.css`, `{{ $site.assets }}/img/...`).
+Template paths are relative to `main/tpl/` (see [Sites](../../basic/templates/index.mdx#sites)). In the templates, replace `{{ base }}/data/` with `{{ $site.assets }}/` (`{{ $site.assets }}/css/style.css`, `{{ $site.assets }}/img/...`).
 
 The uploaded files' URL becomes `/_fegg/site/up_dir/...`. Rich text saved in the database still links to `/up_dir/`: replace it in every column that holds rich text, for example:
 
@@ -4013,6 +4041,32 @@ UPDATE cms_news SET content = REPLACE(content, '/up_dir/', '/_fegg/site/up_dir/'
 The database is used as it is: point the project at a copy of the production database and run `./fegg-cli migration`, which only adds the new core tables (such as `rate_limit`).
 
 ## 4. Rewrite the PHP
+
+Write each controller again as a namespaced class in `htdocs/_fegg/site/controller/`, replace the Fegg 4 classes with their Fegg 5 names, and add `$this->requirePost()` to every CMS action that changes data. Then go through the behaviour changes: Fegg 5 fails loudly where Fegg 4 was silent.
+
+<SiblingDocCardList ids={["rewrite-php", "behaviour-changes"]} />
+
+## 5. Check
+
+- [ ] `./fegg-cli template:lint` prints OK
+- [ ] `php -l` reports no syntax errors for the PHP files under `htdocs/_fegg` (excluding `vendor/` and `data/`)
+- [ ] `./fegg-cli migration` against a copy of the production database only adds new core tables such as `rate_limit` (no project table definition is missing, and every YAML file is read: an error names the file and the line)
+- [ ] `./fegg-cli core:status` prints `No changes to core files.`
+- [ ] The browser console of every CMS screen shows no errors (`$ is not defined` means a template still uses jQuery), and dates (with the time), rich text and gallery ordering are saved
+- [ ] Public pages, the contact form (through to sending), CMS login, create / edit / delete for each post type, and media and image uploads work, with the data and uploads of the old site
+- [ ] Every post type appears in the CMS side menu and on the dashboard
+- [ ] Every saving action in `site/controller/Cms/` calls `$this->requirePost()`: opening its URL in the browser (a GET, e.g. `/cms/news/update/`) answers 405
+- [ ] No page links to an action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) or defined only in a base controller (both are 404 now)
+- [ ] The PHP error log has no warnings
+- [ ] After deploying, `./fegg-cli doctor https://<production URL>` prints OK (`/_fegg/assets/js/base.js` is served; the rest of `/_fegg/`, the sites' SCSS sources included, is not) and the CMS dashboard shows no protection warnings
+
+To roll back, redeploy the old branch. The table definitions are compatible, so the same database works with both.
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/first/migration/rewrite-php ---
+
+
+# Rewriting the PHP
 
 Write each controller again as a namespaced class in `htdocs/_fegg/site/controller/` (`cms/` becomes `Cms/`). The skeleton's `Cms/News.php` and `Cms/Lab.php` are the models for post types.
 
@@ -4061,7 +4115,7 @@ class News extends Controller              // Site\Controller\Cms\Controller: th
 }
 ```
 
-CMS screens extend `Site\Controller\Cms\Controller`, public pages `Site\Controller\Controller`. The CMS base checks the login and the CSRF token of every POST. Edit and delete forms in the project's CMS templates use `method="post"`: delete links in list templates become POST forms (see [Controller](../basic/controller.mdx#cms-screens)). Processing that was added to `MyApplication` goes into `__init()` or a `protected` method of `site/controller/Controller.php`.
+CMS screens extend `Site\Controller\Cms\Controller`, public pages `Site\Controller\Controller`. The CMS base checks the login and the CSRF token of every POST. Edit and delete forms in the project's CMS templates use `method="post"`: delete links in list templates become POST forms (see [Controller](../../basic/cms/controllers.mdx)). Processing that was added to `MyApplication` goes into `__init()` or a `protected` method of `site/controller/Controller.php`.
 
 :::danger Required: `requirePost()` in every action that changes data
 
@@ -4088,70 +4142,72 @@ Fegg 4 had no such check. Add `$this->requirePost()` as the first line of every 
 
 Every file starts with `namespace`, `defined('FEGG_CORE_DIR') || exit;` and `use`. Inside a namespace, prefix PHP's own classes with `\` (`new \Exception`, `new \DateTime`, `\PDO::PARAM_INT`).
 
-- **`Tool/Date`**: `addDay($d, 3)` is `(new \DateTimeImmutable($d))->modify('+3 day')->format('Y-m-d H:i:s')`, `addMinute($d, 30)` is `->modify('+30 minute')`, `getDiff()` is `->diff()`, `getTheLastday()` is `->format('t')`, and a format in a template is `feggDate` (see [Dates and time zone](../basic/controller.mdx#dates-and-time-zone)). A project that needs `addMonth()` (kept at the end of the month) or `getSocialTime()` copies the Fegg 4 class into `site/src/`.
-- **`Tool/OEmbed`**: `(new OEmbed($url))->media` (asked of YouTube) becomes `Fegg\Tool\Embed::youtubeUrl($url)` (a `youtube-nocookie.com` URL, no request), and an `<iframe>` written in a template becomes `{{ $page.data.youtube_url|feggYoutube|noescape }}` / `|feggMap|noescape`, which write the whole block (see [Embed](../library/embed/index.mdx)). Other oEmbed services: ask them with `Fegg\Http\Client` in the project.
+- **`Tool/Date`**: `addDay($d, 3)` is `(new \DateTimeImmutable($d))->modify('+3 day')->format('Y-m-d H:i:s')`, `addMinute($d, 30)` is `->modify('+30 minute')`, `getDiff()` is `->diff()`, `getTheLastday()` is `->format('t')`, and a format in a template is `feggDate` (see [Dates and time zone](../../basic/controller.mdx#dates-and-time-zone)). A project that needs `addMonth()` (kept at the end of the month) or `getSocialTime()` copies the Fegg 4 class into `site/src/`.
+- **`Tool/OEmbed`**: `(new OEmbed($url))->media` (asked of YouTube) becomes `Fegg\Tool\Embed::youtubeUrl($url)` (a `youtube-nocookie.com` URL, no request), and an `<iframe>` written in a template becomes `{{ $page.data.youtube_url|feggYoutube|noescape }}` / `|feggMap|noescape`, which write the whole block (see [Embed](../../library/embed/index.mdx)). Other oEmbed services: ask them with `Fegg\Http\Client` in the project.
 
 `grep -rn "getClass\|MyApplication\|FEGG_DIR\|FEGG_CODE_DIR\|FEGG_TEST_ENVIRONMENT" htdocs/_fegg/site` must find nothing.
 
-## Behaviour changes to check
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/first/migration/behaviour-changes ---
+
+
+# Behaviour changes
 
 Fegg 5 fails loudly where Fegg 4 was silent. The full list is in the 5.0.0 section of `htdocs/_fegg/core/UPGRADE.md`. The ones most likely to affect code brought over:
 
+## Database and models
+
 - **Database errors** throw `Fegg\Database\QueryException` (the message includes the SQL and its parameters) instead of printing and calling `exit`. Uncaught, it is a logged HTTP 500.
+- `updateWhere()`, `deleteWhere()` and `eraseWhere()` with an **empty condition** throw instead of affecting every row. Pass `'1 = 1'` where every row was really meant.
+- `Model::order()`, `join()` and the `table` / `id` / `visible` options accept **only plain names**. Move expressions to `orderRaw()`.
+- **`OR` in conditions** is bracketed: `where('category = ?', 1)->where('a = ? OR b = ?', ...)` is `category = 1 AND (a = ? OR b = ?)`, and the visible flag and `valid = 1` are added outside the brackets. In Fegg 4 such conditions matched rows of every category, and `where('a = ?', 1)->where('b = ?', 2, 'OR')` also returned unpublished and deleted rows matching `b`; such lists can get shorter.
+
+## Templates
+
 - **Missing templates**, `include` targets and `transclude` parents throw `Fegg\Template\TemplateException` (HTTP 500) instead of printing "Can't Read" into the page. `./fegg-cli template:lint` lists them all.
 - **Template blocks are checked**: an unclosed block or an extra `{{ end }}` throws with the line number.
 - **Sections** are passed to the parent template as closures. Code that called the global `section_<name>()` functions directly must be rewritten.
-- `updateWhere()`, `deleteWhere()` and `eraseWhere()` with an **empty condition** throw instead of affecting every row. Pass `'1 = 1'` where every row was really meant.
-- `Model::order()`, `join()` and the `table` / `id` / `visible` options accept **only plain names**. Move expressions to `orderRaw()`.
 - `{{ options }}` escapes labels and values, and `{{ hidden }}` escapes values.
-- **`OR` in conditions** is bracketed: `where('category = ?', 1)->where('a = ? OR b = ?', ...)` is `category = 1 AND (a = ? OR b = ?)`, and the visible flag and `valid = 1` are added outside the brackets. In Fegg 4 such conditions matched rows of every category, and `where('a = ?', 1)->where('b = ?', 2, 'OR')` also returned unpublished and deleted rows matching `b`; such lists can get shorter.
 - **Arrays reach modifiers**: `{{ $tags|feggImplode:', ' }}` now prints the joined tags (it printed nothing).
-- **Actions**: only a controller's own public methods can be called from a URL (see [Controller](../basic/controller.mdx#which-methods-are-actions)). An action defined in `MyApplication` or a base controller is a 404: write it in each controller that uses it. An action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) is a 404: rename it, or map the old URL with a route.
+
+## Requests, sessions and security
+
+- **Actions**: only a controller's own public methods can be called from a URL (see [Controller](../../basic/controller.mdx#which-methods-are-actions)). An action defined in `MyApplication` or a base controller is a 404: write it in each controller that uses it. An action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) is a 404: rename it, or map the old URL with a route.
 - **Basic authentication** with `basic_auth_scope = 1` is checked before the controller's `__init()` and action, so redirects, downloads and direct output are protected too.
-- **CMS sessions** need the session's user to still exist in `cms_user`: deleting a user ends their sessions.
-- **No more `exit`**: Fegg ends responses by throwing `Fegg\Http\Halt`; rethrow it from a `catch (\Throwable $e)` and replace your own `exit` with `$this->halt()` (see [Ending a response](../basic/controller.mdx#ending-a-response)).
-- **Sessions and cookies**: a session starts only when something is written to it (see [Session](../basic/parameters/index.mdx#session)). `setCookie()` takes SameSite as its own argument (not `'/; SameSite=Lax'` in the path), and `unsetCookie()` really deletes the cookie (Fegg 4 set an empty cookie for 7 days; see [setCookie](../basic/parameters/cookie/setcookie.mdx)).
-- **Security headers** are sent with every response; a page framed by another site calls `$this->allowFraming()` (see [Security](../basic/security.mdx#security-headers)).
-- **CMS login**: logout is a POST. Copied CMS frame templates in `site/template/cms/tpl/` add the class `js-cms-logout` to the logout link. Run `fegg-cli migration` for the login throttling table `rate_limit`. `/cms/login/create/...` is gone: use `fegg-cli user:create` (see [fegg-cli](./cli.mdx#cms-users)).
-- **Uploads** check the content against the extension; add the `@content` message to a copied `site/config/file_error_message.php` (see [Upload](../library/upload/configuration.mdx)).
-- **`htdocs/.htaccess`**: remove the `<IfModule mod_php5.c>` block and the Apache 2.2 `Order` / `Deny from all` lines (500 on Apache 2.4), and add the dotfile rules and the `_fegg` exceptions (the CMS's files, the site folders, the uploads) of `core/dist/htaccess.dist`. On nginx, use the rules of [Directory structure](./cont.mdx#protecting-_fegg). `fegg-cli doctor` warns about the old lines.
+- **No more `exit`**: Fegg ends responses by throwing `Fegg\Http\Halt`; rethrow it from a `catch (\Throwable $e)` and replace your own `exit` with `$this->halt()` (see [Ending a response](../../basic/controller.mdx#ending-a-response)).
+- **Sessions and cookies**: a session starts only when something is written to it (see [Session](../../basic/parameters/index.mdx#session)). `setCookie()` takes SameSite as its own argument (not `'/; SameSite=Lax'` in the path), and `unsetCookie()` really deletes the cookie (Fegg 4 set an empty cookie for 7 days; see [setCookie](../../basic/parameters/cookie/setcookie.mdx)).
+- **Security headers** are sent with every response; a page framed by another site calls `$this->allowFraming()` (see [Security](../../basic/security.mdx#security-headers)).
+- **HTTPS** is detected from more server variables and proxy headers, and `redirect()` no longer sends HTTPS pages to HTTP when the detection fails (see [Security](../../basic/security.mdx#https)).
+- **Route-only controllers**: controllers that implement `Fegg\Http\RouteOnly` (such as the skeleton's `Site\Controller\Page`) are only reached through `site/config/route.php`. Add a route such as `$route['about/'] = 'page/render/about';` for each static page that was reached as `/page/render/...` (see [URL](../../basic/url.mdx#static-pages)).
+- **`htdocs/.htaccess`**: remove the `<IfModule mod_php5.c>` block and the Apache 2.2 `Order` / `Deny from all` lines (500 on Apache 2.4), and add the dotfile rules and the `_fegg` exceptions (the CMS's files, the site folders, the uploads) of `core/dist/htaccess.dist`. On nginx, use the rules of [Directory structure](../cont.mdx#protecting-_fegg). `fegg-cli doctor` warns about the old lines.
 - **Captcha keys and the database DSN** move to `env.php`: the skeleton's `database_config.php` and `contact/contact_config.php` read them with `feggEnv()`. Put the project's keys there, not in committed files.
-- **The CMS's files** are in `htdocs/_fegg/assets/`, read at `/_fegg/assets/`. Copies of CMS templates in `site/template/cms/tpl/` load them with `{{ $site.cms_assets }}` instead of `{{ $site.cms_dir }}` (`css/`, `js/`, `img/`, `vendor/`). `_fegg/` can no longer be outside the document root. See [CMS screens and the editor](../basic/cms.mdx).
-- **No jQuery in the CMS** (nor jQuery UI, Select2 or the datetimepicker). Rewrite `$(...)` in the project's CMS templates (`site/template/cms/tpl/*/html_head.tpl`) with plain JavaScript and the `FeggCms` helpers, or load a jQuery of your own there. Date fields become `datetime-local` inputs and drag & drop ordering uses SortableJS (see [Dates](../basic/cms.mdx#dates) and [Drag and drop ordering](../basic/cms.mdx#drag-and-drop-ordering)).
+
+## CMS
+
+- **CMS sessions** need the session's user to still exist in `cms_user`: deleting a user ends their sessions.
+- **CMS login**: logout is a POST. Copied CMS frame templates in `site/template/cms/tpl/` add the class `js-cms-logout` to the logout link. Run `fegg-cli migration` for the login throttling table `rate_limit`. `/cms/login/create/...` is gone: use `fegg-cli user:create` (see [fegg-cli](../cli.mdx#cms-users)).
+- **The CMS's files** are in `htdocs/_fegg/assets/`, read at `/_fegg/assets/`. Copies of CMS templates in `site/template/cms/tpl/` load them with `{{ $site.cms_assets }}` instead of `{{ $site.cms_dir }}` (`css/`, `js/`, `img/`, `vendor/`). `_fegg/` can no longer be outside the document root. See [CMS screens and the editor](../../basic/cms/index.mdx).
+- **No jQuery in the CMS** (nor jQuery UI, Select2 or the datetimepicker). Rewrite `$(...)` in the project's CMS templates (`site/template/cms/tpl/*/html_head.tpl`) with plain JavaScript and the `FeggCms` helpers, or load a jQuery of your own there. Date fields become `datetime-local` inputs and drag & drop ordering uses SortableJS (see [Dates](../../basic/cms/index.mdx#dates) and [Drag and drop ordering](../../basic/cms/index.mdx#drag-and-drop-ordering)).
 - **CKEditor 4 is removed.** Rich text fields use FeggEditor: replace `CKEDITOR.replace(...)` and `ckeditor/ckeditor.js` with `data-fegg-editor="full"` on the textarea and `js/editor.js`, and clean the saved HTML with `Fegg\Cms\HtmlSanitizer::clean()`. Text written with CKEditor opens in FeggEditor. Copied `cms/image/` and `cms/media/` templates use the new picker scripts (`js/modal/image_picker.js`, `file_picker.js`; parameters `from=wysiwyg&picker=<id>`).
-- **Font Awesome 4.3 is removed.** Icons are Tabler Icons: replace `fa fa-…` with `ti ti-…`: `search` → `search`, `angle-right` → `chevron-right`, `image` / `picture-o` → `photo`, `times` → `x`, `cog` → `settings` (`pencil`, `trash`, `plus`, `link`, `check`, `download`, `upload` keep their names; others: tabler.io/icons). An icon the core does not use needs a line in `unique.scss` (see [Icons](../basic/cms.mdx#icons)). Copies of `cms/frame/sitewire.tpl` and `popframe.tpl` load `vendor/tabler-icons/icons.css` instead of `fonts/font-awesome.min.css`.
-- **Spyc is removed.** YAML is read by `Fegg\Tool\Yaml` (see [Yaml](../library/yaml/index.mdx)): replace `spyc_load_file()` / `Spyc::YAMLLoad()` in project code with `Fegg\Tool\Yaml::parseFile()`. Table definitions read as before; `yes` / `no` and numbers with a leading zero are now text, and anchors or tags are refused with the file and the line.
+- **Font Awesome 4.3 is removed.** Icons are Tabler Icons: replace `fa fa-…` with `ti ti-…`: `search` → `search`, `angle-right` → `chevron-right`, `image` / `picture-o` → `photo`, `times` → `x`, `cog` → `settings` (`pencil`, `trash`, `plus`, `link`, `check`, `download`, `upload` keep their names; others: tabler.io/icons). An icon the core does not use needs a line in `unique.scss` (see [Icons](../../basic/cms/index.mdx#icons)). Copies of `cms/frame/sitewire.tpl` and `popframe.tpl` load `vendor/tabler-icons/icons.css` instead of `fonts/font-awesome.min.css`.
+
+## Libraries
+
+- **Uploads** check the content against the extension; add the `@content` message to a copied `site/config/file_error_message.php` (see [Upload](../../library/upload/configuration.mdx)).
+- **Spyc is removed.** YAML is read by `Fegg\Tool\Yaml` (see [Yaml](../../library/yaml/index.mdx)): replace `spyc_load_file()` / `Spyc::YAMLLoad()` in project code with `Fegg\Tool\Yaml::parseFile()`. Table definitions read as before; `yes` / `no` and numbers with a leading zero are now text, and anchors or tags are refused with the file and the line.
 - **`getDatetime()` / `convertDatetime()`** no longer change the process-wide time zone, and `convertDatetime()` returns `''` for a date it cannot read (it returned `1970-01-01 ...`).
-- **Images in other sizes** (`getImageUrl`) are limited by `image_max` and `image_cache_max` in `site/config/upload_dir.php`, and the positions `lb` and `rb` now keep the bottom left and the bottom right (see [Trim](../library/trim/index.mdx#images-of-the-cms-in-other-sizes)).
+- **Images in other sizes** (`getImageUrl`) are limited by `image_max` and `image_cache_max` in `site/config/upload_dir.php`, and the positions `lb` and `rb` now keep the bottom left and the bottom right (see [Trim](../../library/trim/index.mdx#images-of-the-cms-in-other-sizes)).
 - **`Fegg\Tool\Trim`** throws a `\RuntimeException` for a missing file, a file that is not a JPEG, PNG or GIF, or another output type (it called `exit`).
 - **`Fegg\Tool\File`** methods return `true` / `false`. `removeDirectory()` removes symbolic links, never what they point to.
 - **`Fegg\Tool\Upload::upload()`** for a field the form does not have is `@empty` (or OK when not required), and several files (`name="file[]"`) are `@failed`, without PHP warnings.
 - **`Fegg\Tool\Mail`**: the debug log is `mail.log` in the log directory (it was `/tmp/sendmaillog`). `send()` without a sender uses `$settings['mail']['from']` / `['from_name']`, or throws an `\InvalidArgumentException`.
 - **`Fegg\Tool\RSS`** throws a `\RuntimeException` for a feed it cannot fetch or read, and keeps posts whose title contains "PR:": pass `array('skip_pr' => true)` to leave them out as before.
-- **HTTPS** is detected from more server variables and proxy headers, and `redirect()` no longer sends HTTPS pages to HTTP when the detection fails (see [Security](../basic/security.mdx#https)).
-- **Route-only controllers**: controllers that implement `Fegg\Http\RouteOnly` (such as the skeleton's `Site\Controller\Page`) are only reached through `site/config/route.php`. Add a route such as `$route['about/'] = 'page/render/about';` for each static page that was reached as `/page/render/...` (see [URL](../basic/url.mdx#static-pages)).
 
-### Additional work for v3 projects
+## Additional work for v3 projects
 
 - **Mail** (`Fegg\Tool\Mail`) uses PHPMailer. `sendWithFile()`, `setInputCharset()` and `setSendCharset()` were removed: add attachments with `pushAttached()` and call `send()`. A failed send throws `PHPMailer\PHPMailer\Exception`.
 - **Trailing slash**: URLs without an extension are redirected (301) to the same URL with a trailing `/`. Check the keys in `route.php` and the links in templates.
 - **PHP 8**: fix deprecation warnings in the project code (for example passing `null` to string functions).
-
-## 5. Check
-
-- [ ] `./fegg-cli template:lint` prints OK
-- [ ] `php -l` reports no syntax errors for the PHP files under `htdocs/_fegg` (excluding `vendor/` and `data/`)
-- [ ] `./fegg-cli migration` against a copy of the production database only adds new core tables such as `rate_limit` (no project table definition is missing, and every YAML file is read: an error names the file and the line)
-- [ ] `./fegg-cli core:status` prints `No changes to core files.`
-- [ ] The browser console of every CMS screen shows no errors (`$ is not defined` means a template still uses jQuery), and dates (with the time), rich text and gallery ordering are saved
-- [ ] Public pages, the contact form (through to sending), CMS login, create / edit / delete for each post type, and media and image uploads work, with the data and uploads of the old site
-- [ ] Every post type appears in the CMS side menu and on the dashboard
-- [ ] Every saving action in `site/controller/Cms/` calls `$this->requirePost()`: opening its URL in the browser (a GET, e.g. `/cms/news/update/`) answers 405
-- [ ] No page links to an action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) or defined only in a base controller (both are 404 now)
-- [ ] The PHP error log has no warnings
-- [ ] After deploying, `./fegg-cli doctor https://<production URL>` prints OK (`/_fegg/assets/js/base.js` is served; the rest of `/_fegg/`, the sites' SCSS sources included, is not) and the CMS dashboard shows no protection warnings
-
-To roll back, redeploy the old branch. The table definitions are compatible, so the same database works with both.
 
 
 --- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/library ---
@@ -4666,7 +4722,7 @@ The keys differ per server, and the secret keys must not be committed. Put them 
 'FEGG_TURNSTILE_SECRET'   => '...',
 ```
 
-Use different keys (or the providers' test keys) for development and production. On a test server the keys can go in the committed `site/config/env/staging.php` (see [Test servers deployed with git pull](../../first/config.mdx#test-servers-deployed-with-git-pull)):
+Use different keys (or the providers' test keys) for development and production. On a test server the keys can go in the committed `site/config/env/staging.php` (see [Test servers deployed with git pull](../../first/config/environments.mdx#test-servers-deployed-with-git-pull)):
 
 | | Site key | Secret |
 | :--- | :--- | :--- |
@@ -5392,7 +5448,7 @@ try {
 
 ### Database connect setting
 
-The connection is set in **htdocs/\_fegg/site/config/database\_config.php**. The skeleton's file reads these values with `feggEnv()` (an environment variable, then `site/config/env.php`, see [Settings](../../first/config.mdx#environments-and-secrets)), so the file itself is committed and the same on every server.
+The connection is set in **htdocs/\_fegg/site/config/database\_config.php**. The skeleton's file reads these values with `feggEnv()` (an environment variable, then `site/config/env.php`, see [Settings](../../first/config/environments.mdx)), so the file itself is committed and the same on every server.
 
 | Name                | Default                     | Remarks |
 | ------------------- | --------------------------- | ------- |
@@ -7213,7 +7269,7 @@ The arguments are the ratio, the alignment and the width in % of the text (see [
 
 For `feggMap`, the CMS field holds the `<iframe>` that Google Maps gives ("Share" > "Embed a map"), or only its URL.
 
-The styles of these blocks are those of the editor's text, under `.c-entry-block` (the site's `scss/object/component/_wysiwyg.scss`, see [CMS screens and the editor](../../basic/cms.mdx#its-look-on-the-public-site)). Put the block inside `<div class="c-entry-block">`, or style `.fegg-video` / `.fegg-map` in the project.
+The styles of these blocks are those of the editor's text, under `.c-entry-block` (the site's `scss/object/component/_wysiwyg.scss`, see [CMS screens and the editor](../../basic/cms/editor.mdx#its-look-on-the-public-site)). Put the block inside `<div class="c-entry-block">`, or style `.fegg-video` / `.fegg-map` in the project.
 
 ### In PHP
 
@@ -8416,7 +8472,7 @@ if ($response['status'] === 200) {
 }
 ```
 
-Keep tokens out of the code: read them with `feggEnv()` from `env.php` (see [Settings](../../../first/config.mdx#environments-and-secrets)).
+Keep tokens out of the code: read them with `feggEnv()` from `env.php` (see [Settings](../../../first/config/environments.mdx)).
 
 
 --- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/library/http-client/methods/post ---

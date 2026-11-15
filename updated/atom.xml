@@ -20,6 +20,16 @@
 </ul>]]></content>
     </entry>
     <entry>
+        <title type="html"><![CDATA[v0.5.3]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/16/v0.5.3</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2026/11/16/v0.5.3"/>
+        <updated>2026-11-16T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- Fegg 5.x docs (/docs/fegg/next/): long pages split into shorter ones. Moving a Fegg 3 / 4 project now has its own pages for rewriting the PHP and for the behaviour changes (grouped by area); Settings has a page for environments and secrets; CMS screens has pages for the CMS controllers and the editor. The pages keep their URLs]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li class="">Fegg 5.x docs (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next">/docs/fegg/next/</a>): long pages split into shorter ones. Moving a Fegg 3 / 4 project now has its own pages for rewriting the PHP and for the behaviour changes (grouped by area); Settings has a page for environments and secrets; CMS screens has pages for the CMS controllers and the editor. The pages keep their URLs</li>
+</ul>]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[v0.5.0]]></title>
         <id>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.0</id>
         <link href="https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.0"/>
@@ -237,19 +247,6 @@
         <summary type="html"><![CDATA[- Added CSS Methodologies important tips about Modifier]]></summary>
         <content type="html"><![CDATA[<ul>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/important/modifier">Added CSS Methodologies important tips about Modifier</a></li>
-</ul>]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[v0.0.7]]></title>
-        <id>https://lionheart-group.github.io/coding-style-guide/updated/2022/11/28/v0.0.7</id>
-        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2022/11/28/v0.0.7"/>
-        <updated>2022-11-28T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[- Added PHPStorm information partialy]]></summary>
-        <content type="html"><![CDATA[<ul>
-<li class=""><del>Added PHPStorm information partialy</del></li>
-<li class="">Revised some HTML instruction's mistake</li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/task-runner/scripts/optimize-image">Updated task runner instruction</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/javascript/validation">Added validation library introduction for Validation</a></li>
 </ul>]]></content>
     </entry>
 </feed>
