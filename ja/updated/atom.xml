@@ -2,11 +2,23 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lionheart-group.github.io/coding-style-guide/ja/updated</id>
     <title>Coding Style Guide Blog</title>
-    <updated>2026-11-10T00:00:00.000Z</updated>
+    <updated>2026-11-16T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lionheart-group.github.io/coding-style-guide/ja/updated"/>
     <subtitle>Coding Style Guide Blog</subtitle>
     <icon>https://lionheart-group.github.io/coding-style-guide/ja/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[v0.5.2]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/11/16/v0.5.2</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/11/16/v0.5.2"/>
+        <updated>2026-11-16T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- Fegg 5.x のドキュメント（/docs/fegg/next/）：1 つのプロジェクトに複数のサイト（/ の企業サイト、/recruit/ の採用サイト、LP など）を置けるようにしました。サイトごとに site/template// を持ち、テンプレート、SCSS、JS、画像をその中に置きます。fegg-cli site:create、CMS を使わないサイトのための $settings['cms'] = false、アップロードしたファイルの置き場所が fegg/site/updir/ に変わったことを書き加えました]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li class="">Fegg 5.x のドキュメント（<a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/fegg/next">/docs/fegg/next/</a>）：1 つのプロジェクトに複数のサイト（<code>/</code> の企業サイト、<code>/recruit/</code> の採用サイト、LP など）を置けるようにしました。サイトごとに <code>site/template/&lt;サイト&gt;/</code> を持ち、テンプレート、SCSS、JS、画像をその中に置きます。<code>fegg-cli site:create</code>、CMS を使わないサイトのための <code>$settings['cms'] = false</code>、アップロードしたファイルの置き場所が <code>_fegg/site/up_dir/</code> に変わったことを書き加えました</li>
+<li class="">Fegg 5.x のドキュメント：<code>Fegg\Tool</code> の新しいライブラリ（Cache、CSV の書き出しと取り込み、RateLimit、Sitemap、JSON-LD、RSS フィード）と、JSON を返す <code>displayJson()</code> を書き加えました</li>
+<li class="">Fegg 5.x のドキュメント：CMS の画面とエディタ、<code>_fegg/assets</code>、HTTPS、<code>Fegg\Tool</code> に移したライブラリ（Validation、Embed、Yaml、Captcha）となくなったもの（Date、OEmbed）を書き直しました。v3 / v4 のプロジェクトは、互換レイヤーなしで Fegg 5 に作り直します</li>
+</ul>]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v0.5.0]]></title>
         <id>https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/11/10/v0.5.0</id>
@@ -248,19 +260,6 @@
 <li class="">HTMLルールの不備を修正しました</li>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/task-runner/scripts/optimize-image">タスクランナーの説明を更新しました</a></li>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/javascript/validation">Validation JavaScriptライブラリの紹介を追加しました</a></li>
-</ul>]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[v0.0.6]]></title>
-        <id>https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/09/09/v0.0.6</id>
-        <link href="https://lionheart-group.github.io/coding-style-guide/ja/updated/2022/09/09/v0.0.6"/>
-        <updated>2022-09-09T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[- コーディングTIPSのGridの使い方についての説明を追加しました]]></summary>
-        <content type="html"><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/grid">コーディングTIPSのGridの使い方についての説明を追加しました</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/aspect-ratio">コーディングTIPSのアスペクト比のプロパティについての説明を追加しました</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/has">コーディングTIPSの<!-- -->:has<!-- -->セレクタの使い方についての説明を追加しました</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/tips/accordion">コーディングTIPSのアコーディオンについての説明を追加しました</a></li>
 </ul>]]></content>
     </entry>
 </feed>

@@ -4,10 +4,22 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Tue, 10 Nov 2026 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 16 Nov 2026 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[v0.5.2]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/16/v0.5.2</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/16/v0.5.2</guid>
+            <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[- Fegg 5.x docs (/docs/fegg/next/)create; $settings['cms'] = false for a site without the CMS; uploaded files moved to fegg/site/updir/]]></description>
+            <content:encoded><![CDATA[<ul>
+<li class="">Fegg 5.x docs (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next">/docs/fegg/next/</a>): several sites in one project (the corporate site at <code>/</code>, a recruiting site at <code>/recruit/</code>, landing pages), each with its own folder <code>site/template/&lt;site&gt;/</code> holding its templates, SCSS, JS and images; <code>fegg-cli site:create</code>; <code>$settings['cms'] = false</code> for a site without the CMS; uploaded files moved to <code>_fegg/site/up_dir/</code></li>
+<li class="">Fegg 5.x docs: new libraries in <code>Fegg\Tool</code>: Cache, CSV export and import, RateLimit, Sitemap, JSON-LD and RSS feed, plus <code>displayJson()</code> for JSON responses</li>
+<li class="">Fegg 5.x docs: the CMS screens and editor, <code>_fegg/assets</code>, HTTPS, the libraries moved to <code>Fegg\Tool</code> (Validation, Embed, Yaml, Captcha) and removed ones (Date, OEmbed); v3 / v4 projects are rebuilt on Fegg 5 without a compatibility layer</li>
+</ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v0.5.0]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/10/v0.5.0</link>
@@ -239,19 +251,6 @@
 <li class="">Revised some HTML instruction's mistake</li>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/task-runner/scripts/optimize-image">Updated task runner instruction</a></li>
 <li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/javascript/validation">Added validation library introduction for Validation</a></li>
-</ul>]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[v0.0.6]]></title>
-            <link>https://lionheart-group.github.io/coding-style-guide/updated/2022/09/09/v0.0.6</link>
-            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2022/09/09/v0.0.6</guid>
-            <pubDate>Fri, 09 Sep 2022 00:00:00 GMT</pubDate>
-            <description><![CDATA[- Added coding tips for Grid layout]]></description>
-            <content:encoded><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/grid">Added coding tips for Grid layout</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/aspect-ratio">Added coding tips for Aspect Ratio property</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/has">Added coding tips for <!-- -->:has<!-- --> selector</a></li>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/tips/accordion">Added coding tips for Accordion</a></li>
 </ul>]]></content:encoded>
         </item>
     </channel>
