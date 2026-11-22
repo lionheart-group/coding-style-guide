@@ -18,7 +18,7 @@ Removes the attempt stored by the last allowed [attempt()](./attempt.mdx) of thi
 
 The CMS login checks two limits. When the second refuses, the attempt of the first is taken back, and a successful login does not count against the address:
 
-```php title="htdocs/_fegg/core/controller/Cms/Login.php"
+```php title="htdocs/_fegg/core/src/Controller/Cms/Login.php"
 $perAddress = new RateLimit('cms-login-address', 20, 900);
 $perLogin   = new RateLimit('cms-login', 5, 900);
 if ($perAddress->attempt($ip)) {

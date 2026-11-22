@@ -14,7 +14,7 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 The methods are static: import `Fegg\Tool\Csv` and call them. A CMS action that downloads a list:
 
-```php title="htdocs/_fegg/site/controller/Cms/Entry.php"
+```php title="htdocs/_fegg/site/src/Controller/Cms/Entry.php"
 <?php
 namespace Site\Controller\Cms;
 
@@ -96,7 +96,7 @@ With `'header' => true`, a row with another number of fields than the header thr
 
 A CMS form sends the file (`<form method="post" enctype="multipart/form-data">` with `<input type="file" name="csv">` and the CSRF token). Check every row first, and save only when all rows are right:
 
-```php title="htdocs/_fegg/site/controller/Cms/News.php"
+```php title="htdocs/_fegg/site/src/Controller/Cms/News.php"
 use Fegg\Tool\Csv;
 use Fegg\Tool\Validation;
 

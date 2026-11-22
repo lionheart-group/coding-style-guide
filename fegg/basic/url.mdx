@@ -12,21 +12,21 @@ Fegg maps URL segments to a controller class, a method and its arguments:
 https://example.com/class/method/param1/param2/
 ```
 
-1. Controller class (`site/controller/Class.php`, first letter in upper case)
+1. Controller class (`site/src/Controller/Class.php`, first letter in upper case)
 2. Method of the controller class
 3. Arguments for the method
 
 When the method segment is empty, `index()` is called. When no segment names a controller, the `Index` controller of that directory is used.
 
-Sub directories of `site/controller/` are part of the URL and of the namespace:
+Sub directories of `site/src/Controller/` are part of the URL and of the namespace:
 
 | URL                     | File                                       | Called                                   |
 | :---------------------- | :----------------------------------------- | :--------------------------------------- |
-| `/`                     | `site/controller/Index.php`                | `Site\Controller\Index::index()`         |
-| `/news/`                | `site/controller/News.php`                 | `Site\Controller\News::index()`          |
-| `/news/detail/12/`      | `site/controller/News.php`                 | `Site\Controller\News::detail('12')`     |
-| `/cms/news/edit/3/`     | `site/controller/Cms/News.php`             | `Site\Controller\Cms\News::edit('3')`    |
-| `/cms/media/`           | `core/controller/Cms/Media.php` (no site class) | `Fegg\Controller\Cms\Media::index()` |
+| `/`                     | `site/src/Controller/Index.php`                | `Site\Controller\Index::index()`         |
+| `/news/`                | `site/src/Controller/News.php`                 | `Site\Controller\News::index()`          |
+| `/news/detail/12/`      | `site/src/Controller/News.php`                 | `Site\Controller\News::detail('12')`     |
+| `/cms/news/edit/3/`     | `site/src/Controller/Cms/News.php`             | `Site\Controller\Cms\News::edit('3')`    |
+| `/cms/media/`           | `core/src/Controller/Cms/Media.php` (no site class) | `Fegg\Controller\Cms\Media::index()` |
 
 - The site (`Site\Controller\...`) is searched first, then the core (`Fegg\Controller\...`). A site class with the same name replaces the core's CMS screen (see [Controller](./cms/controllers.mdx#extending-a-core-controller)).
 - Segments are walked from the left; the first one that names a controller file wins over a directory with the same name.
@@ -43,7 +43,7 @@ Arguments are always strings.
 https://example.com/post/edit/1/
 ```
 
-```php title="htdocs/_fegg/site/controller/Post.php"
+```php title="htdocs/_fegg/site/src/Controller/Post.php"
 <?php
 namespace Site\Controller;
 
@@ -128,7 +128,7 @@ The template is read from the `tpl/` of the site the URL belongs to (see [Sites]
 
 Use `RouteOnly` for your own controllers whose arguments must not come straight from the URL:
 
-```php title="htdocs/_fegg/site/controller/Landing.php"
+```php title="htdocs/_fegg/site/src/Controller/Landing.php"
 <?php
 namespace Site\Controller;
 

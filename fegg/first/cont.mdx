@@ -22,20 +22,20 @@ htdocs/                   # document root
         .htaccess         # core: deny all
         assets/           # core: the CMS's CSS, JS, images, icons and libraries (built; {{ $site.cms_assets }})
         core/             # core: DO NOT EDIT (replaced on update)
-            src/          # Fegg\             Application, Model, Database\Pdo, Validation, Cms\Helper, Tool\* ...
-            controller/   # Fegg\Controller\  Controller (base class), Cms\Login, Cms\Media, Cms\Image ...
+            src/          # Fegg\             every class of the core: Application, Model, Database\Pdo, Cms\Helper, Tool\* ...
+                Controller/   # Fegg\Controller\  Controller (base class), Cms\Login, Cms\Media, Cms\Image ...
+                Command/      # Fegg\Command\     fegg-cli commands
             template/cms/ # CMS foundation templates
             functions/    # template modifiers (feggDate, getImageUrl, ...)
             config/       # default settings, YAML for the core tables (cms_user, cms_file, cms_image, rate_limit)
-            bin/          # fegg-cli commands
             bootstrap/    # web and CLI start-up, autoloader
             vendor/       # PHPMailer
             dist/         # templates for the project-owned entry files, and the starting folder of a new site (dist/site/)
             VERSION  manifest.json  UPGRADE.md
 
         site/             # project: edit freely (never touched by updates)
-            src/          # Site\             project classes (create it when you need it)
-            controller/   # Site\Controller\  Controller (project base class), Index, News, Cms\News ...
+            src/          # Site\             every class of the project
+                Controller/   # Site\Controller\  Controller (project base class), Index, News, Cms\News ...
             template/
                 main/     # the site at / (one folder per site, see site/config/sites.php)
                     tpl/  # its templates (every template path is relative to it)
@@ -49,7 +49,7 @@ htdocs/                   # document root
             data/         # db/, log/, cache/, core-backup/ (not tracked by git)
 ```
 
-The skeleton's sample code (`site/controller/Index.php`, `News.php`, `Contact.php`, `Cms/News.php`, ...) is project code. Change or delete it as the project needs.
+The skeleton's sample code (`site/src/Controller/Index.php`, `News.php`, `Contact.php`, `Cms/News.php`, ...) is project code. Change or delete it as the project needs.
 
 A project can hold several sites (a recruiting site at `/recruit/`, landing pages), each with its own folder in `site/template/`: see [Sites](../basic/templates/index.mdx#sites).
 
@@ -57,15 +57,14 @@ A project can hold several sites (a recruiting site at `/recruit/`, landing page
 
 Classes are loaded by the core's own autoloader (`core/bootstrap/autoload.php`). Composer is not required; in the skeleton it is only used for the test suite.
 
-| Namespace          | Directory          |
-| ------------------ | ------------------ |
-| `Fegg\`            | `core/src/`        |
-| `Fegg\Controller\` | `core/controller/` |
-| `Fegg\Command\`    | `core/bin/`        |
-| `Site\`            | `site/src/`        |
-| `Site\Controller\` | `site/controller/` |
+There are two namespaces, each in one folder. The path below the folder is the rest of the namespace (PSR-4):
 
-Sub directories are namespaces: `site/src/Shop/Cart.php` is `Site\Shop\Cart`, `site/controller/Cms/News.php` is `Site\Controller\Cms\News`.
+| Namespace | Directory   | Example |
+| --------- | ----------- | ------- |
+| `Fegg\`   | `core/src/` | `Fegg\Controller\Cms\Image` is `core/src/Controller/Cms/Image.php` |
+| `Site\`   | `site/src/` | `Site\Controller\Cms\News` is `site/src/Controller/Cms/News.php`; a class of your own, `Site\Shop\Cart`, is `site/src/Shop/Cart.php` |
+
+URLs reach only the controllers (`Site\Controller\`, then the core's `Fegg\Controller\`): your other classes in `site/src/` can never be called from a URL.
 
 Every PHP file under `htdocs/_fegg/` must start with `defined('FEGG_CORE_DIR') || exit;`. It stops the file from doing anything when it is requested directly from a URL.
 
@@ -78,7 +77,7 @@ The site is searched first, then the core. This works like a WordPress child the
 | Templates     | Put a file in `site/template/cms/tpl/` at the path it has under `core/template/cms/`        | `site/template/cms/tpl/login.tpl` is used instead of `core/template/cms/login.tpl` |
 | Config files  | Put a file with the same name in `site/config/`                                             | `site/config/validation_error_message.php` replaces the core's messages     |
 | Settings      | Write only the keys you want to change in `site/config/settings.php`                        | `$settings['developer_ip'] = array(...);`                                   |
-| CMS screens   | Put a class that extends the core controller in `site/controller/`, with only the methods you change | See [Controller](../basic/cms/controllers.mdx#extending-a-core-controller) |
+| CMS screens   | Put a class that extends the core controller in `site/src/Controller/`, with only the methods you change | See [Controller](../basic/cms/controllers.mdx#extending-a-core-controller) |
 | CMS menu      | Add one block to `site/config/cms_menu.php`                                                 | When you add a post type                                                    |
 | DB tables     | Put a YAML file in `site/config/database/` (a file with the same name wins over the core's) | `cms_news.yaml`                                                             |
 

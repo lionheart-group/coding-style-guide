@@ -32,7 +32,7 @@ Mark the textarea with `data-fegg-editor` and load the editor in the screen's `h
 
 The textarea receives the HTML when the form is sent. **Always clean each field on the server before saving it:**
 
-```php title="site/controller/Cms/News.php"
+```php title="site/src/Controller/Cms/News.php"
 use Fegg\Cms\HtmlSanitizer;
 
 $data['content'] = HtmlSanitizer::clean($this->in('content'));

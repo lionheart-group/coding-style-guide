@@ -78,7 +78,7 @@ With the CMS turned off (`Fegg\Cms\Setting`):
 - [`fegg-cli migration`](../cli.mdx#migration) neither creates nor drops `cms_user`, `cms_file` and `cms_image` (their rows are kept) and creates no first CMS user; `fegg-cli db:schema` leaves them out,
 - `fegg-cli user:*` refuses to run.
 
-Remove what the project itself has for the CMS: `site/config/database/cms_news.yaml` and the other post types (migration then drops those tables), `site/controller/Cms/`, `site/template/cms/`, the news pages if they show CMS posts, and `site/config/cms_menu.php`.
+Remove what the project itself has for the CMS: `site/config/database/cms_news.yaml` and the other post types (migration then drops those tables), `site/src/Controller/Cms/`, `site/template/cms/`, the news pages if they show CMS posts, and `site/config/cms_menu.php`.
 
 ## Database
 

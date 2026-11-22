@@ -6,7 +6,7 @@ sidebar_position: 1
 
 > The controller side of a CMS screen: the base class, `requirePost()`, the CSRF token, logging in, and changing the core's CMS screens
 
-A CMS screen extends `Site\Controller\Cms\Controller` (in `site/controller/Cms/`, where `Controller` is that class without a `use`). Before your method runs, the base class:
+A CMS screen extends `Site\Controller\Cms\Controller` (in `site/src/Controller/Cms/`, where `Controller` is that class without a `use`). Before your method runs, the base class:
 
 - sends a visitor who is not logged in to the login page,
 - creates `$this->_lh` (`Fegg\Cms\Helper`) for the section set in `$_cmsSection`, and sets `$this->page['prefix']` and `$this->page['prev_num']`,
@@ -19,7 +19,7 @@ The CSRF token is only checked on POST. An action that saves, deletes or sorts m
 
 :::
 
-```php title="htdocs/_fegg/site/controller/Cms/Event.php"
+```php title="htdocs/_fegg/site/src/Controller/Cms/Event.php"
 <?php
 namespace Site\Controller\Cms;
 
@@ -79,9 +79,9 @@ Logout is a POST with the CSRF token. `/cms/logout/` opened as a link shows a lo
 
 ## Extending a core controller
 
-The CMS screens provided by the core (`/cms/login/`, `/cms/media/`, `/cms/image/`, ...) are in `htdocs/_fegg/core/controller/Cms/`. Do not edit them. To change one, put a class with the same name in `site/controller/Cms/` that extends the core class, and write only the methods you change. The site class is found first, so it replaces the core one for its URL.
+The CMS screens provided by the core (`/cms/login/`, `/cms/media/`, `/cms/image/`, ...) are in `htdocs/_fegg/core/src/Controller/Cms/`. Do not edit them. To change one, put a class with the same name in `site/src/Controller/Cms/` that extends the core class, and write only the methods you change. The site class is found first, so it replaces the core one for its URL.
 
-```php title="htdocs/_fegg/site/controller/Cms/Media.php"
+```php title="htdocs/_fegg/site/src/Controller/Cms/Media.php"
 <?php
 namespace Site\Controller\Cms;
 

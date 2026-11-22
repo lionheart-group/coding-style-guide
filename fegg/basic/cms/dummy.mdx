@@ -12,7 +12,7 @@ On a test or development server (`FEGG_ENV` other than `production`), the list o
 
 Add the trait to the CMS controller of the post type. `$_dummyOptions` is optional:
 
-```php title="site/controller/Cms/Event.php"
+```php title="site/src/Controller/Cms/Event.php"
 class Event extends Controller
 {
     use \Fegg\Cms\Dummy\DummyActions;   // /cms/event/dummy/
