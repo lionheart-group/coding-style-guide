@@ -1,0 +1,84 @@
+---
+sidebar_position: 3
+---
+
+# Dummy content
+
+> Fill a CMS post type with dummy posts outside production, to see its lists, pages and paging with content
+
+On a test or development server (`FEGG_ENV` other than `production`), the list of a post type can have a 「ダミーデータ」 button next to 「新規追加」. It opens a screen that makes dummy posts, shows them for editing and inserts them, and deletes them again. In production the button is not shown and the screen is a 404.
+
+## Turning it on
+
+Add the trait to the CMS controller of the post type. `$_dummyOptions` is optional:
+
+```php title="site/src/Controller/Cms/Event.php"
+class Event extends Controller
+{
+    use \Fegg\Cms\Dummy\DummyActions;   // /cms/event/dummy/
+
+    protected $_cmsSection = 'event';
+
+    protected $_dummyOptions = array(
+        'category' => 'event',                              // the category column takes keys of $category_info['event']
+        'gallery'  => array('table' => 'cms_event_image'),  // gallery rows: post ID, image_id, ordered
+    );
+    // ...
+}
+```
+
+Then put the button in the list template, with the modal it opens:
+
+```html title="site/template/cms/tpl/event/lists.tpl"
+{{ include head '/cms/dummy/html_head' }}
+{{ transclude '/cms/frame/siteframe' }}
+{{ section body }}
+
+<h1 class="c-h1">{{ $page.mode_title }} <a href="{{ $site.prefix }}/add" class="c-button is-small is-primary">新規追加</a> {{ include '/cms/dummy/button' }}</h1>
+```
+
+The skeleton's news (`Cms\News`, with categories) and Lab (`Cms\Lab`, with a gallery) have it on.
+
+| Option | What it does |
+| :----- | :----------- |
+| `'category' => 'news'` | The `category` column takes keys of `$category_info['news']` (`site/config/category_info.php`) |
+| `'gallery' => array('table' => ...)` | Adds gallery rows with dummy images. Columns: `'parent'` (default: the post's primary key), `'image'` (`image_id`), `'order'` (`ordered`) |
+| `'marker' => array('column' => ..., 'prefix' => ...)` | Where dummy posts are marked. Default: a `title` starting with 【DUMMY】. Set it for a table without a `title` column |
+
+## The screen
+
+- **Making posts.** The screen reads the table's columns from the database and guesses how to fill each one from its name and type. You can change the guess for any column:
+
+  | Column | Filled with |
+  | :----- | :---------- |
+  | `title`, `subject` | A short title |
+  | `content`, `body`, `detail` | Article HTML: headings, paragraphs, lists, quotes, tables and images. `short`, `medium`, `long` or `random`; `long:42` gives the same article again |
+  | `*_image`, `image_id` ... (INTEGER) | A random dummy image |
+  | `category` | A random category (with the `category` option) |
+  | `name`, `company`, `address`, `zip` ... | A name, company name, address, postal code |
+  | `email`, `url`, `tel` | `dummy{n}@example.com`, `https://example.com/dummy/{n}/`, `03-0000-{n}` (`{n}` is the row number). Never a real address |
+  | `visible` | `1` |
+  | Dates, `BOOLEAN`, `INTEGER` | A date within the last year, 0 or 1, a number from 0 to 100 |
+  | Other `*_id` | Empty (NULL) |
+
+- **Preview.** 「プレビュー」 shows the posts as editable fields; 「プレビューの内容で登録」 inserts them as edited. 「作成して登録」 inserts new posts without a preview. Up to 100 posts at a time, all or none.
+- **Deleting.** Deletes the newest N dummy posts, or all of them, for good (with their gallery rows). Only posts with the mark are deleted: a post whose title starts with 【DUMMY】.
+
+The values are made on the server, from Fegg's own Japanese words. Nothing is loaded from other sites. Article HTML has only what the editor writes, and it is saved through `HtmlSanitizer::clean()`, like the CMS forms.
+
+## Images
+
+The core has two placeholder images (`_fegg/assets/img/dummy/`). To use your own, put images in `site/template/cms/img/dummy/`. The first time a post needs one, each image is registered as a CMS image: a `cms_image` row whose file name starts with 【DUMMY】. Later posts reuse it.
+
+## From the command line
+
+`fegg-cli` makes and deletes dummy rows with the guessed settings. It refuses to run in production:
+
+```bash
+./fegg-cli dummy:create cms_news 20 --category=news
+./fegg-cli dummy:create cms_lab 5 --gallery=cms_lab_image
+./fegg-cli dummy:count cms_news
+./fegg-cli dummy:remove cms_news        # all dummy rows (dummy:remove cms_news 5: the newest 5)
+```
+
+Image URLs in the articles are written for a site at the document root (`/_fegg/site/up_dir/...`).

@@ -39,7 +39,7 @@ site/template/
 
 Template names never include the `.tpl` extension and are relative to the `tpl/` of the site the URL belongs to. A controller renders `site/template/main/tpl/news/detail.tpl` with:
 
-```php title="htdocs/_fegg/site/controller/News.php"
+```php title="htdocs/_fegg/site/src/Controller/News.php"
 $this->displayPage('news/detail');
 ```
 
@@ -71,7 +71,7 @@ $sites['recruit'] = array('path' => '/recruit/', 'info' => array('name' => 'ๆก็
 - Only the CSS, JS, images and fonts in `css/`, `js/`, `img/` and `font/` are served (the root `.htaccess` and the folder's own `.htaccess` allow them). `tpl/`, `scss/` and anything else stay denied like the rest of `_fegg/`. `css/` is built and not tracked: put a library's CSS next to its JS (`js/vendor/swiper/`).
 - `npm run build:scss` builds every folder's `scss/*.scss` into its `css/` (the CMS's `unique.scss` too). A new site needs no configuration.
 - Sites share no SCSS: each has its own foundation (values, mixins, breakpoints).
-- Controllers are found by the URL as before: `/recruit/jobs/` is `site/controller/Recruit/Jobs.php`, or a route to `Page` (`$route['recruit/jobs/'] = 'page/render/jobs'` renders `recruit/tpl/jobs.tpl`, see [Static pages](../url.mdx#static-pages)).
+- Controllers are found by the URL as before: `/recruit/jobs/` is `site/src/Controller/Recruit/Jobs.php`, or a route to `Page` (`$route['recruit/jobs/'] = 'page/render/jobs'` renders `recruit/tpl/jobs.tpl`, see [Static pages](../url.mdx#static-pages)).
 
 ## Cache
 

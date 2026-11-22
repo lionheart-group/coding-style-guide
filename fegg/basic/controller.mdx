@@ -14,9 +14,9 @@ A controller is the class that handles a request. Fegg picks the controller clas
 https://example.com/foo/bar/
 ```
 
-For this URL, Fegg loads **`htdocs/_fegg/site/controller/Foo.php`** and calls its `bar()` method:
+For this URL, Fegg loads **`htdocs/_fegg/site/src/Controller/Foo.php`** and calls its `bar()` method:
 
-```php title="htdocs/_fegg/site/controller/Foo.php"
+```php title="htdocs/_fegg/site/src/Controller/Foo.php"
 <?php
 namespace Site\Controller;
 
@@ -35,12 +35,12 @@ class Foo extends Controller
 
 Every controller file follows the same rules:
 
-- The file is in `htdocs/_fegg/site/controller/`, and the file name is the class name (`Foo.php` declares `class Foo`).
-- The namespace is `Site\Controller`. **Sub directories are namespaces**: `site/controller/Cms/News.php` declares `namespace Site\Controller\Cms;` and `class News`.
+- The file is in `htdocs/_fegg/site/src/Controller/`, and the file name is the class name (`Foo.php` declares `class Foo`).
+- The namespace is `Site\Controller`. **Sub directories are namespaces**: `site/src/Controller/Cms/News.php` declares `namespace Site\Controller\Cms;` and `class News`.
 - The first line after the namespace is `defined('FEGG_CORE_DIR') || exit;`. It is required in every PHP file under `htdocs/_fegg/`: it stops the file from running when someone requests it directly by URL.
 - The class extends `Controller`, the project's base class.
 
-```php title="htdocs/_fegg/site/controller/Cms/News.php"
+```php title="htdocs/_fegg/site/src/Controller/Cms/News.php"
 <?php
 namespace Site\Controller\Cms;
 
@@ -62,12 +62,12 @@ There are two kinds of controllers, with a base class each: **public pages** and
 
 ```
 Fegg\Application                                  core/src/Application.php
-└ Fegg\Controller\Controller (abstract)            core/controller/Controller.php
-  ├ Site\Controller\Controller (abstract)          site/controller/Controller.php       public pages
+└ Fegg\Controller\Controller (abstract)            core/src/Controller/Controller.php
+  ├ Site\Controller\Controller (abstract)          site/src/Controller/Controller.php       public pages
   │ └ Site\Controller\Index, News, Contact, ...
-  └ Fegg\Controller\Cms\Controller (abstract)      core/controller/Cms/Controller.php   CMS screens (core)
+  └ Fegg\Controller\Cms\Controller (abstract)      core/src/Controller/Cms/Controller.php   CMS screens (core)
     ├ Fegg\Controller\Cms\Image, Media, Login, ...
-    └ Site\Controller\Cms\Controller (abstract)    site/controller/Cms/Controller.php   CMS screens (project)
+    └ Site\Controller\Cms\Controller (abstract)    site/src/Controller/Cms/Controller.php   CMS screens (project)
       └ Site\Controller\Cms\News, Lab, ...
 ```
 
@@ -76,7 +76,7 @@ Fegg\Application                                  core/src/Application.php
 - `Site\Controller\Controller` (site) is yours: the base of the **public pages**. Put what every public page needs here (shared assigns, ...).
 - `Fegg\Controller\Cms\Controller` (core) and `Site\Controller\Cms\Controller` (site) are the bases of the **CMS screens**: see [CMS screens](./cms/controllers.mdx). Put what every CMS screen of the project needs in `Site\Controller\Cms\Controller`.
 
-```php title="htdocs/_fegg/site/controller/Controller.php"
+```php title="htdocs/_fegg/site/src/Controller/Controller.php"
 <?php
 namespace Site\Controller;
 
@@ -244,7 +244,7 @@ A CMS screen extends `Site\Controller\Cms\Controller`, which checks the login an
 
 ## Template of Controller class
 
-```php title="htdocs/_fegg/site/controller/Index.php"
+```php title="htdocs/_fegg/site/src/Controller/Index.php"
 <?php
 namespace Site\Controller;
 

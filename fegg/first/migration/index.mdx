@@ -55,7 +55,7 @@ The database is used as it is: point the project at a copy of the production dat
 
 ## 4. Rewrite the PHP
 
-Write each controller again as a namespaced class in `htdocs/_fegg/site/controller/`, replace the Fegg 4 classes with their Fegg 5 names, and add `$this->requirePost()` to every CMS action that changes data. Then go through the behaviour changes: Fegg 5 fails loudly where Fegg 4 was silent.
+Write each controller again as a namespaced class in `htdocs/_fegg/site/src/Controller/`, replace the Fegg 4 classes with their Fegg 5 names, and add `$this->requirePost()` to every CMS action that changes data. Then go through the behaviour changes: Fegg 5 fails loudly where Fegg 4 was silent.
 
 <SiblingDocCardList ids={["rewrite-php", "behaviour-changes"]} />
 
@@ -68,7 +68,7 @@ Write each controller again as a namespaced class in `htdocs/_fegg/site/controll
 - [ ] The browser console of every CMS screen shows no errors (`$ is not defined` means a template still uses jQuery), and dates (with the time), rich text and gallery ordering are saved
 - [ ] Public pages, the contact form (through to sending), CMS login, create / edit / delete for each post type, and media and image uploads work, with the data and uploads of the old site
 - [ ] Every post type appears in the CMS side menu and on the dashboard
-- [ ] Every saving action in `site/controller/Cms/` calls `$this->requirePost()`: opening its URL in the browser (a GET, e.g. `/cms/news/update/`) answers 405
+- [ ] Every saving action in `site/src/Controller/Cms/` calls `$this->requirePost()`: opening its URL in the browser (a GET, e.g. `/cms/news/update/`) answers 405
 - [ ] No page links to an action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) or defined only in a base controller (both are 404 now)
 - [ ] The PHP error log has no warnings
 - [ ] After deploying, `./fegg-cli doctor https://<production URL>` prints OK (`/_fegg/assets/js/base.js` is served; the rest of `/_fegg/`, the sites' SCSS sources included, is not) and the CMS dashboard shows no protection warnings
