@@ -58,21 +58,21 @@ Fegg maps URL segments to a controller class, a method and its arguments:
 https://example.com/class/method/param1/param2/
 ```
 
-1. Controller class (`site/controller/Class.php`, first letter in upper case)
+1. Controller class (`site/src/Controller/Class.php`, first letter in upper case)
 2. Method of the controller class
 3. Arguments for the method
 
 When the method segment is empty, `index()` is called. When no segment names a controller, the `Index` controller of that directory is used.
 
-Sub directories of `site/controller/` are part of the URL and of the namespace:
+Sub directories of `site/src/Controller/` are part of the URL and of the namespace:
 
 | URL                     | File                                       | Called                                   |
 | :---------------------- | :----------------------------------------- | :--------------------------------------- |
-| `/`                     | `site/controller/Index.php`                | `Site\Controller\Index::index()`         |
-| `/news/`                | `site/controller/News.php`                 | `Site\Controller\News::index()`          |
-| `/news/detail/12/`      | `site/controller/News.php`                 | `Site\Controller\News::detail('12')`     |
-| `/cms/news/edit/3/`     | `site/controller/Cms/News.php`             | `Site\Controller\Cms\News::edit('3')`    |
-| `/cms/media/`           | `core/controller/Cms/Media.php` (no site class) | `Fegg\Controller\Cms\Media::index()` |
+| `/`                     | `site/src/Controller/Index.php`                | `Site\Controller\Index::index()`         |
+| `/news/`                | `site/src/Controller/News.php`                 | `Site\Controller\News::index()`          |
+| `/news/detail/12/`      | `site/src/Controller/News.php`                 | `Site\Controller\News::detail('12')`     |
+| `/cms/news/edit/3/`     | `site/src/Controller/Cms/News.php`             | `Site\Controller\Cms\News::edit('3')`    |
+| `/cms/media/`           | `core/src/Controller/Cms/Media.php` (no site class) | `Fegg\Controller\Cms\Media::index()` |
 
 - The site (`Site\Controller\...`) is searched first, then the core (`Fegg\Controller\...`). A site class with the same name replaces the core's CMS screen (see [Controller](./cms/controllers.mdx#extending-a-core-controller)).
 - Segments are walked from the left; the first one that names a controller file wins over a directory with the same name.
@@ -89,7 +89,7 @@ Arguments are always strings.
 https://example.com/post/edit/1/
 ```
 
-```php title="htdocs/_fegg/site/controller/Post.php"
+```php title="htdocs/_fegg/site/src/Controller/Post.php"
 <?php
 namespace Site\Controller;
 
@@ -174,7 +174,7 @@ The template is read from the `tpl/` of the site the URL belongs to (see [Sites]
 
 Use `RouteOnly` for your own controllers whose arguments must not come straight from the URL:
 
-```php title="htdocs/_fegg/site/controller/Landing.php"
+```php title="htdocs/_fegg/site/src/Controller/Landing.php"
 <?php
 namespace Site\Controller;
 
@@ -212,9 +212,9 @@ A controller is the class that handles a request. Fegg picks the controller clas
 https://example.com/foo/bar/
 ```
 
-For this URL, Fegg loads **`htdocs/_fegg/site/controller/Foo.php`** and calls its `bar()` method:
+For this URL, Fegg loads **`htdocs/_fegg/site/src/Controller/Foo.php`** and calls its `bar()` method:
 
-```php title="htdocs/_fegg/site/controller/Foo.php"
+```php title="htdocs/_fegg/site/src/Controller/Foo.php"
 <?php
 namespace Site\Controller;
 
@@ -233,12 +233,12 @@ class Foo extends Controller
 
 Every controller file follows the same rules:
 
-- The file is in `htdocs/_fegg/site/controller/`, and the file name is the class name (`Foo.php` declares `class Foo`).
-- The namespace is `Site\Controller`. **Sub directories are namespaces**: `site/controller/Cms/News.php` declares `namespace Site\Controller\Cms;` and `class News`.
+- The file is in `htdocs/_fegg/site/src/Controller/`, and the file name is the class name (`Foo.php` declares `class Foo`).
+- The namespace is `Site\Controller`. **Sub directories are namespaces**: `site/src/Controller/Cms/News.php` declares `namespace Site\Controller\Cms;` and `class News`.
 - The first line after the namespace is `defined('FEGG_CORE_DIR') || exit;`. It is required in every PHP file under `htdocs/_fegg/`: it stops the file from running when someone requests it directly by URL.
 - The class extends `Controller`, the project's base class.
 
-```php title="htdocs/_fegg/site/controller/Cms/News.php"
+```php title="htdocs/_fegg/site/src/Controller/Cms/News.php"
 <?php
 namespace Site\Controller\Cms;
 
@@ -260,12 +260,12 @@ There are two kinds of controllers, with a base class each: **public pages** and
 
 ```
 Fegg\Application                                  core/src/Application.php
-└ Fegg\Controller\Controller (abstract)            core/controller/Controller.php
-  ├ Site\Controller\Controller (abstract)          site/controller/Controller.php       public pages
+└ Fegg\Controller\Controller (abstract)            core/src/Controller/Controller.php
+  ├ Site\Controller\Controller (abstract)          site/src/Controller/Controller.php       public pages
   │ └ Site\Controller\Index, News, Contact, ...
-  └ Fegg\Controller\Cms\Controller (abstract)      core/controller/Cms/Controller.php   CMS screens (core)
+  └ Fegg\Controller\Cms\Controller (abstract)      core/src/Controller/Cms/Controller.php   CMS screens (core)
     ├ Fegg\Controller\Cms\Image, Media, Login, ...
-    └ Site\Controller\Cms\Controller (abstract)    site/controller/Cms/Controller.php   CMS screens (project)
+    └ Site\Controller\Cms\Controller (abstract)    site/src/Controller/Cms/Controller.php   CMS screens (project)
       └ Site\Controller\Cms\News, Lab, ...
 ```
 
@@ -274,7 +274,7 @@ Fegg\Application                                  core/src/Application.php
 - `Site\Controller\Controller` (site) is yours: the base of the **public pages**. Put what every public page needs here (shared assigns, ...).
 - `Fegg\Controller\Cms\Controller` (core) and `Site\Controller\Cms\Controller` (site) are the bases of the **CMS screens**: see [CMS screens](./cms/controllers.mdx). Put what every CMS screen of the project needs in `Site\Controller\Cms\Controller`.
 
-```php title="htdocs/_fegg/site/controller/Controller.php"
+```php title="htdocs/_fegg/site/src/Controller/Controller.php"
 <?php
 namespace Site\Controller;
 
@@ -442,7 +442,7 @@ A CMS screen extends `Site\Controller\Cms\Controller`, which checks the login an
 
 ## Template of Controller class
 
-```php title="htdocs/_fegg/site/controller/Index.php"
+```php title="htdocs/_fegg/site/src/Controller/Index.php"
 <?php
 namespace Site\Controller;
 
@@ -617,7 +617,7 @@ Call other services (an API, a webhook) with `Fegg\Http\Client`, which has timeo
 
 > The controller side of a CMS screen: the base class, `requirePost()`, the CSRF token, logging in, and changing the core's CMS screens
 
-A CMS screen extends `Site\Controller\Cms\Controller` (in `site/controller/Cms/`, where `Controller` is that class without a `use`). Before your method runs, the base class:
+A CMS screen extends `Site\Controller\Cms\Controller` (in `site/src/Controller/Cms/`, where `Controller` is that class without a `use`). Before your method runs, the base class:
 
 - sends a visitor who is not logged in to the login page,
 - creates `$this->_lh` (`Fegg\Cms\Helper`) for the section set in `$_cmsSection`, and sets `$this->page['prefix']` and `$this->page['prev_num']`,
@@ -630,7 +630,7 @@ The CSRF token is only checked on POST. An action that saves, deletes or sorts m
 
 :::
 
-```php title="htdocs/_fegg/site/controller/Cms/Event.php"
+```php title="htdocs/_fegg/site/src/Controller/Cms/Event.php"
 <?php
 namespace Site\Controller\Cms;
 
@@ -690,9 +690,9 @@ Logout is a POST with the CSRF token. `/cms/logout/` opened as a link shows a lo
 
 ## Extending a core controller
 
-The CMS screens provided by the core (`/cms/login/`, `/cms/media/`, `/cms/image/`, ...) are in `htdocs/_fegg/core/controller/Cms/`. Do not edit them. To change one, put a class with the same name in `site/controller/Cms/` that extends the core class, and write only the methods you change. The site class is found first, so it replaces the core one for its URL.
+The CMS screens provided by the core (`/cms/login/`, `/cms/media/`, `/cms/image/`, ...) are in `htdocs/_fegg/core/src/Controller/Cms/`. Do not edit them. To change one, put a class with the same name in `site/src/Controller/Cms/` that extends the core class, and write only the methods you change. The site class is found first, so it replaces the core one for its URL.
 
-```php title="htdocs/_fegg/site/controller/Cms/Media.php"
+```php title="htdocs/_fegg/site/src/Controller/Cms/Media.php"
 <?php
 namespace Site\Controller\Cms;
 
@@ -719,9 +719,9 @@ import { SiblingDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # CMS screens and the editor
 
-> The CMS's files, scripts and icons. The controllers of CMS screens and rich text fields have pages of their own:
+> The CMS's files, scripts and icons. The controllers of CMS screens, rich text fields and dummy content have pages of their own:
 
-<SiblingDocCardList ids={["controllers", "editor"]} />
+<SiblingDocCardList ids={["controllers", "editor", "dummy"]} />
 
 ## The CMS's files
 
@@ -770,7 +770,7 @@ Date fields are `<input type="datetime-local">`: the browser shows its own picke
 <input type="datetime-local" name="post_date" value="{{ $page.data.post_date|feggDate:$format }}" required>
 ```
 
-```php title="site/controller/Cms/News.php"
+```php title="site/src/Controller/Cms/News.php"
 $validation->datetime('post_date', $this->in('post_date'), array('@date', '投稿日'));
 // ...
 // "2026-11-10T10:00" -> "2026-11-10 10:00:00"
@@ -843,7 +843,7 @@ Mark the textarea with `data-fegg-editor` and load the editor in the screen's `h
 
 The textarea receives the HTML when the form is sent. **Always clean each field on the server before saving it:**
 
-```php title="site/controller/Cms/News.php"
+```php title="site/src/Controller/Cms/News.php"
 use Fegg\Cms\HtmlSanitizer;
 
 $data['content'] = HtmlSanitizer::clean($this->in('content'));
@@ -870,13 +870,15 @@ Never print a rich text field with `noescape` unless it was saved through `HtmlS
 | Image | `<figure class="fegg-image aligncenter" style="width: 50%"><a href><img></a><figcaption>` | `alignleft` / `aligncenter` / `alignright`; width 1–100 %; `is-zoom`: shown large on a click (no link then) |
 | Columns | `<div class="fegg-columns is-1-2"><div class="fegg-column">…</div>…</div>` | `is-1-1`, `is-1-2`, `is-2-1`, `is-1-1-1` |
 | Button link | `<div class="fegg-button is-primary is-center"><a href>Text</a></div>` | `is-primary` (filled) / `is-secondary` (outlined), `is-center` |
-| Gallery | `<div class="fegg-gallery is-cols-3 is-1-1 is-contain is-zoom"><figure><img></figure>…</div>` | `is-cols-2` … `is-cols-4`; frame `is-16-9` / `is-1-1` / `is-3-4` (4:3 without); `is-contain`: whole images (filled and cut without); `is-zoom` |
+| Gallery | `<div class="fegg-gallery is-cols-3 is-sp-cols-1 is-1-1 is-contain is-zoom"><figure><img></figure>…</div>` | `is-cols-2` … `is-cols-5`; on a phone (body under 480px) `is-sp-cols-1` / `is-sp-cols-3` (2 without); frame `is-16-9` / `is-1-1` / `is-3-4` (4:3 without); `is-contain`: whole images (filled and cut without); `is-zoom` |
 | Google Maps | `<div class="fegg-map is-16-9 aligncenter" style="width: 50%"><iframe src="https://www.google.com/maps/embed?pb=…" loading="lazy"></iframe></div>` | ratio `is-16-9` / `is-1-1` (4:3 without), `aligncenter` / `alignright`; width 10–100 % |
 | Link to a file | `<a class="fegg-file is-pdf" href>Name（PDF・1.2 MB）</a>` | `is-pdf`, `is-word`, `is-excel`, `is-powerpoint`, `is-zip`, `is-other` |
 | YouTube | `<div data-youtube-video class="fegg-video is-9-16"><iframe src="https://www.youtube-nocookie.com/embed/…"></iframe></div>` | ratio `is-9-16` (a short; 16:9 without), alignment and width as maps |
 | Table | `<table><thead>…</thead><tbody>…</tbody></table>` | merged cells: `colspan` / `rowspan` |
 
 Plus paragraphs, headings (h2–h4, `text-align`), lists, quotes, lines, bold, italic, underline, strike, mark and links. The class names are written by the editor, so they are not FLOCSS names.
+
+List items and table cells hold their text in a paragraph (`<li><p>Item</p></li>`, `<td><p>1</p></td>`), as Tiptap makes lists and tables. It is valid HTML; the public styles remove the paragraph margins there, so styles of your own for lists and cells count on `li > p` and `td > p`.
 
 ## YouTube and maps outside the text
 
@@ -893,8 +895,93 @@ A CMS field of its own that holds a YouTube URL or a Google map is printed with 
 
 The public styles are in the site's `scss/object/component/_wysiwyg.scss` (`htdocs/_fegg/site/template/main/scss/...`, `.c-entry-block`). Change them there for a project. Sites share no SCSS: another site that shows rich text copies it.
 
-- Blocks respond to the **body's own width** (container queries on `.c-entry-block`), not to the project's breakpoints: columns stack under 600px; under 480px images go full width and galleries use 2 columns. The editor uses the same values.
+- Blocks respond to the **body's own width** (container queries on `.c-entry-block`), not to the project's breakpoints: columns stack under 600px. Under 480px images lose their width and do not float (large ones fill the body, small ones keep their own size), maps and videos fill the body, and galleries use 2 columns (1 or 3 with `is-sp-cols-1` / `is-sp-cols-3`). The editor uses the same values and says so next to the width of images, maps and videos.
 - Images and galleries with `is-zoom` open the image large in a modal (`<dialog class="c-lightbox">`) on a click or Enter, with its caption, and arrows in a gallery. The script is `site/template/main/js/common/lightbox.js` (loaded by `siteframe.tpl`), the styles `site/template/main/scss/object/component/_lightbox.scss`. Keep both when the project replaces the skeleton's frame; another site copies both if it shows galleries.
+
+
+--- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/cms/dummy ---
+
+
+# Dummy content
+
+> Fill a CMS post type with dummy posts outside production, to see its lists, pages and paging with content
+
+On a test or development server (`FEGG_ENV` other than `production`), the list of a post type can have a 「ダミーデータ」 button next to 「新規追加」. It opens a screen that makes dummy posts, shows them for editing and inserts them, and deletes them again. In production the button is not shown and the screen is a 404.
+
+## Turning it on
+
+Add the trait to the CMS controller of the post type. `$_dummyOptions` is optional:
+
+```php title="site/src/Controller/Cms/Event.php"
+class Event extends Controller
+{
+    use \Fegg\Cms\Dummy\DummyActions;   // /cms/event/dummy/
+
+    protected $_cmsSection = 'event';
+
+    protected $_dummyOptions = array(
+        'category' => 'event',                              // the category column takes keys of $category_info['event']
+        'gallery'  => array('table' => 'cms_event_image'),  // gallery rows: post ID, image_id, ordered
+    );
+    // ...
+}
+```
+
+Then put the button in the list template, with the modal it opens:
+
+```html title="site/template/cms/tpl/event/lists.tpl"
+{{ include head '/cms/dummy/html_head' }}
+{{ transclude '/cms/frame/siteframe' }}
+{{ section body }}
+
+<h1 class="c-h1">{{ $page.mode_title }} <a href="{{ $site.prefix }}/add" class="c-button is-small is-primary">新規追加</a> {{ include '/cms/dummy/button' }}</h1>
+```
+
+The skeleton's news (`Cms\News`, with categories) and Lab (`Cms\Lab`, with a gallery) have it on.
+
+| Option | What it does |
+| :----- | :----------- |
+| `'category' => 'news'` | The `category` column takes keys of `$category_info['news']` (`site/config/category_info.php`) |
+| `'gallery' => array('table' => ...)` | Adds gallery rows with dummy images. Columns: `'parent'` (default: the post's primary key), `'image'` (`image_id`), `'order'` (`ordered`) |
+| `'marker' => array('column' => ..., 'prefix' => ...)` | Where dummy posts are marked. Default: a `title` starting with 【DUMMY】. Set it for a table without a `title` column |
+
+## The screen
+
+- **Making posts.** The screen reads the table's columns from the database and guesses how to fill each one from its name and type. You can change the guess for any column:
+
+  | Column | Filled with |
+  | :----- | :---------- |
+  | `title`, `subject` | A short title |
+  | `content`, `body`, `detail` | Article HTML: headings, paragraphs, lists, quotes, tables and images. `short`, `medium`, `long` or `random`; `long:42` gives the same article again |
+  | `*_image`, `image_id` ... (INTEGER) | A random dummy image |
+  | `category` | A random category (with the `category` option) |
+  | `name`, `company`, `address`, `zip` ... | A name, company name, address, postal code |
+  | `email`, `url`, `tel` | `dummy{n}@example.com`, `https://example.com/dummy/{n}/`, `03-0000-{n}` (`{n}` is the row number). Never a real address |
+  | `visible` | `1` |
+  | Dates, `BOOLEAN`, `INTEGER` | A date within the last year, 0 or 1, a number from 0 to 100 |
+  | Other `*_id` | Empty (NULL) |
+
+- **Preview.** 「プレビュー」 shows the posts as editable fields; 「プレビューの内容で登録」 inserts them as edited. 「作成して登録」 inserts new posts without a preview. Up to 100 posts at a time, all or none.
+- **Deleting.** Deletes the newest N dummy posts, or all of them, for good (with their gallery rows). Only posts with the mark are deleted: a post whose title starts with 【DUMMY】.
+
+The values are made on the server, from Fegg's own Japanese words. Nothing is loaded from other sites. Article HTML has only what the editor writes, and it is saved through `HtmlSanitizer::clean()`, like the CMS forms.
+
+## Images
+
+The core has two placeholder images (`_fegg/assets/img/dummy/`). To use your own, put images in `site/template/cms/img/dummy/`. The first time a post needs one, each image is registered as a CMS image: a `cms_image` row whose file name starts with 【DUMMY】. Later posts reuse it.
+
+## From the command line
+
+`fegg-cli` makes and deletes dummy rows with the guessed settings. It refuses to run in production:
+
+```bash
+./fegg-cli dummy:create cms_news 20 --category=news
+./fegg-cli dummy:create cms_lab 5 --gallery=cms_lab_image
+./fegg-cli dummy:count cms_news
+./fegg-cli dummy:remove cms_news        # all dummy rows (dummy:remove cms_news 5: the newest 5)
+```
+
+Image URLs in the articles are written for a site at the document root (`/_fegg/site/up_dir/...`).
 
 
 --- https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/others ---
@@ -1414,7 +1501,7 @@ array(2) { ["foo"]=> string(3) "bar" ["baz"]=> string(3) "qux" }
 
 A typical use is the page number of a list:
 
-```php title="htdocs/_fegg/site/controller/News.php"
+```php title="htdocs/_fegg/site/src/Controller/News.php"
 $this->page['data'] = $this->_model
     ->listMax(20)
     ->current($this->in('p'))
@@ -1629,7 +1716,7 @@ site/template/
 
 Template names never include the `.tpl` extension and are relative to the `tpl/` of the site the URL belongs to. A controller renders `site/template/main/tpl/news/detail.tpl` with:
 
-```php title="htdocs/_fegg/site/controller/News.php"
+```php title="htdocs/_fegg/site/src/Controller/News.php"
 $this->displayPage('news/detail');
 ```
 
@@ -1661,7 +1748,7 @@ $sites['recruit'] = array('path' => '/recruit/', 'info' => array('name' => '採�
 - Only the CSS, JS, images and fonts in `css/`, `js/`, `img/` and `font/` are served (the root `.htaccess` and the folder's own `.htaccess` allow them). `tpl/`, `scss/` and anything else stay denied like the rest of `_fegg/`. `css/` is built and not tracked: put a library's CSS next to its JS (`js/vendor/swiper/`).
 - `npm run build:scss` builds every folder's `scss/*.scss` into its `css/` (the CMS's `unique.scss` too). A new site needs no configuration.
 - Sites share no SCSS: each has its own foundation (values, mixins, breakpoints).
-- Controllers are found by the URL as before: `/recruit/jobs/` is `site/controller/Recruit/Jobs.php`, or a route to `Page` (`$route['recruit/jobs/'] = 'page/render/jobs'` renders `recruit/tpl/jobs.tpl`, see [Static pages](../url.mdx#static-pages)).
+- Controllers are found by the URL as before: `/recruit/jobs/` is `site/src/Controller/Recruit/Jobs.php`, or a route to `Page` (`$route['recruit/jobs/'] = 'page/render/jobs'` renders `recruit/tpl/jobs.tpl`, see [Static pages](../url.mdx#static-pages)).
 
 ## Cache
 
@@ -2192,7 +2279,7 @@ This is the method to use for every page.
 
 ## Example
 
-```php title="htdocs/_fegg/site/controller/News.php"
+```php title="htdocs/_fegg/site/src/Controller/News.php"
 <?php
 namespace Site\Controller;
 
@@ -2261,7 +2348,7 @@ Use it when you need the page as a string: to post-process it, or as the body of
 
 ## Example
 
-```php title="htdocs/_fegg/site/controller/Foo.php"
+```php title="htdocs/_fegg/site/src/Controller/Foo.php"
 <?php
 namespace Site\Controller;
 
@@ -2317,7 +2404,7 @@ The template engine itself uses this method for `{{ include }}` and `{{ transclu
 
 ## Example
 
-```php title="htdocs/_fegg/site/controller/Foo.php"
+```php title="htdocs/_fegg/site/src/Controller/Foo.php"
 <?php
 namespace Site\Controller;
 
@@ -2427,7 +2514,7 @@ Use it for actions called with `fetch()` from a page, instead of `echo json_enco
 
 ## Example
 
-```php title="htdocs/_fegg/site/controller/Shop.php"
+```php title="htdocs/_fegg/site/src/Controller/Shop.php"
 <?php
 namespace Site\Controller;
 
@@ -3242,7 +3329,7 @@ Creates a new instance of a controller and runs one of its methods at this place
 
 ## Example
 
-```php title="htdocs/_fegg/site/controller/Banner.php"
+```php title="htdocs/_fegg/site/src/Controller/Banner.php"
 <?php
 namespace Site\Controller;
 
@@ -3389,20 +3476,20 @@ htdocs/                   # document root
         .htaccess         # core: deny all
         assets/           # core: the CMS's CSS, JS, images, icons and libraries (built; {{ $site.cms_assets }})
         core/             # core: DO NOT EDIT (replaced on update)
-            src/          # Fegg\             Application, Model, Database\Pdo, Validation, Cms\Helper, Tool\* ...
-            controller/   # Fegg\Controller\  Controller (base class), Cms\Login, Cms\Media, Cms\Image ...
+            src/          # Fegg\             every class of the core: Application, Model, Database\Pdo, Cms\Helper, Tool\* ...
+                Controller/   # Fegg\Controller\  Controller (base class), Cms\Login, Cms\Media, Cms\Image ...
+                Command/      # Fegg\Command\     fegg-cli commands
             template/cms/ # CMS foundation templates
             functions/    # template modifiers (feggDate, getImageUrl, ...)
             config/       # default settings, YAML for the core tables (cms_user, cms_file, cms_image, rate_limit)
-            bin/          # fegg-cli commands
             bootstrap/    # web and CLI start-up, autoloader
             vendor/       # PHPMailer
             dist/         # templates for the project-owned entry files, and the starting folder of a new site (dist/site/)
             VERSION  manifest.json  UPGRADE.md
 
         site/             # project: edit freely (never touched by updates)
-            src/          # Site\             project classes (create it when you need it)
-            controller/   # Site\Controller\  Controller (project base class), Index, News, Cms\News ...
+            src/          # Site\             every class of the project
+                Controller/   # Site\Controller\  Controller (project base class), Index, News, Cms\News ...
             template/
                 main/     # the site at / (one folder per site, see site/config/sites.php)
                     tpl/  # its templates (every template path is relative to it)
@@ -3416,7 +3503,7 @@ htdocs/                   # document root
             data/         # db/, log/, cache/, core-backup/ (not tracked by git)
 ```
 
-The skeleton's sample code (`site/controller/Index.php`, `News.php`, `Contact.php`, `Cms/News.php`, ...) is project code. Change or delete it as the project needs.
+The skeleton's sample code (`site/src/Controller/Index.php`, `News.php`, `Contact.php`, `Cms/News.php`, ...) is project code. Change or delete it as the project needs.
 
 A project can hold several sites (a recruiting site at `/recruit/`, landing pages), each with its own folder in `site/template/`: see [Sites](../basic/templates/index.mdx#sites).
 
@@ -3424,15 +3511,14 @@ A project can hold several sites (a recruiting site at `/recruit/`, landing page
 
 Classes are loaded by the core's own autoloader (`core/bootstrap/autoload.php`). Composer is not required; in the skeleton it is only used for the test suite.
 
-| Namespace          | Directory          |
-| ------------------ | ------------------ |
-| `Fegg\`            | `core/src/`        |
-| `Fegg\Controller\` | `core/controller/` |
-| `Fegg\Command\`    | `core/bin/`        |
-| `Site\`            | `site/src/`        |
-| `Site\Controller\` | `site/controller/` |
+There are two namespaces, each in one folder. The path below the folder is the rest of the namespace (PSR-4):
 
-Sub directories are namespaces: `site/src/Shop/Cart.php` is `Site\Shop\Cart`, `site/controller/Cms/News.php` is `Site\Controller\Cms\News`.
+| Namespace | Directory   | Example |
+| --------- | ----------- | ------- |
+| `Fegg\`   | `core/src/` | `Fegg\Controller\Cms\Image` is `core/src/Controller/Cms/Image.php` |
+| `Site\`   | `site/src/` | `Site\Controller\Cms\News` is `site/src/Controller/Cms/News.php`; a class of your own, `Site\Shop\Cart`, is `site/src/Shop/Cart.php` |
+
+URLs reach only the controllers (`Site\Controller\`, then the core's `Fegg\Controller\`): your other classes in `site/src/` can never be called from a URL.
 
 Every PHP file under `htdocs/_fegg/` must start with `defined('FEGG_CORE_DIR') || exit;`. It stops the file from doing anything when it is requested directly from a URL.
 
@@ -3445,7 +3531,7 @@ The site is searched first, then the core. This works like a WordPress child the
 | Templates     | Put a file in `site/template/cms/tpl/` at the path it has under `core/template/cms/`        | `site/template/cms/tpl/login.tpl` is used instead of `core/template/cms/login.tpl` |
 | Config files  | Put a file with the same name in `site/config/`                                             | `site/config/validation_error_message.php` replaces the core's messages     |
 | Settings      | Write only the keys you want to change in `site/config/settings.php`                        | `$settings['developer_ip'] = array(...);`                                   |
-| CMS screens   | Put a class that extends the core controller in `site/controller/`, with only the methods you change | See [Controller](../basic/cms/controllers.mdx#extending-a-core-controller) |
+| CMS screens   | Put a class that extends the core controller in `site/src/Controller/`, with only the methods you change | See [Controller](../basic/cms/controllers.mdx#extending-a-core-controller) |
 | CMS menu      | Add one block to `site/config/cms_menu.php`                                                 | When you add a post type                                                    |
 | DB tables     | Put a YAML file in `site/config/database/` (a file with the same name wins over the core's) | `cms_news.yaml`                                                             |
 
@@ -3511,7 +3597,7 @@ location ~* \.(tpl|db|sqlite|ya?ml|log|md|json|dist)$ { deny all; }
 ./fegg-cli <command> [arguments]
 ```
 
-The file only defines the paths (see [Directory structure](./cont.mdx#entry-files-and-layout)); the commands are in `htdocs/_fegg/core/bin/`. Commands exit with code `1` when they find a problem, so they can be used in CI.
+The file only defines the paths (see [Directory structure](./cont.mdx#entry-files-and-layout)); the commands are in `htdocs/_fegg/core/src/Command/`. Commands exit with code `1` when they find a problem, so they can be used in CI.
 
 | Command                                         | What it does |
 | :---------------------------------------------- | :----------- |
@@ -3528,6 +3614,8 @@ The file only defines the paths (see [Directory structure](./cont.mdx#entry-file
 | `core:status`                                   | Show the core version and core files changed in this project |
 | `core:update [vX.Y.Z] [--dry-run] [--force]`    | Update the core from the skeleton repository |
 | `doctor [URL]`                                  | Check that `_fegg/` cannot be read from the web |
+| `dummy:create TABLE [COUNT]`                    | Add dummy rows to a CMS table, not in production (see [Dummy content](../basic/cms/dummy.mdx#from-the-command-line)) |
+| `dummy:remove TABLE [COUNT]` / `dummy:count TABLE` | Remove or count the dummy rows (a title starting with 【DUMMY】) |
 
 Running a command group without a sub command prints its help: `./fegg-cli core`, `./fegg-cli db`, `./fegg-cli template`, `./fegg-cli site`, `./fegg-cli user`, `./fegg-cli migration:help`, `./fegg-cli doctor:help`.
 
@@ -3959,7 +4047,7 @@ With the CMS turned off (`Fegg\Cms\Setting`):
 - [`fegg-cli migration`](../cli.mdx#migration) neither creates nor drops `cms_user`, `cms_file` and `cms_image` (their rows are kept) and creates no first CMS user; `fegg-cli db:schema` leaves them out,
 - `fegg-cli user:*` refuses to run.
 
-Remove what the project itself has for the CMS: `site/config/database/cms_news.yaml` and the other post types (migration then drops those tables), `site/controller/Cms/`, `site/template/cms/`, the news pages if they show CMS posts, and `site/config/cms_menu.php`.
+Remove what the project itself has for the CMS: `site/config/database/cms_news.yaml` and the other post types (migration then drops those tables), `site/src/Controller/Cms/`, `site/template/cms/`, the news pages if they show CMS posts, and `site/config/cms_menu.php`.
 
 ## Database
 
@@ -4042,7 +4130,7 @@ The database is used as it is: point the project at a copy of the production dat
 
 ## 4. Rewrite the PHP
 
-Write each controller again as a namespaced class in `htdocs/_fegg/site/controller/`, replace the Fegg 4 classes with their Fegg 5 names, and add `$this->requirePost()` to every CMS action that changes data. Then go through the behaviour changes: Fegg 5 fails loudly where Fegg 4 was silent.
+Write each controller again as a namespaced class in `htdocs/_fegg/site/src/Controller/`, replace the Fegg 4 classes with their Fegg 5 names, and add `$this->requirePost()` to every CMS action that changes data. Then go through the behaviour changes: Fegg 5 fails loudly where Fegg 4 was silent.
 
 <SiblingDocCardList ids={["rewrite-php", "behaviour-changes"]} />
 
@@ -4055,7 +4143,7 @@ Write each controller again as a namespaced class in `htdocs/_fegg/site/controll
 - [ ] The browser console of every CMS screen shows no errors (`$ is not defined` means a template still uses jQuery), and dates (with the time), rich text and gallery ordering are saved
 - [ ] Public pages, the contact form (through to sending), CMS login, create / edit / delete for each post type, and media and image uploads work, with the data and uploads of the old site
 - [ ] Every post type appears in the CMS side menu and on the dashboard
-- [ ] Every saving action in `site/controller/Cms/` calls `$this->requirePost()`: opening its URL in the browser (a GET, e.g. `/cms/news/update/`) answers 405
+- [ ] Every saving action in `site/src/Controller/Cms/` calls `$this->requirePost()`: opening its URL in the browser (a GET, e.g. `/cms/news/update/`) answers 405
 - [ ] No page links to an action named like a method of `Fegg\Application` (`mail`, `in`, `redirect` ...) or defined only in a base controller (both are 404 now)
 - [ ] The PHP error log has no warnings
 - [ ] After deploying, `./fegg-cli doctor https://<production URL>` prints OK (`/_fegg/assets/js/base.js` is served; the rest of `/_fegg/`, the sites' SCSS sources included, is not) and the CMS dashboard shows no protection warnings
@@ -4068,7 +4156,7 @@ To roll back, redeploy the old branch. The table definitions are compatible, so 
 
 # Rewriting the PHP
 
-Write each controller again as a namespaced class in `htdocs/_fegg/site/controller/` (`cms/` becomes `Cms/`). The skeleton's `Cms/News.php` and `Cms/Lab.php` are the models for post types.
+Write each controller again as a namespaced class in `htdocs/_fegg/site/src/Controller/` (`cms/` becomes `Cms/`). The skeleton's `Cms/News.php` and `Cms/Lab.php` are the models for post types.
 
 ```php title="Fegg 4: code/application/cms/News.php"
 <?php
@@ -4083,7 +4171,7 @@ class News extends MyApplication
 }
 ```
 
-```php title="Fegg 5: htdocs/_fegg/site/controller/Cms/News.php"
+```php title="Fegg 5: htdocs/_fegg/site/src/Controller/Cms/News.php"
 <?php
 namespace Site\Controller\Cms;
 
@@ -4115,11 +4203,11 @@ class News extends Controller              // Site\Controller\Cms\Controller: th
 }
 ```
 
-CMS screens extend `Site\Controller\Cms\Controller`, public pages `Site\Controller\Controller`. The CMS base checks the login and the CSRF token of every POST. Edit and delete forms in the project's CMS templates use `method="post"`: delete links in list templates become POST forms (see [Controller](../../basic/cms/controllers.mdx)). Processing that was added to `MyApplication` goes into `__init()` or a `protected` method of `site/controller/Controller.php`.
+CMS screens extend `Site\Controller\Cms\Controller`, public pages `Site\Controller\Controller`. The CMS base checks the login and the CSRF token of every POST. Edit and delete forms in the project's CMS templates use `method="post"`: delete links in list templates become POST forms (see [Controller](../../basic/cms/controllers.mdx)). Processing that was added to `MyApplication` goes into `__init()` or a `protected` method of `site/src/Controller/Controller.php`.
 
 :::danger Required: `requirePost()` in every action that changes data
 
-Fegg 4 had no such check. Add `$this->requirePost()` as the first line of every action that saves, deletes, sorts or otherwise writes (`update`, `create`, `delete` ...). The CSRF token is only checked on POST: an action without `requirePost()` still runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET answers 405. Check every action with `grep -n "public function" htdocs/_fegg/site/controller/Cms/*.php`.
+Fegg 4 had no such check. Add `$this->requirePost()` as the first line of every action that saves, deletes, sorts or otherwise writes (`update`, `create`, `delete` ...). The CSRF token is only checked on POST: an action without `requirePost()` still runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET answers 405. Check every action with `grep -n "public function" htdocs/_fegg/site/src/Controller/Cms/*.php`.
 
 :::
 
@@ -4742,7 +4830,7 @@ $_recaptcha_secret = feggEnv('FEGG_RECAPTCHA_SECRET', '');
 $_recaptcha_score_threshold = 0.5;
 ```
 
-The widgets are output by `site/template/main/tpl/template/antispam.tpl`, and `site/controller/Contact.php` verifies them.
+The widgets are output by `site/template/main/tpl/template/antispam.tpl`, and `site/src/Controller/Contact.php` verifies them.
 
 ## Methods
 
@@ -4906,7 +4994,7 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 The methods are static: import `Fegg\Tool\Csv` and call them. A CMS action that downloads a list:
 
-```php title="htdocs/_fegg/site/controller/Cms/Entry.php"
+```php title="htdocs/_fegg/site/src/Controller/Cms/Entry.php"
 <?php
 namespace Site\Controller\Cms;
 
@@ -4988,7 +5076,7 @@ With `'header' => true`, a row with another number of fields than the header thr
 
 A CMS form sends the file (`<form method="post" enctype="multipart/form-data">` with `<input type="file" name="csv">` and the CSRF token). Check every row first, and save only when all rows are right:
 
-```php title="htdocs/_fegg/site/controller/Cms/News.php"
+```php title="htdocs/_fegg/site/src/Controller/Cms/News.php"
 use Fegg\Tool\Csv;
 use Fegg\Tool\Validation;
 
@@ -7595,7 +7683,7 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 The skeleton serves the latest news posts at `/news/feed.xml` with `News::feed()`:
 
-```php title="htdocs/_fegg/site/controller/News.php"
+```php title="htdocs/_fegg/site/src/Controller/News.php"
 use Fegg\Tool\Feed;
 
 public function feed()
@@ -8578,7 +8666,7 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 The methods are static. A controller sets the data as the site information `json_ld` with [setSiteinfo](../../basic/templates/helpers/setsiteinfo.mdx), usually several items in one [graph()](./methods/graph.mdx):
 
-```php title="htdocs/_fegg/site/controller/News.php"
+```php title="htdocs/_fegg/site/src/Controller/News.php"
 use Fegg\Tool\JsonLd;
 
 public function detail($id = '')
@@ -8685,7 +8773,7 @@ Returns `array('@context' => 'https://schema.org', '@graph' => array(...))` with
 
 ## Example
 
-```php title="htdocs/_fegg/site/controller/Index.php"
+```php title="htdocs/_fegg/site/src/Controller/Index.php"
 use Fegg\Tool\JsonLd;
 
 $siteName = $this->config['site_info']['name'];
@@ -9142,7 +9230,7 @@ class Contact extends Controller
 }
 ```
 
-The contact form of the skeleton (`htdocs/_fegg/site/controller/Contact.php`) is a complete example, including [Mail::setDebugFlag](./methods/setdebugflag.mdx) to write the emails to a log file instead of sending them.
+The contact form of the skeleton (`htdocs/_fegg/site/src/Controller/Contact.php`) is a complete example, including [Mail::setDebugFlag](./methods/setdebugflag.mdx) to write the emails to a log file instead of sending them.
 
 ## Sender
 
@@ -12420,9 +12508,9 @@ Run `fegg-cli migration` after deploying a project that uses `RateLimit` for the
 
 | Where | Bucket | Key | Limit |
 | :---- | :----- | :-- | :---- |
-| CMS login (`core/controller/Cms/Login.php`) | `cms-login` | Login ID + address | 5 in 15 minutes |
+| CMS login (`core/src/Controller/Cms/Login.php`) | `cms-login` | Login ID + address | 5 in 15 minutes |
 | CMS login | `cms-login-address` | Address | 20 in 15 minutes |
-| Contact form (`site/controller/Contact.php`) | `contact:<template>` | Address | `rate_limit_per_hour` an hour |
+| Contact form (`site/src/Controller/Contact.php`) | `contact:<template>` | Address | `rate_limit_per_hour` an hour |
 
 The CMS login takes back the attempt of the address when the per-login limit refuses ([undo()](./methods/undo.mdx)), and after a successful login forgets the failures of that login ([clear()](./methods/clear.mdx)) and takes back the attempt of the address. A locked login shows a message on the login page.
 
@@ -12606,7 +12694,7 @@ Removes the attempt stored by the last allowed [attempt()](./attempt.mdx) of thi
 
 The CMS login checks two limits. When the second refuses, the attempt of the first is taken back, and a successful login does not count against the address:
 
-```php title="htdocs/_fegg/core/controller/Cms/Login.php"
+```php title="htdocs/_fegg/core/src/Controller/Cms/Login.php"
 $perAddress = new RateLimit('cms-login-address', 20, 900);
 $perLogin   = new RateLimit('cms-login', 5, 900);
 if ($perAddress->attempt($ip)) {
@@ -12850,7 +12938,7 @@ import { CategoryDocCardList } from '@site/src/components/CategoryDocCardList';
 
 The skeleton serves `/sitemap.xml` with `Site\Controller\Sitemap`: the pages listed in `site/config/sitemap.php`, then every published news post.
 
-```php title="htdocs/_fegg/site/controller/Sitemap.php"
+```php title="htdocs/_fegg/site/src/Controller/Sitemap.php"
 <?php
 namespace Site\Controller;
 

@@ -301,6 +301,7 @@ LionHeart Group Coding Style Guide
     - [CMS controllers](https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/cms/controllers)
     - [CMS screens and the editor](https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/cms)
     - [Rich text (FeggEditor)](https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/cms/editor)
+    - [Dummy content](https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/cms/dummy)
     - [About Other methods](https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/others)
       - [Application::loadConfig](https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/others/config/loadconfig)
       - [Application::getSetting](https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/others/config/getsetting)

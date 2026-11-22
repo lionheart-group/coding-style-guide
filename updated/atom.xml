@@ -2,11 +2,23 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lionheart-group.github.io/coding-style-guide/updated</id>
     <title>Coding Style Guide Blog</title>
-    <updated>2026-11-16T10:00:00.000Z</updated>
+    <updated>2026-11-23T09:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lionheart-group.github.io/coding-style-guide/updated"/>
     <subtitle>Coding Style Guide Blog</subtitle>
     <icon>https://lionheart-group.github.io/coding-style-guide/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[v0.5.4]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/23/v0.5.4</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2026/11/23/v0.5.4"/>
+        <updated>2026-11-23T09:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- Fegg 5.x docs (/docs/fegg/next/): every class is under src/ now, at the path of its namespace. The project's controllers are in site/src/Controller/, and the core's controllers and fegg-cli commands are in core/src/Controller/ and core/src/Command/ (Directory structure)]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li class="">Fegg 5.x docs (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next">/docs/fegg/next/</a>): every class is under <code>src/</code> now, at the path of its namespace. The project's controllers are in <code>site/src/Controller/</code>, and the core's controllers and fegg-cli commands are in <code>core/src/Controller/</code> and <code>core/src/Command/</code> (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/first/cont">Directory structure</a>)</li>
+<li class="">New page <a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/cms/dummy">Dummy content</a>: fill a CMS post type with dummy posts outside production, from the CMS screen or with <code>fegg-cli dummy:*</code></li>
+<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/cms/editor">Rich text (FeggEditor)</a>: galleries take 2 to 5 columns, and 1 to 3 columns on a phone (<code>is-sp-cols-*</code>). List items and table cells hold their text in a <code>&lt;p&gt;</code>, and the public styles remove its margins</li>
+</ul>]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v0.5.3]]></title>
         <id>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/16/v0.5.3</id>
@@ -237,16 +249,6 @@
 <li class="">Arranged documents file structures</li>
 <li class="">Created Updated History list/detail page</li>
 <li class="">Updated top page layout partially</li>
-</ul>]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[v0.0.8]]></title>
-        <id>https://lionheart-group.github.io/coding-style-guide/updated/2023/02/07/v0.0.8</id>
-        <link href="https://lionheart-group.github.io/coding-style-guide/updated/2023/02/07/v0.0.8"/>
-        <updated>2023-02-07T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[- Added CSS Methodologies important tips about Modifier]]></summary>
-        <content type="html"><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/important/modifier">Added CSS Methodologies important tips about Modifier</a></li>
 </ul>]]></content>
     </entry>
 </feed>

@@ -4,10 +4,22 @@
         <title>Coding Style Guide Blog</title>
         <link>https://lionheart-group.github.io/coding-style-guide/updated</link>
         <description>Coding Style Guide Blog</description>
-        <lastBuildDate>Mon, 16 Nov 2026 10:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 23 Nov 2026 09:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[v0.5.4]]></title>
+            <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/23/v0.5.4</link>
+            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/23/v0.5.4</guid>
+            <pubDate>Mon, 23 Nov 2026 09:00:00 GMT</pubDate>
+            <description><![CDATA[- Fegg 5.x docs (/docs/fegg/next/): every class is under src/ now, at the path of its namespace. The project's controllers are in site/src/Controller/, and the core's controllers and fegg-cli commands are in core/src/Controller/ and core/src/Command/ (Directory structure)]]></description>
+            <content:encoded><![CDATA[<ul>
+<li class="">Fegg 5.x docs (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next">/docs/fegg/next/</a>): every class is under <code>src/</code> now, at the path of its namespace. The project's controllers are in <code>site/src/Controller/</code>, and the core's controllers and fegg-cli commands are in <code>core/src/Controller/</code> and <code>core/src/Command/</code> (<a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/first/cont">Directory structure</a>)</li>
+<li class="">New page <a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/cms/dummy">Dummy content</a>: fill a CMS post type with dummy posts outside production, from the CMS screen or with <code>fegg-cli dummy:*</code></li>
+<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/fegg/next/basic/cms/editor">Rich text (FeggEditor)</a>: galleries take 2 to 5 columns, and 1 to 3 columns on a phone (<code>is-sp-cols-*</code>). List items and table cells hold their text in a <code>&lt;p&gt;</code>, and the public styles remove its margins</li>
+</ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v0.5.3]]></title>
             <link>https://lionheart-group.github.io/coding-style-guide/updated/2026/11/16/v0.5.3</link>
@@ -238,16 +250,6 @@
 <li class="">Arranged documents file structures</li>
 <li class="">Created Updated History list/detail page</li>
 <li class="">Updated top page layout partially</li>
-</ul>]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[v0.0.8]]></title>
-            <link>https://lionheart-group.github.io/coding-style-guide/updated/2023/02/07/v0.0.8</link>
-            <guid>https://lionheart-group.github.io/coding-style-guide/updated/2023/02/07/v0.0.8</guid>
-            <pubDate>Tue, 07 Feb 2023 00:00:00 GMT</pubDate>
-            <description><![CDATA[- Added CSS Methodologies important tips about Modifier]]></description>
-            <content:encoded><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/docs/html/methodologies/important/modifier">Added CSS Methodologies important tips about Modifier</a></li>
 </ul>]]></content:encoded>
         </item>
     </channel>

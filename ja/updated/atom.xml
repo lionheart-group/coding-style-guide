@@ -2,11 +2,23 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lionheart-group.github.io/coding-style-guide/ja/updated</id>
     <title>Coding Style Guide Blog</title>
-    <updated>2026-11-16T10:00:00.000Z</updated>
+    <updated>2026-11-23T09:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lionheart-group.github.io/coding-style-guide/ja/updated"/>
     <subtitle>Coding Style Guide Blog</subtitle>
     <icon>https://lionheart-group.github.io/coding-style-guide/ja/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[v0.5.4]]></title>
+        <id>https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/11/23/v0.5.4</id>
+        <link href="https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/11/23/v0.5.4"/>
+        <updated>2026-11-23T09:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- Fegg 5.x のドキュメント（/docs/fegg/next/）：クラスをすべて src/ の下に、名前空間のとおりのパスで置くようにしました。プロジェクトのコントローラは site/src/Controller/、コアのコントローラと fegg-cli のコマンドは core/src/Controller/ と core/src/Command/ です（ディレクトリ構成）]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li class="">Fegg 5.x のドキュメント（<a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/fegg/next">/docs/fegg/next/</a>）：クラスをすべて <code>src/</code> の下に、名前空間のとおりのパスで置くようにしました。プロジェクトのコントローラは <code>site/src/Controller/</code>、コアのコントローラと fegg-cli のコマンドは <code>core/src/Controller/</code> と <code>core/src/Command/</code> です（<a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/fegg/next/first/cont">ディレクトリ構成</a>）</li>
+<li class="">新しいページ「<a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/fegg/next/basic/cms/dummy">ダミーデータ</a>」：本番以外で、CMS の投稿タイプにダミーの記事を入れます。CMS の画面か <code>fegg-cli dummy:*</code> で使います</li>
+<li class="">「<a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/fegg/next/basic/cms/editor">リッチテキスト（FeggEditor）</a>」：ギャラリーは 2〜5 列、スマホでは 1〜3 列（<code>is-sp-cols-*</code>）を選べます。リストの項目と表のセルは文字を <code>&lt;p&gt;</code> に入れて書き、公開側のスタイルでその余白を消しています</li>
+</ul>]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v0.5.3]]></title>
         <id>https://lionheart-group.github.io/coding-style-guide/ja/updated/2026/11/16/v0.5.3</id>
@@ -247,16 +259,6 @@
 <li class="">ドキュメントファイルの構造を調整しました</li>
 <li class="">更新履歴の一覧・詳細ページを作成しました</li>
 <li class="">トップページを更新しました</li>
-</ul>]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[v0.0.8]]></title>
-        <id>https://lionheart-group.github.io/coding-style-guide/ja/updated/2023/02/07/v0.0.8</id>
-        <link href="https://lionheart-group.github.io/coding-style-guide/ja/updated/2023/02/07/v0.0.8"/>
-        <updated>2023-02-07T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[- CSS構造の重要事項にModifierに関するページを追加しました]]></summary>
-        <content type="html"><![CDATA[<ul>
-<li class=""><a class="" href="https://lionheart-group.github.io/coding-style-guide/ja/docs/html/methodologies/important/modifier">CSS構造の重要事項にModifierに関するページを追加しました</a></li>
 </ul>]]></content>
     </entry>
 </feed>
