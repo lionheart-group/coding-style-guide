@@ -10,7 +10,7 @@ sidebar_position: 3
 ./fegg-cli <command> [arguments]
 ```
 
-The file only defines the paths (see [Directory structure](./cont.mdx#entry-files-and-layout)); the commands are in `htdocs/_fegg/core/bin/`. Commands exit with code `1` when they find a problem, so they can be used in CI.
+The file only defines the paths (see [Directory structure](./cont.mdx#entry-files-and-layout)); the commands are in `htdocs/_fegg/core/src/Command/`. Commands exit with code `1` when they find a problem, so they can be used in CI.
 
 | Command                                         | What it does |
 | :---------------------------------------------- | :----------- |
@@ -27,6 +27,8 @@ The file only defines the paths (see [Directory structure](./cont.mdx#entry-file
 | `core:status`                                   | Show the core version and core files changed in this project |
 | `core:update [vX.Y.Z] [--dry-run] [--force]`    | Update the core from the skeleton repository |
 | `doctor [URL]`                                  | Check that `_fegg/` cannot be read from the web |
+| `dummy:create TABLE [COUNT]`                    | Add dummy rows to a CMS table, not in production (see [Dummy content](../basic/cms/dummy.mdx#from-the-command-line)) |
+| `dummy:remove TABLE [COUNT]` / `dummy:count TABLE` | Remove or count the dummy rows (a title starting with 【DUMMY】) |
 
 Running a command group without a sub command prints its help: `./fegg-cli core`, `./fegg-cli db`, `./fegg-cli template`, `./fegg-cli site`, `./fegg-cli user`, `./fegg-cli migration:help`, `./fegg-cli doctor:help`.
 

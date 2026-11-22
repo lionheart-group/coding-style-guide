@@ -6,9 +6,9 @@ import { SiblingDocCardList } from '@site/src/components/CategoryDocCardList';
 
 # CMS screens and the editor
 
-> The CMS's files, scripts and icons. The controllers of CMS screens and rich text fields have pages of their own:
+> The CMS's files, scripts and icons. The controllers of CMS screens, rich text fields and dummy content have pages of their own:
 
-<SiblingDocCardList ids={["controllers", "editor"]} />
+<SiblingDocCardList ids={["controllers", "editor", "dummy"]} />
 
 ## The CMS's files
 
@@ -57,7 +57,7 @@ Date fields are `<input type="datetime-local">`: the browser shows its own picke
 <input type="datetime-local" name="post_date" value="{{ $page.data.post_date|feggDate:$format }}" required>
 ```
 
-```php title="site/controller/Cms/News.php"
+```php title="site/src/Controller/Cms/News.php"
 $validation->datetime('post_date', $this->in('post_date'), array('@date', '投稿日'));
 // ...
 // "2026-11-10T10:00" -> "2026-11-10 10:00:00"

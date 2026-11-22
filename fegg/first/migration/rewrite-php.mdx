@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Rewriting the PHP
 
-Write each controller again as a namespaced class in `htdocs/_fegg/site/controller/` (`cms/` becomes `Cms/`). The skeleton's `Cms/News.php` and `Cms/Lab.php` are the models for post types.
+Write each controller again as a namespaced class in `htdocs/_fegg/site/src/Controller/` (`cms/` becomes `Cms/`). The skeleton's `Cms/News.php` and `Cms/Lab.php` are the models for post types.
 
 ```php title="Fegg 4: code/application/cms/News.php"
 <?php
@@ -19,7 +19,7 @@ class News extends MyApplication
 }
 ```
 
-```php title="Fegg 5: htdocs/_fegg/site/controller/Cms/News.php"
+```php title="Fegg 5: htdocs/_fegg/site/src/Controller/Cms/News.php"
 <?php
 namespace Site\Controller\Cms;
 
@@ -51,11 +51,11 @@ class News extends Controller              // Site\Controller\Cms\Controller: th
 }
 ```
 
-CMS screens extend `Site\Controller\Cms\Controller`, public pages `Site\Controller\Controller`. The CMS base checks the login and the CSRF token of every POST. Edit and delete forms in the project's CMS templates use `method="post"`: delete links in list templates become POST forms (see [Controller](../../basic/cms/controllers.mdx)). Processing that was added to `MyApplication` goes into `__init()` or a `protected` method of `site/controller/Controller.php`.
+CMS screens extend `Site\Controller\Cms\Controller`, public pages `Site\Controller\Controller`. The CMS base checks the login and the CSRF token of every POST. Edit and delete forms in the project's CMS templates use `method="post"`: delete links in list templates become POST forms (see [Controller](../../basic/cms/controllers.mdx)). Processing that was added to `MyApplication` goes into `__init()` or a `protected` method of `site/src/Controller/Controller.php`.
 
 :::danger Required: `requirePost()` in every action that changes data
 
-Fegg 4 had no such check. Add `$this->requirePost()` as the first line of every action that saves, deletes, sorts or otherwise writes (`update`, `create`, `delete` ...). The CSRF token is only checked on POST: an action without `requirePost()` still runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET answers 405. Check every action with `grep -n "public function" htdocs/_fegg/site/controller/Cms/*.php`.
+Fegg 4 had no such check. Add `$this->requirePost()` as the first line of every action that saves, deletes, sorts or otherwise writes (`update`, `create`, `delete` ...). The CSRF token is only checked on POST: an action without `requirePost()` still runs on a GET, so a link or an image on another site can change data while a CMS user is logged in. With it, a GET answers 405. Check every action with `grep -n "public function" htdocs/_fegg/site/src/Controller/Cms/*.php`.
 
 :::
 

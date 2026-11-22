@@ -67,7 +67,7 @@ array(2) { ["foo"]=> string(3) "bar" ["baz"]=> string(3) "qux" }
 
 A typical use is the page number of a list:
 
-```php title="htdocs/_fegg/site/controller/News.php"
+```php title="htdocs/_fegg/site/src/Controller/News.php"
 $this->page['data'] = $this->_model
     ->listMax(20)
     ->current($this->in('p'))

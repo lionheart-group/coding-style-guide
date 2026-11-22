@@ -65,9 +65,9 @@ Run `fegg-cli migration` after deploying a project that uses `RateLimit` for the
 
 | Where | Bucket | Key | Limit |
 | :---- | :----- | :-- | :---- |
-| CMS login (`core/controller/Cms/Login.php`) | `cms-login` | Login ID + address | 5 in 15 minutes |
+| CMS login (`core/src/Controller/Cms/Login.php`) | `cms-login` | Login ID + address | 5 in 15 minutes |
 | CMS login | `cms-login-address` | Address | 20 in 15 minutes |
-| Contact form (`site/controller/Contact.php`) | `contact:<template>` | Address | `rate_limit_per_hour` an hour |
+| Contact form (`site/src/Controller/Contact.php`) | `contact:<template>` | Address | `rate_limit_per_hour` an hour |
 
 The CMS login takes back the attempt of the address when the per-login limit refuses ([undo()](./methods/undo.mdx)), and after a successful login forgets the failures of that login ([clear()](./methods/clear.mdx)) and takes back the attempt of the address. A locked login shows a message on the login page.
 
